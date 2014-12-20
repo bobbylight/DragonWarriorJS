@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+   <title>Dragon Warrior in HTML 5!</title>
+   <meta charset="UTF-8">
+   <link rel='stylesheet' type='text/css' href='css/dw.css'>
+   
+   <!-- build:js js/dw.min.js -->
+   <script src='js/dw.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Utils.js'></script>
+   <script src='../bower_components/gtp/src/gtp/ImageUtils.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Timer.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Delay.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Image.js'></script>
+   <script src='../bower_components/gtp/src/gtp/ImageAtlas.js'></script>
+   <script src='../bower_components/gtp/src/gtp/AudioSystem.js'></script>
+   <script src='../bower_components/gtp/src/gtp/AssetType.js'></script>
+   <script src='../bower_components/gtp/src/gtp/AssetLoader.js'></script>
+   <script src='../bower_components/gtp/src/gtp/SpriteSheet.js'></script>
+   <script src='../bower_components/gtp/src/gtp/BitmapFont.js'></script>
+   <script src='../bower_components/gtp/src/gtp/InputManager.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Keys.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Game.js'></script>
+   <script src='../bower_components/gtp/src/gtp/Sound.js'></script>
+   <script src='../bower_components/gtp/src/gtp/State.js'></script>
+   <script src='../bower_components/gtp/src/gtp/FadeOutInState.js'></script>
+   <script src='../bower_components/gtp/src/tiled/TiledTileset.js'></script>
+   <script src='../bower_components/gtp/src/tiled/TiledMap.js'></script>
+   <script src='../bower_components/gtp/src/tiled/TiledObject.js'></script>
+   <script src='../bower_components/gtp/src/tiled/TiledLayer.js'></script>
+   <script src='js/dw/DwGame.js'></script>
+   <script src='js/dw/_BaseState.js'></script>
+   <script src='js/dw/BattleEntity.js'></script>
+   <script src='js/dw/EnemyAI.js'></script>
+   <script src='js/dw/Enemy.js'></script>
+   <script src='js/dw/RoamingEntity.js'></script>
+   <script src='js/dw/Bubble.js'></script>
+   <script src='js/dw/BattleCommandBubble.js'></script>
+   <script src='js/dw/CommandBubble.js'></script>
+   <script src='js/dw/StatBubble.js'></script>
+   <script src='js/dw/TextBubble.js'></script>
+   <script src='js/dw/QuestionBubble.js'></script>
+   <script src='js/dw/Direction.js'></script>
+   <script src='js/dw/Hero.js'></script>
+   <script src='js/dw/LoadingState.js'></script>
+   <script src='js/dw/MapChangeState.js'></script>
+   <script src='js/dw/MapLogic.js'></script>
+   <script src='js/dw/NpcType.js'></script>
+   <script src='js/dw/Npc.js'></script>
+   <script src='js/dw/Sounds.js'></script>
+   <script src='js/dw/TitleScreenState.js'></script>
+   <script src='js/dw/GamesAtLunchAdvertState.js'></script>
+   <script src='js/dw/BattleTransitionState.js'></script>
+   <script src='js/dw/BattleState.js'></script>
+   <script src='js/dw/RoamingState.js'></script>
+   <script src='js/dw/Conversation.js'></script>
+   <!-- TODO: Dynamically load these scripts in MapChangeStates. -->
+   <script src='js/dw/mapLogic/brecconary.js'></script>
+   <script src='js/dw/mapLogic/overworld.js'></script>
+   <script src='js/dw/mapLogic/tantegelCastle.js'></script>
+   <!-- endbuild -->
+   
+</head>
+
+<body onload='init("parent")'>
+   
+   <div id='parent'></div>
+   
+   <h3>Controls:</h3>
+   <ol>
+      <li><b>Arrow Keys:</b> Move around
+      <li><b>z:</b> Take action
+      <li><b>x:</b> Cancel action
+   </ol>
+   
+</body>
+
+</html>

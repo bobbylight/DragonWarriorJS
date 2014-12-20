@@ -1,0 +1,57 @@
+{
+   "bitwise": true,
+   "browser": true,
+   "curly": true,        // Require curly braces around code blocks
+   "debug": false,
+   "devel": true,
+   "eqeqeq": true,
+   "eqnull": true,       // Suppress warnings about == null comparisons
+   "forin":  true,       // Require use of hasOwnProperty() check in for...in loops
+   "freeze": true,       // Prohibit overwriting prototypes of native objects such as Array and Date
+   "immed": true,        // Prohibits immediate function invocations without wrapping them in parens
+   "latedef": true,      // Prohibit use of variable before it is defined
+   "laxcomma": true,     // Suppress warnings about comma-first style in object literals
+   "newcap": true,       // Require constructor functions to be capitalized
+   "noempty": true,      // Prohibit empty blocks in code
+   "shadow": false,
+   "strict": true,
+   "undef": true,        // Warns about unknown globals
+   "unused": "vars",     // Warn on unused variables (explicitly vars, not function params)
+   
+   // TODO: Move globals and exporteds into Gruntfile?
+   "globals": {
+      "gtp": true,
+      "game": true,
+      "_BaseState": true,
+      "BattleCommandBubble": true,
+      "BattleEntity": true,
+      "BattleState": true,
+      "BattleTransitionState": true,
+      "Brecconary": true,
+      "Bubble": true,
+      "CommandBubble": true,
+      "Conversation": true,
+      "Direction": true,
+      "DwGame": true,
+      "Enemy": true,
+      "FadeOutInState": true,
+      "GamesAtLunchAdvertState": true,
+      "Hero": true,
+      "LoadingState": true,
+      "MapChangeState": true,
+      "MapLogic": true,
+      "Npc": true,
+      "NpcType": true,
+      "QuestionBubble": true,
+      "QuestionSegment": true,
+      "RoamingState": true,
+      "RoamingEntity": true,
+      "Sounds": true,
+      "TalkManager": true,
+      "TalkSegment": true,
+      "TextBubble": true,
+      "tiled": true,
+      "TitleScreenState": true
+   },
+   "exported": [ "init", "BattleEntity" ]
+}

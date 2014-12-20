@@ -1,0 +1,19 @@
+@font-face {
+   font-family: 'Dragon Warrior 2';
+   src: url('../fonts/dw-font.ttf');
+}
+
+canvas {
+   display: block;
+   margin: 0 auto;
+/*   width: 272px;/*544px;  /*16*17 * 2 */
+/*   height: 240px;/*480px; /* 16*15 * 2 */
+/*   width: 544px;  /*16*17 * 2 */
+/*   height: 480px; /* 16*15 * 2 */
+   image-rendering: -crisp-edges;
+   image-rendering: -moz-crisp-edges;          /* FF 6.0+ */
+   image-rendering: -webkit-optimize-contrast; /* Webkit */
+   image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+   image-rendering: optimize-contrast;         /* Possible future browsers. */
+   -ms-interpolation-mode: nearest-neighbor;   /* IE */
+}
