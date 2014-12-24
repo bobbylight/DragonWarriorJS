@@ -14,10 +14,13 @@ TextBubble.MAX_LINE_COUNT = 6;
 TextBubble.prototype = Object.create(Bubble.prototype, {
    
    addToConversation: {
-      value: function(text) {
+      value: function(text, autoAdvance) {
          'use strict';
          this._conversation.addSegment(text);
-         this._updateConversation();
+
+         if (autoAdvance && this._textDone) {
+            this._updateConversation();
+         }
       }
    },
    
@@ -81,7 +84,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       value: function() {
          'use strict';
          return this._textDone && !this._questionBubble &&
-               (!this.conversation || !this.conversation.hasNext());
+               (!this._conversation || !this._conversation.hasNext());
       }
    },
    

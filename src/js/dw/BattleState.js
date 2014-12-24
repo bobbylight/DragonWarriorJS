@@ -19,7 +19,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          this._commandExecuting = true;
          this._fightDelay = new gtp.Delay({ millis: [ 300 ], callback: gtp.Utils.hitch(this, this._fightCallback) });
          game.audio.playSound('attack');
-         this._textBubble.addToConversation({ text: 'You attack!' });
+         this._textBubble.addToConversation({ text: 'You attack!' }, true);
       }
    },
    
@@ -42,19 +42,47 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var dead = this._enemy.takeDamage(damage);
          
          var text = "Direct hit! Thy enemy's hit points have been reduced by " + damage + '.';
+         this._textBubble.addToConversation({ text: text }, true);
+         
          if (dead) {
-            text += '\nThou hast defeated the ' + this._enemy.name + '.';
-            text += '\nThy experience increases by ' + this._enemy.xp + '.';
-            text += '\nThy gold increases by ' + this._enemy.gp + '.';
-            this._enemiesDead = true;
-            
-            game.hero.exp += this._enemy.xp;
-            game.hero.gold += this._enemy.gp;
-            
-            // TODO: Check for level up
+            this._defeatedEnemy();
          }
+         
+         else {
+            this._enemyAttack();
+         }
+      }
+   },
+   
+   _defeatedEnemy: {
+      value: function() {
+         'use strict';
+         
+         var text = '\nThou hast defeated the ' + this._enemy.name + '.' +
+                    '\nThy experience increases by ' + this._enemy.xp + '.' +
+                    '\nThy gold increases by ' + this._enemy.gp + '.';
+         this._enemiesDead = true;
+         
+         game.hero.exp += this._enemy.xp;
+         game.hero.gold += this._enemy.gp;
+         
+         // TODO: Check for level up
+         
          this._textBubble.addToConversation({ text: text });
-            
+         this._commandExecuting = false;
+      }
+   },
+   
+   _enemyAttack: {
+      value: function() {
+         'use strict';
+         
+         var text = 'The ' + this._enemy.name + ' attacks!';
+         this._textBubble.addToConversation({ text: text }, true);
+         
+         text = 'Thy hit points are reduced by 0.';
+         this._textBubble.addToConversation({ text: text }, true);
+         
          this._commandExecuting = false;
       }
    },
@@ -162,7 +190,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          this.handleDefaultKeys();
          
-         if (this._enemiesDead) {
+         if (this._enemiesDead && this._textBubble.isDone()) {
             if (game.anyKeyDown()) {
                this._backToRoaming();
                return;
