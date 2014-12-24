@@ -18,6 +18,7 @@ StatBubble.prototype = Object.create(Bubble.prototype, {
    
    _calculateX2Offs: {
       value: function(val) {
+         'use strict';
          return game.stringWidth(''+val);
 //         var digits = 1;
 //         while (val > 10) {

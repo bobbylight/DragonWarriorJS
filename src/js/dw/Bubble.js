@@ -43,29 +43,30 @@ Bubble.prototype = {
     * @return {string} The text, with any escapes removed.
     */
    _removeSpecialEscapes: function(text, delays) {
+      'use strict';
       
       // Delay formats:
       //    \d      - default ms
       //    \d{300} - 300 ms
       
-      var index, lastOffs = 0;
+      var delay, index, lastOffs = 0;
       while ((index = text.indexOf('\\d', lastOffs)) > -1) {
          
          if ((index + 2) < text.length && text.charAt(index + 2) === '{') {
             var end = text.indexOf('}', index + 3);
             if (end > -1) {
-               var delay = parseInt(text.substring(index + 3, end));
+               delay = parseInt(text.substring(index + 3, end));
                console.log('Adding a delay of ' + delay + ' ms');
                delays.push({ offs: index, millis: delay });
                text = text.substring(0, index) + text.substring(end + 1);
             }
             else {
-               console.warn('Suspicious, aparent unclosed delay at offset ' + start);
+               console.warn('Suspicious, apparent unclosed delay at offset ' + index);
             }
          }
          
          else {
-            var delay = 500;
+            delay = 500;
             console.log('Adding the default delay of ' + delay + ' ms');
             delays.push({ offs: index, millis: delay });
             text = text.substring(0, index) + text.substring(index + 2);

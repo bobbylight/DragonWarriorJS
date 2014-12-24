@@ -15,6 +15,7 @@ BattleEntity.prototype = {
    },
    
    takeDamage: function(amount) {
+      'use strict';
       this.hp = Math.max(0, this.hp - amount);
       return this.isDead();
    }
