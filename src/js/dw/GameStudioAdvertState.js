@@ -1,9 +1,9 @@
-var GamesAtLunchAdvertState = function() {
+var GameStudioAdvertState = function() {
    'use strict';
    _BaseState.apply(this, arguments);
 };
 
-GamesAtLunchAdvertState.prototype = Object.create(_BaseState.prototype, {
+GameStudioAdvertState.prototype = Object.create(_BaseState.prototype, {
    
    init: {
       value: function() {
@@ -38,7 +38,7 @@ GamesAtLunchAdvertState.prototype = Object.create(_BaseState.prototype, {
 //         var y = 30;
 //         img.draw(ctx, x, y);
          
-         var prompt = 'GamesAtLunch Presents';
+         var prompt = 'OutOnBail Games Presents';
          var x = (w - game.stringWidth(prompt)) / 2;
          var y = (game.getHeight() - game.stringHeight()) / 2;
          game.drawString(prompt, x, y);
@@ -54,4 +54,4 @@ GamesAtLunchAdvertState.prototype = Object.create(_BaseState.prototype, {
    
 });
 
-GamesAtLunchAdvertState.prototype.constructor = GamesAtLunchAdvertState;
+GameStudioAdvertState.prototype.constructor = GameStudioAdvertState;

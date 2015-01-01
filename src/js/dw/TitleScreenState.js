@@ -64,7 +64,7 @@ handleStart: {
          var y = 30;
          img.draw(ctx, x, y);
          
-         if (game.audio.isInitialized()) {
+         if (!game.audio.isInitialized()) {
             var text = 'Sound is disabled as your';
             x = ( w - game.stringWidth(text)) / 2;
             y = 390;
