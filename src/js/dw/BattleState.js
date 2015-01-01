@@ -81,6 +81,9 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          this._textBubble.addToConversation({ text: text }, true);
          
          text = 'Thy hit points are reduced by 0.';
+         if (!game.hero.isDead()) {
+            text += '\nCommand?';
+         }
          this._textBubble.addToConversation({ text: text }, true);
          
          this._commandExecuting = false;
@@ -106,7 +109,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    item: {
       value: function() {
          'use strict';
-         this._textBubble.addToConversation({ text: 'Not implmented, command?' });
+         this._textBubble.addToConversation({ text: 'Not implemented, command?' });
       }
    },
    
@@ -163,7 +166,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          this._commandExecuting = true;
          this._fightDelay = new gtp.Delay({ millis: [ 600 ], callback: gtp.Utils.hitch(this, this._runCallback) });
          game.audio.playSound('run');
-         this._textBubble.addToConversation({ text: game.hero.name + ' started to run away.' });
+         this._textBubble.addToConversation({ text: game.hero.name + ' started to run away.' }, true);
       }
    },
    

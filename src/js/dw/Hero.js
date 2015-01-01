@@ -124,6 +124,13 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
       }
    },
    
+   isDead: {
+      value: function() {
+         'use strict';
+         return this.hp <= 0;
+      }
+   },
+   
    _possiblyStartRandomEncounter: {
       value: function() {
          'use strict';

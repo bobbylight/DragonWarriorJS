@@ -48,11 +48,13 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
          
          var w = game.getWidth();
          var h = game.getHeight();
+         var tileSize = game.getTileSize();
          
          var cx = w/2;
-         var cy = h/2;
-         var xts = this._enteringStateScreenshot.width / 5;
-         var yts = this._enteringStateScreenshot.height / 5;
+         var cy = h/2 - tileSize; // Matches where battle bg is draw in BattleState
+         var battleBG = game.assets.get('battleBG');
+         var xts = battleBG.width / 5;
+         var yts = battleBG.height / 5;
    
          var x = [ cx-2*xts-xts/2, cx-xts-xts/2, cx-xts/2, cx+xts/2, cx+xts+xts/2 ];
          var y = [ cy-2*yts-yts/2, cy-yts-yts/2, cy-yts/2, cy+yts/2, cy+yts+xts/2 ];

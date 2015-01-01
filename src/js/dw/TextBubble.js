@@ -157,7 +157,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             }
             if (this._textDone && this._conversation.hasNext()) {
                // TODO: Remove magic constants
-               game.drawArrow(this.x+this.w-30, this.y+this.h-30);
+               game.drawDownArrow(this.x+this.w-30, this.y+this.h-30);
             }
          }
          

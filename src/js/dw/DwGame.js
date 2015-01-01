@@ -403,6 +403,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   drawDownArrow: {
+      value: function(x, y) {
+         'use strict';
+         this.drawString('\\', x, y); // '\' char replaced by down arrow
+      }
+   },
+   
    startRandomEncounter: {
       value: function() {
          'use strict';
