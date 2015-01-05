@@ -26,6 +26,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             game.assets.addCanvas('enemiesImage', 'res/monsters.png');
             game.assets.addJson('enemyAtlas', 'res/enemyAtlas.json');
             game.assets.addJson('overworld.json', 'res/maps/overworld.json');
+            game.assets.addJson('equipment', 'res/equipment.json');
             game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
             game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
             game.assets.addSound(Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
@@ -50,6 +51,10 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                      game.assets.set(id, images[id]);
                   }
                }
+               
+               var equipment = game.assets.get('equipment');
+               game.assets.set('weapons', equipment.weapons);
+               game.assets.set('armor', equipment.armor);
                
                var font = game.assets.get('font');
                game.assets.set('font', new gtp.BitmapFont(font, 16,20, 16,12));

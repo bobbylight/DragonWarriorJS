@@ -1,0 +1,23 @@
+{
+   "weapons": {
+      
+      "bambooPole": { "baseCost": 10, "power": 2 },
+      
+      "club": { "baseCost": 60, "power": 4 },
+      
+      "copperSword": { "baseCost": 180, "power": 10 },
+      
+      "handAxe": { "baseCost": 560, "power": 15 },
+      
+      "broadSword": { "baseCost": 1500, "power": 20 },
+      
+      "flameSword": { "baseCost": 9800, "power": 28 },
+      
+      "erdricksSword": { "baseCost": 0, "power": 40 }
+      
+   },
+   
+   "armor": {
+      
+   }
+}

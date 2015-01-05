@@ -7,8 +7,9 @@ function Hero(args) {
    this.gold = 768;
    this.exp = 12345;
    
-   this.strength = 5;
-   this.defense = 10;
+   this._strength = 4;
+   //this.defense = 10;
+   this.agility = 4;
    
    this.hp = args.hp || 1234;
    this.maxHp = args.hp || 0;
@@ -24,6 +25,53 @@ function Hero(args) {
 Hero.STEP_INC = 0;
 
 Hero.prototype = Object.create(RoamingEntity.prototype, {
+   
+   computePhysicalAttackDamage: {
+      value: function(enemy) {
+         'use strict';
+         
+         var strength = this.getStrength(),
+               min, max;
+         if (!enemy.cannotBeExcellentMoved && this._getPerformExcellentMove()) {
+            min = Math.floor(strength / 2);
+            max = this._strength;
+         }
+         else {
+            var temp = strength - enemy.agility/2;
+            min = Math.floor(temp / 4);
+            max = Math.floor(temp / 2);
+         }
+         
+         var damage = gtp.Utils.randomInt(min, max+1);
+         if (damage < 1) {
+            damage = gtp.Utils.randomInt(0, 2)===0 ? 1 : 0;
+         }
+         return damage;
+      }
+   },
+   
+   getDefense: {
+      value: function() {
+         'use strict';
+         var defense = Math.floor(this.agility / 2);
+         // TODO: Equipment modifiers
+         return defense;
+      }
+   },
+   
+   _getPerformExcellentMove: {
+      value: function() {
+         'use strict';
+         return gtp.Utils.randomInt(0, 32) === 0;
+      }
+   },
+   
+   getStrength: {
+      value: function() {
+         'use strict';
+         return this._strength + (this.weapon ? this.weapon.power : 0);
+      }
+   },
    
    handleIntersectedObject: {
       value: function(/*TiledObject*/ obj) {
@@ -143,6 +191,16 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
                }
             }
          }
+      }
+   },
+   
+   takeDamage: {
+      value: function(amount) {
+         'use strict';
+         this.hp = Math.max(0, this.hp - amount);
+         // TODO: Remove me, just for testing
+         this.hp = Math.max(1, this.hp);
+         return this.isDead();
       }
    }
    

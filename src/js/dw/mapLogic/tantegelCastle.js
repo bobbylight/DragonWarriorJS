@@ -17,7 +17,7 @@ TantegelCastle.prototype = (function() {
       
       oldman1: function(game) {
          
-         if (game.hero.strength<100) {
+         if (game.hero.getStrength()<100) {
             return [
                'Brave traveler, you must save us from the dreaded Dragon Lord!!',
                'But you should buy some supplies before venturing out...',

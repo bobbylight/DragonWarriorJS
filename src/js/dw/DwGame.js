@@ -298,9 +298,21 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   _loadGame: {
+      value: function() {
+         var hero = game.hero;
+         hero.hp = hero.maxHp = 15;
+         hero.mp = hero.maxMp = 15;
+         hero._strength = 4;
+         hero.agility = 4;
+         hero.weapon = game.assets.get('weapons')['club'];
+      }
+   },
+   
    startNewGame: {
       value: function() {
          'use strict';
+         this._loadGame();
          var transitionLogic = function() {
             game.setMap('overworld.json');
             game.hero.setMapLocation(52, 45);

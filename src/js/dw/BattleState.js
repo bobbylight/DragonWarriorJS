@@ -38,7 +38,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          delete this._enemyFlashDelay;
          
-         var damage = 1;
+         var damage = game.hero.computePhysicalAttackDamage(this._enemy);
          var dead = this._enemy.takeDamage(damage);
          
          var text = "Direct hit! Thy enemy's hit points have been reduced by " + damage + '.';
@@ -80,7 +80,9 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          var text = 'The ' + this._enemy.name + ' attacks!';
          this._textBubble.addToConversation({ text: text }, true);
          
-         text = 'Thy hit points are reduced by 0.';
+         var damage = this._enemy.ai(game.hero, this._enemy).damage;
+         game.hero.takeDamage(damage);
+         text = 'Thy hit points are reduced by ' + damage + '.';
          if (!game.hero.isDead()) {
             text += '\nCommand?';
          }

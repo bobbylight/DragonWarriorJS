@@ -16,13 +16,13 @@ Enemy.prototype = Object.create(BattleEntity.prototype, {
          'use strict';
          
          if (hero.defense >= this.str) {
-            return gtp.Utils.randomInt(0, Math.floor((this.str + 4) / 6));
+            return gtp.Utils.randomInt(0, Math.floor((this.str + 4) / 6)+1);
          }
          
-         var temp = this.str - hero.defense/2;
+         var temp = this.str - Math.floor(hero.getDefense() / 2);
          var min = Math.floor(temp / 4);
          var max = Math.floor(temp / 2);
-         return gtp.Utils.randomInt(min, max);
+         return gtp.Utils.randomInt(min, max+1);
       }
    },
    
