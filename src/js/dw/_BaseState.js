@@ -4,7 +4,7 @@
  */
 _BaseState = function(args) {
    'use strict';
-   gtp.State.apply(this, args);
+   gtp.State.apply(this, arguments);
 };
 
 _BaseState.prototype = Object.create(gtp.State.prototype, {

@@ -31,8 +31,22 @@ Enemy.prototype = Object.create(BattleEntity.prototype, {
          'use strict';
          return game.assets.get(hit ? this.damagedImage : this.image);
       }
+   },
+   
+   prepare: {
+      value: function() {
+         'use strict';
+         
+         // Convert arrays into a single value
+         if (this.hp.length) {
+            // hp can be an array of form [min, max], both inclusive
+            this.hp = gtp.Utils.randomInt(this.hp[0], this.hp[1]+1);
+         }
+         
+         return this;
+      }
    }
-      
+   
 });
 
 Enemy.prototype.constructor = Enemy;

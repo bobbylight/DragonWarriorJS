@@ -183,13 +183,7 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
       value: function() {
          'use strict';
          if (game.randomInt(20)===0) {
-            var enemyTerritoryLayer = game.getEnemyTerritoryLayer();
-            if (enemyTerritoryLayer) {
-               var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
-               if (territory > 0) {
-                  game.startRandomEncounter();
-               }
-            }
+            game.startRandomEncounter();
          }
       }
    },

@@ -1,6 +1,7 @@
-var BattleState = function() {
+var BattleState = function(enemyName) {
    'use strict';
    _BaseState.apply(this, arguments);
+   this._enemyName = enemyName;
 };
 
 BattleState.prototype = Object.create(_BaseState.prototype, {
@@ -100,7 +101,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          this._commandExecuting = false;
          this._textBubble = new TextBubble(game);
          var conversation = new Conversation();
-         this._enemy = new Enemy(game.getEnemy('Slime'));
+         this._enemy = new Enemy(game.getEnemy(this._enemyName)).prepare();
          conversation.addSegment({ text: 'A ' + this._enemy.name + ' draws near!  Command?' });
          this._textBubble.setConversation(conversation);
          this._enemyAttackShake = 0;
@@ -176,7 +177,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       value: function(param) {
          'use strict';
          delete this._fightDelay;
-         var success = gtp.Utils.randomInt(0, 2) === 1;
+         var success = gtp.Utils.randomInt(2) === 1;
          if (success) {
             this._commandExecuting = false;
             this._backToRoaming();

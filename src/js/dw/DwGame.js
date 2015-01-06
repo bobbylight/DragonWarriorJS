@@ -425,7 +425,21 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    startRandomEncounter: {
       value: function() {
          'use strict';
-         this.setState(new BattleTransitionState(this.state, new BattleState()));
+         var enemyTerritoryLayer = game.getEnemyTerritoryLayer();
+         if (enemyTerritoryLayer) {
+            var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
+            if (territory > 0) {
+               // Enemy territory index is offset by the Tiled tileset's firstgid
+               // TODO: Remove call to private method
+               territory = territory - game.map._getImageForGid(territory).firstgid;
+               if (territory >= 0) {
+                  var territories = game.assets.get('enemyTerritories');
+                  var possibleEnemies = territories[territory];
+                  var enemyName = possibleEnemies[gtp.Utils.randomInt(0, possibleEnemies.length)];
+                  this.setState(new BattleTransitionState(this.state, new BattleState(enemyName)));
+               }
+            }
+         }
       }
    },
    

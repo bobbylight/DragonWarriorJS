@@ -23,6 +23,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             game.assets.addImage('battleBG', 'res/battle_backgrounds.png');
             game.assets.addImage('font', 'res/font_8x10.png');
             game.assets.addJson('enemies', 'res/enemies.json');
+            game.assets.addJson('enemyTerritories', 'res/enemyTerritories.json');
             game.assets.addCanvas('enemiesImage', 'res/monsters.png');
             game.assets.addJson('enemyAtlas', 'res/enemyAtlas.json');
             game.assets.addJson('overworld.json', 'res/maps/overworld.json');
