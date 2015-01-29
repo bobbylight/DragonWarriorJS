@@ -22,6 +22,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          this.npcs = [];
          this._bumpSoundDelay = 0;
          this._mapLogics = {};
+         this.setCameraOffset(0, 0);
       }
    },
    
@@ -38,8 +39,8 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var hero = game.hero;
          var centerCol = hero.mapCol;
          var centerRow = hero.mapRow;
-         var dx = hero.xOffs;
-         var dy = hero.yOffs;
+         var dx = hero.xOffs + this._cameraDx;
+         var dy = hero.yOffs + this._cameraDy;
          this._drawMapCount++;
 //         if (this._drawMapCount === 10) {
 //            this.timer.start('drawMap');
@@ -306,6 +307,13 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          hero._strength = 4;
          hero.agility = 4;
          hero.weapon = game.assets.get('weapons')['club'];
+      }
+   },
+   
+   setCameraOffset: {
+      value: function(dx, dy) {
+         this._cameraDx = dx;
+         this._cameraDy = dy;
       }
    },
    

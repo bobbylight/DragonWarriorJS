@@ -52,6 +52,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          else {
             this._enemyAttack();
          }
+         
       }
    },
    
@@ -77,9 +78,31 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    _enemyAttack: {
       value: function() {
          'use strict';
-         
+         console.log('_enemyAttack called');
          var text = 'The ' + this._enemy.name + ' attacks!';
          this._textBubble.addToConversation({ text: text }, true);
+         var self = this;
+         this._textBubble.onDone(function() {
+            self._enemyAttackDelay = new gtp.Delay({ millis: 300, callback: gtp.Utils.hitch(self, self._enemyAttackCallback) });
+         });
+      }
+   },
+   
+   _enemyAttackCallback: {
+      value: function() {
+         
+         delete this._enemyAttackDelay;
+         this._shake = true;
+         this._enemyAttackShakeDelay = new gtp.Delay({ millis: 1000, callback: gtp.Utils.hitch(this, this._enemyAttackShakeCallback) });
+         
+      }
+   },
+   
+   _enemyAttackShakeCallback: {
+      value: function() {
+         
+         delete this._enemyAttackShakeDelay;
+         this._shake = false;
          
          var damage = this._enemy.ai(game.hero, this._enemy).damage;
          game.hero.takeDamage(damage);
@@ -120,7 +143,14 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       value: function(ctx) {
          'use strict';
          
+         if (this._shake) {
+            game.setCameraOffset(this._shakeXOffs, 0);
+         }
          game.drawMap(ctx);
+         if (this._shake) {
+            game.setCameraOffset(0, 0);
+         }
+         
          var width = game.getWidth();
          var height = game.getHeight();
          var tileSize = game.getTileSize();
@@ -177,7 +207,8 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       value: function(param) {
          'use strict';
          delete this._fightDelay;
-         var success = gtp.Utils.randomInt(2) === 1;
+         var temp = gtp.Utils.randomInt(2);
+         var success = temp === 1;
          if (success) {
             this._commandExecuting = false;
             this._backToRoaming();
@@ -209,6 +240,18 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          if (this._enemyFlashDelay) {
             this._flashMillis += delta;
             this._enemyFlashDelay.update(delta);
+         }
+         else if (this._enemyAttackDelay) {
+            this._enemyAttackDelay.update(delta);
+         }
+         else if (this._enemyAttackShakeDelay) {
+            this._enemyAttackShakeDelay.update(delta);
+            if (!this._shakeMillisCount) {
+               this._shakeMillisCount = 0;
+            }
+            this._shakeMillisCount += delta;
+            this._shakeXOffs = (this._shakeMillisCount % 100) > 50 ? 4 : -4;
+            console.log(delta);
          }
          
          if (!this._textBubble.isDone()) {

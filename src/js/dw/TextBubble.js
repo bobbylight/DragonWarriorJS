@@ -6,6 +6,7 @@ function TextBubble(game) {
    var height = game.getTileSize() * 5;
    var y = game.getHeight() - tileSize - height;
    Bubble.call(this, null, x, y, width, height);
+   this._doneCallbacks = [];
 }
 
 TextBubble.CHAR_RENDER_MILLIS = 0;
@@ -20,6 +21,9 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
 
          if (autoAdvance && this._textDone) {
             this._updateConversation();
+         }
+         else {
+            console.log('oh no - ' + autoAdvance + ', ' + this._textDone);
          }
       }
    },
@@ -36,6 +40,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          this._curOffs = -1;
          this._curCharMillis = 0;
          this._textDone = false;
+console.log('>>> textDone set to false');
          if (text.choices) {
             this._questionBubble = new QuestionBubble(game, text.choices);
          }
@@ -88,6 +93,18 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
       }
    },
    
+   onDone: {
+      value: function(callback) {
+         'use strict';
+         if (this.isDone()) {
+            callback();
+         }
+         else {
+            this._doneCallbacks.push(callback);
+         }
+      }
+   },
+   
    update: {
       value: function(delta) {
          'use strict';
@@ -121,9 +138,11 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
                this._curOffs++;
                if (this._curOffs === this._lines[this._curLine].length) {
                   if (this._curLine === this._lines.length-1) {
+console.log('Setting textDone to true');
                      this._textDone = true;
                   }
                   else {
+console.log('Going to next line');
                      this._curLine++;
                   }
                   this._curOffs = -1;
@@ -133,6 +152,13 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          
          else if (this._questionBubble) {
             this._questionBubble.update(delta);
+         }
+         
+         if (this._doneCallbacks.length > 0 && this.isDone()) {
+            this._doneCallbacks.forEach(function(callback) {
+               callback();
+            });
+            this._doneCallbacks = [];
          }
          
       }
@@ -158,6 +184,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             if (this._textDone && this._conversation.hasNext()) {
                // TODO: Remove magic constants
                game.drawDownArrow(this.x+this.w-30, this.y+this.h-30);
+               console.log('--- ' + JSON.stringify(this._conversation.peekNext()));
             }
          }
          
@@ -186,6 +213,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
             this._curOffs = -1;
             this._curCharMillis = 0;
             this._textDone = false;
+console.log('>>> textDone set to false');
          }
          if (text.choices) {
             this._questionBubble = new QuestionBubble(game, text.choices);

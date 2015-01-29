@@ -10,11 +10,11 @@ Conversation.prototype = (function() {
    function parameterize(segment) {
       var text = segment.text;
       // TODO: This could be much, much better
-      var lbrace = text.indexOf('{');
+      var lbrace = text.indexOf('\\w{');
       while (lbrace > -1) {
-         var rbrace = text.indexOf('}', lbrace+1);
+         var rbrace = text.indexOf('}', lbrace+3);
          if (rbrace > -1) {
-            var expression = text.substring(lbrace+1, rbrace);
+            var expression = text.substring(lbrace+3, rbrace);
             if (expression === 'hero.name') {
                text = text.substring(0, lbrace) + game.hero.name + text.substring(rbrace+1);
                lbrace = text.indexOf('{', lbrace+game.hero.name.length);
@@ -72,6 +72,10 @@ Conversation.prototype = (function() {
       
       next: function() {
          return this._segments[this._segmentIndex++];
+      },
+      
+      peekNext: function() {
+         return this._segments[this._segmentIndex];
       },
       
       setDialogueState: function(state) {
