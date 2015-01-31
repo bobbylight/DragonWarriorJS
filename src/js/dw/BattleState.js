@@ -19,8 +19,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          this._commandExecuting = true;
          this._fightDelay = new gtp.Delay({ millis: [ 300 ], callback: gtp.Utils.hitch(this, this._fightCallback) });
-         game.audio.playSound('attack');
-         this._textBubble.addToConversation({ text: 'You attack!' }, true);
+         this._textBubble.addToConversation({ text: 'You attack!', sound: 'attack' }, true);
       }
    },
    
@@ -70,7 +69,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          // TODO: Check for level up
          
-         this._textBubble.addToConversation({ text: text });
+         this._textBubble.addToConversation({ text: text, music: 'victory' });
          this._commandExecuting = false;
       }
    },
@@ -80,10 +79,10 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          console.log('_enemyAttack called');
          var text = 'The ' + this._enemy.name + ' attacks!';
-         this._textBubble.addToConversation({ text: text }, true);
+         this._textBubble.addToConversation({ text: text, sound: 'prepareToAttack' }, true);
          var self = this;
          this._textBubble.onDone(function() {
-            self._enemyAttackDelay = new gtp.Delay({ millis: 300, callback: gtp.Utils.hitch(self, self._enemyAttackCallback) });
+            self._enemyAttackDelay = new gtp.Delay({ millis: 200, callback: gtp.Utils.hitch(self, self._enemyAttackCallback) });
          });
       }
    },
@@ -93,6 +92,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
          
          delete this._enemyAttackDelay;
          this._shake = true;
+         game.audio.playSound('receiveDamage');
          this._enemyAttackShakeDelay = new gtp.Delay({ millis: 1000, callback: gtp.Utils.hitch(this, this._enemyAttackShakeCallback) });
          
       }

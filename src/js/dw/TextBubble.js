@@ -241,6 +241,12 @@ console.log('>>> textDone set to false');
             else {
                this._append(segment);
             }
+            if (segment.sound) {
+               game.audio.playSound(segment.sound);
+            }
+            if (segment.music) {
+               game.audio.playMusic(segment.music);
+            }
             return true;
          }
          return false;
