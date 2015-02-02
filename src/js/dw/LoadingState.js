@@ -4,7 +4,37 @@ var LoadingState = function(args) {
    this.assetsLoaded = false;
 };
 LoadingState.prototype = Object.create(_BaseState.prototype, {
-
+   
+   _createWeaponsArray: {
+      value: function(weapons) {
+         'use strict';
+         
+         var weaponArray = [];
+         
+         for (var weaponName in weapons) {
+            if (weapons.hasOwnProperty(weaponName)) {
+               weaponArray.push(weapons[weaponName]);
+            }
+         }
+         
+         weaponArray.sort(function(a, b) {
+            return a.power - b.power;
+         });
+         
+         return weaponArray;
+      }
+   },
+   
+   _createWeaponsMap: {
+      value: function(weapons) {
+         'use strict';
+         for (var weaponName in weapons) {
+            weapons[weaponName] = new Weapon(weaponName, weapons[weaponName]);
+         }
+         return weapons;
+      }
+   },
+   
    update: {
       value: function(delta) {
          'use strict';
@@ -61,7 +91,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                }
                
                var equipment = game.assets.get('equipment');
-               game.assets.set('weapons', equipment.weapons);
+               var weaponsMap = self._createWeaponsMap(equipment.weapons);
+               game.assets.set('weapons', weaponsMap);
+               game.assets.set('weaponsArray', self._createWeaponsArray(weaponsMap));
                game.assets.set('armor', equipment.armor);
                
                var font = game.assets.get('font');

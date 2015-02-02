@@ -50,6 +50,9 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys.M, true)) {
                game.toggleMuted();
             }
+            else if (im.isKeyDown(gtp.Keys.W, true)) {
+               game.cycleWeapon();
+            }
          }
          
       }

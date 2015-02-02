@@ -33,6 +33,24 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   cycleWeapon: {
+      value: function() {
+         if (game.hero && game.hero.weapon) {
+            var curWeapon = game.hero.weapon.name;
+            var weaponArray = game.assets.get('weaponsArray');
+            var i;
+            for (i=0; i<weaponArray.length; i++) {
+               if (curWeapon === weaponArray[i].name) {
+                  break;
+               }
+            }
+            i = (i + 1) % weaponArray.length;
+            game.hero.weapon = weaponArray[i];
+            this.setStatusMessage('Weapon changed to: ' + game.hero.weapon.name);
+         }
+      }
+   },
+   
    drawMap: {
       value: function(ctx) {
          'use strict';
