@@ -27,6 +27,7 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
                break;
       
             case 1: // STATUS
+               screen.showStatus();
                break;
       
             case 2: // STAIRS

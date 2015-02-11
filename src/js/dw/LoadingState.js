@@ -5,6 +5,36 @@ var LoadingState = function(args) {
 };
 LoadingState.prototype = Object.create(_BaseState.prototype, {
    
+   _createArmorArray: {
+      value: function(armors) {
+         'use strict';
+         
+         var armorArray = [];
+         
+         for (var armorName in armors) {
+            if (armors.hasOwnProperty(armorName)) {
+               armorArray.push(armors[armorName]);
+            }
+         }
+         
+         armorArray.sort(function(a, b) {
+            return a.defense - b.defense;
+         });
+         
+         return armorArray;
+      }
+   },
+   
+   _createArmorMap: {
+      value: function(armors) {
+         'use strict';
+         for (var armorName in armors) {
+            armors[armorName] = new Armor(armorName, armors[armorName]);
+         }
+         return armors;
+      }
+   },
+   
    _createWeaponsArray: {
       value: function(weapons) {
          'use strict';
@@ -94,7 +124,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                var weaponsMap = self._createWeaponsMap(equipment.weapons);
                game.assets.set('weapons', weaponsMap);
                game.assets.set('weaponsArray', self._createWeaponsArray(weaponsMap));
-               game.assets.set('armor', equipment.armor);
+               var armorMap = self._createArmorMap(equipment.armor);
+               game.assets.set('armor', armorMap);
+               game.assets.set('armorArray', self._createArmorArray(armorMap));
                
                var font = game.assets.get('font');
                game.assets.set('font', new gtp.BitmapFont(font, 16,20, 16,12));

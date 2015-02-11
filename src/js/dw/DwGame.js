@@ -33,8 +33,28 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   cycleArmor: {
+      value: function() {
+         'use strict';
+         if (game.hero && game.hero.armor) {
+            var curArmor = game.hero.armor.name;
+            var armorArray = game.assets.get('armorArray');
+            var i;
+            for (i=0; i<armorArray.length; i++) {
+               if (curArmor === armorArray[i].name) {
+                  break;
+               }
+            }
+            i = (i + 1) % armorArray.length;
+            game.hero.armor = armorArray[i];
+            this.setStatusMessage('Armor changed to: ' + game.hero.armor.name);
+         }
+      }
+   },
+   
    cycleWeapon: {
       value: function() {
+         'use strict';
          if (game.hero && game.hero.weapon) {
             var curWeapon = game.hero.weapon.name;
             var weaponArray = game.assets.get('weaponsArray');
@@ -319,17 +339,20 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    _loadGame: {
       value: function() {
+         'use strict';
          var hero = game.hero;
          hero.hp = hero.maxHp = 15;
          hero.mp = hero.maxMp = 15;
          hero._strength = 4;
          hero.agility = 4;
-         hero.weapon = game.assets.get('weapons')['club'];
+         hero.weapon = game.assets.get('weapons').club;
+         hero.armor = game.assets.get('armor').clothes;
       }
    },
    
    setCameraOffset: {
       value: function(dx, dy) {
+         'use strict';
          this._cameraDx = dx;
          this._cameraDy = dy;
       }
@@ -430,6 +453,9 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    drawString: {
       value: function(text, x, y) {
          'use strict';
+         if (!text.charAt) { // Allow us to pass in stuff like numerics
+            text = text.toString();
+         }
          this.assets.get('font').drawString(text, x, y);
       }
    },

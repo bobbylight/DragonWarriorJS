@@ -1,22 +1,22 @@
-function Weapon(name, args) {
+function Armor(name, args) {
    'use strict';
    this.name = name;
    this.baseCost = args.baseCost || 0;
-   this.power = args.power || 1;
+   this.defense = args.defense || 1;
    this.displayName = args.displayName || this.name;
 }
 
-Weapon.prototype = {
+Armor.prototype = {
    
    toString: function() {
       'use strict';
-      return '[weapon: ' +
+      return '[Armor: ' +
          'name=' + this.name +
          ', baseCost=' + this.baseCost +
-         ', power=' + this.power +
+         ', defense=' + this.defense +
          ']';
    }
    
 };
 
-Weapon.prototype.constructor = Weapon;
+Armor.prototype.constructor = Armor;

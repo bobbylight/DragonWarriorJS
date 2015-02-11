@@ -55,7 +55,11 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
       value: function(delta) {
          'use strict';
          
-         //var im = game.inputManager;
+         if (this._statusBubble && game.anyKeyDown()) {
+            delete this._statusBubble;
+            return;
+         }
+         
          var done = this._commandBubble.handleInput();
          if (done) {
             this._commandBubble.handleCommandChosen(this);
@@ -164,6 +168,16 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          if (this._substate!==_RoamingSubState.ROAMING || this._showStats) {
             this._statBubble.paint(ctx);
          }
+         if (this._statusBubble) {
+            this._statusBubble.paint(ctx);
+         }
+      }
+   },
+   
+   showStatus: {
+      value: function() {
+         'use strict';
+         this._statusBubble = new StatusBubble();
       }
    },
    

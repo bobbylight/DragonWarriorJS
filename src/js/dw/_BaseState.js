@@ -53,6 +53,9 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys.W, true)) {
                game.cycleWeapon();
             }
+            else if (im.isKeyDown(gtp.Keys.A, true)) {
+               game.cycleArmor();
+            }
          }
          
       }
