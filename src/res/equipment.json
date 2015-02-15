@@ -33,6 +33,16 @@
       
       "erdricksArmor": { "baseCost": -1, "defense": 28, "displayName": "Erdrick's Armor" }
       
+   },
+   
+   "shields": {
+      
+      "smallShield": { "baseCost": 90, "defense": 4, "displayName": "Small Shield" },
+      
+      "largeShield": { "baseCost": 800, "defense": 10, "displayName": "Large Shield" },
+      
+      "silverShield": { "baseCost": 14800, "defense": 20, "displayName": "Silver Shield" }
+      
    }
    
 }

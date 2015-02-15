@@ -52,6 +52,25 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   cycleShield: {
+      value: function() {
+         'use strict';
+         if (game.hero && game.hero.shield) {
+            var curShield = game.hero.shield.name;
+            var shieldArray = game.assets.get('shieldArray');
+            var i;
+            for (i=0; i<shieldArray.length; i++) {
+               if (curShield === shieldArray[i].name) {
+                  break;
+               }
+            }
+            i = (i + 1) % shieldArray.length;
+            game.hero.shield = shieldArray[i];
+            this.setStatusMessage('Shield changed to: ' + game.hero.shield.name);
+         }
+      }
+   },
+   
    cycleWeapon: {
       value: function() {
          'use strict';
@@ -347,6 +366,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          hero.agility = 4;
          hero.weapon = game.assets.get('weapons').club;
          hero.armor = game.assets.get('armor').clothes;
+         hero.shield = game.assets.get('shields').smallShield;
       }
    },
    

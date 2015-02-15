@@ -56,6 +56,9 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys.A, true)) {
                game.cycleArmor();
             }
+            else if (im.isKeyDown(gtp.Keys.S, true)) {
+               game.cycleShield();
+            }
          }
          
       }

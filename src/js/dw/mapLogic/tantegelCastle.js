@@ -11,46 +11,80 @@ TantegelCastle.prototype = (function() {
    
    var talks = {
       
-      greeter: function(game) {
+      south_soldier_left: function(game) {
          return 'Welcome to Tantegel Castle!';
       },
       
-      oldman1: function(game) {
-         
-         if (game.hero.getStrength()<100) {
-            return [
-               'Brave traveler, you must save us from the dreaded Dragon Lord!!',
-               'But you should buy some supplies before venturing out...',
-               {
-                  id: 'makeUserChoose',
-                  clear: true,
-                  text: 'Do you want my help?',
-                  choices: [
-                     { text: 'Yes', next: function() {
-                           game.hero.addGold(10);
-                           return 'iGaveYouMoney';
-                        }
-                     },
-                     { text: 'Nope', next: 'makeUserChoose' },
-                  ]
-               },
-               {
-                  id: 'iGaveYouMoney', text: "I've given you all I have... 100 gold.  Good luck, my child."
-               }
-            ];
-         }
-         
-         else {
-            return 'Wow, you are strong! I cannot help you.  Go, defeat the Dragon Lord!';
-         }
+      south_soldier_right: function(game) {
+         return 'Zzz...';
       },
       
-      innkeeper: function(game) {
-         return 'Sorry, the inn is temporarily closed while we renovate.';
+      bottom_left_merchant_1: function(game) {
+         return "I'm merchant 1";
       },
       
-      merchant1: function(game) {
-         return "I'm all sold out after the Carnival yesterday.  Boy, you missed out on some good deals!";
+      bottom_left_merchant_2: function(game) {
+         return "I'm merchant 2";
+      },
+      
+      bottom_left_merchant_3: function(game) {
+         return "I'm merchant 3";
+      },
+      
+      bottom_right_soldier: function(game) {
+         return 'I am not sure what to say...';
+      },
+      
+      bottom_right_old_man: function(game) {
+         return 'I am not sure what to say either...';
+      },
+      
+      stairs_soldier_north: function(game) {
+         return 'Up these stairs resides the king.';
+      },
+      
+      stairs_soldier_south: function(game) {
+         return 'I go on break in 15 minutes.';
+      },
+      
+      woman_near_stairs: function(game) {
+         return 'I do not have my text to say yet.';
+      },
+      
+      man_near_stairs: function(game) {
+         return 'I do not have my text to say yet either.';
+      },
+      
+      treasure_room_soldier: function(game) {
+         return 'How did you get in here???';
+      },
+      
+      man_in_west_room: function(game) {
+         return 'I am not sure what to say...';
+      },
+      
+      top_right_soldier: function(game) {
+         return 'You are in Tantegel Castle.';
+      },
+      
+      outside_merchant: function(game) {
+         return 'I have nothing to sell right now!';
+      },
+      
+      outside_woman: function(game) {
+         return 'What are you doing out here?';
+      },
+      
+      prison_guard_soldier: function(game) {
+         return 'This is the prison.';
+      },
+      
+      old_man_east: function(game) {
+         return "Leave me alone, I'm old!";
+      },
+      
+      prisoner_red_soldier: function(game) {
+         return 'I was arrested for being a peeping tom.';
       }
       
    };

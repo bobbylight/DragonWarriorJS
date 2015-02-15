@@ -54,7 +54,12 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
       value: function() {
          'use strict';
          var defense = Math.floor(this.agility / 2);
-         // TODO: Equipment modifiers
+         if (this.armor) {
+            defense += this.armor.defense;
+         }
+         if (this.shield) {
+            defense += this.shield.defense;
+         }
          return defense;
       }
    },

@@ -3,6 +3,7 @@ var LoadingState = function(args) {
    _BaseState.apply(this, args);
    this.assetsLoaded = false;
 };
+
 LoadingState.prototype = Object.create(_BaseState.prototype, {
    
    _createArmorArray: {
@@ -32,6 +33,36 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             armors[armorName] = new Armor(armorName, armors[armorName]);
          }
          return armors;
+      }
+   },
+   
+   _createShieldArray: {
+      value: function(shields) {
+         'use strict';
+         
+         var shieldArray = [];
+         
+         for (var shieldName in shields) {
+            if (shields.hasOwnProperty(shieldName)) {
+               shieldArray.push(shields[shieldName]);
+            }
+         }
+         
+         shieldArray.sort(function(a, b) {
+            return a.defense - b.defense;
+         });
+         
+         return shieldArray;
+      }
+   },
+   
+   _createShieldMap: {
+      value: function(shields) {
+         'use strict';
+         for (var shieldName in shields) {
+            shields[shieldName] = new Shield(shieldName, shields[shieldName]);
+         }
+         return shields;
       }
    },
    
@@ -127,6 +158,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                var armorMap = self._createArmorMap(equipment.armor);
                game.assets.set('armor', armorMap);
                game.assets.set('armorArray', self._createArmorArray(armorMap));
+               var shieldMap = self._createShieldMap(equipment.shields);
+               game.assets.set('shields', shieldMap);
+               game.assets.set('shieldArray', self._createShieldArray(shieldMap));
                
                var font = game.assets.get('font');
                game.assets.set('font', new gtp.BitmapFont(font, 16,20, 16,12));

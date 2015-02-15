@@ -15,7 +15,7 @@ Enemy.prototype = Object.create(BattleEntity.prototype, {
       value: function(hero) {
          'use strict';
          
-         if (hero.defense >= this.str) {
+         if (hero.getDefense() >= this.str) {
             return gtp.Utils.randomInt(0, Math.floor((this.str + 4) / 6)+1);
          }
          

@@ -25,7 +25,7 @@ Brecconary.prototype = (function() {
       
       soldier1: function(game) {
          return [ 'Many have been the warriors who have perished on this quest.',
-            'But for thee I wish success, {hero.name}.' ];
+            'But for thee I wish success, \\w{hero.name}.' ];
       },
       
       oldman_test: function(game) {
