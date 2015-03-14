@@ -89,7 +89,7 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    
    _enemyAttackCallback: {
       value: function() {
-         
+         'use strict';
          delete this._enemyAttackDelay;
          this._shake = true;
          game.audio.playSound('receiveDamage');
@@ -100,13 +100,14 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    
    _enemyAttackShakeCallback: {
       value: function() {
+         'use strict';
          
          delete this._enemyAttackShakeDelay;
          this._shake = false;
          
          var damage = this._enemy.ai(game.hero, this._enemy).damage;
          game.hero.takeDamage(damage);
-         text = 'Thy hit points are reduced by ' + damage + '.';
+         var text = 'Thy hit points are reduced by ' + damage + '.';
          if (!game.hero.isDead()) {
             text += '\nCommand?';
          }

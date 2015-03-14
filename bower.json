@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "gtp": "file://D:/dev/htmlgames/gtp/.git"
+    "gtp": "file://D:/dev/htmlgames/gtp/.git#master"
   }
 }

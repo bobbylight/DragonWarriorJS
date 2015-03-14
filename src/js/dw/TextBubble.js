@@ -44,6 +44,9 @@ console.log('>>> textDone set to false');
          if (text.choices) {
             this._questionBubble = new QuestionBubble(game, text.choices);
          }
+         else if (text.shopping) {
+            this._shoppingBubble = new ShoppingBubble(game, text.shopping);
+         }
       }
    },
    
@@ -55,15 +58,29 @@ console.log('>>> textDone set to false');
       value: function() {
          'use strict';
          
-         if (this._textDone && this._questionBubble) {
-            var result = this._questionBubble.handleInput();
-            if (result) {
-               var nextState = this._questionBubble.getSelectedChoiceNextDialogue();
-               this._conversation.setDialogueState(nextState);
-               delete this._questionBubble;
-               return !this._updateConversation();
+         var result, nextState;
+         
+         if (this._textDone) {
+            if (this._shoppingBubble) {
+               result = this._shoppingBubble.handleInput();
+               if (result) {
+                  nextState = this._shoppingBubble.getSelectedChoiceNextDialogue();
+                  this._conversation.setDialogueState(nextState);
+                  delete this._shoppingBubble;
+                  return !this._updateConversation();
+               }
+               return false;
+         }
+            else if (this._questionBubble) {
+               result = this._questionBubble.handleInput();
+               if (result) {
+                  nextState = this._questionBubble.getSelectedChoiceNextDialogue();
+                  this._conversation.setDialogueState(nextState);
+                  delete this._questionBubble;
+                  return !this._updateConversation();
+               }
+               return false;
             }
-            return false;
          }
          
          if (game.anyKeyDown()) {
@@ -89,6 +106,7 @@ console.log('>>> textDone set to false');
       value: function() {
          'use strict';
          return this._textDone && !this._questionBubble &&
+               !this._shoppingBubble &&
                (!this._conversation || !this._conversation.hasNext());
       }
    },
@@ -150,6 +168,10 @@ console.log('Going to next line');
             }
          }
          
+         else if (this._shoppingBubble) {
+            this._shoppingBubble.update(delta);
+         }
+         
          else if (this._questionBubble) {
             this._questionBubble.update(delta);
          }
@@ -188,8 +210,13 @@ console.log('Going to next line');
             }
          }
          
-         if (this._textDone && this._questionBubble) {
-            this._questionBubble.paint(ctx);
+         if (this._textDone) {
+            if (this._shoppingBubble) {
+               this._shoppingBubble.paint(ctx);
+            }
+            else if (this._questionBubble) {
+               this._questionBubble.paint(ctx);
+            }
          }
          
       }
@@ -218,12 +245,16 @@ console.log('>>> textDone set to false');
          if (text.choices) {
             this._questionBubble = new QuestionBubble(game, text.choices);
          }
+         else if (text.shopping) {
+            this._shoppingBubble = new ShoppingBubble(game, text.shopping.choices);
+         }
       }
    },
    
    setConversation: {
       value: function(conversation) {
          'use strict';
+         delete this._shoppingBubble;
          delete this._questionBubble;
          this._conversation = conversation;
          this._setText(this._conversation.start());

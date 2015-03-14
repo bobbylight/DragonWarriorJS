@@ -30,7 +30,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       value: function(armors) {
          'use strict';
          for (var armorName in armors) {
-            armors[armorName] = new Armor(armorName, armors[armorName]);
+            if (armors.hasOwnProperty(armorName)) {
+               armors[armorName] = new Armor(armorName, armors[armorName]);
+            }
          }
          return armors;
       }
@@ -60,7 +62,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       value: function(shields) {
          'use strict';
          for (var shieldName in shields) {
-            shields[shieldName] = new Shield(shieldName, shields[shieldName]);
+            if (shields.hasOwnProperty(shieldName)) {
+               shields[shieldName] = new Shield(shieldName, shields[shieldName]);
+            }
          }
          return shields;
       }
@@ -90,7 +94,9 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
       value: function(weapons) {
          'use strict';
          for (var weaponName in weapons) {
-            weapons[weaponName] = new Weapon(weaponName, weapons[weaponName]);
+            if (weapons.hasOwnProperty(weaponName)) {
+               weapons[weaponName] = new Weapon(weaponName, weapons[weaponName]);
+            }
          }
          return weapons;
       }

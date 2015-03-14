@@ -48,6 +48,8 @@
       "QuestionSegment": true,
       "RoamingState": true,
       "RoamingEntity": true,
+      "Shield": true,
+      "ShoppingBubble": true,
       "Sounds": true,
       "StatBubble": true,
       "StatusBubble": true,
@@ -55,7 +57,8 @@
       "TalkSegment": true,
       "TextBubble": true,
       "tiled": true,
-      "TitleScreenState": true
+      "TitleScreenState": true,
+      "Weapon": true
    },
    "exported": [ "init", "BattleEntity" ]
 }

@@ -170,7 +170,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             self.hero.setMapLocation(-1, -1); // Free the location he was in in the map
             self.setMap(mapName + '.json');
             self.hero.setMapLocation(newRow, newCol);
-            self.hero.direction = dir || Direction.SOUTH;
+            self.hero.direction = typeof dir === 'undefined' ? Direction.SOUTH : dir;
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
          };
          this.setState(new /*FadeOutInState*/MapChangeState(this.state, this.state, updatePlayer));
@@ -311,7 +311,10 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var dir = Direction.SOUTH;
          var tempDir = obj.properties.dir;
          if (tempDir) {
-            dir = Direction[tempDir.toUpperCase()] || Direction.SOUTH;
+            dir = Direction[tempDir.toUpperCase()];// || Direction.SOUTH;
+            if (typeof dir === 'undefined') {
+               dir = Direction.SOUTH;
+            }
          }
          var wanders = true;
          var wanderStr = obj.properties.wanders;
@@ -575,6 +578,27 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function() {
          'use strict';
          return this.inputManager.isKeyDown(gtp.Keys.X, true);
+      }
+   },
+   
+   getWeapon: {
+      value: function(weapon) {
+         'use strict';
+         return this.assets.get('weapons')[weapon];
+      }
+   },
+   
+   getArmor: {
+      value: function(armor) {
+         'use strict';
+         return this.assets.get('armors')[armor];
+      }
+   },
+   
+   getShield: {
+      value: function(shield) {
+         'use strict';
+         return this.assets.get('shields')[shield];
       }
    }
    

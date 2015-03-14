@@ -44,7 +44,7 @@ Brecconary.prototype = (function() {
                            return 'iGaveYouMoney';
                         }
                      },
-                     { text: 'Nope', next: 'makeUserChoose' },
+                     { text: 'Nope', next: 'makeUserChoose' }
                   ]
                },
                {
@@ -63,7 +63,27 @@ Brecconary.prototype = (function() {
       },
       
       merchant1: function(game) {
-         return "I'm all sold out after the Carnival yesterday.  Boy, you missed out on some good deals!";
+         return [
+            {
+               clear: false,
+               text: "We deal in weapons and armor.\nDost thou wish to buy anything today?",
+               choices: [
+                  { text: 'Yes', next: 'whatToBuy' },
+                  { text: 'No', next: 'bidFarewell' }
+               ]
+            },
+            {
+               id: 'whatToBuy',
+               text: 'What dost thou wish to buy?',
+               shopping: {
+                  choices: [ 'bambooPole', 'club', 'copperSword' ]
+               }
+            },
+            {
+               id: 'bidFarewell',
+               text: 'Please, come again.'
+            }
+         ];
       }
       
    };

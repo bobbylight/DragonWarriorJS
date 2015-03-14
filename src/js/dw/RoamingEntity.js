@@ -7,7 +7,7 @@ function RoamingEntity() {
    this.xOffs = this.xOffs || 0;
    this.yOffs = this.yOffs || 0;
    this._stepTick = 0;
-   // TODO: Make this time-dependant!
+   // TODO: Make this time-dependent!
    this._moveInc = game._scale * (game._targetFps===30 ? 2 : 1);
 }
 

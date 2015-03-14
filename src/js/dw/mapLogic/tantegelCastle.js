@@ -85,6 +85,20 @@ TantegelCastle.prototype = (function() {
       
       prisoner_red_soldier: function(game) {
          return 'I was arrested for being a peeping tom.';
+      },
+      
+      // King's court NPCs
+      
+      king_soldier_right: function(game) {
+         return '???';
+      },
+      
+      king_soldier_left: function(game) {
+         return '???';
+      },
+      
+      king_soldier_wandering: function(game) {
+         return '???';
       }
       
    };
