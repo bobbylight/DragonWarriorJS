@@ -59,7 +59,30 @@ Brecconary.prototype = (function() {
       },
       
       innkeeper: function(game) {
-         return 'Sorry, the inn is temporarily closed while we renovate.';
+         //return 'Sorry, the inn is temporarily closed while we renovate.';
+         return [
+            {
+               clear: false,
+               text: 'Welcome to the inn.  Our price is 6 gold per night.  Wilst thou stay?',
+               choices: [
+                  { text: 'Yes', next: 'stay' },
+                  { text: 'No',  next: 'leave' }
+               ]
+            },
+            {
+               id: 'stay',
+               text: 'Have a good night!'
+            },
+            {
+               text: 'I hope you had a good night.'
+               , overnight: true
+            },
+            { text: 'I shall see thee again.', next: null },
+            {
+               id: 'leave',
+               text: 'I shall see thee again.'
+            }
+         ];
       },
       
       merchant1: function(game) {

@@ -70,7 +70,7 @@ console.log('>>> textDone set to false');
                   return !this._updateConversation();
                }
                return false;
-         }
+            }
             else if (this._questionBubble) {
                result = this._questionBubble.handleInput();
                if (result) {
@@ -100,6 +100,17 @@ console.log('>>> textDone set to false');
    },
    
    /**
+    * Forces the conversation to go to the next segment.  Should only be called
+    * internally.  This is a sign of bad design.
+    */
+   nudgeConversation: {
+      value: function() {
+         'use strict';
+         this._updateConversation();
+      }
+   },
+   
+   /**
     * Returns true if the current conversation has completed.
     */
    isDone: {
@@ -108,6 +119,20 @@ console.log('>>> textDone set to false');
          return this._textDone && !this._questionBubble &&
                !this._shoppingBubble &&
                (!this._conversation || !this._conversation.hasNext());
+      }
+   },
+   
+   isOvernight: {
+      value: function() {
+         'use strict';
+         return this._overnight;
+      }
+   },
+   
+   clearOvernight: {
+      value: function(overnight) {
+         'use strict';
+         delete this._overnight;
       }
    },
    
@@ -265,7 +290,13 @@ console.log('>>> textDone set to false');
       value: function() {
          'use strict';
          if (this._conversation.hasNext()) {
+            if (this._conversation.current().overnight && this._textDone) {
+               this._overnight = true;
+            }
             var segment = this._conversation.next();
+//            if (segment.overnight) {
+//               this._overnight = true;
+//            } else
             if (segment.clear) {
                this._setText(segment);
             }

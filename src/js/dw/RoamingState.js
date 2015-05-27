@@ -1,7 +1,8 @@
 var _RoamingSubState = Object.freeze({
    ROAMING: 0,
    MENU: 1,
-   TALKING: 2
+   TALKING: 2,
+   OVERNIGHT: 3
 });
 
 var RoamingState = function() {
@@ -14,6 +15,7 @@ var RoamingState = function() {
    this._updateMethods[_RoamingSubState.ROAMING] = this._updateRoaming;
    this._updateMethods[_RoamingSubState.MENU] = this._updateMenu;
    this._updateMethods[_RoamingSubState.TALKING] = this._updateTalking;
+   this._updateMethods[_RoamingSubState.OVERNIGHT] = this._updateOvernight;
    
    this._textBubble = new TextBubble(game);
    this._showTextBubble = false;
@@ -135,7 +137,11 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          
          var done = this._textBubble.handleInput();
-         if (this._showTextBubble) {
+         if (this._textBubble.isOvernight()) {
+            this._substate = _RoamingSubState.OVERNIGHT;
+            this._textBubble.clearOvernight();
+         }
+         else if (this._showTextBubble) {
             this._textBubble.update(delta);
          }
          
@@ -143,6 +149,31 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             this.startRoaming();
             return;
          }
+      }
+   },
+   
+   _updateOvernight: {
+      value: function(delta) {
+         'use strict';
+         
+         if (this._overnightDelay) {
+            this._overnightDelay.update(delta);
+         }
+         else {
+            game.audio.playMusic('overnight');
+            this._overnightDelay = new gtp.Delay({ millis: [ 2000 ],
+                  callback: gtp.Utils.hitch(this, this._overnightOver) });
+         }
+      }
+   },
+   
+   _overnightOver: {
+      value: function() {
+         'use strict';
+         game.audio.playMusic(Sounds.MUSIC_TOWN);
+         delete this._overnightDelay;
+         this._substate = _RoamingSubState.TALKING;
+         this._textBubble.nudgeConversation(); // User doesn't have to press a key
       }
    },
    

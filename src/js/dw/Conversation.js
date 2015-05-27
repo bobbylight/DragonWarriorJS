@@ -70,6 +70,11 @@ Conversation.prototype = (function() {
          return this._segmentIndex < this._segments.length;
       },
       
+      current: function() {
+         return this._segmentIndex >= this._segments.length ? null :
+               this._segments[this._segmentIndex];
+      },
+      
       next: function() {
          return this._segments[this._segmentIndex++];
       },
