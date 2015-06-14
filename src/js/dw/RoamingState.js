@@ -27,6 +27,16 @@ var RoamingState = function() {
 
 RoamingState.prototype = Object.create(_BaseState.prototype, {
    
+   _OVERNIGHT_DARK_TIME: {
+      value: 2500,
+      writable: false
+   },
+   
+   _OVERNIGHT_FADE_TIME: {
+      value: 500,
+      writable: false
+   },
+   
    _totalTime: {
       value: 0,
       writable: true
@@ -40,6 +50,9 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          if (game.inputManager.isKeyDown(gtp.Keys.R, true)) {
             game.startRandomEncounter();
             return;
+         }
+         else if (game.inputManager.isKeyDown(gtp.Keys.O, true)) {
+            this._substate = _RoamingSubState.OVERNIGHT;
          }
          
          game.hero.update(delta);
@@ -137,7 +150,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          
          var done = this._textBubble.handleInput();
-         if (this._textBubble.isOvernight()) {
+         if (this._textBubble.currentTextDone() && this._textBubble.isOvernight()) {
             this._substate = _RoamingSubState.OVERNIGHT;
             this._textBubble.clearOvernight();
          }
@@ -160,8 +173,8 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             this._overnightDelay.update(delta);
          }
          else {
-            game.audio.playMusic('overnight');
-            this._overnightDelay = new gtp.Delay({ millis: [ 2000 ],
+            game.audio.playMusic('overnight', false);
+            this._overnightDelay = new gtp.Delay({ millis: [ this._OVERNIGHT_DARK_TIME ],
                   callback: gtp.Utils.hitch(this, this._overnightOver) });
          }
       }
@@ -201,6 +214,25 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          }
          if (this._statusBubble) {
             this._statusBubble.paint(ctx);
+         }
+         
+         if (this._overnightDelay) {
+            ctx.save();
+            var overnightRemaining = this._overnightDelay.getRemaining();
+            var alpha, fadeInTime = this._OVERNIGHT_FADE_TIME;
+            if (overnightRemaining > (this._OVERNIGHT_DARK_TIME - fadeInTime)) {
+               alpha = (this._OVERNIGHT_DARK_TIME - overnightRemaining) / fadeInTime;
+               ctx.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+            }
+            else if (overnightRemaining < fadeInTime) {
+               alpha = overnightRemaining / fadeInTime;
+               ctx.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+            }
+            else {
+               ctx.fillStyle = 'rgba(0, 0, 0, 1)';
+            }
+            ctx.fillRect(0, 0, game.getWidth(), game.getHeight());
+            ctx.restore();
          }
       }
    },

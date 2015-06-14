@@ -72,10 +72,10 @@ Brecconary.prototype = (function() {
             {
                id: 'stay',
                text: 'Have a good night!'
+               , overnight: true
             },
             {
                text: 'I hope you had a good night.'
-               , overnight: true
             },
             { text: 'I shall see thee again.', next: null },
             {

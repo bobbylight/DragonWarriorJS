@@ -122,6 +122,13 @@ console.log('>>> textDone set to false');
       }
    },
    
+   currentTextDone: {
+      value: function() {
+         'use strict';
+         return this._textDone;
+      }
+   },
+   
    isOvernight: {
       value: function() {
          'use strict';
