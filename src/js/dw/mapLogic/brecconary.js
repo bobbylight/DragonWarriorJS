@@ -59,7 +59,6 @@ Brecconary.prototype = (function() {
       },
       
       innkeeper: function(game) {
-         //return 'Sorry, the inn is temporarily closed while we renovate.';
          return [
             {
                clear: false,
@@ -77,7 +76,7 @@ Brecconary.prototype = (function() {
             {
                text: 'I hope you had a good night.'
             },
-            { text: 'I shall see thee again.', next: null },
+            { text: 'I shall see thee again.', next: '_done' },
             {
                id: 'leave',
                text: 'I shall see thee again.'
@@ -86,27 +85,11 @@ Brecconary.prototype = (function() {
       },
       
       merchant1: function(game) {
-         return [
-            {
-               clear: false,
-               text: "We deal in weapons and armor.\nDost thou wish to buy anything today?",
-               choices: [
-                  { text: 'Yes', next: 'whatToBuy' },
-                  { text: 'No', next: 'bidFarewell' }
-               ]
-            },
-            {
-               id: 'whatToBuy',
-               text: 'What dost thou wish to buy?',
-               shopping: {
-                  choices: [ 'bambooPole', 'club', 'copperSword' ]
-               }
-            },
-            {
-               id: 'bidFarewell',
-               text: 'Please, come again.'
-            }
-         ];
+         return {
+            conversationType: 'merchant',
+            choices: [ 'bambooPole', 'club', 'copperSword' ],
+            introText: "We deal in weapons and armor.\nDost thou wish to buy anything today?"
+         };
       }
       
    };

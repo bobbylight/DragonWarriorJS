@@ -68,15 +68,11 @@ ShoppingBubble.prototype = Object.create(Bubble.prototype, {
       }
    },
    
-   getSelectedChoiceNextDialogue: {
+   getSelectedItem: {
       value: function() {
          'use strict';
-         var choice = this._choices[this._curChoice];
-         if (choice.next) {
-            // Just a string id of the next dialogue, or a function
-            return choice.next.length ? choice.next : choice.next();
-         }
-         return null;
+         return this._curChoice === -1 ? null :
+               this._choices[this._curChoice];
       }
    },
    

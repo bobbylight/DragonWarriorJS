@@ -32,6 +32,7 @@
       "Bubble": true,
       "CommandBubble": true,
       "Conversation": true,
+      "ConversationSegment": true,
       "Direction": true,
       "DwGame": true,
       "Enemy": true,

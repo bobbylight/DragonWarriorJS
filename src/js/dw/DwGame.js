@@ -386,8 +386,10 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          'use strict';
          this._loadGame();
          var transitionLogic = function() {
-            game.setMap('overworld.json');
-            game.hero.setMapLocation(52, 45);
+//            game.setMap('overworld.json');
+//            game.hero.setMapLocation(52, 45);
+game.setMap('brecconary.json');
+game.hero.setMapLocation(7, 6);
          };
          game.setState(new gtp.FadeOutInState(this.state, new RoamingState(), transitionLogic));
       }

@@ -29,23 +29,24 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
    },
    
    _append: {
-      value: function(text) {
+      value: function(segment) {
          'use strict';
-         this._text = this._text + '\n' + text.text;
+         var curText = segment.currentText();
+         this._text = this._text + '\n' + curText;
          this._curLine = this._lines.length;
          var w = this.w - 2*Bubble.MARGIN;
-         var breakApartResult = this._breakApart(text.text, w);
+         var breakApartResult = this._breakApart(curText, w);
          this._lines = this._lines.concat(breakApartResult.lines);
          this._delays = breakApartResult.delays;
          this._curOffs = -1;
          this._curCharMillis = 0;
          this._textDone = false;
 console.log('>>> textDone set to false');
-         if (text.choices) {
-            this._questionBubble = new QuestionBubble(game, text.choices);
+         if (segment.choices) {
+            this._questionBubble = new QuestionBubble(game, segment.choices);
          }
-         else if (text.shopping) {
-            this._shoppingBubble = new ShoppingBubble(game, text.shopping);
+         else if (segment.shopping) {
+            this._shoppingBubble = new ShoppingBubble(game, segment.shopping);
          }
       }
    },
@@ -64,10 +65,12 @@ console.log('>>> textDone set to false');
             if (this._shoppingBubble) {
                result = this._shoppingBubble.handleInput();
                if (result) {
-                  nextState = this._shoppingBubble.getSelectedChoiceNextDialogue();
-                  this._conversation.setDialogueState(nextState);
+                  var item = this._shoppingBubble.getSelectedItem();
                   delete this._shoppingBubble;
-                  return !this._updateConversation();
+                  this._conversation.setItem(item);
+                  nextState = item.baseCost > game.hero.gold ?
+                     Conversation.NOT_ENOUGH_SEGMENT : Conversation.CONFIRM_SEGMENT;
+                  return !this._updateConversation(nextState);
                }
                return false;
             }
@@ -75,9 +78,9 @@ console.log('>>> textDone set to false');
                result = this._questionBubble.handleInput();
                if (result) {
                   nextState = this._questionBubble.getSelectedChoiceNextDialogue();
-                  this._conversation.setDialogueState(nextState);
+                  //this._conversation.setDialogueState(nextState);
                   delete this._questionBubble;
-                  return !this._updateConversation();
+                  return !this._updateConversation(nextState);
                }
                return false;
             }
@@ -238,7 +241,18 @@ console.log('Going to next line');
             if (this._textDone && this._conversation.hasNext()) {
                // TODO: Remove magic constants
                game.drawDownArrow(this.x+this.w-30, this.y+this.h-30);
-               console.log('--- ' + JSON.stringify(this._conversation.peekNext()));
+               var conv = this._conversation;
+               console.log('--- ' +
+                     JSON.stringify(this._conversation.peekNext(),
+                           // Custom replacer to prevent circular printing of conversation
+                           function(key, value) {
+                              if (value === conv) {
+                                 return;
+                              }
+                              return value;
+                           }
+                     )
+               );
             }
          }
          
@@ -260,9 +274,9 @@ console.log('Going to next line');
     * @param {TalkSegment} text The text to render.
     */
    _setText: {
-      value: function(text) {
+      value: function(segment) {
          'use strict';
-         this._text = text.text;
+         this._text = segment.currentText();
          if (this._text) {
             var w = this.w - 2*Bubble.MARGIN;
             var breakApartResult = this._breakApart(this._text, w);
@@ -274,11 +288,11 @@ console.log('Going to next line');
             this._textDone = false;
 console.log('>>> textDone set to false');
          }
-         if (text.choices) {
-            this._questionBubble = new QuestionBubble(game, text.choices);
+         if (segment.choices) {
+            this._questionBubble = new QuestionBubble(game, segment.choices);
          }
-         else if (text.shopping) {
-            this._shoppingBubble = new ShoppingBubble(game, text.shopping.choices);
+         else if (segment.shopping) {
+            this._shoppingBubble = new ShoppingBubble(game, segment.shopping.choices);
          }
       }
    },
@@ -294,13 +308,20 @@ console.log('>>> textDone set to false');
    },
    
    _updateConversation: {
-      value: function() {
+      value: function(forcedNextState) {
          'use strict';
-         if (this._conversation.hasNext()) {
+         if (forcedNextState || this._conversation.hasNext()) {
             if (this._conversation.current().overnight && this._textDone) {
                this._overnight = true;
             }
-            var segment = this._conversation.next();
+            var segment;
+            if (forcedNextState) {
+               this._conversation.setDialogueState(forcedNextState);
+               segment = this._conversation.current();
+            }
+            else {
+               segment = this._conversation.next();
+            }
 //            if (segment.overnight) {
 //               this._overnight = true;
 //            } else
