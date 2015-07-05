@@ -1,15 +1,15 @@
 /**
  * Transitions from the map to a battle
  */
-var BattleTransitionState = function(leavingState, enteringState) {
+dw.BattleTransitionState = function(leavingState, enteringState) {
    'use strict';
-   _BaseState.apply(this, arguments);
+   dw._BaseState.apply(this, arguments);
    
    this._enteringState = enteringState;
    this._enteringStateScreenshot = enteringState.createScreenshot();
 };
 
-BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
+dw.BattleTransitionState.prototype = Object.create(dw._BaseState.prototype, {
    
    _TICK_COUNT: {
       value: 25
@@ -28,7 +28,7 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
          
          this.state = 0;
          this.tick = 0;
-         game.audio.playMusic(Sounds.MUSIC_BATTLE);
+         game.audio.playMusic(dw.Sounds.MUSIC_BATTLE);
          
       }
    },
@@ -51,7 +51,7 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
          var tileSize = game.getTileSize();
          
          var cx = w/2;
-         var cy = h/2 - tileSize; // Matches where battle bg is draw in BattleState
+         var cy = h/2 - tileSize; // Matches where battle bg is draw in dw.BattleState
          var battleBG = game.assets.get('battleBG');
          var xts = battleBG.width / 5;
          var yts = battleBG.height / 5;
@@ -165,4 +165,4 @@ BattleTransitionState.prototype = Object.create(_BaseState.prototype, {
    
 });
 
-BattleTransitionState.prototype.constructor = BattleTransitionState;
+dw.BattleTransitionState.prototype.constructor = dw.BattleTransitionState;

@@ -1,11 +1,11 @@
-var DwGame = function() {
+dw.DwGame = function() {
    'use strict';
    gtp.Game.apply(this, arguments);
    this.map = null;
    this._drawMapCount = 0;
 };
 
-DwGame.prototype = Object.create(gtp.Game.prototype, {
+dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    
    start: {
       value: function() {
@@ -18,7 +18,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
    _init: {
       value: function() {
          'use strict';
-         this.hero = new Hero({ name: 'Erdrick' });
+         this.hero = new dw.Hero({ name: 'Erdrick' });
          this.npcs = [];
          this._bumpSoundDelay = 0;
          this._mapLogics = {};
@@ -66,7 +66,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             }
             i = (i + 1) % shieldArray.length;
             game.hero.shield = shieldArray[i];
-            this.setStatusMessage('Shield changed to: ' + game.hero.shield.name);
+            this.setStatusMessage('dw.Shield changed to: ' + game.hero.shield.name);
          }
       }
    },
@@ -170,10 +170,10 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             self.hero.setMapLocation(-1, -1); // Free the location he was in in the map
             self.setMap(mapName + '.json');
             self.hero.setMapLocation(newRow, newCol);
-            self.hero.direction = typeof dir === 'undefined' ? Direction.SOUTH : dir;
+            self.hero.direction = typeof dir === 'undefined' ? dw.Direction.SOUTH : dir;
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
          };
-         this.setState(new /*FadeOutInState*/MapChangeState(this.state, this.state, updatePlayer));
+         this.setState(new /*FadeOutInState*/dw.MapChangeState(this.state, this.state, updatePlayer));
       }
    },
    
@@ -205,7 +205,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          console.log('Setting map to: ' + assetName);
          this.map = this.maps[assetName];
          this._resetMap(this.map);
-         var newMusic = Sounds[this.map.properties.music];
+         var newMusic = dw.Sounds[this.map.properties.music];
          if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);
          }
@@ -300,20 +300,20 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
          var name = obj.name;
          var type;
          if (obj.properties.type) {
-            type = NpcType[obj.properties.type.toUpperCase()];
+            type = dw.NpcType[obj.properties.type.toUpperCase()];
          }
          if (type == null) { // 0 is a valid value
-            type = NpcType.MERCHANT_GREEN;
+            type = dw.NpcType.MERCHANT_GREEN;
          }
          var tileSize = this.getTileSize();
          var row = obj.y / tileSize;
          var col = obj.x / tileSize;
-         var dir = Direction.SOUTH;
+         var dir = dw.Direction.SOUTH;
          var tempDir = obj.properties.dir;
          if (tempDir) {
-            dir = Direction[tempDir.toUpperCase()];// || Direction.SOUTH;
+            dir = dw.Direction[tempDir.toUpperCase()];// || dw.Direction.SOUTH;
             if (typeof dir === 'undefined') {
-               dir = Direction.SOUTH;
+               dir = dw.Direction.SOUTH;
             }
          }
          var wanders = true;
@@ -322,7 +322,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
             wanders = wanderStr==='true';
          }
          var range = this._parseRange(obj.properties.range);
-         var npc = new Npc({ name: name, type: type, direction: dir,
+         var npc = new dw.Npc({ name: name, type: type, direction: dir,
                      range: range, wanders: wanders, mapRow: row, mapCol: col });
          return npc;
       }
@@ -391,7 +391,7 @@ DwGame.prototype = Object.create(gtp.Game.prototype, {
 game.setMap('brecconary.json');
 game.hero.setMapLocation(7, 6);
          };
-         game.setState(new gtp.FadeOutInState(this.state, new RoamingState(), transitionLogic));
+         game.setState(new gtp.FadeOutInState(this.state, new dw.RoamingState(), transitionLogic));
       }
    },
    
@@ -506,14 +506,14 @@ game.hero.setMapLocation(7, 6);
          if (enemyTerritoryLayer) {
             var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
             if (territory > 0) {
-               // Enemy territory index is offset by the Tiled tileset's firstgid
+               // dw.Enemy territory index is offset by the Tiled tileset's firstgid
                // TODO: Remove call to private method
                territory = territory - game.map._getImageForGid(territory).firstgid;
                if (territory >= 0) {
                   var territories = game.assets.get('enemyTerritories');
                   var possibleEnemies = territories[territory];
                   var enemyName = possibleEnemies[gtp.Utils.randomInt(0, possibleEnemies.length)];
-                  this.setState(new BattleTransitionState(this.state, new BattleState(enemyName)));
+                  this.setState(new dw.BattleTransitionState(this.state, new dw.BattleState(enemyName)));
                }
             }
          }
@@ -526,16 +526,16 @@ game.hero.setMapLocation(7, 6);
          var row = this.hero.mapRow, col = this.hero.mapCol;
          do {
             switch (this.hero.direction) {
-               case Direction.NORTH:
+               case dw.Direction.NORTH:
                   row--;
                   break;
-               case Direction.SOUTH:
+               case dw.Direction.SOUTH:
                   row++;
                   break;
-               case Direction.EAST:
+               case dw.Direction.EAST:
                   col++;
                   break;
-               case Direction.WEST:
+               case dw.Direction.WEST:
                   col--;
                   break;
             }
@@ -606,4 +606,4 @@ game.hero.setMapLocation(7, 6);
    
 });
 
-DwGame.prototype.constructor = DwGame;
+dw.DwGame.prototype.constructor = dw.DwGame;

@@ -1,4 +1,4 @@
-var EnemyAI = Object.freeze({
+dw.EnemyAI = Object.freeze({
    
    attackOnly: function(hero, enemy) {
       'use strict';
@@ -7,10 +7,10 @@ var EnemyAI = Object.freeze({
    
    get: function(id) {
       'use strict';
-      if (EnemyAI[id]) {
-         return EnemyAI[id];
+      if (dw.EnemyAI[id]) {
+         return dw.EnemyAI[id];
       }
-      console.error('Unknown EnemyAI: ' + id + '. Falling back on attackOnly');
+      console.error('Unknown dw.EnemyAI: ' + id + '. Falling back on attackOnly');
       return this.attackOnly;
    }
    

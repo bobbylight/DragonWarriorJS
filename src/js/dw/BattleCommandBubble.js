@@ -1,14 +1,14 @@
-function BattleCommandBubble() {
+dw.BattleCommandBubble = function() {
    'use strict';
    var tileSize = game.getTileSize();
-   Bubble.call(this, "COMMAND", 8*tileSize, tileSize, tileSize*8, tileSize*3);
+   dw.Bubble.call(this, "COMMAND", 8*tileSize, tileSize, tileSize*8, tileSize*3);
    this.selection = 0;
-}
+};
 
-BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
+dw.BattleCommandBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    handleCommandChosen: {
-      value: function(/*BattleState*/ state) {
+      value: function(/*dw.BattleState*/ state) {
          'use strict';
          
          switch (this.selection) {
@@ -113,4 +113,4 @@ BattleCommandBubble.prototype = Object.create(Bubble.prototype, {
 
 });
 
-BattleCommandBubble.prototype.constructor = BattleCommandBubble;
+dw.BattleCommandBubble.prototype.constructor = dw.BattleCommandBubble;

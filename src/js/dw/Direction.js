@@ -1,4 +1,4 @@
-Direction = Object.freeze({
+dw.Direction = Object.freeze({
    
    NORTH: 0,
    EAST: 1,
@@ -8,19 +8,19 @@ Direction = Object.freeze({
    fromString: function(str) {
       'use strict';
       if (!str || !str.length) {
-         return Direction.SOUTH;
+         return dw.Direction.SOUTH;
       }
       switch (str.toUpperCase()) {
          case 'NORTH':
-            return Direction.NORTH;
+            return dw.Direction.NORTH;
          case 'EAST':
-            return Direction.EAST;
+            return dw.Direction.EAST;
          case 'WEST':
-            return Direction.WEST;
+            return dw.Direction.WEST;
          case 'SOUTH':
-            return Direction.SOUTH;
+            return dw.Direction.SOUTH;
          default:
-            return Direction.SOUTH;
+            return dw.Direction.SOUTH;
       }
    }
    

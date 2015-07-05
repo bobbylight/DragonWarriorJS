@@ -1,18 +1,18 @@
-function QuestionBubble(game, choices) {
+dw.QuestionBubble = function(game, choices) {
    'use strict';
    var scale = game._scale;
-   var margin = Bubble.MARGIN*scale;
+   var margin = dw.Bubble.MARGIN*scale;
    var x = 200 * scale;
    var y = 20 * scale;
    var width = game.getWidth() - 2*margin;
    var height = game.getTileSize() * 5;
-   Bubble.call(this, null, x, y, width, height);
+   dw.Bubble.call(this, null, x, y, width, height);
    
    this._choices = choices;
    this._curChoice = 0;
-}
+};
 
-QuestionBubble.prototype = Object.create(Bubble.prototype, {
+dw.QuestionBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    /**
     * Returns whether the user is "done" talking; that is, whether the entire
@@ -52,12 +52,12 @@ QuestionBubble.prototype = Object.create(Bubble.prototype, {
       value: function(ctx, y) {
          'use strict';
          
-         var x = this.x + Bubble.MARGIN + 10*game._scale;
+         var x = this.x + dw.Bubble.MARGIN + 10*game._scale;
          
          ctx.fillStyle = 'rgb(255,255,255)';
          for (var i=0; i<this._choices.length; i++) {
             if (this._curChoice === i) {
-               game.drawArrow(this.x + Bubble.MARGIN, y);
+               game.drawArrow(this.x + dw.Bubble.MARGIN, y);
             }
             game.drawString(this._choices[i].text, x, y);
             y += 10 * game._scale;
@@ -87,4 +87,4 @@ QuestionBubble.prototype = Object.create(Bubble.prototype, {
    
 });
 
-QuestionBubble.prototype.constructor = QuestionBubble;
+dw.QuestionBubble.prototype.constructor = dw.QuestionBubble;

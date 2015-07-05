@@ -2,12 +2,12 @@
  * Functionality common amongst all states in this game.
  * @constructor
  */
-_BaseState = function(args) {
+dw._BaseState = function(args) {
    'use strict';
    gtp.State.apply(this, arguments);
 };
 
-_BaseState.prototype = Object.create(gtp.State.prototype, {
+dw._BaseState.prototype = Object.create(gtp.State.prototype, {
    
    createScreenshot: {
       value: function() {
@@ -66,4 +66,4 @@ _BaseState.prototype = Object.create(gtp.State.prototype, {
    
 });
 
-_BaseState.prototype.constructor = _BaseState;
+dw._BaseState.prototype.constructor = dw._BaseState;

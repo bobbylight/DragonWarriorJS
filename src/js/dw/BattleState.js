@@ -1,16 +1,16 @@
-var BattleState = function(enemyName) {
+dw.BattleState = function(enemyName) {
    'use strict';
-   _BaseState.apply(this, arguments);
+   dw._BaseState.apply(this, arguments);
    this._enemyName = enemyName;
 };
 
-BattleState.prototype = Object.create(_BaseState.prototype, {
+dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
    
    _backToRoaming: {
       value: function() {
          'use strict';
-         game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
-         game.setState(new RoamingState());
+         game.audio.fadeOutMusic(dw.Sounds.MUSIC_OVERWORLD);
+         game.setState(new dw.RoamingState());
       }
    },
    
@@ -121,15 +121,15 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
       value: function() {
          'use strict';
          gtp.State.prototype.init.apply(this, arguments); // Not defined in super, but in parent of super (?)
-         this._commandBubble = new BattleCommandBubble();
+         this._commandBubble = new dw.BattleCommandBubble();
          this._commandExecuting = false;
-         this._textBubble = new TextBubble(game);
-         var conversation = new Conversation();
-         this._enemy = new Enemy(game.getEnemy(this._enemyName)).prepare();
+         this._textBubble = new dw.TextBubble(game);
+         var conversation = new dw.Conversation();
+         this._enemy = new dw.Enemy(game.getEnemy(this._enemyName)).prepare();
          conversation.addSegment({ text: 'A ' + this._enemy.name + ' draws near!  Command?' });
          this._textBubble.setConversation(conversation);
          this._enemyAttackShake = 0;
-         this._statBubble = new StatBubble();
+         this._statBubble = new dw.StatBubble();
       }
    },
    
@@ -268,4 +268,4 @@ BattleState.prototype = Object.create(_BaseState.prototype, {
    
 });
 
-BattleState.prototype.constructor = BattleState;
+dw.BattleState.prototype.constructor = dw.BattleState;

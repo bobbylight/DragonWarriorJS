@@ -5,10 +5,10 @@ var _RoamingSubState = Object.freeze({
    OVERNIGHT: 3
 });
 
-var RoamingState = function() {
+dw.RoamingState = function() {
    'use strict';
    
-   _BaseState.apply(this, arguments);
+   dw._BaseState.apply(this, arguments);
    this._substate = _RoamingSubState.ROAMING;
    
    this._updateMethods = {};
@@ -17,15 +17,15 @@ var RoamingState = function() {
    this._updateMethods[_RoamingSubState.TALKING] = this._updateTalking;
    this._updateMethods[_RoamingSubState.OVERNIGHT] = this._updateOvernight;
    
-   this._textBubble = new TextBubble(game);
+   this._textBubble = new dw.TextBubble(game);
    this._showTextBubble = false;
    
-   this._commandBubble = new CommandBubble();
-   this._statBubble = new StatBubble();
+   this._commandBubble = new dw.CommandBubble();
+   this._statBubble = new dw.StatBubble();
    this._stationaryTimer = new gtp.Delay({ millis: 1000 });
 };
 
-RoamingState.prototype = Object.create(_BaseState.prototype, {
+dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
    
    _OVERNIGHT_DARK_TIME: {
       value: 2500,
@@ -57,9 +57,9 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
          
          game.hero.update(delta);
          
-         RoamingState._totalTime += delta;
-         if (RoamingState._totalTime>=1000) {
-            RoamingState._totalTime = 0;
+         dw.RoamingState._totalTime += delta;
+         if (dw.RoamingState._totalTime>=1000) {
+            dw.RoamingState._totalTime = 0;
          }
          
          this._updateMethods[this._substate].call(this, delta);
@@ -98,7 +98,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             return;
          }
          
-         // Make sure we're not in BattleTransitionState
+         // Make sure we're not in dw.BattleTransitionState
          if (!hero.isMoving() && game.state===this) {
             
             if (im.up()) {
@@ -183,7 +183,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    _overnightOver: {
       value: function() {
          'use strict';
-         game.audio.playMusic(Sounds.MUSIC_TOWN);
+         game.audio.playMusic(dw.Sounds.MUSIC_TOWN);
          delete this._overnightDelay;
          this._substate = _RoamingSubState.TALKING;
          this._textBubble.nudgeConversation(); // User doesn't have to press a key
@@ -240,7 +240,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    showStatus: {
       value: function() {
          'use strict';
-         this._statusBubble = new StatusBubble();
+         this._statusBubble = new dw.StatusBubble();
       }
    },
    
@@ -264,7 +264,7 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
             return;
          }
          
-         var conversation = new Conversation();
+         var conversation = new dw.Conversation();
          
          var npc = game.getNpcHeroIsFacing();
          if (npc) {
@@ -285,4 +285,4 @@ RoamingState.prototype = Object.create(_BaseState.prototype, {
    
 });
 
-RoamingState.prototype.constructor = RoamingState;
+dw.RoamingState.prototype.constructor = dw.RoamingState;

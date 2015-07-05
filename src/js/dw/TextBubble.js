@@ -1,18 +1,18 @@
-function TextBubble(game) {
+dw.TextBubble = function(game) {
    'use strict';
    var tileSize = game.getTileSize();
    var x = tileSize;
    var width = game.getWidth() - 2*x;
    var height = game.getTileSize() * 5;
    var y = game.getHeight() - tileSize - height;
-   Bubble.call(this, null, x, y, width, height);
+   dw.Bubble.call(this, null, x, y, width, height);
    this._doneCallbacks = [];
-}
+};
 
-TextBubble.CHAR_RENDER_MILLIS = 0;
-TextBubble.MAX_LINE_COUNT = 6;
+dw.TextBubble.CHAR_RENDER_MILLIS = 0;
+dw.TextBubble.MAX_LINE_COUNT = 6;
 
-TextBubble.prototype = Object.create(Bubble.prototype, {
+dw.TextBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    addToConversation: {
       value: function(text, autoAdvance) {
@@ -34,7 +34,7 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          var curText = segment.currentText();
          this._text = this._text + '\n' + curText;
          this._curLine = this._lines.length;
-         var w = this.w - 2*Bubble.MARGIN;
+         var w = this.w - 2*dw.Bubble.MARGIN;
          var breakApartResult = this._breakApart(curText, w);
          this._lines = this._lines.concat(breakApartResult.lines);
          this._delays = breakApartResult.delays;
@@ -43,10 +43,10 @@ TextBubble.prototype = Object.create(Bubble.prototype, {
          this._textDone = false;
 console.log('>>> textDone set to false');
          if (segment.choices) {
-            this._questionBubble = new QuestionBubble(game, segment.choices);
+            this._questionBubble = new dw.QuestionBubble(game, segment.choices);
          }
          else if (segment.shopping) {
-            this._shoppingBubble = new ShoppingBubble(game, segment.shopping);
+            this._shoppingBubble = new dw.ShoppingBubble(game, segment.shopping);
          }
       }
    },
@@ -69,7 +69,7 @@ console.log('>>> textDone set to false');
                   delete this._shoppingBubble;
                   this._conversation.setItem(item);
                   nextState = item.baseCost > game.hero.gold ?
-                     Conversation.NOT_ENOUGH_SEGMENT : Conversation.CONFIRM_SEGMENT;
+                     dw.Conversation.NOT_ENOUGH_SEGMENT : dw.Conversation.CONFIRM_SEGMENT;
                   return !this._updateConversation(nextState);
                }
                return false;
@@ -89,8 +89,8 @@ console.log('>>> textDone set to false');
          if (game.anyKeyDown()) {
             if (!this._textDone) {
                this._textDone = true;
-               if (this._lines.length > TextBubble.MAX_LINE_COUNT) {
-                  this._lines.splice(0, this._lines.length-TextBubble.MAX_LINE_COUNT);
+               if (this._lines.length > dw.TextBubble.MAX_LINE_COUNT) {
+                  this._lines.splice(0, this._lines.length-dw.TextBubble.MAX_LINE_COUNT);
                }
                this._curLine = this._lines.length - 1;
             }
@@ -173,9 +173,9 @@ console.log('>>> textDone set to false');
          
          if (!this._textDone) {
             this._curCharMillis += delta;
-            if (this._curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
-               this._curCharMillis -= TextBubble.CHAR_RENDER_MILLIS;
-               if (this._curOffs===-1 && this._curLine===TextBubble.MAX_LINE_COUNT) {
+            if (this._curCharMillis > dw.TextBubble.CHAR_RENDER_MILLIS) {
+               this._curCharMillis -= dw.TextBubble.CHAR_RENDER_MILLIS;
+               if (this._curOffs===-1 && this._curLine===dw.TextBubble.MAX_LINE_COUNT) {
                   this._lines.shift();
                   this._curLine--;
                }
@@ -225,7 +225,7 @@ console.log('Going to next line');
       value: function(ctx, y) {
          'use strict';
          
-         var x = this.x + Bubble.MARGIN;
+         var x = this.x + dw.Bubble.MARGIN;
          
          ctx.fillStyle = 'rgb(255,255,255)';
          if (this._lines) {
@@ -241,6 +241,7 @@ console.log('Going to next line');
             if (this._textDone && this._conversation.hasNext()) {
                // TODO: Remove magic constants
                game.drawDownArrow(this.x+this.w-30, this.y+this.h-30);
+               /*
                var conv = this._conversation;
                console.log('--- ' +
                      JSON.stringify(this._conversation.peekNext(),
@@ -253,6 +254,7 @@ console.log('Going to next line');
                            }
                      )
                );
+               */
             }
          }
          
@@ -278,7 +280,7 @@ console.log('Going to next line');
          'use strict';
          this._text = segment.currentText();
          if (this._text) {
-            var w = this.w - 2*Bubble.MARGIN;
+            var w = this.w - 2*dw.Bubble.MARGIN;
             var breakApartResult = this._breakApart(this._text, w);
             this._lines = breakApartResult.lines;
             this._delays = breakApartResult.delays;
@@ -289,10 +291,10 @@ console.log('Going to next line');
 console.log('>>> textDone set to false');
          }
          if (segment.choices) {
-            this._questionBubble = new QuestionBubble(game, segment.choices);
+            this._questionBubble = new dw.QuestionBubble(game, segment.choices);
          }
          else if (segment.shopping) {
-            this._shoppingBubble = new ShoppingBubble(game, segment.shopping.choices);
+            this._shoppingBubble = new dw.ShoppingBubble(game, segment.shopping.choices);
          }
       }
    },
@@ -344,4 +346,4 @@ console.log('>>> textDone set to false');
    }
 });
 
-TextBubble.prototype.constructor = TextBubble;
+dw.TextBubble.prototype.constructor = dw.TextBubble;

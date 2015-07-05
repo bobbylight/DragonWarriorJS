@@ -103,7 +103,7 @@ TantegelCastle.prototype = (function() {
       
    };
    
-   return Object.create(MapLogic.prototype, {
+   return Object.create(dw.MapLogic.prototype, {
       
       init: {
          value: function() {

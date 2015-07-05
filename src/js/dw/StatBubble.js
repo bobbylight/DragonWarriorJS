@@ -1,4 +1,4 @@
-function StatBubble() {
+dw.StatBubble = function() {
    'use strict';
    var scale = game._scale;
    var tileSize = game.getTileSize();
@@ -10,11 +10,11 @@ function StatBubble() {
    if (title.length > 4) {
       title = title.substring(0, 4);
    }
-   Bubble.call(this, title, x, y, w, h);
+   dw.Bubble.call(this, title, x, y, w, h);
    this.selection = 0;
-}
+};
 
-StatBubble.prototype = Object.create(Bubble.prototype, {
+dw.StatBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    _calculateX2Offs: {
       value: function(val) {
@@ -41,8 +41,8 @@ StatBubble.prototype = Object.create(Bubble.prototype, {
          'use strict';
       
          var SCALE = game._scale;
-         var x = this.x + Bubble.MARGIN;
-         var x2 = this.x + this.w - Bubble.MARGIN;
+         var x = this.x + dw.Bubble.MARGIN;
+         var x2 = this.x + this.w - dw.Bubble.MARGIN;
          var y0 = y;
          var Y_INC = game.stringHeight() + 7*SCALE;
          var hero = game.hero;
@@ -77,4 +77,4 @@ StatBubble.prototype = Object.create(Bubble.prototype, {
    
 });
 
-StatBubble.prototype.constructor = StatBubble;
+dw.StatBubble.prototype.constructor = dw.StatBubble;

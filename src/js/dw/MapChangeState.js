@@ -2,12 +2,12 @@
  * Transitions from one map to another, lazily loading map-specific resources
  * if necessary.
  */
-var MapChangeState = function() {
+dw.MapChangeState = function() {
    'use strict';
    gtp.FadeOutInState.apply(this, arguments);
 };
 
-MapChangeState.prototype = Object.create(gtp.FadeOutInState.prototype, {
+dw.MapChangeState.prototype = Object.create(gtp.FadeOutInState.prototype, {
    
    init: {
       value: function() {

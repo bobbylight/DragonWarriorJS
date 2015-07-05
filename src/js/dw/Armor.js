@@ -1,22 +1,27 @@
-function Armor(name, args) {
+dw.Armor = (function() {
    'use strict';
-   this.name = name;
-   this.baseCost = args.baseCost || 0;
-   this.defense = args.defense || 1;
-   this.displayName = args.displayName || this.name;
-}
-
-Armor.prototype = {
    
-   toString: function() {
-      'use strict';
-      return '[Armor: ' +
-         'name=' + this.name +
-         ', baseCost=' + this.baseCost +
-         ', defense=' + this.defense +
-         ']';
-   }
+   var Armor = function(name, args) {
+      this.name = name;
+      this.baseCost = args.baseCost || 0;
+      this.defense = args.defense || 1;
+      this.displayName = args.displayName || this.name;
+   };
    
-};
-
-Armor.prototype.constructor = Armor;
+   Armor.prototype = {
+      
+      toString: function() {
+         return '[dw.Armor: ' +
+            'name=' + this.name +
+            ', baseCost=' + this.baseCost +
+            ', defense=' + this.defense +
+            ']';
+      }
+      
+   };
+   
+   Armor.prototype.constructor = dw.Armor;
+   
+   return Armor;
+   
+})();

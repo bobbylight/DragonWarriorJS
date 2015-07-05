@@ -1,18 +1,18 @@
-function Conversation() {
+dw.Conversation = function() {
    'use strict';
    this._segments = [];
    this._responses = [];
-}
+};
 
-Conversation.DONE = '_done';
-Conversation.CHOICES_SEGMENT = 'choicesSegment';
-Conversation.NOT_ENOUGH_SEGMENT = 'notEnoughGold';
-Conversation.CONFIRM_SEGMENT = 'confirmPurchase';
-Conversation.PURCHASE_SEGMENT = 'makePurchase';
-Conversation.SOMETHING_ELSE_SEGMENT = 'somethingElse';
-Conversation.BID_FAREWELL_SEGMENT = 'bidFarewell';
+dw.Conversation.DONE = '_done';
+dw.Conversation.CHOICES_SEGMENT = 'choicesSegment';
+dw.Conversation.NOT_ENOUGH_SEGMENT = 'notEnoughGold';
+dw.Conversation.CONFIRM_SEGMENT = 'confirmPurchase';
+dw.Conversation.PURCHASE_SEGMENT = 'makePurchase';
+dw.Conversation.SOMETHING_ELSE_SEGMENT = 'somethingElse';
+dw.Conversation.BID_FAREWELL_SEGMENT = 'bidFarewell';
 
-Conversation.prototype = (function() {
+dw.Conversation.prototype = (function() {
    'use strict';
    
    return {
@@ -30,7 +30,7 @@ Conversation.prototype = (function() {
          if (segmentArgs.length) { // A string
             segmentArgs = { text: segmentArgs };
          }
-         var segment = new ConversationSegment(this, segmentArgs);
+         var segment = new dw.ConversationSegment(this, segmentArgs);
          if (atCurIndex) {
             this._segments.splice(this._segmentIndex, 0, segment);
          }
@@ -46,7 +46,7 @@ Conversation.prototype = (function() {
        *        an array of them.
        */
       setSegments: function(segmentArgs) {
-         if (segmentArgs.conversationType) { // A Conversation object
+         if (segmentArgs.conversationType) { // A dw.Conversation object
             switch (segmentArgs.conversationType) {
                case 'merchant':
                   if (!segmentArgs.choices) {
@@ -54,56 +54,7 @@ Conversation.prototype = (function() {
                   }
                   // Add the standard segments for a merchant.
                   // TODO: Allow user-defined segments to override these.
-                  this.setSegments([
-                     {
-                        clear: false,
-                        text: segmentArgs.introText || 'Welcome! Would you like to see our wares?',
-                        choices: [
-                           { text: 'Yes', next: Conversation.CHOICES_SEGMENT },
-                           { text: 'No', next: Conversation.BID_FAREWELL_SEGMENT }
-                        ]
-                     },
-                     {
-                        id: Conversation.CHOICES_SEGMENT, // This ID is special and required
-                        text: 'What dost thou wish to buy?',
-                        shopping: {
-                           choices: segmentArgs.choices
-                        }
-                     },
-                     {
-                        id: Conversation.CONFIRM_SEGMENT,
-                        text: 'The \\w{item.name}? That will be \\w{item.baseCost}  gold.  Is that okay?',
-                        choices: [
-                           { text: 'Yes', next: Conversation.PURCHASE_SEGMENT },
-                           { text: 'No', next: Conversation.CHOICES_SEGMENT }
-                        ]
-                     },
-                     {
-                        id: Conversation.PURCHASE_SEGMENT,
-                        action: function() {
-                           game.hero.gold -= this.item.baseCost;
-                           console.log('TODO: Give hero the item, in this case: ' + JSON.stringify(this.item));
-                        },
-                        text: 'I thank thee!',
-                        next: Conversation.SOMETHING_ELSE_SEGMENT
-                     },
-                     {
-                        id: Conversation.NOT_ENOUGH_SEGMENT,
-                        text: "I'm afraid you do not have enough gold!"
-                     },
-                     {
-                        id: Conversation.SOMETHING_ELSE_SEGMENT,
-                        text: 'Would you like to buy something else?',
-                        choices: [
-                           { text: 'Yes', next: Conversation.CHOICES_SEGMENT },
-                           { text: 'No', next: Conversation.BID_FAREWELL_SEGMENT }
-                        ]
-                     },
-                     {
-                        id: Conversation.BID_FAREWELL_SEGMENT, // This ID is special and required
-                        text: 'Please, come again.'
-                     }
-                  ]);
+                  this.setSegments(merchantConversationTemplate(this, segmentArgs));
                   break;
                default:
                   throw 'Unknown conversation type: ' + segmentArgs.conversationType;
@@ -140,7 +91,7 @@ Conversation.prototype = (function() {
             return this._segments.length;
          }
          if (current.next) {
-            if (current.next === Conversation.DONE) {
+            if (current.next === dw.Conversation.DONE) {
                return this._segments.length;
             }
             return this._findIndexById(current.next);

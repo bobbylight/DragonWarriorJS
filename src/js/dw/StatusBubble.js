@@ -1,4 +1,4 @@
-function StatusBubble() {
+dw.StatusBubble = function() {
    'use strict';
    var scale = game._scale;
    var tileSize = game.getTileSize();
@@ -6,11 +6,11 @@ function StatusBubble() {
    var x = game.getWidth() - tileSize - w;
    var y = tileSize * 3;
    var h = game.getHeight() - y - tileSize;
-   Bubble.call(this, null, x, y, w, h);
+   dw.Bubble.call(this, null, x, y, w, h);
    this.selection = 0;
-}
+};
 
-StatusBubble.prototype = Object.create(Bubble.prototype, {
+dw.StatusBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    _calculateX2Offs: {
       value: function(val) {
@@ -35,8 +35,8 @@ StatusBubble.prototype = Object.create(Bubble.prototype, {
          'use strict';
       
          var SCALE = game._scale;
-         var x = this.x + Bubble.MARGIN;
-         var x2 = this.x + this.w - Bubble.MARGIN;
+         var x = this.x + dw.Bubble.MARGIN;
+         var x2 = this.x + this.w - dw.Bubble.MARGIN;
          var y0 = y;
          var Y_INC = game.stringHeight() + 7*SCALE;
          var hero = game.hero;
@@ -91,4 +91,4 @@ StatusBubble.prototype = Object.create(Bubble.prototype, {
    
 });
 
-StatusBubble.prototype.constructor = StatusBubble;
+dw.StatusBubble.prototype.constructor = dw.StatusBubble;

@@ -1,15 +1,15 @@
-function Enemy(args) {
+dw.Enemy = function(args) {
    'use strict';
    
    gtp.Utils.mixin(args, this);
    
-   BattleEntity.call(this, args); // TODO: Better way to do a mixin?
-   gtp.Utils.mixin(RoamingEntity.prototype, this);
+   dw.BattleEntity.call(this, args); // TODO: Better way to do a mixin?
+   gtp.Utils.mixin(dw.RoamingEntity.prototype, this);
    
-   this.ai = EnemyAI.get(this.ai);
-}
+   this.ai = dw.EnemyAI.get(this.ai);
+};
 
-Enemy.prototype = Object.create(BattleEntity.prototype, {
+dw.Enemy.prototype = Object.create(dw.BattleEntity.prototype, {
    
    computePhysicalAttackDamage: {
       value: function(hero) {
@@ -49,4 +49,4 @@ Enemy.prototype = Object.create(BattleEntity.prototype, {
    
 });
 
-Enemy.prototype.constructor = Enemy;
+dw.Enemy.prototype.constructor = dw.Enemy;

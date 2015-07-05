@@ -1,6 +1,6 @@
-function Hero(args) {
+dw.Hero = function(args) {
    'use strict';
-   RoamingEntity.call(this, args);
+   dw.RoamingEntity.call(this, args);
    
    this.name = args.name;
    this.level = 1;
@@ -16,15 +16,15 @@ function Hero(args) {
    this.mp = args.mp || 0;
    this.maxMp = args.mp || 0;
    
-   //BattleEntity.call(this, args); // TODO: Better way to do a mixin?
-   //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);
-   //BattleEntityMixin.call(this);
+   //dw.BattleEntity.call(this, args); // TODO: Better way to do a mixin?
+   //gtp.Utils.mixin(dw.RoamingEntityMixin.prototype, this);
+   //dw.BattleEntityMixin.call(this);
    
-}
+};
 
-Hero.STEP_INC = 0;
+dw.Hero.STEP_INC = 0;
 
-Hero.prototype = Object.create(RoamingEntity.prototype, {
+dw.Hero.prototype = Object.create(dw.RoamingEntity.prototype, {
    
    computePhysicalAttackDamage: {
       value: function(enemy) {
@@ -84,7 +84,7 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
          if ('warp' === obj.type) {
             var newRow = parseInt(obj.properties.row, 10);
             var newCol = parseInt(obj.properties.col, 10);
-            var newDir = Direction.fromString(obj.properties.dir);
+            var newDir = dw.Direction.fromString(obj.properties.dir);
             game.loadMap(obj.properties. map, newRow, newCol, newDir);
          }
       }   
@@ -97,10 +97,10 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
          this._stepTick += delta;
          if (this._stepTick>=600) {
             this._stepTick -= 600;
-            Hero.STEP_INC = 0;
+            dw.Hero.STEP_INC = 0;
          }
          else if (this._stepTick>=300) {
-            Hero.STEP_INC = 1;
+            dw.Hero.STEP_INC = 1;
          }
          
          this.handleIsMovingInUpdate();
@@ -121,20 +121,20 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
          
          var ssRow = 0, ssCol = 0;
          switch (this.direction) {
-            case Direction.NORTH:
+            case dw.Direction.NORTH:
                ssCol = 4;
                break;
-            case Direction.SOUTH:
+            case dw.Direction.SOUTH:
                //ssCol = 0;
                break;
-            case Direction.EAST:
+            case dw.Direction.EAST:
                ssCol = 6;
                break;
-            case Direction.WEST:
+            case dw.Direction.WEST:
                ssCol = 2;
                break;
          }
-         ssCol += Hero.STEP_INC;
+         ssCol += dw.Hero.STEP_INC;
          
          var x = (game.canvas.width - tileSize)/2;
          var y = (game.canvas.height - tileSize)/2;
@@ -205,4 +205,4 @@ Hero.prototype = Object.create(RoamingEntity.prototype, {
    
 });
 
-Hero.prototype.constructor = Hero;
+dw.Hero.prototype.constructor = dw.Hero;

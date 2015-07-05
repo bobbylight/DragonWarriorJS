@@ -1,11 +1,17 @@
 DragonWarriorJS - A recreation of Dragon Warrior for the NES in JavaScript
 ==========================================================================
 Like it says on the tin.  This reproduction will try to be as authentic as
-possible.
+possible, warts and all.
 
-Status:
+What's (mostly) done:
 
 * Map loading, motion, moving in and out of towns
 * Collision detection
 * Conversations with NPCs
 * Sound (uses WebAudio, so Firefox and Chrome only for now)
+
+What's currently being worked on (half-baked):
+
+* Staying overnight at an inn
+* Buying goods from a shop
+* Battling an enemy

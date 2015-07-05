@@ -1,19 +1,19 @@
-var TitleScreenState = function() {
+dw.TitleScreenState = function() {
    'use strict';
-   _BaseState.apply(this, arguments);
+   dw._BaseState.apply(this, arguments);
    this.assetsLoaded = false;
 };
 
-TitleScreenState.prototype = Object.create(_BaseState.prototype, {
+dw.TitleScreenState.prototype = Object.create(dw._BaseState.prototype, {
    
    init: {
       value: function() {
          'use strict';
-         _BaseState.prototype.init.apply(this, arguments);
+         dw._BaseState.prototype.init.apply(this, arguments);
          game.canvas.addEventListener('touchstart', this.handleStart, false);
          this._delay = new gtp.Delay({ millis: [ 600, 400 ] });
          this._blink = true;
-         game.audio.playMusic(Sounds.MUSIC_TITLE_SCREEN);
+         game.audio.playMusic(dw.Sounds.MUSIC_TITLE_SCREEN);
       }
    },
    
@@ -116,4 +116,4 @@ handleStart: {
    
 });
 
-TitleScreenState.prototype.constructor = TitleScreenState;
+dw.TitleScreenState.prototype.constructor = dw.TitleScreenState;

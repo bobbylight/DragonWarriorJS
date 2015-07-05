@@ -1,7 +1,7 @@
-function Npc(args) {
+dw.Npc = function(args) {
    'use strict';
    
-   RoamingEntity.call(this, args);
+   dw.RoamingEntity.call(this, args);
    gtp.Utils.mixin(args, this);
    
    this._origMapRow = this.mapRow;
@@ -13,25 +13,25 @@ function Npc(args) {
       delete this.wanders;
    }
    
-   //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);
-   //RoamingEntityMixin.call(this);
-}
+   //gtp.Utils.mixin(dw.RoamingEntityMixin.prototype, this);
+   //dw.RoamingEntityMixin.call(this);
+};
 
-Npc.prototype = Object.create(RoamingEntity.prototype, {
+dw.Npc.prototype = Object.create(dw.RoamingEntity.prototype, {
    
    // TODO: Change NPC image to remove the need for this
    _computeColumn: {
       value: function() {
          'use strict';
          switch (this.direction) {
-            case Direction.NORTH:
+            case dw.Direction.NORTH:
                return 4;
-            case Direction.EAST:
+            case dw.Direction.EAST:
                return 2;
             default:
-            case Direction.SOUTH:
+            case dw.Direction.SOUTH:
                return 0;
-            case Direction.WEST:
+            case dw.Direction.WEST:
                return 6;
          }
       }
@@ -64,7 +64,7 @@ Npc.prototype = Object.create(RoamingEntity.prototype, {
          var y = this.mapRow * game.getTileSize();
    y -= game.getMapYOffs();
    y += this.yOffs;
-         ssCol += Hero.STEP_INC;
+         ssCol += dw.Hero.STEP_INC;
          ss.drawSprite(ctx, x,y, ssRow,ssCol);
       }
    },
@@ -105,4 +105,4 @@ Npc.prototype = Object.create(RoamingEntity.prototype, {
    
 });
 
-Npc.prototype.constructor = Npc;
+dw.Npc.prototype.constructor = dw.Npc;

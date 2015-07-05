@@ -1,14 +1,14 @@
-var GameStudioAdvertState = function() {
+dw.GameStudioAdvertState = function() {
    'use strict';
-   _BaseState.apply(this, arguments);
+   dw._BaseState.apply(this, arguments);
 };
 
-GameStudioAdvertState.prototype = Object.create(_BaseState.prototype, {
+dw.GameStudioAdvertState.prototype = Object.create(dw._BaseState.prototype, {
    
    init: {
       value: function() {
          'use strict';
-         _BaseState.prototype.init.apply(this, arguments);
+         dw._BaseState.prototype.init.apply(this, arguments);
          this._delay = new gtp.Delay({ millis: 3000 });
       }
    },
@@ -48,10 +48,10 @@ GameStudioAdvertState.prototype = Object.create(_BaseState.prototype, {
    _startGame: {
       value: function() {
          'use strict';
-         game.setState(new gtp.FadeOutInState(this, new TitleScreenState()));
+         game.setState(new gtp.FadeOutInState(this, new dw.TitleScreenState()));
       }
    }
    
 });
 
-GameStudioAdvertState.prototype.constructor = GameStudioAdvertState;
+dw.GameStudioAdvertState.prototype.constructor = dw.GameStudioAdvertState;

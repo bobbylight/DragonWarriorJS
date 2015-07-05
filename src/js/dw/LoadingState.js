@@ -1,10 +1,10 @@
-var LoadingState = function(args) {
+dw.LoadingState = function(args) {
    'use strict';
-   _BaseState.apply(this, args);
+   dw._BaseState.apply(this, args);
    this.assetsLoaded = false;
 };
 
-LoadingState.prototype = Object.create(_BaseState.prototype, {
+dw.LoadingState.prototype = Object.create(dw._BaseState.prototype, {
    
    _createArmorArray: {
       value: function(armors) {
@@ -31,7 +31,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          for (var armorName in armors) {
             if (armors.hasOwnProperty(armorName)) {
-               armors[armorName] = new Armor(armorName, armors[armorName]);
+               armors[armorName] = new dw.Armor(armorName, armors[armorName]);
             }
          }
          return armors;
@@ -63,7 +63,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          for (var shieldName in shields) {
             if (shields.hasOwnProperty(shieldName)) {
-               shields[shieldName] = new Shield(shieldName, shields[shieldName]);
+               shields[shieldName] = new dw.Shield(shieldName, shields[shieldName]);
             }
          }
          return shields;
@@ -95,7 +95,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
          'use strict';
          for (var weaponName in weapons) {
             if (weapons.hasOwnProperty(weaponName)) {
-               weapons[weaponName] = new Weapon(weaponName, weapons[weaponName]);
+               weapons[weaponName] = new dw.Weapon(weaponName, weapons[weaponName]);
             }
          }
          return weapons;
@@ -127,10 +127,10 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
             game.assets.addJson('equipment', 'res/equipment.json');
             game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
             game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
-            game.assets.addSound(Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
-            game.assets.addSound(Sounds.MUSIC_TOWN, 'res/sound/04 Dragon Quest 1 - Peaceful Village (22khz mono).ogg');
-            game.assets.addSound(Sounds.MUSIC_OVERWORLD, 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
-            game.assets.addSound(Sounds.MUSIC_BATTLE, 'res/sound/14 Dragon Quest 1 - A Monster Draws Near (16khz mono).ogg', 2.32);
+            game.assets.addSound(dw.Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
+            game.assets.addSound(dw.Sounds.MUSIC_TOWN, 'res/sound/04 Dragon Quest 1 - Peaceful Village (22khz mono).ogg');
+            game.assets.addSound(dw.Sounds.MUSIC_OVERWORLD, 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
+            game.assets.addSound(dw.Sounds.MUSIC_BATTLE, 'res/sound/14 Dragon Quest 1 - A Monster Draws Near (16khz mono).ogg', 2.32);
             game.assets.addSound('overnight', 'res/sound/21 Dragon Quest 1 - Special Item (22khz mono).ogg');
             game.assets.addSound('victory', 'res/sound/25 Dragon Quest 1 - Victory (22khz mono).ogg', 0, false);
             game.assets.addSound('stairs', 'res/sound/29 Dragon Quest 1 - Stairs Up (22khz mono).wav');
@@ -181,7 +181,7 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
                      game.startNewGame();
                   }
                   else {
-                     game.setState(new gtp.FadeOutInState(self, new GameStudioAdvertState()));
+                     game.setState(new gtp.FadeOutInState(self, new dw.GameStudioAdvertState()));
                   }
                });
             });
@@ -216,4 +216,4 @@ LoadingState.prototype = Object.create(_BaseState.prototype, {
    
 });
 
-LoadingState.prototype.constructor = LoadingState;
+dw.LoadingState.prototype.constructor = dw.LoadingState;

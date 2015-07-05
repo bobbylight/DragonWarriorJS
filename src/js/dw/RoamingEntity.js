@@ -1,7 +1,7 @@
-function RoamingEntity() {
+dw.RoamingEntity = function() {
    'use strict';
    
-   this.direction = this.direction || Direction.SOUTH;
+   this.direction = this.direction || dw.Direction.SOUTH;
    this.mapCol = this.mapCol || 0;
    this.mapRow = this.mapRow || 0;
    this.xOffs = this.xOffs || 0;
@@ -9,9 +9,9 @@ function RoamingEntity() {
    this._stepTick = 0;
    // TODO: Make this time-dependent!
    this._moveInc = game._scale * (game._targetFps===30 ? 2 : 1);
-}
+};
 
-RoamingEntity.prototype = {
+dw.RoamingEntity.prototype = {
    
    getMoveIncrement: function() {
       'use strict';
@@ -98,7 +98,7 @@ RoamingEntity.prototype = {
       }
       
       // TODO: Is there a better way to determine that I'm the hero?
-      else if (data===361 && this.constructor.name==='Hero') { // i.e., not an NPC
+      else if (data===361 && this.constructor.name==='dw.Hero') { // i.e., not an NPC
          game.bump();
       }
       /*
@@ -121,7 +121,7 @@ RoamingEntity.prototype = {
          this.xOffs = game.getTileSize();
          success = true;
       }
-      this.direction = Direction.WEST;
+      this.direction = dw.Direction.WEST;
       return success;
    },
    
@@ -133,7 +133,7 @@ RoamingEntity.prototype = {
          this.xOffs = -game.getTileSize();
          success = true;
       }
-      this.direction = Direction.EAST;
+      this.direction = dw.Direction.EAST;
       return success;
    },
    
@@ -148,7 +148,7 @@ RoamingEntity.prototype = {
          this.yOffs += game.getTileSize();
          success = true;
       }
-      this.direction = Direction.NORTH;
+      this.direction = dw.Direction.NORTH;
       return success;
    },
    
@@ -160,7 +160,7 @@ RoamingEntity.prototype = {
          this.yOffs -= game.getTileSize();
          success = true;
       }
-      this.direction = Direction.SOUTH;
+      this.direction = dw.Direction.SOUTH;
       return success;
    }
    

@@ -1,4 +1,4 @@
-function Bubble(title, x, y, w, h) {
+dw.Bubble = function(title, x, y, w, h) {
    'use strict';
    this.title = title;
    var scale = 1;//game._scale;
@@ -12,11 +12,11 @@ function Bubble(title, x, y, w, h) {
 //      int strokeW = 2 * SCALE;
 //      borderStroke = new BasicStroke(strokeW, BasicStroke.CAP_ROUND,
 //                              BasicStroke.JOIN_ROUND);
-}
+};
 
-Bubble.MARGIN = 10; // 5 * SCALE; TODO
+dw.Bubble.MARGIN = 10; // 5 * SCALE; TODO
 
-Bubble.prototype = {
+dw.Bubble.prototype = {
    
    _breakApart: function(text, w) {
       'use strict';

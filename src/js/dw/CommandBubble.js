@@ -1,4 +1,4 @@
-function CommandBubble() {
+dw.CommandBubble = function() {
    'use strict';
    var scale = game._scale;
    var tileSize = game.getTileSize();
@@ -6,14 +6,14 @@ function CommandBubble() {
    var h = 90 * scale;
    var x = game.getWidth() - tileSize - w;
    var y = tileSize;
-   Bubble.call(this, "COMMAND", x, y, w, h);
+   dw.Bubble.call(this, "COMMAND", x, y, w, h);
    this.selection = 0;
-}
+};
 
-CommandBubble.prototype = Object.create(Bubble.prototype, {
+dw.CommandBubble.prototype = Object.create(dw.Bubble.prototype, {
    
    handleCommandChosen: {
-      value: function(/*RoamingState*/ screen) {
+      value: function(/*dw.RoamingState*/ screen) {
          'use strict';
          
          switch (this.selection) {
@@ -136,4 +136,4 @@ CommandBubble.prototype = Object.create(Bubble.prototype, {
 
 });
 
-CommandBubble.prototype.constructor = CommandBubble;
+dw.CommandBubble.prototype.constructor = dw.CommandBubble;

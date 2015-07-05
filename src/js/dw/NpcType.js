@@ -1,4 +1,4 @@
-NpcType = Object.freeze({
+dw.NpcType = Object.freeze({
    SOLDIER_GRAY: 0,
    SOLDIER_RED: 1,
    MAN_BLUE: 2,

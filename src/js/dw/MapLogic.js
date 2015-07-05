@@ -2,11 +2,11 @@
  * Logic for an RPG map.  Handles things such as what an NPC should say.
  * @constructor
  */
-function MapLogic() {
+dw.MapLogic = function() {
    
-}
+};
 
-MapLogic.prototype = {
+dw.MapLogic.prototype = {
    
    /**
     * Called when a map is entered.  This gives the logic a chance to
@@ -18,7 +18,7 @@ MapLogic.prototype = {
    /**
     * Returns the text for a specific NPC to say.
     *
-    * @param {Npc} npc The NPC.
+    * @param {dw.Npc} npc The NPC.
     */
    npcText: function(npc) {
       

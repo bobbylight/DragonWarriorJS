@@ -1,10 +1,10 @@
-function ConversationSegment(parentConversation, args) {
+dw.ConversationSegment = function(parentConversation, args) {
    'use strict';
    this.parentConversation = parentConversation;
    gtp.Utils.mixin(args, this);
-}
+};
 
-ConversationSegment.prototype = {
+dw.ConversationSegment.prototype = {
    
    _getParameterizedText: function() {
       'use strict';
@@ -49,4 +49,4 @@ ConversationSegment.prototype = {
    
 };
 
-ConversationSegment.prototype.constructor = ConversationSegment;
+dw.ConversationSegment.prototype.constructor = dw.ConversationSegment;

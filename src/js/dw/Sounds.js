@@ -1,4 +1,4 @@
-Sounds = Object.freeze({
+dw.Sounds = Object.freeze({
    MUSIC_TITLE_SCREEN: 'titleMusic',
    MUSIC_OVERWORLD: 'overworldMusic',
    MUSIC_BATTLE: 'battleMusic',
