@@ -68,7 +68,7 @@ console.log('>>> textDone set to false');
                   var item = this._shoppingBubble.getSelectedItem();
                   delete this._shoppingBubble;
                   this._conversation.setItem(item);
-                  nextState = item.baseCost > game.hero.gold ?
+                  nextState = item.baseCost > game.party.gold ?
                      dw.Conversation.NOT_ENOUGH_SEGMENT : dw.Conversation.CONFIRM_SEGMENT;
                   return !this._updateConversation(nextState);
                }

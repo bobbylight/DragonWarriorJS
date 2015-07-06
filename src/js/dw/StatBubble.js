@@ -45,6 +45,7 @@ dw.StatBubble.prototype = Object.create(dw.Bubble.prototype, {
          var x2 = this.x + this.w - dw.Bubble.MARGIN;
          var y0 = y;
          var Y_INC = game.stringHeight() + 7*SCALE;
+         var party = game.party;
          var hero = game.hero;
          
          game.drawString("LV", x, y0);
@@ -63,8 +64,8 @@ dw.StatBubble.prototype = Object.create(dw.Bubble.prototype, {
          y0 += Y_INC;
          
          game.drawString("G", x, y0);
-         xOffs = this._calculateX2Offs(hero.gold);
-         game.drawString(''+hero.gold, x2-xOffs, y0);
+         xOffs = this._calculateX2Offs(party.gold);
+         game.drawString(''+party.gold, x2-xOffs, y0);
          y0 += Y_INC;
          
          game.drawString("E", x, y0);

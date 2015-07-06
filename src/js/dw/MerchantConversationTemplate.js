@@ -29,7 +29,7 @@ function merchantConversationTemplate(conversation, segmentArgs) {
       {
          id: dw.Conversation.PURCHASE_SEGMENT,
          action: function() {
-            game.hero.gold -= conversation.item.baseCost;
+            game.party.gold -= conversation.item.baseCost;
             console.log('TODO: Give hero the item, in this case: ' + JSON.stringify(conversation.item));
          },
          text: 'I thank thee!',

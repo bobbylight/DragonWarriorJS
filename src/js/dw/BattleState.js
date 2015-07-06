@@ -65,7 +65,7 @@ dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
          this._enemiesDead = true;
          
          game.hero.exp += this._enemy.xp;
-         game.hero.gold += this._enemy.gp;
+         game.party.gold += this._enemy.gp;
          
          // TODO: Check for level up
          

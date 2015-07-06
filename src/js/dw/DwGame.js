@@ -10,19 +10,28 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    start: {
       value: function() {
          'use strict';
-         this._init();
          gtp.Game.prototype.start.apply(this, arguments);
+         this._init();
       }
    },
    
    _init: {
       value: function() {
          'use strict';
-         this.hero = new dw.Hero({ name: 'Erdrick' });
+         this._createPartyAndHero();
          this.npcs = [];
          this._bumpSoundDelay = 0;
          this._mapLogics = {};
          this.setCameraOffset(0, 0);
+      }
+   },
+   
+   _createPartyAndHero: {
+      value: function() {
+         'use strict';
+         this.hero = new dw.Hero({ name: 'Erdrick' });
+         this.party = new dw.Party(this);
+         this.party.addMember(this.hero);
       }
    },
    
@@ -134,7 +143,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    getMapXOffs: {
       value: function() {
          'use strict';
-         var hero = game.hero;
+         var hero = this.hero;
          var centerCol = hero.mapCol;
          var dx = hero.xOffs;
          var tileSize = this.getTileSize();
@@ -146,12 +155,19 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    getMapYOffs: {
       value: function() {
          'use strict';
-         var hero = game.hero;
+         var hero = this.hero;
          var centerRow = hero.mapRow;
          var dy = hero.yOffs;
          var tileSize = this.getTileSize();
          var yOffs = centerRow*tileSize + tileSize/2 + dy - this.getHeight()/2;
          return yOffs;
+      }
+   },
+   
+   getParty: {
+      value: function() {
+         'use strict';
+         return this.party;
       }
    },
    

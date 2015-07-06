@@ -40,6 +40,7 @@ dw.CommandBubble.prototype = Object.create(dw.Bubble.prototype, {
                break;
       
             case 5: // ITEM
+               screen.showInventory();
                break;
       
             case 6: // DOOR

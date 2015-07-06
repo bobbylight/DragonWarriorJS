@@ -75,6 +75,13 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             return;
          }
          
+         if (this._itemBubble) {
+            if (game.anyKeyDown()) {
+               delete this._itemBubble;
+            }
+            return;
+         }
+         
          var done = this._commandBubble.handleInput();
          if (done) {
             this._commandBubble.handleCommandChosen(this);
@@ -215,6 +222,9 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          if (this._statusBubble) {
             this._statusBubble.paint(ctx);
          }
+         if (this._itemBubble) {
+            this._itemBubble.paint(ctx);
+         }
          
          if (this._overnightDelay) {
             ctx.save();
@@ -234,6 +244,13 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             ctx.fillRect(0, 0, game.getWidth(), game.getHeight());
             ctx.restore();
          }
+      }
+   },
+   
+   showInventory: {
+      value: function() {
+         'use strict';
+         this._itemBubble = new dw.ItemBubble();
       }
    },
    
