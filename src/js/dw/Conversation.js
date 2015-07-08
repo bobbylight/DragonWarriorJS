@@ -103,16 +103,24 @@ dw.Conversation.prototype = (function() {
          return this._getNextIndex() < this._segments.length;
       },
       
-      current: function() {
-         return this._segmentIndex >= this._segments.length ? null :
+      current: function(performAction) {
+         var segment = this._segmentIndex >= this._segments.length ? null :
                this._segments[this._segmentIndex];
+         if (performAction && segment && segment.action) {
+            segment.action();
+         }
+         return segment;
       },
       
-      next: function() {
+      next: function(performAction) {
          var nextIndex = this._getNextIndex();
          if (nextIndex < this._segments.length) {
             this._segmentIndex = nextIndex;
-            return this._segments[this._segmentIndex];
+            var segment = this._segments[this._segmentIndex];
+            if (performAction && segment && segment.action) {
+               segment.action();
+            }
+            return segment;
          }
          return null;
       },

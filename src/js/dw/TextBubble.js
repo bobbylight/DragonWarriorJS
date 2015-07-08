@@ -103,6 +103,25 @@ console.log('>>> textDone set to false');
    },
    
    /**
+    * Immediately plays, or remembers to play, audio bits for a conversation
+    * segment as appropriate.
+    */
+   _handleSegmentAudio: {
+      value: function(segment) {
+         'use strict';
+         if (segment.sound) {
+            game.audio.playSound(segment.sound);
+         }
+         if (segment.music) {
+            game.audio.playMusic(segment.music);
+         }
+         if (segment.afterSound) {
+            this._afterSound = segment.afterSound;
+         }
+      }
+   },
+   
+   /**
     * Forces the conversation to go to the next segment.  Should only be called
     * internally.  This is a sign of bad design.
     */
@@ -193,6 +212,10 @@ console.log('>>> textDone set to false');
                   if (this._curLine === this._lines.length-1) {
 console.log('Setting textDone to true');
                      this._textDone = true;
+                     if (this._afterSound) {
+                        game.audio.playSound(this._afterSound);
+                        delete this._afterSound;
+                     }
                   }
                   else {
 console.log('Going to next line');
@@ -305,7 +328,9 @@ console.log('>>> textDone set to false');
          delete this._shoppingBubble;
          delete this._questionBubble;
          this._conversation = conversation;
-         this._setText(this._conversation.start());
+         var segment = this._conversation.start();
+         this._setText(segment);
+         this._handleSegmentAudio(segment);
       }
    },
    
@@ -319,10 +344,10 @@ console.log('>>> textDone set to false');
             var segment;
             if (forcedNextState) {
                this._conversation.setDialogueState(forcedNextState);
-               segment = this._conversation.current();
+               segment = this._conversation.current(true);
             }
             else {
-               segment = this._conversation.next();
+               segment = this._conversation.next(true);
             }
 //            if (segment.overnight) {
 //               this._overnight = true;
@@ -333,12 +358,7 @@ console.log('>>> textDone set to false');
             else {
                this._append(segment);
             }
-            if (segment.sound) {
-               game.audio.playSound(segment.sound);
-            }
-            if (segment.music) {
-               game.audio.playMusic(segment.music);
-            }
+            this._handleSegmentAudio(segment);
             return true;
          }
          return false;

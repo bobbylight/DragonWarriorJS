@@ -38,9 +38,10 @@ Brecconary.prototype = (function() {
                   id: 'makeUserChoose',
                   clear: false,
                   text: 'Do you want my help?',
+                  afterSound: 'confirmation',
                   choices: [
                      { text: 'Yes', next: function() {
-                           game.hero.addGold(10);
+                           game.party.addGold(10);
                            return 'iGaveYouMoney';
                         }
                      },
