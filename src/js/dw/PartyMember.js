@@ -178,6 +178,17 @@ dw.PartyMember.prototype = Object.create(dw.RoamingEntity.prototype, {
       }
    },
    
+   /**
+    * Replenishes the HP and MP of this party member.
+    */
+   replenishHealthAndMagic: {
+      value: function() {
+         'use strict';
+         this.hp = this.maxHp;
+         this.mp = this.maxMp;
+      }
+   },
+   
    takeDamage: {
       value: function(amount) {
          'use strict';

@@ -10,8 +10,6 @@ dw.Party = function(game) {
    
    // Dummy data
    this.gold = 768;
-//   this.addInventoryItem(game.getWeapon('club'));
-//   this.addInventoryItem(game.getShield('smallShield'));
 };
 
 dw.Party.INVENTORY_MAX_SIZE = 20;
@@ -70,10 +68,6 @@ dw.Party.prototype = {
     */
    getInventory: function() {
       'use strict';
-      if (this._inventory.length === 0) {
-         this.addInventoryItem(game.getWeapon('club'));
-         this.addInventoryItem(game.getShield('smallShield'));
-      }
       return this._inventory;
    },
    
@@ -114,6 +108,16 @@ dw.Party.prototype = {
    isInventoryFull: function() {
       'use strict';
       return this._inventory.length >= dw.Party.INVENTORY_MAX_SIZE;
+   },
+   
+   /**
+    * Replenishes the HP and MP of all party members.
+    */
+   replenishHealthAndMagic: function() {
+      'use strict';
+      this._members.forEach(function(partyMember) {
+         partyMember.replenishHealthAndMagic();
+      });
    }
    
 };

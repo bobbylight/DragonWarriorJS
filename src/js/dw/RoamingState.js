@@ -157,7 +157,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          'use strict';
          
          var done = this._textBubble.handleInput();
-         if (this._textBubble.currentTextDone() && this._textBubble.isOvernight()) {
+         if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
             this._substate = _RoamingSubState.OVERNIGHT;
             this._textBubble.clearOvernight();
          }
@@ -193,7 +193,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          game.audio.playMusic(dw.Sounds.MUSIC_TOWN);
          delete this._overnightDelay;
          this._substate = _RoamingSubState.TALKING;
-         this._textBubble.nudgeConversation(); // User doesn't have to press a key
+//         this._textBubble.nudgeConversation(); // User doesn't have to press a key
       }
    },
    

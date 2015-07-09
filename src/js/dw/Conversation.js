@@ -56,6 +56,14 @@ dw.Conversation.prototype = (function() {
                   // TODO: Allow user-defined segments to override these.
                   this.setSegments(merchantConversationTemplate(this, segmentArgs));
                   break;
+               case 'innkeeper':
+                  if (!segmentArgs.cost) {
+                     throw 'No cost for the inn specified in conversation: ' + JSON.stringify(segmentArgs);
+                  }
+                  // Add the standard segments for an innkeeper.
+                  // TODO: Allow user-defined segments to override these.
+                  this.setSegments(innkeeperConversationTemplate(this, segmentArgs));
+                  break;
                default:
                   throw 'Unknown conversation type: ' + segmentArgs.conversationType;
             }

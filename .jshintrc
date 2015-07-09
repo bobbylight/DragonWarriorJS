@@ -24,6 +24,7 @@
       "game": true,
       "dw": true,
       "tiled": true,
+      "innkeeperConversationTemplate": true,
       "merchantConversationTemplate": true
    },
    "exported": [ "init" ]
