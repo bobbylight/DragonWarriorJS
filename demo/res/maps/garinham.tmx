@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="29" height="28" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="music" value="MUSIC_TOWN"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../tiles.png" width="407" height="254"/>
+ </tileset>
+ <tileset firstgid="361" name="collision" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../collision.png" width="50" height="50"/>
+ </tileset>
+ <layer name="tileLayer" width="29" height="28">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2VQQ6DIBBFidJ20SPQDUfg/perTST5+fngMKSJCxYviso8YBhMIYRysh1EB9j/dZAMsDMPoMZgcW5ApLaVAvdW5+h6KmdlxKnGf5XDEubmyY7afpzwuyLwOH88aZ7sQ6e6/iufvTzf2TmDx8lnEOb3c4HaAx7nLpyJ5pPIHelb69qqGsUYEeL3sDgxZut5K+6ooxdTOTj+W6yNdW0xLxib+7Oz5mMnt6dWcP/kRr7V+TWzbzFODno+7PTWZ++fqOpenV8jzh5qPL3zy7OPF4vFPfgC2Z1xErAMAAA=
+  </data>
+ </layer>
+ <layer name="collisionLayer" width="29" height="28" opacity="0.3">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+2V0QqAIAxF1+f2/z8QPkQiu3NebYLsgFDUPHeWJfJxX0JR6t7B1EbR5qzPmeF1MjlnsPqLcHrn3dUn+yxXZGbm2uVctTfY9UXvlDfv304W6xuU6GsT6azd3lrt39Je145R/Uhm5NHuRflGnKjfntPKztLLk/srSc7hAdTLCCywDAAA
+  </data>
+ </layer>
+ <objectgroup name="warpLayer" width="29" height="28">
+  <object name="overworldExit1" type="warp" x="0" y="208" width="16" height="48">
+   <properties>
+    <property name="col" value="4"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="12"/>
+   </properties>
+  </object>
+  <object name="overworldExit2" type="warp" x="336" y="176" width="16" height="64">
+   <properties>
+    <property name="col" value="4"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="12"/>
+   </properties>
+  </object>
+  <object name="overworldExit3" type="warp" x="224" y="320" width="16" height="16">
+   <properties>
+    <property name="col" value="4"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="12"/>
+   </properties>
+  </object>
+  <object name="outdoorExit4" type="warp" x="336" y="16" width="16" height="16">
+   <properties>
+    <property name="col" value="4"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="12"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="npcLayer" width="29" height="28">
+  <object name="npc1" type="npc" x="96" y="176" width="16" height="16">
+   <properties>
+    <property name="dir" value="left"/>
+    <property name="type" value="soldier"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

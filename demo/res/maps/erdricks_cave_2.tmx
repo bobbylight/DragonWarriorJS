@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../tiles.png" width="407" height="254"/>
+ </tileset>
+ <tileset firstgid="361" name="collision" tilewidth="16" tileheight="16" spacing="1">
+  <image source="../collision.png" width="50" height="50"/>
+ </tileset>
+ <layer name="tileLayer" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYCIB8xDAIDUsRGJSzMPmFmzi5LqPCY0mxX243IRsPisF7sNlLqnhh24GtjAkNT7Qw4zc+EXXh8seYuMDW1ySG7/Y4gKZz0GG+6iV30bxKB5IDAAEjA2k
+  </data>
+ </layer>
+ <layer name="collisionLayer" width="20" height="20" opacity="0.46">
+  <data encoding="base64" compression="zlib">
+   eJzLZGRgyCQBEwLEqCFFLUwNLrdQy33I5pHqPlxuItZuQmpwmUtq+KGbgS0MSTEPW5hhU0uMeehipNiDTy82d1PiPnx8ctILpfltFIyCgQQAWKIhiw==
+  </data>
+ </layer>
+ <objectgroup name="warpLayer" width="20" height="20">
+  <object name="upstairs" type="warp" x="144" y="160" width="16" height="16">
+   <properties>
+    <property name="col" value="10"/>
+    <property name="map" value="erdricks_cave_1"/>
+    <property name="row" value="10"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

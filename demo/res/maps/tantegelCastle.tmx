@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="60" height="60" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="logicFile" value="tantegelCastle"/>
+  <property name="music" value="MUSIC_OVERWORLD"/>
+ </properties>
+ <tileset firstgid="1" source="tileset_tiles.tsx"/>
+ <tileset firstgid="361" source="collision_tiles.tsx"/>
+ <layer name="tileLayer" width="60" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztl1sOgkAMRQkQlDUMm2D/mzMkkjTNnZkOqLR4P05EtKaHPjKmrusSuT19gbOx+v3ixHcE6BwXdW2J7dV7D9RyPhO7vQ6BfCW1+6VnJXvjanI5n0HOgifXlvrmODoLV/oiB0vdZcxU+S3rzv91fWWOz4Kn9Zl4q3upJy35R/dFPXh0ttFu9+Cbm7l9t2rf/b52sVx78M3V9x99E/BNwDfq/E4gN+SLYiP6ojO+xfcO/YxcpXNU39x+3n1XxViIrZ2xPPjW5m5znN+shu97Pld/y3cGePFF5yB5D/Vz7f+RZ9/Wvjz6WQTflvOzxXd15Jtza6lt6Xl487X2piVGz7zEg6/cRdKp5luqo1dftH+t9UXX0X1RPVEfD0F9UV/fqb7WM3Bt90aY30/nUPLceVzsTAghhBBCCCGEEEIIIYQQQsgLHCNEjA==
+  </data>
+ </layer>
+ <layer name="collisionLayer" width="60" height="60" opacity="0.22">
+  <data encoding="base64" compression="zlib">
+   eJztl1ESwyAIBdPj9v4X6D+j8tQoWHdnOk2IKG9AYp4HbuD7qf9mfXvm2kUtFlVvy27/M7Ba70n5LcWr1HwmfZYVsZ2ot9WLTs9vrbeO+Gbv0zYGRe9o382o17P3jpkZv4JWfms1qO7tUm+PZnb/jl5HMbJ/S7636R1ZKwL0lu2e7231fJJerz+r3w7KGSuamTz2zone/Xh1au+V+syud9ezE/T2nJ+9OTP0LC9O1WafK98PESixv+Gj+q6m1n9a5w7lHeytF4W39xS99jq7Xu++lM/WXCfptbZ/zK96Bh4ZX1ovkrffETO9GwAAAAAAAAAAAAAAAGAXP9Wrd6s=
+  </data>
+ </layer>
+ <objectgroup name="warpLayer" width="60" height="60">
+  <object name="south_exit" type="warp" x="32" y="512" width="480" height="16">
+   <properties>
+    <property name="col" value="45"/>
+    <property name="dir" value="south"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="53"/>
+   </properties>
+  </object>
+  <object name="north_exit" type="warp" x="32" y="16" width="480" height="16">
+   <properties>
+    <property name="col" value="45"/>
+    <property name="dir" value="south"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="53"/>
+   </properties>
+  </object>
+  <object name="east_exit" type="warp" x="512" y="32" width="16" height="480">
+   <properties>
+    <property name="col" value="45"/>
+    <property name="dir" value="south"/>
+    <property name="map" value="overworld"/>
+    <property name="row" value="53"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

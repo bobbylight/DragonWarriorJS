@@ -1,0 +1,27 @@
+#gameDiv {
+   width: 544px;
+   height: 480px;
+   border: 1px solid black;
+   position: relative;
+}
+
+#gameDiv div {
+   position: absolute;
+   left: 0;
+   width: 544px;
+   height: 480px;
+   -webkit-transition: opacity 0.5s ease-in-out;
+   -moz-transition: opacity 0.5s ease-in-out;
+   -o-transition: opacity 0.5s ease-in-out;
+   transition: opacity 0.5s ease-in-out;
+}
+#dw-screenshot-bw {
+   background-image: url(../images/dw_screenshot_1_bw.png);
+}
+#dw-screenshot-color {
+   opacity: 0;
+   background-image: url(../images/dw_screenshot_1_color.png);
+}
+#dw-screenshot-color:hover {
+   opacity: 1;
+}
