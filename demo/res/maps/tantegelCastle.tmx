@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="60" height="60" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" width="60" height="68" tilewidth="16" tileheight="16">
  <properties>
   <property name="logicFile" value="tantegelCastle"/>
   <property name="music" value="MUSIC_OVERWORLD"/>
  </properties>
  <tileset firstgid="1" source="tileset_tiles.tsx"/>
  <tileset firstgid="361" source="collision_tiles.tsx"/>
- <layer name="tileLayer" width="60" height="60">
+ <layer name="tileLayer" width="60" height="68">
   <data encoding="base64" compression="zlib">
-   eJztl1sOgkAMRQkQlDUMm2D/mzMkkjTNnZkOqLR4P05EtKaHPjKmrusSuT19gbOx+v3ixHcE6BwXdW2J7dV7D9RyPhO7vQ6BfCW1+6VnJXvjanI5n0HOgifXlvrmODoLV/oiB0vdZcxU+S3rzv91fWWOz4Kn9Zl4q3upJy35R/dFPXh0ttFu9+Cbm7l9t2rf/b52sVx78M3V9x99E/BNwDfq/E4gN+SLYiP6ojO+xfcO/YxcpXNU39x+3n1XxViIrZ2xPPjW5m5znN+shu97Pld/y3cGePFF5yB5D/Vz7f+RZ9/Wvjz6WQTflvOzxXd15Jtza6lt6Xl487X2piVGz7zEg6/cRdKp5luqo1dftH+t9UXX0X1RPVEfD0F9UV/fqb7WM3Bt90aY30/nUPLceVzsTAghhBBCCCGEEEIIIYQQQsgLHCNEjA==
+   eJztmmGOgkAMRlkxup4BL8H9L7cx2UmayTedAuq05fvxIqBD5tF2KMRlmqaFpOeicHRsvf904nsF1HN8VtuWsZdq3wO9OR8Z+/qcHfvW2xLL8da1krkxmlaMjiBrwZNrLyct7K2Fkb7IwRJ3OebWOZd1zf92fOUcfxVP6zXxFnctJy3zj+6LcnBvbaM13INvq+bK2lr7luPa/chyn/IW3zP6LsB3Ab5R6/cG5oZ80diIvqjHt/hmyGfkKp2j+rbW5+K7VlyVsb0ey4Nvr+5ejo9/VsPvPffVn/J9ALz4oj5IHkP53Hs+8uy7NS/3fhfBd0v/bPFdHfm23LbEVrse3nytuWkZU9e8xIOvXIukU89Xi6NXX7T+WuOLtqP7oniiPJ6D+qK8zhRfaw/cW3sj1O+756B5Fu6DnQkhhBDyHX4+zGg/+tKXvvSlb3xf6zN9Jl/tfWt5z5HNd26Q2Vd61+8gs/meLZ/pm9dX0vrvayZfLbb3hL5n6jfewWg/+tKXvnl8CSGE+OQP0nZCWQ==
   </data>
  </layer>
- <layer name="collisionLayer" width="60" height="60" opacity="0.22">
+ <layer name="collisionLayer" width="60" height="68" opacity="0.22">
   <data encoding="base64" compression="zlib">
-   eJztl1ESwyAIBdPj9v4X6D+j8tQoWHdnOk2IKG9AYp4HbuD7qf9mfXvm2kUtFlVvy27/M7Ba70n5LcWr1HwmfZYVsZ2ot9WLTs9vrbeO+Gbv0zYGRe9o382o17P3jpkZv4JWfms1qO7tUm+PZnb/jl5HMbJ/S7636R1ZKwL0lu2e7231fJJerz+r3w7KGSuamTz2zone/Xh1au+V+syud9ezE/T2nJ+9OTP0LC9O1WafK98PESixv+Gj+q6m1n9a5w7lHeytF4W39xS99jq7Xu++lM/WXCfptbZ/zK96Bh4ZX1ovkrffETO9GwAAAAAAAAAAAAAAAGAXP9Wrd6s=
+   eJztmWEOwyAIRrfj7v4X2H+iglAV6nvJMmtB+aKijZ8P3MDv2/9FfWfa2kUvFqveUb38z8BqvZnHV5Zb8Y7qW+VsrIitot5RLtLmaXa9vdzq8c2ep2UMFr3evJtRr1Y/axOxX8FofHtz0Lq2Rzn8FNH16y2fwrN+W7636fX0dQL0tus139vmcyW9Wn62fjtYzliniYzjbJvo3Y82T+WzZX5m17vrXQW9M+dnrc0MOUuL01on31u+H05gif0JH6vvanr5Z3TusOzBWn+n0NaeRa8sZ9erPbfGc9RWJb2y7o3jaz0De+xb/Z3k6T0ikrsBAAAAAAAAdhL9pq9G5I6oIr17I3l/9BakppbON+qN2lQBvT6bKrAf+WyqcNv4AgAAAABo/AGhSo7b
   </data>
  </layer>
- <objectgroup name="warpLayer" width="60" height="60">
+ <objectgroup name="warpLayer" width="60" height="68">
   <object name="south_exit" type="warp" x="32" y="512" width="480" height="16">
    <properties>
     <property name="col" value="45"/>
@@ -39,6 +39,170 @@
     <property name="dir" value="south"/>
     <property name="map" value="overworld"/>
     <property name="row" value="53"/>
+   </properties>
+  </object>
+  <object name="stairs_to_king" type="warp" x="144" y="144" width="16" height="16">
+   <properties>
+    <property name="col" value="15"/>
+    <property name="dir" value="west"/>
+    <property name="map" value="tantegelCastle"/>
+    <property name="row" value="55"/>
+   </properties>
+  </object>
+  <object name="stairs_to_main_floor" type="warp" x="240" y="880" width="16" height="16">
+   <properties>
+    <property name="col" value="9"/>
+    <property name="dir" value="east"/>
+    <property name="map" value="tantegelCastle"/>
+    <property name="row" value="9"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="npcLayer" width="60" height="68">
+  <object name="south_soldier_left" type="npc" x="176" y="464" width="16" height="16">
+   <properties>
+    <property name="dir" value="east"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="south_soldier_right" type="npc" x="224" y="464" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="bottom_right_old_man" type="npc" x="352" y="448" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="old_man_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="bottom_right_soldier" type="npc" x="272" y="352" width="16" height="16">
+   <properties>
+    <property name="dir" value="east"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="bottom_left_merchant_1" type="npc" x="128" y="464" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="merchant_green"/>
+   </properties>
+  </object>
+  <object name="bottom_left_merchant_2" type="npc" x="80" y="400" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="merchant_green"/>
+   </properties>
+  </object>
+  <object name="bottom_left_merchant_3" type="npc" x="112" y="304" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="merchant_green"/>
+   </properties>
+  </object>
+  <object name="table1" type="talkAcross" x="336" y="448" width="16" height="16"/>
+  <object name="stairs_soldier_north" type="npc" x="160" y="128" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="stairs_soldier_south" type="npc" x="160" y="160" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="woman_near_stairs" type="npc" x="240" y="224" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="woman_blue"/>
+   </properties>
+  </object>
+  <object name="man_near_stairs" type="npc" x="240" y="160" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="man_blue"/>
+   </properties>
+  </object>
+  <object name="treasure_room_soldier" type="npc" x="64" y="224" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="soldier_gray"/>
+   </properties>
+  </object>
+  <object name="man_in_west_room" type="npc" x="64" y="160" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="man_blue"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="top_right_soldier" type="npc" x="336" y="96" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="soldier_gray"/>
+   </properties>
+  </object>
+  <object name="outside_merchant" type="npc" x="416" y="48" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="merchant_green"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="outside_merchant_table" type="talkAcross" x="416" y="64" width="16" height="16"/>
+  <object name="outside_woman" type="npc" x="464" y="112" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="woman_blue"/>
+   </properties>
+  </object>
+  <object name="prison_guard_soldier" type="npc" x="448" y="272" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="old_man_east" type="npc" x="400" y="272" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="old_man_gray"/>
+   </properties>
+  </object>
+  <object name="prisoner_red_soldier" type="npc" x="416" y="352" width="16" height="16">
+   <properties>
+    <property name="dir" value="north"/>
+    <property name="type" value="soldier_red"/>
+   </properties>
+  </object>
+  <object name="king_soldier_right" type="npc" x="192" y="848" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="king_soldier_left" type="npc" x="160" y="848" width="16" height="16">
+   <properties>
+    <property name="dir" value="east"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="king_soldier_wandering" type="npc" x="224" y="832" width="16" height="16">
+   <properties>
+    <property name="dir" value="south"/>
+    <property name="type" value="soldier_gray"/>
+    <property name="wanders" value="true"/>
    </properties>
   </object>
  </objectgroup>
