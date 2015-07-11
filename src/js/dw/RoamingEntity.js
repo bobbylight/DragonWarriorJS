@@ -98,7 +98,7 @@ dw.RoamingEntity.prototype = {
       }
       
       // TODO: Is there a better way to determine that I'm the hero?
-      else if (data===361 && this.constructor.name==='dw.Hero') { // i.e., not an NPC
+      else if (data===361 && this.constructor === dw.Hero) { // i.e., not an NPC
          game.bump();
       }
       /*

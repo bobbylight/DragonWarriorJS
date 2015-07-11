@@ -474,7 +474,7 @@
  "properties":
     {
      "logicFile":"tantegelCastle",
-     "music":"MUSIC_OVERWORLD"
+     "music":"MUSIC_TANTEGEL"
     },
  "tileheight":16,
  "tilesets":[

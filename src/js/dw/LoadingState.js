@@ -128,6 +128,8 @@ dw.LoadingState.prototype = Object.create(dw._BaseState.prototype, {
             game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
             game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
             game.assets.addSound(dw.Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
+            game.assets.addSound(dw.Sounds.MUSIC_TANTEGEL, 'res/sound/02 Dragon Quest 1 - Tantegel Castle (22khz mono).ogg');
+            game.assets.addSound(dw.Sounds.MUSIC_TANTEGEL_LOWER, 'res/sound/03 Dragon Quest 1 - Tantegel Castle (Lower) (22khz mono).ogg');
             game.assets.addSound(dw.Sounds.MUSIC_TOWN, 'res/sound/04 Dragon Quest 1 - Peaceful Village (22khz mono).ogg');
             game.assets.addSound(dw.Sounds.MUSIC_OVERWORLD, 'res/sound/05 Dragon Quest 1 - Kingdom of Alefgard (22khz mono).ogg');
             game.assets.addSound(dw.Sounds.MUSIC_BATTLE, 'res/sound/14 Dragon Quest 1 - A Monster Draws Near (16khz mono).ogg', 2.32);
