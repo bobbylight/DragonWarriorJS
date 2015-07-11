@@ -1,10 +1,1 @@
-{
-   "firstPixelIsTranslucent": true,
-   "images": [
-      { "id": "Slime", "dim": "5,0,19,18"},
-      { "id": "Slime_damaged", "dim": "68,0,19,18" },
-      { "id": "RedSlime", "dim": "26,0,19,18"},
-      { "id": "Drakee", "dim": "90,0,24,36"},
-      { "id": "Drakee_damaged", "dim": "168,0,24,36"}
-   ]
-}
+{"firstPixelIsTranslucent":true,"images":[{"id":"Slime","dim":"5,0,19,18"},{"id":"Slime_damaged","dim":"68,0,19,18"},{"id":"RedSlime","dim":"26,0,19,18"},{"id":"Drakee","dim":"90,0,24,36"},{"id":"Drakee_damaged","dim":"168,0,24,36"}]}

@@ -1,6 +1,32 @@
 @font-face {
    font-family: 'Dragon Warrior 2';
-   src: url('../fonts/dw-font.ttf');
+   src: url('../res/dw-font.ttf');
+}
+
+body {
+   background: black;
+   color: white;
+   font-family: 'Dragon Warrior 2';
+   font-size: 24px;
+   font-style: normal;
+   padding-left: 0px 3em;
+}
+
+h1 {
+   text-align: center;
+}
+h1, h2, h3 {
+   font-weight: normal;
+}
+h3 {
+   color: yellow;
+}
+b {
+   font-weight:normal;
+   color: rgb(180, 180, 255);
+}
+ol {
+   margin-left: 1em;
 }
 
 canvas {
