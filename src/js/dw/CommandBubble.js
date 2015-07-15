@@ -44,6 +44,7 @@ dw.CommandBubble.prototype = Object.create(dw.Bubble.prototype, {
                break;
       
             case 6: // DOOR
+               screen.openDoor();
                break;
       
             case 7: // TAKE

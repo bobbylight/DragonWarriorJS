@@ -197,6 +197,23 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       }
    },
    
+   openDoor: {
+      value: function() {
+         'use strict';
+         var door = game.getDoorHeroIsFacing();
+         if (door) {
+            console.log('TODO: Open door: ' + door);
+         }
+         else {
+            var conversation = new dw.Conversation();
+            conversation.addSegment('There is no door there to open!');
+            this._showTextBubble = true;
+            this._textBubble.setConversation(conversation);
+            this._substate = _RoamingSubState.TALKING;
+         }
+      }
+   },
+   
    render: {
       value: function(ctx) {
          'use strict';

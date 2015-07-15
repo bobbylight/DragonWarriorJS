@@ -51,6 +51,19 @@ dw.RoamingEntity.prototype = {
    },
    
    /**
+    * Returns whether this entity is at the specified row and column in the
+    * map.
+    *
+    * @param {int} row The row.
+    * @param {int} col The column.
+    * @return {boolean} Whether this entity is at that row and column.
+    */
+   isAt: function(row, col) {
+      'use strict';
+      return this.mapRow === row && this.mapCol === col;
+   },
+   
+   /**
     * If this entity is only allowed to walk around in a certain range, this
     * method returns true iff the specified location is outside of that range.
     */

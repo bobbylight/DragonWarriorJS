@@ -258,7 +258,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(map) {
          'use strict';
 
-         var i, npc;
+         var i, npc, door;
          
          // Hide layers that shouldn't be shown (why aren't they marked as hidden
          // in Tiled?)
@@ -271,33 +271,48 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          
          // We special-case the NPC layer
          var newNpcs = [];
+         var newDoors = [];
          var newTalkAcrosses = {};
          var temp = map.getLayer("npcLayer");
          if (temp && temp.isObjectGroup()) {
+            
             var npcLayer = temp;
-            for (i=0; i<npcLayer.objects.length; i++) {
+            
+            for (i = 0; i < npcLayer.objects.length; i++) {
                var obj = npcLayer.objects[i];
-               if ('npc'===obj.type) {
-                  npc = this._parseNpc(obj);
-                  npc.setNpcIndex(newNpcs.length+1);
-                  newNpcs.push(npc);
-               }
-               else if ('talkAcross'===obj.type) {
-                  newTalkAcrosses[this._parseTalkAcrossKey(obj)] = true;
-               }
-               else {
-                  console.error('Unhandled object type in tiled map: ' + obj.type);
+               switch (obj.type) {
+                  case 'npc':
+                     npc = this._parseNpc(obj);
+                     npc.setNpcIndex(newNpcs.length + 1);
+                     newNpcs.push(npc);
+                     break;
+                  case 'door':
+                     door = this._parseDoor(obj);
+                     //door.setDoorIndex(newDoors.length + 1);
+                     newDoors.push(door);
+                     break;
+                  case 'talkAcross':
+                     newTalkAcrosses[this._parseTalkAcrossKey(obj)] = true;
+                     break;
+                  default:
+                     console.error('Unhandled object type in tiled map: ' + obj.type);
+                     break;
                }
             }
-            map.removeLayer("npcs");
+            
+            map.removeLayer("npcLayer");
+            
          }
          
          map.npcs = newNpcs;
-         for (i=0; i<map.npcs.length; i++) {
-            npc = map.npcs[i];
+         map.npcs.forEach(function(npc) {
             map.getLayer("collisionLayer").setData(npc.mapRow, npc.mapCol, 1);
-         }
+         });
          map.talkAcrosses = newTalkAcrosses;
+         
+         map.doors = newDoors;
+         // Don't need to set collision as it is already set in the map.
+         // Should we require that?
          
 //         // Hide layers we aren't interested in seeing.
 //         map.getLayer("collisionLayer").setVisible(collisionLayerVisible);
@@ -306,6 +321,18 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
 //            layer.setVisible(enemyTerritoryLayerVisible);
 //         }
       
+      }
+   },
+   
+   _parseDoor: {
+      value: function(obj) {
+         'use strict';
+         var name = obj.name;
+         var replacementTileIndex = obj.properties.replacementTileIndex;
+         var tileSize = this.getTileSize();
+         var row = obj.y / tileSize;
+         var col = obj.x / tileSize;
+         return new dw.Door(name, row, col, replacementTileIndex);
       }
    },
    
@@ -536,6 +563,36 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
+   getDoorHeroIsFacing: {
+      value: function() {
+         'use strict';
+         var row = this.hero.mapRow, col = this.hero.mapCol;
+         switch (this.hero.direction) {
+            case dw.Direction.NORTH:
+               row--;
+               break;
+            case dw.Direction.SOUTH:
+               row++;
+               break;
+            case dw.Direction.EAST:
+               col++;
+               break;
+            case dw.Direction.WEST:
+               col--;
+               break;
+         }
+         console.log('Checking for door at: ' + row + ', ' + col);
+         for (var i=0; i<this.map.doors.length; i++) {
+            var door = this.map.doors[i];
+            console.log('... ' + door);
+            if (door.isAt(row, col)) {
+               return door;
+            }
+         }
+         return null;
+      }
+   },
+   
    getNpcHeroIsFacing: {
       value: function() {
          'use strict';
@@ -558,7 +615,7 @@ game.hero.setMapLocation(7, 6);
          } while (this.getShouldTalkAcross(row, col));
          for (var i=0; i<this.map.npcs.length; i++) {
             var npc = this.map.npcs[i];
-            if (row===npc.mapRow && col===npc.mapCol) {
+            if (npc.isAt(row, col)) {
                return npc;
             }
          }

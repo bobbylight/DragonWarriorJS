@@ -108,7 +108,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "width":60,
          "x":0,
          "y":0
@@ -462,6 +462,19 @@
                  "width":16,
                  "x":224,
                  "y":832
+                }, 
+                {
+                 "height":16,
+                 "name":"treasuryDoor",
+                 "properties":
+                    {
+                     "replacementTileIndex":"3"
+                    },
+                 "type":"door",
+                 "visible":true,
+                 "width":16,
+                 "x":96,
+                 "y":240
                 }],
          "opacity":1,
          "type":"objectgroup",

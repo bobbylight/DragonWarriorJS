@@ -22,7 +22,7 @@ dw.Hero.prototype = Object.create(dw.PartyMember.prototype, {
             var newRow = parseInt(obj.properties.row, 10);
             var newCol = parseInt(obj.properties.col, 10);
             var newDir = dw.Direction.fromString(obj.properties.dir);
-            game.loadMap(obj.properties. map, newRow, newCol, newDir);
+            game.loadMap(obj.properties.map, newRow, newCol, newDir);
          }
       }   
    }

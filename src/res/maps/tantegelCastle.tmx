@@ -16,7 +16,7 @@
    eJztmWEOwyAIRrfj7v4X2H+iglAV6nvJMmtB+aKijZ8P3MDv2/9FfWfa2kUvFqveUb38z8BqvZnHV5Zb8Y7qW+VsrIitot5RLtLmaXa9vdzq8c2ep2UMFr3evJtRr1Y/axOxX8FofHtz0Lq2Rzn8FNH16y2fwrN+W7636fX0dQL0tus139vmcyW9Wn62fjtYzliniYzjbJvo3Y82T+WzZX5m17vrXQW9M+dnrc0MOUuL01on31u+H05gif0JH6vvanr5Z3TusOzBWn+n0NaeRa8sZ9erPbfGc9RWJb2y7o3jaz0De+xb/Z3k6T0ikrsBAAAAAAAAdhL9pq9G5I6oIr17I3l/9BakppbON+qN2lQBvT6bKrAf+WyqcNv4AgAAAABo/AGhSo7b
   </data>
  </layer>
- <objectgroup name="warpLayer" width="60" height="68">
+ <objectgroup name="warpLayer" width="60" height="68" visible="0">
   <object name="south_exit" type="warp" x="32" y="512" width="480" height="16">
    <properties>
     <property name="col" value="45"/>
@@ -203,6 +203,11 @@
     <property name="dir" value="south"/>
     <property name="type" value="soldier_gray"/>
     <property name="wanders" value="true"/>
+   </properties>
+  </object>
+  <object name="treasuryDoor" type="door" x="96" y="240" width="16" height="16">
+   <properties>
+    <property name="replacementTileIndex" value="3"/>
    </properties>
   </object>
  </objectgroup>
