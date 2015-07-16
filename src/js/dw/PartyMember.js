@@ -162,6 +162,26 @@ dw.PartyMember.prototype = Object.create(dw.RoamingEntity.prototype, {
       }
    },
    
+   /**
+    * Adds HP to this entity's total, making sure to not exceed its maximum
+    * HP value.  The inverse of this method is <code>takeDamage</code>.
+    *
+    * @param {int} amount The amount of HP to add.
+    * @return {boolean} Whether this entity is dead (has 0 HP).  This will
+    *         only be possible if you pass a negative value to this method.
+    * @see takeDamage
+    */
+   incHp: {
+      value: function(amount) {
+         'use strict';
+         this.hp = Math.min(this.hp + amount, this.maxHp);
+         this.hp = Math.max(0, this.hp);
+         // TODO: Remove me, just for testing
+         this.hp = Math.max(1, this.hp);
+         return this.isDead();
+      }
+   },
+   
    isDead: {
       value: function() {
          'use strict';
@@ -189,13 +209,18 @@ dw.PartyMember.prototype = Object.create(dw.RoamingEntity.prototype, {
       }
    },
    
+   /**
+    * Subtracts HP from this entity's current amount.  This is the inverse
+    * of <code>incHp</code>.
+    * 
+    * @param {int} amount The amount of hit points to deduct.
+    * @return {boolean} Whether this entity is dead (has 0 HP).
+    * @see incHp
+    */
    takeDamage: {
       value: function(amount) {
          'use strict';
-         this.hp = Math.max(0, this.hp - amount);
-         // TODO: Remove me, just for testing
-         this.hp = Math.max(1, this.hp);
-         return this.isDead();
+         this.incHp(-amount);
       }
    }
    

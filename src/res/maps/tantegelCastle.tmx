@@ -207,7 +207,7 @@
   </object>
   <object name="treasuryDoor" type="door" x="96" y="240" width="16" height="16">
    <properties>
-    <property name="replacementTileIndex" value="3"/>
+    <property name="replacementTileIndex" value="4"/>
    </properties>
   </object>
  </objectgroup>

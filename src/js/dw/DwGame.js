@@ -206,6 +206,34 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   /**
+    * If the hero is facing a door, it is opened.  Otherwise, nothing
+    * happens.
+    *
+    * @return {boolean} Whether there was a door to open.
+    */
+   openDoorHeroIsFacing: {
+      value: function() {
+         'use strict';
+         var door = this._getDoorHeroIsFacing();
+         if (door) {
+            this.audio.playSound('door');
+            this.map.getLayer('tileLayer').setData(door.row, door.col,
+                  door.replacementTileIndex);
+            var index = this.map.doors.indexOf(door);
+            if (index > -1) {
+               this.map.doors.splice(index, 1);
+               this.map.getLayer("collisionLayer").setData(door.row, door.col, 0);
+            }
+            else { // Should never happen
+               console.error('Door not found in map.doors! - ' + door);
+            }
+            return true;
+         }
+         return false;
+      }
+   },
+   
    _resetMap: {
       value: function(map) {
          'use strict';
@@ -328,7 +356,8 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function(obj) {
          'use strict';
          var name = obj.name;
-         var replacementTileIndex = obj.properties.replacementTileIndex;
+         var replacementTileIndex = 
+               parseInt(obj.properties.replacementTileIndex, 10);
          var tileSize = this.getTileSize();
          var row = obj.y / tileSize;
          var col = obj.x / tileSize;
@@ -563,7 +592,7 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
-   getDoorHeroIsFacing: {
+   _getDoorHeroIsFacing: {
       value: function() {
          'use strict';
          var row = this.hero.mapRow, col = this.hero.mapCol;

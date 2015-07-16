@@ -20,7 +20,7 @@ dw.Armor = (function() {
       
    };
    
-   Armor.prototype.constructor = dw.Armor;
+   Armor.prototype.constructor = Armor;
    
    return Armor;
    

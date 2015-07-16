@@ -468,7 +468,7 @@
                  "name":"treasuryDoor",
                  "properties":
                     {
-                     "replacementTileIndex":"3"
+                     "replacementTileIndex":"4"
                     },
                  "type":"door",
                  "visible":true,

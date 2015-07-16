@@ -10,6 +10,7 @@ dw.Party = function(game) {
    
    // Dummy data
    this.gold = 768;
+   this._inventory.push(dw.Items.KEY);
 };
 
 dw.Party.INVENTORY_MAX_SIZE = 20;
