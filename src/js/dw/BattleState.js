@@ -217,6 +217,7 @@ dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
          else {
             this._commandExecuting = false;
             this._commandBubble.reset();
+            this._commandBubble.init();
             this._textBubble.addToConversation({ text: 'Couldn\'t run!' });
          }
       }
@@ -225,6 +226,9 @@ dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
    update: {
       value: function(delta) {
          'use strict';
+         
+         this._statBubble.update(delta);
+         this._commandBubble.update(delta);
          
          this.handleDefaultKeys();
          

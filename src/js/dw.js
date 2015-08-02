@@ -12,7 +12,7 @@ var dw = {};
 function init(parent, assetRoot) {
    'use strict';
    game = new dw.DwGame({ parent: parent, scale: SCALE, width: CANVAS_WIDTH, height: CANVAS_HEIGHT,
-         assetRoot: assetRoot, targetFps: 60 });
+         assetRoot: assetRoot, keyRefreshMillis: 300, targetFps: 60 });
    game.setState(new dw.LoadingState());
    game.start();
 }

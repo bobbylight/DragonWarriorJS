@@ -177,7 +177,7 @@ console.log('>>> textDone set to false');
       }
    },
    
-   update: {
+   updateImpl: {
       value: function(delta) {
          'use strict';
          

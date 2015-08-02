@@ -6,6 +6,7 @@ dw.Bubble = function(title, x, y, w, h) {
    this.y = y * scale;
    this.w = w * scale;
    this.h = h * scale;
+   this.init();
    
    this._fontWidth = game.assets.get('font').cellW;
    
@@ -35,7 +36,7 @@ dw.Bubble.prototype = {
    },
    
    /**
-    * Locates special escapes in text and addds entries into the appropriate
+    * Locates special escapes in text and adds entries into the appropriate
     * arrays (delays, font color changes, etc.).
     * 
     * @param {string} text The text to scan.
@@ -100,14 +101,45 @@ dw.Bubble.prototype = {
       //}
    },
    
+   init: function() {
+      'use strict';
+      this._initAnimation();
+   },
+   
+   _initAnimation: function() {
+      'use strict';
+      this._paintH = 0;
+      var self = this;
+      this._animator = new gtp.Delay({ millis: 20, loop: true,
+            callback: function() {
+               self._paintH = Math.min(self._paintH + game.getTileSize(), self.h);
+               //console.log('--- ' + self._paintH);
+               if (self._paintH >= self.h) {
+                  delete self._animator;
+                  delete self._paintH;
+                  console.log('DONE!!!');
+               }
+            }
+      });
+   },
+   
    paint: function(ctx) {
       'use strict';
+      
+      if (this._animator) {
+         ctx.save();
+         ctx.beginPath();
+         ctx.rect(this.x, this.y, this.w, this._paintH);
+         //console.log('Setting clip to: ' + this.x + ',' + this.y + ',' + this.w + ',' + this._paintH);
+         ctx.clip();
+      }
       
       var scale = game._scale;
       var fontHeight = game.stringHeight();
       
       ctx.fillStyle = 'rgb(0,0,0)';
       ctx.fillRect(this.x,this.y, this.w,this.h);
+      
       
       // TODO: border via graphics
       ctx.strokeStyle = 'rgb(255,255,255)';
@@ -126,7 +158,13 @@ dw.Bubble.prototype = {
          game.drawString(this.title, x+2*scale, this.y);
       }
       
-      this.paintContent(ctx, this.y+this.getYMargin());
+      if (!this._isAnimating()) {
+         this.paintContent(ctx, this.y+this.getYMargin());
+      }
+      
+      if (this._animator) {
+         ctx.restore();
+      }
    },
    
    getXMargin: function() {
@@ -139,7 +177,39 @@ dw.Bubble.prototype = {
       return this.title ? game.getTileSize() : (8 * game._scale);
    },
    
+   _isAnimating: function() {
+      'use strict';
+      return this._animator;
+   },
+   
+   /**
+    * Updates this bubble.  This method should not be overridden; subclasses
+    * should override <code>updateImpl()</code> instead.
+    * 
+    * @param {int} delta The amount of time that elapsed since the last call
+    *        to this method.
+    * @see updateImpl()
+    */
    update: function(delta) {
+      'use strict';
+      if (this._animator) {
+         //console.log(this.title + ' - updating animator with delta === ' + delta);
+         this._animator.update(delta);
+      }
+      else {
+         this.updateImpl(delta);
+      }
+   },
+   
+   /**
+    * Updates this bubble.  Subclasses should override this method to perform
+    * any custom logic.
+    * 
+    * @param {int} delta The amount of time that elapsed since the last call
+    *        to this method.
+    * @see update()
+    */
+   updateImpl: function(delta) {
       // Should be overridden
    },
    

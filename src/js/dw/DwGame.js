@@ -26,6 +26,32 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   actionKeyPressed: {
+      value: function() {
+         'use strict';
+         return this.inputManager.isKeyDown(gtp.Keys.Z, true);
+      }
+   },
+   
+   anyKeyDown: {
+      value: function(clear) {
+         'use strict';
+         if (typeof clear === 'undefined') {
+            clear = true;
+         }
+         var im = this.inputManager;
+         return im.isKeyDown(gtp.Keys.Z, clear) || im.isKeyDown(gtp.Keys.X, clear) ||
+               im.enter(clear);
+      }
+   },
+   
+   cancelKeyPressed: {
+      value: function() {
+         'use strict';
+         return this.inputManager.isKeyDown(gtp.Keys.X, true);
+      }
+   },
+   
    _createPartyAndHero: {
       value: function() {
          'use strict';
@@ -656,32 +682,6 @@ game.hero.setMapLocation(7, 6);
       value: function(row, col) {
          'use strict';
          return this.map.talkAcrosses[this._getTalkAcrossKey(row, col)];
-      }
-   },
-   
-   anyKeyDown: {
-      value: function(clear) {
-         'use strict';
-         if (typeof clear === 'undefined') {
-            clear = true;
-         }
-         var im = this.inputManager;
-         return im.isKeyDown(gtp.Keys.Z, clear) || im.isKeyDown(gtp.Keys.X, clear) ||
-               im.enter(clear);
-      }
-   },
-   
-   actionKeyPressed: {
-      value: function() {
-         'use strict';
-         return this.inputManager.isKeyDown(gtp.Keys.Z, true);
-      }
-   },
-   
-   cancelKeyPressed: {
-      value: function() {
-         'use strict';
-         return this.inputManager.isKeyDown(gtp.Keys.X, true);
       }
    },
    

@@ -1,11 +1,10 @@
 dw.QuestionBubble = function(game, choices) {
    'use strict';
-   var scale = game._scale;
-   var margin = dw.Bubble.MARGIN*scale;
-   var x = 200 * scale;
-   var y = 20 * scale;
-   var width = game.getWidth() - 2*margin;
-   var height = game.getTileSize() * 5;
+   var tileSize = game.getTileSize();
+   var x = game.getWidth() - tileSize * 6;
+   var y = tileSize;
+   var width = tileSize * 5;
+   var height = tileSize * 5;
    dw.Bubble.call(this, null, x, y, width, height);
    
    this._choices = choices;
@@ -21,6 +20,9 @@ dw.QuestionBubble.prototype = Object.create(dw.Bubble.prototype, {
    handleInput: {
       value: function() {
          'use strict';
+         
+         var im = game.inputManager;
+         
          if (game.cancelKeyPressed()) {
             this._curChoice = 0;
          }
@@ -28,23 +30,14 @@ dw.QuestionBubble.prototype = Object.create(dw.Bubble.prototype, {
             this._done = true;
             return true;
          }
-         return false;
-      }
-   },
-   
-   update: {
-      value: function(delta) {
-         'use strict';
-         
-         var im = game.inputManager;
-         
-         if (im.up(true)) {
+         else if (im.up(true)) {
             this._curChoice = Math.max(0, this._curChoice-1);
          }
          else if (im.down(true)) {
             this._curChoice = Math.min(this._curChoice+1, this._choices.length-1);
          }
          
+         return false;
       }
    },
    

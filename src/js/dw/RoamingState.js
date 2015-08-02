@@ -9,7 +9,12 @@ dw.RoamingState = function() {
    'use strict';
    
    dw._BaseState.apply(this, arguments);
-   this._substate = _RoamingSubState.ROAMING;
+   
+   this._commandBubble = new dw.CommandBubble();
+   this._statBubble = new dw.StatBubble();
+   this._stationaryTimer = new gtp.Delay({ millis: 1000 });
+   
+   this._setSubstate(_RoamingSubState.ROAMING);
    
    this._updateMethods = {};
    this._updateMethods[_RoamingSubState.ROAMING] = this._updateRoaming;
@@ -19,10 +24,6 @@ dw.RoamingState = function() {
    
    this._textBubble = new dw.TextBubble(game);
    this._showTextBubble = false;
-   
-   this._commandBubble = new dw.CommandBubble();
-   this._statBubble = new dw.StatBubble();
-   this._stationaryTimer = new gtp.Delay({ millis: 1000 });
 };
 
 dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
@@ -52,7 +53,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             return;
          }
          else if (game.inputManager.isKeyDown(gtp.Keys.O, true)) {
-            this._substate = _RoamingSubState.OVERNIGHT;
+            this._setSubstate(_RoamingSubState.OVERNIGHT);
          }
          
          game.hero.update(delta);
@@ -70,18 +71,23 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       value: function(delta) {
          'use strict';
          
-         if (this._statusBubble && game.anyKeyDown()) {
-            delete this._statusBubble;
-            return;
+         if (this._statusBubble) {
+            this._statusBubble.update(delta);
+            if (game.anyKeyDown()) {
+               delete this._statusBubble;
+               return;
+            }
          }
          
          if (this._itemBubble) {
+            this._itemBubble.update(delta);
             if (game.anyKeyDown()) {
                delete this._itemBubble;
             }
             return;
          }
          
+         this._commandBubble.update(delta);
          var done = this._commandBubble.handleInput();
          if (done) {
             this._commandBubble.handleCommandChosen(this);
@@ -94,6 +100,10 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       value: function(delta) {
          'use strict';
          
+         if (this._substate!==_RoamingSubState.ROAMING || this._showStats) {
+            this._statBubble.update(delta);
+         }
+         
          var hero = game.hero;
          var im = game.inputManager;
          
@@ -101,7 +111,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             game.setNpcsPaused(true);
             this._commandBubble.reset();
             game.audio.playSound('menu');
-            this._substate = _RoamingSubState.MENU;
+            this._setSubstate(_RoamingSubState.MENU);
             return;
          }
          
@@ -111,21 +121,25 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             if (im.up()) {
                hero.tryToMoveUp();
                this._stationaryTimer.reset();
+               this._statBubble.init();
                //this.yOffs = Math.max(this.yOffs-inc, 0);
             }
             else if (im.down()) {
                hero.tryToMoveDown();
                this._stationaryTimer.reset();
+               this._statBubble.init();
                //this.yOffs = Math.min(this.yOffs+inc, maxY);
             }
             else if (im.left()) {
                hero.tryToMoveLeft();
                this._stationaryTimer.reset();
+               this._statBubble.init();
                //this.xOffs = Math.max(this.xOffs-inc, 0);
             }
             else if (im.right()) {
                hero.tryToMoveRight();
                this._stationaryTimer.reset();
+               this._statBubble.init();
                //this.xOffs = Math.min(this.xOffs+inc, maxX);
             }
             
@@ -158,7 +172,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          
          var done = this._textBubble.handleInput();
          if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
-            this._substate = _RoamingSubState.OVERNIGHT;
+            this._setSubstate(_RoamingSubState.OVERNIGHT);
             this._textBubble.clearOvernight();
          }
          else if (this._showTextBubble) {
@@ -192,7 +206,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          'use strict';
          game.audio.playMusic(dw.Sounds.MUSIC_TOWN);
          delete this._overnightDelay;
-         this._substate = _RoamingSubState.TALKING;
+         this._setSubstate(_RoamingSubState.TALKING);
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key
       }
    },
@@ -205,10 +219,10 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
             conversation.addSegment('There is no door there to open!');
             this._showTextBubble = true;
             this._textBubble.setConversation(conversation);
-            this._substate = _RoamingSubState.TALKING;
+            this._setSubstate(_RoamingSubState.TALKING);
          }
          else {
-            this._substate = _RoamingSubState.ROAMING;
+            this._setSubstate(_RoamingSubState.ROAMING);
          }
       }
    },
@@ -263,6 +277,22 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       }
    },
    
+   _setSubstate: {
+      value: function(substate) {
+         'use strict';
+         var prevSubstate = this._substate;
+         this._substate = substate;
+         this._statBubble.init(); // Reset this guy
+         if (substate === _RoamingSubState.MENU) {
+            this._commandBubble.init();
+         }
+         else if (substate === _RoamingSubState.TALKING &&
+               prevSubstate !== _RoamingSubState.OVERNIGHT) {
+            this._textBubble.init();
+         }
+      }
+   },
+   
    showInventory: {
       value: function() {
          'use strict';
@@ -282,7 +312,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          'use strict';
          game.setNpcsPaused(false);
          this._showTextBubble = false;
-         this._substate = _RoamingSubState.ROAMING;
+         this._setSubstate(_RoamingSubState.ROAMING);
          this._stationaryTimer.reset();
       }
    },
@@ -312,7 +342,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          }
          this._showTextBubble = true;
          this._textBubble.setConversation(conversation);
-         this._substate = _RoamingSubState.TALKING;
+         this._setSubstate(_RoamingSubState.TALKING);
       }
    }
    
