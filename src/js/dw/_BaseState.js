@@ -50,6 +50,9 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys['1'], true)) {
                game.loadMap('tantegelCastle', 15, 7, dw.Direction.WEST);
             }
+            else if (im.isKeyDown(gtp.Keys['2'], true)) {
+               game.loadMap('tantegelCastle', 51, 11, dw.Direction.WEST);
+            }
             else if (im.isKeyDown(gtp.Keys.M, true)) {
                game.toggleMuted();
             }

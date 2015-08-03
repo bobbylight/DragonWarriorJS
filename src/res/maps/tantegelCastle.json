@@ -207,20 +207,6 @@
                 }, 
                 {
                  "height":16,
-                 "name":"bottom_left_merchant_3",
-                 "properties":
-                    {
-                     "dir":"west",
-                     "type":"merchant_green"
-                    },
-                 "type":"npc",
-                 "visible":true,
-                 "width":16,
-                 "x":112,
-                 "y":304
-                }, 
-                {
-                 "height":16,
                  "name":"table1",
                  "properties":
                     {
@@ -475,6 +461,48 @@
                  "width":16,
                  "x":96,
                  "y":240
+                }, 
+                {
+                 "height":16,
+                 "name":"bottom_right_soldier_2",
+                 "properties":
+                    {
+                     "dir":"west",
+                     "type":"soldier_gray"
+                    },
+                 "type":"npc",
+                 "visible":true,
+                 "width":16,
+                 "x":336,
+                 "y":352
+                }, 
+                {
+                 "height":16,
+                 "name":"king",
+                 "properties":
+                    {
+                     "dir":"south",
+                     "type":"soldier_gray",
+                     "wanders":"false"
+                    },
+                 "type":"npc",
+                 "visible":true,
+                 "width":16,
+                 "x":160,
+                 "y":800
+                }, 
+                {
+                 "height":16,
+                 "name":"kingsDoor",
+                 "properties":
+                    {
+                     "replacementTileIndex":"4"
+                    },
+                 "type":"door",
+                 "visible":true,
+                 "width":16,
+                 "x":176,
+                 "y":864
                 }],
          "opacity":1,
          "type":"objectgroup",
