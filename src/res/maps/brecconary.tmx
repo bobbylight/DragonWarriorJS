@@ -6,9 +6,14 @@
  </properties>
  <tileset firstgid="1" source="tileset_tiles.tsx"/>
  <tileset firstgid="361" source="collision_tiles.tsx"/>
+ <layer name="tileLayer2" width="39" height="38" visible="0">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC+3QwQnAMAwEQRGr/5qThw02uIAjzMCh76IqAAAA+K/nW8+7L8Fq6zo7E+xto3LbEv92GwDZXlFaQsYoFwAA
+  </data>
+ </layer>
  <layer name="tileLayer" width="39" height="38">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2WS47DIBBEkcfKInOEsEE5ge9/ucwiSKVSdUPjjmZG8qJkC3Dz3D94lFIef1jbgtqP9rfaoo1Ztgri+Upqgq2JdZ5W2Kw1lZ7MhutG/lphs+JrfdfZ+B82mOvvx1tn2XayPWJrwl6f+/oAW7cZYVP/l+23DeyijZ7ziq2RjVvR+bHBmigb7nsXXMhn+U3VEL+fqVPMcfSLx6a4lDL8hmxef0M7M/0jiw3jyHyKjWvcqvkIm6pBjidyYUw/zTaTb1YtcEyxxlXNR3qIOq+43yMjrlHreEydHd75yN/+hv4728jHyk415iw7BygS09EdycuXncZw7nAUZZvxm6pndS/1uLpm2azx7+LfR9BvEa4om3XOcL9iNo/L442yWT3dus/tYn9vr0w26/6FtdD1nNyvM66y3YruScxm7Wf9WxVrI2wqzxSbyjNm4xicZeN84/dRL2NbnKuZtZDpt/5tVg/xasHqG969d4VtRbN9C8+qaEwzlXkuXLp06dKqXtHeMB8oFwAA
+   H4sIAAAAAAAAC+2WTa7CMAyEQ6lYPI5ANhEn6P0vx1s00mg0duI0CJC6GFE1rvPhv+SRUnp8sZYBlX+tu8qgj162DOL1TCqCrQg7TyNslk2mX2ZDu1a8Rtis/FrfVTb+Dwus1edt11G2lXy32IrwV9eub2CrPiNs6v/NjtsCftFHrXnFVsjHLen6WMAmyob7/gku5LPipnqIn4/0KdY4xsVjU1xKM+KGbN58Qz8982MWG+aR+RQb97jV8xE21YOcT+TCnL6braferF7gnGKPq56PzBB1XvG8R0a0UXb8Tp0d3vnI335Cv87WirHyk401y88GiuS0dUfy6mWld7i2OYqy9cRN9bO6l3pcVb1s1vt78u8jGLcIV5TNOmd4XjGbx+XxRtmsmW7d51axv7fXTDbr/oW9UPXs3K8yjrLdkp5JzGbtd9ntL6QsbCNsqs4Um6ozZFM6ysb1xs+tWeax9dblKNuRuNVvZ80QrxesueHldIRtRL1zC8+qaE5naua5cOrUqVOjegH2IBTDKBcAAA==
   </data>
  </layer>
  <layer name="collisionLayer" width="39" height="38" opacity="0.26">
@@ -39,6 +44,16 @@
     <property name="dir" value="south"/>
     <property name="map" value="overworld"/>
     <property name="row" value="51"/>
+   </properties>
+  </object>
+  <object name="goInItemShop" type="insideOutside" x="368" y="400" width="16" height="16">
+   <properties>
+    <property name="inside" value="true"/>
+   </properties>
+  </object>
+  <object name="leaveItemShop" type="insideOutside" x="368" y="384" width="16" height="16">
+   <properties>
+    <property name="inside" value="false"/>
    </properties>
   </object>
  </objectgroup>
@@ -89,5 +104,13 @@
     <property name="wanders" value="true"/>
    </properties>
   </object>
+  <object name="itemMerchant" type="npc" x="416" y="416" width="16" height="16">
+   <properties>
+    <property name="dir" value="west"/>
+    <property name="type" value="merchant"/>
+    <property name="wanders" value="false"/>
+   </properties>
+  </object>
+  <object name="itemMerchantTable" type="talkAcross" x="400" y="416" width="16" height="16"/>
  </objectgroup>
 </map>

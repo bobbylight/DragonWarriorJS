@@ -23,6 +23,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          this._bumpSoundDelay = 0;
          this._mapLogics = {};
          this.setCameraOffset(0, 0);
+         this.inside = false;
       }
    },
    
@@ -134,6 +135,9 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          var dx = hero.xOffs + this._cameraDx;
          var dy = hero.yOffs + this._cameraDy;
          this._drawMapCount++;
+         if (this.inside) {
+            this.clearScreen('#000000');
+         }
 //         if (this._drawMapCount === 10) {
 //            this.timer.start('drawMap');
 //         }
@@ -203,7 +207,6 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    loadMap: {
       value: function(mapName, newRow, newCol, dir) {
          'use strict';
-//         newMap = this.getMapImpl(mapName);
          this.newRow = newRow;
          this.newCol = newCol;
          this.audio.playSound('stairs');
@@ -216,19 +219,6 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
             self.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
          };
          this.setState(new /*FadeOutInState*/dw.MapChangeState(this.state, this.state, updatePlayer));
-      }
-   },
-   
-   getMapImpl: {
-      value: function(mapName) {
-         'use strict';
-         
-         var map = null;
-         
-         map = this.assets.get(mapName + '.json');
-         //map = MapLoader.load(in, new Java2DTilesetFactory(), SCALE);
-         
-         return map;
       }
    },
    
@@ -490,6 +480,15 @@ game.setMap('brecconary.json');
 game.hero.setMapLocation(7, 6);
          };
          game.setState(new gtp.FadeOutInState(this.state, new dw.RoamingState(), transitionLogic));
+      }
+   },
+   
+   setInsideOutside: {
+      value: function(inside) {
+         'use strict';
+         this.inside = inside;
+         this.map.getLayer('tileLayer').visible = !this.inside;
+         this.map.getLayer('tileLayer2').visible = this.inside;
       }
    },
    

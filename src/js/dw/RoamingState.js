@@ -227,6 +227,18 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       }
    },
    
+   _possiblyRenderNpc: {
+      value: function(npc, ctx) {
+         'use strict';
+         var row = npc.mapRow;
+         var col = npc.mapCol;
+         var underRoof = game.map.getLayer('tileLayer2').getData(row, col) > 0;
+         if ((underRoof && game.inside) || (!underRoof && !game.inside)) {
+            npc.render(ctx);
+         }
+      }
+   },
+   
    render: {
       value: function(ctx) {
          'use strict';
@@ -234,8 +246,9 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          game.drawMap(ctx);
          game.hero.render(ctx);
          
+         var self = this;
          game.map.npcs.forEach(function(npc) {
-            npc.render(ctx);
+            self._possiblyRenderNpc(npc, ctx);
          });
          
          if (this._substate===_RoamingSubState.MENU) {

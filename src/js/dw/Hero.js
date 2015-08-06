@@ -24,6 +24,9 @@ dw.Hero.prototype = Object.create(dw.PartyMember.prototype, {
             var newDir = dw.Direction.fromString(obj.properties.dir);
             game.loadMap(obj.properties.map, newRow, newCol, newDir);
          }
+         else if ('insideOutside' === obj.type) {
+            game.setInsideOutside(obj.properties.inside === 'true');
+         }
       }   
    }
    
