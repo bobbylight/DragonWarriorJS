@@ -127,6 +127,8 @@ dw.LoadingState.prototype = Object.create(dw._BaseState.prototype, {
             game.assets.addJson('equipment', 'res/equipment.json');
             game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
             game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
+            game.assets.addJson('erdricksCave1.json', 'res/maps/erdricksCave1.json');
+            game.assets.addJson('erdricksCave2.json', 'res/maps/erdricksCave2.json');
             game.assets.addSound(dw.Sounds.MUSIC_TITLE_SCREEN, 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
             game.assets.addSound(dw.Sounds.MUSIC_TANTEGEL, 'res/sound/02 Dragon Quest 1 - Tantegel Castle (22khz mono).ogg');
             game.assets.addSound(dw.Sounds.MUSIC_TANTEGEL_LOWER, 'res/sound/03 Dragon Quest 1 - Tantegel Castle (Lower) (22khz mono).ogg');
@@ -178,6 +180,8 @@ dw.LoadingState.prototype = Object.create(dw._BaseState.prototype, {
                game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
                game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
                game.assets.addTmxMap(game.initLoadedMap('tantegelCastle.json'));
+               game.assets.addTmxMap(game.initLoadedMap('erdricksCave1.json'));
+               game.assets.addTmxMap(game.initLoadedMap('erdricksCave2.json'));
                game.assets.onLoad(function() {
                   var skipTitle = gtp.Utils.getRequestParam('skipTitle');
                   if (skipTitle !== null) { // Allow empty strings

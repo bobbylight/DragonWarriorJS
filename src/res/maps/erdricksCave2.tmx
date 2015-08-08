@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="20" height="20" tilewidth="16" tileheight="16">
+ <properties>
+  <property name="logicFile" value="erdricksCave2"/>
+  <property name="music" value="MUSIC_TOWN"/>
+ </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1">
   <image source="../tiles.png" width="407" height="254"/>
  </tileset>
@@ -20,7 +24,7 @@
   <object name="upstairs" type="warp" x="144" y="160" width="16" height="16">
    <properties>
     <property name="col" value="10"/>
-    <property name="map" value="erdricks_cave_1"/>
+    <property name="map" value="erdricksCave1"/>
     <property name="row" value="10"/>
    </properties>
   </object>

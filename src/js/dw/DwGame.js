@@ -24,6 +24,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          this._mapLogics = {};
          this.setCameraOffset(0, 0);
          this.inside = false;
+         this._randomEncounters = true;
       }
    },
    
@@ -126,6 +127,20 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       }
    },
    
+   drawArrow: {
+      value: function(x, y) {
+         'use strict';
+         this.drawString('\u007f', x, y);
+      }
+   },
+   
+   drawDownArrow: {
+      value: function(x, y) {
+         'use strict';
+         this.drawString('\\', x, y); // '\' char replaced by down arrow
+      }
+   },
+   
    drawMap: {
       value: function(ctx) {
          'use strict';
@@ -146,6 +161,16 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
 //            this.timer.endAndLog('drawMap');
 //            this._drawMapCount = 0;
 //         }
+      }
+   },
+   
+   drawString: {
+      value: function(text, x, y) {
+         'use strict';
+         if (!text.charAt) { // Allow us to pass in stuff like numerics
+            text = text.toString();
+         }
+         this.assets.get('font').drawString(text, x, y);
       }
    },
    
@@ -198,6 +223,17 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
       value: function() {
          'use strict';
          return this.party;
+      }
+   },
+   
+   /**
+    * Returns whether the tile at a given location has a "roof" layer tile.
+    */
+   hasRoofTile: {
+      value: function(row, col) {
+         'use strict';
+         var roofLayer = this.map.getLayer('tileLayer2');
+         return roofLayer && roofLayer.getData(row, col) > 0;
       }
    },
    
@@ -492,131 +528,6 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
-   toggleMuted: {
-      value: function() {
-         'use strict';
-         var muted = this.audio.toggleMuted();
-         this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
-      }
-   },
-   
-   toggleShowCollisionLayer: {
-      value: function() {
-         'use strict';
-         var layer = this.getCollisionLayer();
-         layer.visible = !layer.visible;
-         this.setStatusMessage(layer.visible ?
-               'Collision layer showing' : 'Collision layer hidden');
-      }
-   },
-   
-   toggleShowTerritoryLayer: {
-      value: function() {
-         'use strict';
-         var layer = this.map.getLayer('enemyTerritoryLayer');
-         layer.visible = !layer.visible;
-         this.setStatusMessage(layer.visible ?
-               'Territory layer showing' : 'Territory layer hidden');
-      }
-   },
-   
-   getTileSize: {
-      value: function() {
-         'use strict';
-         return 16 * this._scale;
-      }
-   },
-   
-   getCollisionLayer: {
-      value: function() {
-         'use strict';
-         return game.map.getLayer('collisionLayer');
-      }
-   },
-   
-   getEnemyTerritoryLayer: {
-      value: function() {
-         'use strict';
-         return game.map.getLayer('enemyTerritoryLayer');
-      }
-   },
-   
-   bump: {
-      value: function() {
-         'use strict';
-         if (this._gameTime>this._bumpSoundDelay) {
-            this.audio.playSound('bump');
-            this._bumpSoundDelay = this._gameTime + 300;
-         }
-      }
-   },
-   
-   setNpcsPaused: {
-      value: function(paused) {
-         'use strict';
-         this.npcsPaused = paused;
-      }
-   },
-   
-   stringHeight: {
-      value: function() {
-         'use strict';
-         return this.assets.get('font').cellH;//charHeight();
-      }
-   },
-   
-   stringWidth: {
-      value: function(str) {
-         'use strict';
-         return str ? (str.length*this.assets.get('font').cellW) : 0;
-      }
-   },
-   
-   drawString: {
-      value: function(text, x, y) {
-         'use strict';
-         if (!text.charAt) { // Allow us to pass in stuff like numerics
-            text = text.toString();
-         }
-         this.assets.get('font').drawString(text, x, y);
-      }
-   },
-   
-   drawArrow: {
-      value: function(x, y) {
-         'use strict';
-         this.drawString('\u007f', x, y);
-      }
-   },
-   
-   drawDownArrow: {
-      value: function(x, y) {
-         'use strict';
-         this.drawString('\\', x, y); // '\' char replaced by down arrow
-      }
-   },
-   
-   startRandomEncounter: {
-      value: function() {
-         'use strict';
-         var enemyTerritoryLayer = game.getEnemyTerritoryLayer();
-         if (enemyTerritoryLayer) {
-            var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
-            if (territory > 0) {
-               // dw.Enemy territory index is offset by the Tiled tileset's firstgid
-               // TODO: Remove call to private method
-               territory = territory - game.map._getImageForGid(territory).firstgid;
-               if (territory >= 0) {
-                  var territories = game.assets.get('enemyTerritories');
-                  var possibleEnemies = territories[territory];
-                  var enemyName = possibleEnemies[gtp.Utils.randomInt(0, possibleEnemies.length)];
-                  this.setState(new dw.BattleTransitionState(this.state, new dw.BattleState(enemyName)));
-               }
-            }
-         }
-      }
-   },
-   
    _getDoorHeroIsFacing: {
       value: function() {
          'use strict';
@@ -703,7 +614,121 @@ game.hero.setMapLocation(7, 6);
          'use strict';
          return this.assets.get('shields')[shield];
       }
-   }
+   },
+   
+   getTileSize: {
+      value: function() {
+         'use strict';
+         return 16 * this._scale;
+      }
+   },
+   
+   getCollisionLayer: {
+      value: function() {
+         'use strict';
+         return game.map.getLayer('collisionLayer');
+      }
+   },
+   
+   getEnemyTerritoryLayer: {
+      value: function() {
+         'use strict';
+         return game.map.getLayer('enemyTerritoryLayer');
+      }
+   },
+   
+   bump: {
+      value: function() {
+         'use strict';
+         if (this._gameTime>this._bumpSoundDelay) {
+            this.audio.playSound('bump');
+            this._bumpSoundDelay = this._gameTime + 300;
+         }
+      }
+   },
+   
+   setNpcsPaused: {
+      value: function(paused) {
+         'use strict';
+         this.npcsPaused = paused;
+      }
+   },
+   
+   stringHeight: {
+      value: function() {
+         'use strict';
+         return this.assets.get('font').cellH;//charHeight();
+      }
+   },
+   
+   stringWidth: {
+      value: function(str) {
+         'use strict';
+         return str ? (str.length*this.assets.get('font').cellW) : 0;
+      }
+   },
+   
+   startRandomEncounter: {
+      value: function() {
+         'use strict';
+         if (this._randomEncounters) {
+            var enemyTerritoryLayer = game.getEnemyTerritoryLayer();
+            if (enemyTerritoryLayer) {
+               var territory = enemyTerritoryLayer.getData(game.hero.mapRow, game.hero.mapCol);
+               if (territory > 0) {
+                  // dw.Enemy territory index is offset by the Tiled tileset's firstgid
+                  // TODO: Remove call to private method
+                  territory = territory - game.map._getImageForGid(territory).firstgid;
+                  if (territory >= 0) {
+                     var territories = game.assets.get('enemyTerritories');
+                     var possibleEnemies = territories[territory];
+                     var enemyName = possibleEnemies[gtp.Utils.randomInt(0, possibleEnemies.length)];
+                     this.setState(new dw.BattleTransitionState(this.state, new dw.BattleState(enemyName)));
+                     return true;
+                  }
+               }
+            }
+         }
+         return false;
+      }
+   },
+   
+   toggleMuted: {
+      value: function() {
+         'use strict';
+         var muted = this.audio.toggleMuted();
+         this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
+      }
+   },
+   
+   toggleRandomEncounters: {
+      value: function() {
+         'use strict';
+         this._randomEncounters = !this._randomEncounters;
+         this.setStatusMessage('Random encounters ' +
+               (this._randomEncounters ? 'enabled' : 'disabled'));
+      }
+   },
+   
+   toggleShowCollisionLayer: {
+      value: function() {
+         'use strict';
+         var layer = this.getCollisionLayer();
+         layer.visible = !layer.visible;
+         this.setStatusMessage(layer.visible ?
+               'Collision layer showing' : 'Collision layer hidden');
+      }
+   },
+   
+   toggleShowTerritoryLayer: {
+      value: function() {
+         'use strict';
+         var layer = this.map.getLayer('enemyTerritoryLayer');
+         layer.visible = !layer.visible;
+         this.setStatusMessage(layer.visible ?
+               'Territory layer showing' : 'Territory layer hidden');
+      }
+   },
    
 });
 

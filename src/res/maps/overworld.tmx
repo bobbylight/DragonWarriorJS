@@ -30,7 +30,7 @@
   <object name="Erdrick's Cave" type="warp" x="480" y="352" width="16" height="16">
    <properties>
     <property name="col" value="1"/>
-    <property name="map" value="erdricks_cave_1"/>
+    <property name="map" value="erdricksCave1"/>
     <property name="row" value="1"/>
    </properties>
   </object>

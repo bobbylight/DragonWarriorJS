@@ -47,7 +47,7 @@
                  "properties":
                     {
                      "col":"1",
-                     "map":"erdricks_cave_1",
+                     "map":"erdricksCave1",
                      "row":"1"
                     },
                  "type":"warp",

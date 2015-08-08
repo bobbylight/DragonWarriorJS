@@ -49,9 +49,15 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             }
             else if (im.isKeyDown(gtp.Keys['1'], true)) {
                game.loadMap('tantegelCastle', 15, 7, dw.Direction.WEST);
+               game.setStatusMessage('Warping to treasure at Tantegel Castle...');
             }
             else if (im.isKeyDown(gtp.Keys['2'], true)) {
                game.loadMap('tantegelCastle', 51, 11, dw.Direction.WEST);
+               game.setStatusMessage('Warping to the King at Tantegel Castle...');
+            }
+            else if (im.isKeyDown(gtp.Keys['3'], true)) {
+               game.loadMap('erdricksCave1', 1, 1, dw.Direction.SOUTH);
+               game.setStatusMessage("Warping to Erdrick's Cave...");
             }
             else if (im.isKeyDown(gtp.Keys.M, true)) {
                game.toggleMuted();
@@ -64,6 +70,17 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             }
             else if (im.isKeyDown(gtp.Keys.S, true)) {
                game.cycleShield();
+            }
+            else if (im.isKeyDown(gtp.Keys.U, true)) {
+               game.hero.setMoveIncrement(4);
+               game.setStatusMessage('Hero speed === 4');
+            }
+            else if (im.isKeyDown(gtp.Keys.D, true)) {
+               game.hero.setMoveIncrement(2);
+               game.setStatusMessage('Hero speed === 2');
+            }
+            else if (im.isKeyDown(gtp.Keys.E, true)) {
+               game.toggleRandomEncounters();
             }
          }
          

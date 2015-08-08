@@ -18,11 +18,6 @@ dw.RoamingEntity.prototype = {
       return this._moveInc;
    },
    
-   isMoving: function() {
-      'use strict';
-      return this.xOffs!==0 || this.yOffs!==0;
-   },
-   
    handleIsMovingInUpdate: function() {
       'use strict';
       if (this.isMoving()) {
@@ -63,6 +58,11 @@ dw.RoamingEntity.prototype = {
       return this.mapRow === row && this.mapCol === col;
    },
    
+   isMoving: function() {
+      'use strict';
+      return this.xOffs!==0 || this.yOffs!==0;
+   },
+   
    /**
     * If this entity is only allowed to walk around in a certain range, this
     * method returns true iff the specified location is outside of that range.
@@ -88,6 +88,15 @@ dw.RoamingEntity.prototype = {
       this.mapRow = row;
       this.mapCol = col;
       this.xOffs = this.yOffs = 0;
+   },
+   
+   /**
+    * Call this with care.
+    */
+   setMoveIncrement: function(moveInc) {
+      'use strict';
+      moveInc = Math.max(0, moveInc);
+      this._moveInc = moveInc;
    },
    
    /**

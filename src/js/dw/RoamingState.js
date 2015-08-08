@@ -232,7 +232,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          'use strict';
          var row = npc.mapRow;
          var col = npc.mapCol;
-         var underRoof = game.map.getLayer('tileLayer2').getData(row, col) > 0;
+         var underRoof = game.hasRoofTile(row, col);
          if ((underRoof && game.inside) || (!underRoof && !game.inside)) {
             npc.render(ctx);
          }
