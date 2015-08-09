@@ -1,6 +1,8 @@
 {
    "weapons": {
       
+      "wetNoodle": { "baseCost": 1, "power": 0, "displayName": "Wet Noodle" },
+      
       "bambooPole": { "baseCost": 10, "power": 2, "displayName": "Bamboo Pole" },
       
       "club": { "baseCost": 60, "power": 4, "displayName": "Club" },

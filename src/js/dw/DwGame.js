@@ -647,6 +647,26 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
+   setHeroStats: {
+      value: function(hp, maxHp, mp, maxMp) {
+         'use strict';
+         if (hp) {
+            game.hero.hp = hp;
+         }
+         if (maxHp) {
+            game.hero.maxHp = maxHp;
+         }
+         if (typeof mp !== 'undefined') {
+            game.hero.mp = mp;
+         }
+         if (typeof maxMp !== 'undefined') {
+            game.hero.maxMp = maxMp;
+         }
+         game.setStatusMessage('Hero stats now: ' + game.hero.hp + '/' + game.hero.maxHp +
+               ', ' + game.hero.mp + '/' + game.hero.maxMp);
+      }
+   },
+   
    setNpcsPaused: {
       value: function(paused) {
          'use strict';
