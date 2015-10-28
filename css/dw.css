@@ -25,3 +25,9 @@
 #dw-screenshot-color:hover {
    opacity: 1;
 }
+
+.controls {
+   width: 544px; /* Same as gamediv */
+   text-align: center;
+   font-weight: bold;
+}
