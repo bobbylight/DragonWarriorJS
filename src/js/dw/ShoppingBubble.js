@@ -27,7 +27,9 @@ dw.ShoppingBubble.prototype = Object.create(dw.Bubble.prototype, {
          var im = game.inputManager;
          
          if (game.cancelKeyPressed()) {
-            this._curChoice = 0;
+            this._curChoice = -1;
+            this._done = true;
+            return true;
          }
          else if (game.actionKeyPressed()) {
             this._done = true;

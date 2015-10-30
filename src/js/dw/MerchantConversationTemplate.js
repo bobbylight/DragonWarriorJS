@@ -25,7 +25,7 @@ function merchantConversationTemplate(conversation, segmentArgs) {
          afterSound: 'confirmation',
          choices: [
             { text: 'Yes', next: dw.Conversation.PURCHASE_SEGMENT },
-            { text: 'No', next: dw.Conversation.CHOICES_SEGMENT }
+            { text: 'No', next: dw.Conversation.DECLINED_PURCHASE_SEGMENT }
          ]
       },
       {
@@ -49,6 +49,11 @@ function merchantConversationTemplate(conversation, segmentArgs) {
             { text: 'Yes', next: dw.Conversation.CHOICES_SEGMENT },
             { text: 'No', next: dw.Conversation.BID_FAREWELL_SEGMENT }
          ]
+      },
+      {
+         id: dw.Conversation.DECLINED_PURCHASE_SEGMENT,
+         text: "I'm sorry to hear that.",
+         next: dw.Conversation.SOMETHING_ELSE_SEGMENT
       },
       {
          id: dw.Conversation.BID_FAREWELL_SEGMENT,

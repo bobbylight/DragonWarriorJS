@@ -67,10 +67,15 @@ console.log('>>> textDone set to false');
                if (result) {
                   var item = this._shoppingBubble.getSelectedItem();
                   delete this._shoppingBubble;
-                  this._conversation.setItem(item);
-                  nextState = item.baseCost > game.party.gold ?
-                     dw.Conversation.NOT_ENOUGH_SEGMENT : dw.Conversation.CONFIRM_SEGMENT;
-                  return !this._updateConversation(nextState);
+                  if (item) {
+                     this._conversation.setItem(item);
+                     nextState = item.baseCost > game.party.gold ?
+                        dw.Conversation.NOT_ENOUGH_SEGMENT : dw.Conversation.CONFIRM_SEGMENT;
+                     return !this._updateConversation(nextState);
+                  }
+                  else {
+                     return !this._updateConversation(dw.Conversation.SOMETHING_ELSE_SEGMENT);
+                  }
                }
                return false;
             }

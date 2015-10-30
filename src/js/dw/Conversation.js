@@ -10,6 +10,7 @@ dw.Conversation.NOT_ENOUGH_SEGMENT = 'notEnoughGold';
 dw.Conversation.CONFIRM_SEGMENT = 'confirmPurchase';
 dw.Conversation.PURCHASE_SEGMENT = 'makePurchase';
 dw.Conversation.SOMETHING_ELSE_SEGMENT = 'somethingElse';
+dw.Conversation.DECLINED_PURCHASE_SEGMENT = 'declinedPurchase';
 dw.Conversation.BID_FAREWELL_SEGMENT = 'bidFarewell';
 
 dw.Conversation.prototype = (function() {
