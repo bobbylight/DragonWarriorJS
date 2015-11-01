@@ -101,6 +101,11 @@ dw.Bubble.prototype = {
       //}
    },
    
+   _getDefaultTextColor: function() {
+      'use strict';
+      return game.hero.isDead() ? 'rgb(255, 0, 0)' : 'rgb(255, 255, 255)';
+   },
+   
    init: function() {
       'use strict';
       this._initAnimation();
@@ -142,7 +147,7 @@ dw.Bubble.prototype = {
       
       
       // TODO: border via graphics
-      ctx.strokeStyle = 'rgb(255,255,255)';
+      ctx.strokeStyle = this._getDefaultTextColor();
       ctx.lineWidth = 2;
       var doubleScale = 2 * scale;
       ctx.strokeRect(this.x+doubleScale, this.y+doubleScale, this.w-2*doubleScale, this.h-2*doubleScale);
@@ -154,7 +159,7 @@ dw.Bubble.prototype = {
          var x = this.x + Math.floor((this.w-stringW)/2);
          ctx.fillRect(x, this.y, stringW, fontHeight);
          
-         ctx.fillStyle = 'rgb(255,255,255)';
+         ctx.fillStyle = this._getDefaultTextColor();
          game.drawString(this.title, x+2*scale, this.y);
       }
       

@@ -76,6 +76,9 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys['4'], true)) {
                this._warpTo('erdricksCave1', 1, 1, "Erdrick's Cave");
             }
+            else if (im.isKeyDown(gtp.Keys['5'], true)) {
+               this._warpTo('overworld', 51, 41, "Outside Tantegel Castle");
+            }
             
             // Audio stuff
             else if (im.isKeyDown(gtp.Keys.M, true)) {

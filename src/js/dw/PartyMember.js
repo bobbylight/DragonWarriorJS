@@ -176,8 +176,6 @@ dw.PartyMember.prototype = Object.create(dw.RoamingEntity.prototype, {
          'use strict';
          this.hp = Math.min(this.hp + amount, this.maxHp);
          this.hp = Math.max(0, this.hp);
-         // TODO: Remove me, just for testing
-         this.hp = Math.max(1, this.hp);
          return this.isDead();
       }
    },

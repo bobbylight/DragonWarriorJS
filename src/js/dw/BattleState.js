@@ -108,10 +108,15 @@ dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
          var damage = this._enemy.ai(game.hero, this._enemy).damage;
          game.hero.takeDamage(damage);
          var text = 'Thy hit points are reduced by ' + damage + '.';
-         if (!game.hero.isDead()) {
-            text += '\nCommand?';
+         if (game.hero.isDead()) {
+            text += '\nThou art dead.';
+            this._textBubble.addToConversation({ text: text }, true);
+            this._dead = true;
          }
-         this._textBubble.addToConversation({ text: text }, true);
+         else {
+            text += '\nCommand?';
+            this._textBubble.addToConversation({ text: text }, true);
+         }
          
          this._commandExecuting = false;
       }
@@ -226,6 +231,11 @@ dw.BattleState.prototype = Object.create(dw._BaseState.prototype, {
    update: {
       value: function(delta) {
          'use strict';
+         
+         if (this._dead && this._textBubble.isDone()) {
+            game.setState(new dw.DeadState(this));
+            return;
+         }
          
          this._statBubble.update(delta);
          this._commandBubble.update(delta);
