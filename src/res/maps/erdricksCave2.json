@@ -52,7 +52,7 @@
  "properties":
     {
      "logicFile":"erdricksCave2",
-     "music":"MUSIC_TOWN"
+     "music":"MUSIC_DUNGEON_FLOOR_1"
     },
  "tileheight":16,
  "tilesets":[

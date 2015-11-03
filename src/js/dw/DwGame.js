@@ -25,6 +25,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          this.setCameraOffset(0, 0);
          this.inside = false;
          this._randomEncounters = true;
+         this._torch = false;
       }
    },
    
@@ -150,9 +151,10 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          var dx = hero.xOffs + this._cameraDx;
          var dy = hero.yOffs + this._cameraDy;
          this._drawMapCount++;
-         if (this.inside) {
-            this.clearScreen('#000000');
-         }
+//         if (this.inside) {
+//            this.clearScreen('#000000');
+//         }
+         
 //         if (this._drawMapCount === 10) {
 //            this.timer.start('drawMap');
 //         }
@@ -161,6 +163,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
 //            this.timer.endAndLog('drawMap');
 //            this._drawMapCount = 0;
 //         }
+
       }
    },
    
@@ -595,6 +598,13 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
+   getUsingTorch: {
+      value: function() {
+         'use strict';
+         return this._torch;
+      }
+   },
+   
    getWeapon: {
       value: function(weapon) {
          'use strict';
@@ -674,6 +684,14 @@ game.hero.setMapLocation(7, 6);
       }
    },
    
+   setUsingTorch: {
+      value: function(usingTorch) {
+         'use strict';
+         this._torch = usingTorch;
+         game.setStatusMessage('Using torch: ' + usingTorch);
+      }
+   },
+   
    stringHeight: {
       value: function() {
          'use strict';
@@ -748,7 +766,7 @@ game.hero.setMapLocation(7, 6);
          this.setStatusMessage(layer.visible ?
                'Territory layer showing' : 'Territory layer hidden');
       }
-   },
+   }
    
 });
 

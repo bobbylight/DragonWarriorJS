@@ -4,5 +4,6 @@ dw.Sounds = Object.freeze({
    MUSIC_TANTEGEL_LOWER: 'tangelLowerMusic',
    MUSIC_OVERWORLD: 'overworldMusic',
    MUSIC_BATTLE: 'battleMusic',
-   MUSIC_TOWN: 'villageMusic'
+   MUSIC_TOWN: 'villageMusic',
+   MUSIC_DUNGEON_FLOOR_1: 'dungeonFloor1'
 });

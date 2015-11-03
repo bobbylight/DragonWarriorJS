@@ -79,6 +79,9 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             else if (im.isKeyDown(gtp.Keys['5'], true)) {
                this._warpTo('overworld', 51, 41, "Outside Tantegel Castle");
             }
+            else if (im.isKeyDown(gtp.Keys['6'], true)) {
+               this._warpTo('erdricksCave1', 1, 1, "Erdrick's Cave");
+            }
             
             // Audio stuff
             else if (im.isKeyDown(gtp.Keys.M, true)) {
@@ -112,6 +115,10 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
                else {
                   game.setHeroStats(null, null, 255, 255);
                }
+            }
+            
+            else if (im.isKeyDown(gtp.Keys.T, true)) {
+               game.setUsingTorch(!game.getUsingTorch());
             }
             
             // Options generally useful for debugging

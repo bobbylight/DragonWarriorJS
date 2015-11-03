@@ -243,6 +243,17 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
       value: function(ctx) {
          'use strict';
          
+         if (game.getUsingTorch()) {
+            game.clearScreen('#000000');
+            ctx.save();
+            var clipRadius = game.getTileSize() * 3 / 2;
+            var x0 = game.getWidth() / 2 - clipRadius;
+            var y0 = game.getHeight() / 2 - clipRadius;
+            ctx.beginPath();
+            ctx.rect(x0, y0, 2 * clipRadius, 2 * clipRadius);
+            ctx.clip();
+         }
+         
          game.drawMap(ctx);
          game.hero.render(ctx);
          
@@ -250,6 +261,10 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          game.map.npcs.forEach(function(npc) {
             self._possiblyRenderNpc(npc, ctx);
          });
+         
+         if (game.getUsingTorch()) {
+            ctx.restore();
+         }
          
          if (this._substate===_RoamingSubState.MENU) {
             this._commandBubble.paint(ctx);
