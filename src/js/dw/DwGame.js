@@ -151,9 +151,6 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
          var dx = hero.xOffs + this._cameraDx;
          var dy = hero.yOffs + this._cameraDy;
          this._drawMapCount++;
-//         if (this.inside) {
-//            this.clearScreen('#000000');
-//         }
          
 //         if (this._drawMapCount === 10) {
 //            this.timer.start('drawMap');
@@ -301,9 +298,15 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    setMap: {
       value: function(assetName) {
          'use strict';
+         var prevMap = this.map;
          console.log('Setting map to: ' + assetName);
          this.map = this.maps[assetName];
          this._resetMap(this.map);
+         if (prevMap && prevMap.properties.requiresTorch !== this.map.properties.requiresTorch) {
+            // You blow your torch out leaving a dungeon, but it stays lit
+            // when going into another map in the same dungeon that is also dark
+            this.setUsingTorch(false);
+         }
          var newMusic = dw.Sounds[this.map.properties.music];
          if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);

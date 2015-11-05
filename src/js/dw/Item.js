@@ -41,6 +41,13 @@ dw.Items = Object.freeze({
          'use strict';
          game.state.openDoor();
       }
+   }),
+   
+   TORCH: new dw.Item('Torch', {
+      use: function() {
+         'use strict';
+         game.setUsingTorch(true);
+      }
    })
    
 });

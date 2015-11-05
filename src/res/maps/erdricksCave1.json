@@ -67,7 +67,8 @@
  "properties":
     {
      "logicFile":"erdricksCave1",
-     "music":"MUSIC_DUNGEON_FLOOR_1"
+     "music":"MUSIC_DUNGEON_FLOOR_1",
+     "requiresTorch":"true"
     },
  "tileheight":16,
  "tilesets":[
