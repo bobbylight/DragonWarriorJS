@@ -7,7 +7,9 @@ dw.ItemBubble = function() {
    var x = 9 * tileSize;
    var y = 3 * tileSize;
    dw.Bubble.call(this, null, x, y, w, h);
-   this.selection = 0;
+   
+   this._choices = game.party.getInventory().getItems();
+   this._curChoice = 0;
 };
 
 dw.ItemBubble.prototype = Object.create(dw.Bubble.prototype, {
@@ -25,9 +27,39 @@ dw.ItemBubble.prototype = Object.create(dw.Bubble.prototype, {
       }
    },
    
+   getAndRemoveSelectedItem: {
+      value: function() {
+         'use strict';
+         if (this._curChoice === -1) {
+            return null;
+         }
+         return this._choices.splice(this._curChoice, 1)[0];
+      }
+   },
+   
    handleInput: {
       value: function() {
          'use strict';
+         
+         var im = game.inputManager;
+         
+         if (game.cancelKeyPressed()) {
+            this._curChoice = -1;
+            this._done = true;
+            return true;
+         }
+         else if (game.actionKeyPressed()) {
+            this._done = true;
+            return true;
+         }
+         else if (im.up(true)) {
+            this._curChoice = Math.max(0, this._curChoice-1);
+         }
+         else if (im.down(true)) {
+            this._curChoice = Math.min(this._curChoice+1, this._choices.length-1);
+         }
+         
+         return false;
       }         
    },
    
@@ -36,19 +68,16 @@ dw.ItemBubble.prototype = Object.create(dw.Bubble.prototype, {
       value: function(ctx, y) {
          'use strict';
       
-         var SCALE = game._scale;
-         var x = this.x + dw.Bubble.MARGIN;
-         var y0 = y;
-         var Y_INC = game.stringHeight() + 7*SCALE;
+         var x = this.x + dw.Bubble.MARGIN + 10*game._scale;
          
-         var items = game.party.getInventory();
-         items.forEach(function(item) {
-            
-            game.drawString(item.displayName, x, y0);
-            y0 += Y_INC;
-            
-         });
-         
+         ctx.fillStyle = 'rgb(255,255,255)';
+         for (var i=0; i<this._choices.length; i++) {
+            if (this._curChoice === i) {
+               game.drawArrow(this.x + dw.Bubble.MARGIN, y);
+            }
+            game.drawString(this._choices[i].displayName, x, y);
+            y += 10 * game._scale;
+         }
       }
    }
    

@@ -10,7 +10,7 @@ dw.Item = (function() {
    Item.prototype = {
       
       use: function() {
-         this.useFunc();
+         return this.useFunc();
       },
       
       toString: function() {
@@ -39,14 +39,14 @@ dw.Items = Object.freeze({
    KEY: new dw.Item('Key', {
       use: function() {
          'use strict';
-         game.state.openDoor();
+         return game.state.openDoor();
       }
    }),
    
    TORCH: new dw.Item('Torch', {
       use: function() {
          'use strict';
-         game.setUsingTorch(true);
+         return game.setUsingTorch(true);
       }
    })
    
