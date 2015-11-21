@@ -692,6 +692,7 @@ game.hero.setMapLocation(7, 6);
          'use strict';
          this._torch = usingTorch;
          game.setStatusMessage('Using torch: ' + usingTorch);
+         return true;
       }
    },
    

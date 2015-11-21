@@ -81,8 +81,14 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          
          if (this._itemBubble) {
             this._itemBubble.update(delta);
-            if (game.anyKeyDown()) {
+            var done = this._itemBubble.handleInput();
+            if (done) {
+               var selectedItem = this._itemBubble.getAndRemoveSelectedItem();
                delete this._itemBubble;
+               var success = selectedItem.use();
+               if (success) {
+                  this._setSubstate(_RoamingSubState.ROAMING);
+               }
             }
             return;
          }

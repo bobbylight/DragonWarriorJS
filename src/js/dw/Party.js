@@ -5,7 +5,7 @@
 dw.Party = function(game) {
    'use strict';
    this._members = [];
-   this._inventory = [];
+   this._inventory = new dw.Inventory();
    this.gold = 0;
    
    // Dummy data
