@@ -115,8 +115,8 @@ dw.LoadingState.prototype = Object.create(dw._BaseState.prototype, {
             var self = this;
             
             game.assets.addImage('title', 'res/title.png');
-            game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, true);
-            game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, true);
+            game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, 1, true);
+            game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, 1, true);
             game.assets.addImage('battleBG', 'res/battle_backgrounds.png');
             game.assets.addImage('font', 'res/font_8x10.png');
             game.assets.addJson('enemies', 'res/enemies.json');
