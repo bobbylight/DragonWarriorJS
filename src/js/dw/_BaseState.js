@@ -38,7 +38,7 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
          if (im.shift()) {
             
             // Increase canvas size
-            if (im.isKeyDown(gtp.Keys.P, true)) {
+            if (im.isKeyDown(gtp.Keys.KEY_P, true)) {
                if (!game.canvas.style.width) {
                   game.canvas.style.width = game.canvas.width + 'px';
                }
@@ -51,7 +51,7 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             }
             
             // Decrease canvas size
-            else if (im.isKeyDown(gtp.Keys.L, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_L, true)) {
                if (!game.canvas.style.width) {
                   game.canvas.style.width = game.canvas.width + 'px';
                }
@@ -84,23 +84,23 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
             }
             
             // Audio stuff
-            else if (im.isKeyDown(gtp.Keys.M, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_M, true)) {
                game.toggleMuted();
             }
             
             // Equipment testing
-            else if (im.isKeyDown(gtp.Keys.W, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_W, true)) {
                game.cycleWeapon();
             }
-            else if (im.isKeyDown(gtp.Keys.A, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_A, true)) {
                game.cycleArmor();
             }
-            else if (im.isKeyDown(gtp.Keys.S, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_S, true)) {
                game.cycleShield();
             }
             
             // Stat testing
-            else if (im.isKeyDown(gtp.Keys.H, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_H, true)) {
                if (im.ctrl()) {
                   game.setHeroStats(1, 1);
                }
@@ -108,7 +108,7 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
                   game.setHeroStats(255, 255);
                }
             }
-            else if (im.isKeyDown(gtp.Keys.K, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_K, true)) {
                if (im.ctrl()) {
                   game.setHeroStats(null, null, 0, 0);
                }
@@ -117,20 +117,20 @@ dw._BaseState.prototype = Object.create(gtp.State.prototype, {
                }
             }
             
-            else if (im.isKeyDown(gtp.Keys.T, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_T, true)) {
                game.setUsingTorch(!game.getUsingTorch());
             }
             
             // Options generally useful for debugging
-            else if (im.isKeyDown(gtp.Keys.U, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_U, true)) {
                game.hero.setMoveIncrement(4);
                game.setStatusMessage('Hero speed === 4');
             }
-            else if (im.isKeyDown(gtp.Keys.D, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_D, true)) {
                game.hero.setMoveIncrement(2);
                game.setStatusMessage('Hero speed === 2');
             }
-            else if (im.isKeyDown(gtp.Keys.E, true)) {
+            else if (im.isKeyDown(gtp.Keys.KEY_E, true)) {
                game.toggleRandomEncounters();
             }
          }

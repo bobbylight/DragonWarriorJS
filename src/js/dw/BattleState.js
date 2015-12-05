@@ -1,6 +1,6 @@
 dw.BattleState = function(enemyName) {
    'use strict';
-   dw._BaseState.apply(this, arguments);
+   dw._BaseState.apply(this); // No arguments
    this._enemyName = enemyName;
 };
 

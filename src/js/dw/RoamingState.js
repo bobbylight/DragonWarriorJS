@@ -48,11 +48,11 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          'use strict';
 
          this.handleDefaultKeys();
-         if (game.inputManager.isKeyDown(gtp.Keys.R, true)) {
+         if (game.inputManager.isKeyDown(gtp.Keys.KEY_R, true)) {
             game.startRandomEncounter();
             return;
          }
-         else if (game.inputManager.isKeyDown(gtp.Keys.O, true)) {
+         else if (game.inputManager.isKeyDown(gtp.Keys.KEY_O, true)) {
             this._setSubstate(_RoamingSubState.OVERNIGHT);
          }
          
@@ -153,14 +153,14 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          
          this._showStats = this._stationaryTimer.update(delta);
          
-         if (im.isKeyDown(gtp.Keys.SHIFT)) {
-            if (im.isKeyDown(gtp.Keys.C, true)) {
+         if (im.isKeyDown(gtp.Keys.KEY_SHIFT)) {
+            if (im.isKeyDown(gtp.Keys.KEY_C, true)) {
                game.toggleShowCollisionLayer();
             }
-            if (im.isKeyDown(gtp.Keys.T, true)) {
+            if (im.isKeyDown(gtp.Keys.KEY_T, true)) {
                game.toggleShowTerritoryLayer();
             }
-            if (im.isKeyDown(gtp.Keys.S, true)) {
+            if (im.isKeyDown(gtp.Keys.KEY_S, true)) {
                game.audio.playSound('stairs');
             }
          }

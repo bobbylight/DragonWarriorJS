@@ -32,7 +32,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    actionKeyPressed: {
       value: function() {
          'use strict';
-         return this.inputManager.isKeyDown(gtp.Keys.Z, true);
+         return this.inputManager.isKeyDown(gtp.Keys.KEY_Z, true);
       }
    },
    
@@ -43,7 +43,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
             clear = true;
          }
          var im = this.inputManager;
-         return im.isKeyDown(gtp.Keys.Z, clear) || im.isKeyDown(gtp.Keys.X, clear) ||
+         return im.isKeyDown(gtp.Keys.KEY_Z, clear) || im.isKeyDown(gtp.Keys.KEY_X, clear) ||
                im.enter(clear);
       }
    },
@@ -51,7 +51,7 @@ dw.DwGame.prototype = Object.create(gtp.Game.prototype, {
    cancelKeyPressed: {
       value: function() {
          'use strict';
-         return this.inputManager.isKeyDown(gtp.Keys.X, true);
+         return this.inputManager.isKeyDown(gtp.Keys.KEY_X, true);
       }
    },
    
