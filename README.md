@@ -15,3 +15,14 @@ What's currently being worked on (half-baked):
 * Staying overnight at an inn
 * Buying goods from a shop
 * Battling an enemy
+
+# To test this out
+For the time being, you'll need to run this from a local Apache server, or some other
+means of avoiding 
+# To-Do
+This project is in serious need of modernization.  On the to-do list includes:
+
+* Conversion to webpack
+* Conversion to TypeScript
+* Updating gtp to 2.0.0
+* Actual game stuff

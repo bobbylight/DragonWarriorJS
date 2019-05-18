@@ -78,10 +78,11 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
                return;
             }
          }
-         
+
+         var done;
          if (this._itemBubble) {
             this._itemBubble.update(delta);
-            var done = this._itemBubble.handleInput();
+            done = this._itemBubble.handleInput();
             if (done) {
                var selectedItem = this._itemBubble.getAndRemoveSelectedItem();
                delete this._itemBubble;
@@ -94,7 +95,7 @@ dw.RoamingState.prototype = Object.create(dw._BaseState.prototype, {
          }
          
          this._commandBubble.update(delta);
-         var done = this._commandBubble.handleInput();
+         done = this._commandBubble.handleInput();
          if (done) {
             this._commandBubble.handleCommandChosen(this);
             return;

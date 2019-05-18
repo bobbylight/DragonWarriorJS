@@ -1,0 +1,160 @@
+{
+  "rules": {
+    "adjacent-overload-signatures": false,
+    "align": [
+      true,
+      "statements"
+    ],
+    "arrow-parens": true,
+    "ban": false,
+    "ban-comma-operator": true,
+    "class-name": false,
+    "comment-format": false, //[ true, "check-space" ],
+    //"completed-docs": [ true, "classes", "enums", "functions", "interfaces" ],
+    "curly": true,
+    "cyclomatic-complexity": [ true, 20 ],
+    "deprecation": true,
+    "encoding": true,
+    "eofline": true,
+    "forin": false,
+    "indent": [
+      true,
+      "spaces"
+    ],
+    "jsdoc-format": [ true, "check-multiline-start" ],
+    "label-position": true,
+    "linebreak-style": [ true, "LF" ],
+    "match-default-export-name": true,
+    "max-file-line-count": [ true, 760 ],
+    "max-line-length": [
+      true,
+      140
+    ],
+    "member-access": false,
+    "member-ordering": false, // TODO: Can we make this work the way we want it to?
+    "new-parens": true,
+    "no-angle-bracket-type-assertion": true,
+    "no-any": false,
+    "no-arg": true,
+    "no-bitwise": false, // We use bitwise operations in this project
+    "no-boolean-literal-compare": true,
+    "no-conditional-assignment": true,
+    "no-consecutive-blank-lines": [ true, 1 ],
+    "no-console": false, //[ true, "debug", "log", "info", "warn", "error" ],
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-imports": true,
+    "no-duplicate-super": true,
+    "no-duplicate-switch-case": true,
+    "no-duplicate-variable": true,
+    "no-dynamic-delete": true,
+    "no-empty": false,
+    "no-empty-interface": true,
+    "no-eval": true,
+    //"no-for-in-array": true,
+    "no-implicit-dependencies": [ true, "dev" ],
+    "no-import-side-effect": false, // Importing CSS files violates this
+    "no-inferrable-types": false,
+    "no-internal-module": false,
+    "no-invalid-template-strings": true,
+    "no-invalid-this": true,
+    "no-irregular-whitespace": true,
+    "no-magic-numbers": false,
+    "no-mergeable-namespace": true,
+    "no-misused-new": true,
+    "no-namespace": true,
+    "no-null-keyword": false,
+    "no-parameter-properties": true,
+    "no-redundant-jsdoc": true,
+    "no-reference": true,
+    "no-require-imports": false,
+    "no-return-await": true,
+    "no-shadowed-variable": false,
+    "no-sparse-arrays": true,
+    "no-string-literal": true,
+    "no-submodule-imports": true,
+    "no-switch-case-fall-through": false,
+    "no-this-assignment": true,
+    "no-trailing-whitespace": true,
+    "no-unbound-method": true,
+    "no-unnecessary-callback-wrapper": true,
+    "no-unnecessary-class": true,
+    "no-unnecessary-qualifier": true,
+    "no-unnecessary-type-assertion": true,
+    //"no-unsafe-any": true,
+    "no-unsafe-finally": true,
+    "no-unused-expression": true,
+    "no-unused-variable": true,
+    //"no-unused-variable": [true],
+    "no-use-before-declare": true,
+    "no-var-keyword": true,
+    "no-var-requires": true,
+    "object-literal-sort-keys": false,
+    "one-line": [
+      true,
+      "check-open-brace",
+      "check-catch",
+      "check-finally",
+      "check-whitespace"
+    ],
+    "only-arrow-functions": true,
+    "prefer-conditional-expression": true,
+    "prefer-const": true,
+    "prefer-readonly": true,
+    "prefer-while": true,
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "radix": true,
+    "restrict-plus-operands": false,
+    "semicolon": true,
+    "strict-boolean-expressions": false,
+    "strict-type-predicates": false, // Requires --strictNullChecks, which is too much for now
+    "trailing-comma": [
+      true,
+      { "singleline": "never", "esSpecCompliant": true }
+    ],
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "typedef": [
+      true,
+      "parameter",
+      "property-declaration",
+      "variable-declaration",
+      "member-variable-declaration"
+    ],
+    "typedef-whitespace": [
+      true,
+      {
+        "call-signature": "nospace",
+        "index-signature": "nospace",
+        "parameter": "nospace",
+        "property-declaration": "nospace",
+        "variable-declaration": "nospace"
+      }
+    ],
+    "unified-signatures": true,
+    "use-default-type-parameter": true,
+    "use-isnan": true,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-pascal-case",
+      "allow-leading-underscore",
+      "ban-keywords"
+    ],
+    "whitespace": [
+      true,
+      "check-branch",
+      "check-decl",
+      "check-module",
+      "check-operator",
+      "check-separator",
+      "check-type"
+    ]
+  }
+}
