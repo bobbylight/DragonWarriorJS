@@ -18,12 +18,12 @@ export default class Hero extends PartyMember {
      * intersect on the map.
      */
     handleIntersectedObject(obj: TiledObject) {
-        if ('warp' === (obj as any).type) { // TODO: How is this property on TiledObject?
+        if ('warp' === obj.type) {
             const newRow: number = parseInt(obj.properties.row, 10);
             const newCol: number = parseInt(obj.properties.col, 10);
             const newDir: number = Direction.fromString(obj.properties.dir);
             this.game.loadMap(obj.properties.map, newRow, newCol, newDir);
-        } else if ('insideOutside' === obj.properties.type) {//type) {
+        } else if ('insideOutside' === obj.type) {
             this.game.setInsideOutside(obj.properties.inside === 'true');
         }
     }

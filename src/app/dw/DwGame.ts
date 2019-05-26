@@ -335,7 +335,7 @@ export default class DwGame extends Game {
 
             for (i = 0; i < npcLayer.objects!.length; i++) {
                 const obj: TiledObject = npcLayer.objects![i];
-                switch ((obj as any).type) { // TODO: Why isn't type on interface?
+                switch (obj.type) {
                     case 'npc':
                         npc = this._parseNpc(obj);
                         npc.setNpcIndex(newNpcs.length + 1);
@@ -350,7 +350,7 @@ export default class DwGame extends Game {
                         newTalkAcrosses[ this._parseTalkAcrossKey(obj) ] = true;
                         break;
                     default:
-                        console.error('Unhandled object type in tiled map: ' + (obj as any).type);
+                        console.error(`Unhandled object type in tiled map: ${obj.type}`);
                         break;
                 }
             }
