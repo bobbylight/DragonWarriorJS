@@ -10,15 +10,15 @@ console.log(`Starting webpack build with NODE_ENV: ${process.env.NODE_ENV}`);
 
 module.exports = {
     entry: [
-        path.resolve('./src/js/dw.js')
+        path.resolve('./src/app/dw.ts')
     ],
     output: {
         path: path.resolve('./build/web/'),
         filename: '[name].js'
     },
     resolve: {
-        extensions: ['.js', '.ts'],
-        modules: ['src/js', 'src/css', 'src/res', 'src/html', 'node_modules']
+        extensions: [ '.js', '.ts' ],
+        modules: [ 'src/app', 'src/html', 'node_modules' ]
     },
     mode: devBuild ? 'development' : 'production',
     devtool: devBuild ? 'source-map' : undefined,
@@ -30,6 +30,7 @@ module.exports = {
         }),
         // Simply copies the files over
         new CopyWebpackPlugin([
+            { from: 'src/css', to: 'css' },
             { from: 'src/res', to: 'res' }
         ]),
         new HtmlWebpackPlugin({

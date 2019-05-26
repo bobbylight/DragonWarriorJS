@@ -4,8 +4,8 @@ const devBuild = process.env.NODE_ENV === 'dev';
 
 module.exports = [
     {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
+        test: /\.ts$/,
+        exclude: /src\/tiled|node_modules/,
         use: [
             { loader: 'ts-loader' },
             {

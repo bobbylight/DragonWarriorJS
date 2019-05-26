@@ -1,5 +1,4 @@
-DragonWarriorJS - A recreation of Dragon Warrior for the NES in JavaScript
-==========================================================================
+# DragonWarriorJS - A recreation of Dragon Warrior for the NES in TypeScript
 Like it says on the tin.  This reproduction will try to be as authentic as
 possible, warts and all.
 
@@ -17,12 +16,9 @@ What's currently being worked on (half-baked):
 * Battling an enemy
 
 # To test this out
-For the time being, you'll need to run this from a local Apache server, or some other
-means of avoiding 
-# To-Do
-This project is in serious need of modernization.  On the to-do list includes:
 
-* Conversion to webpack
-* Conversion to TypeScript
-* Updating gtp to 2.0.0
-* Actual game stuff
+```bash
+npm install
+npm run watch
+# View http://localhost:8080
+```
