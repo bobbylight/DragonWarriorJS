@@ -114,7 +114,7 @@ export class LoadingState extends _BaseState {
         if (!this.assetsLoaded) {
 
             this.assetsLoaded = true;
-            const game: DwGame = this.game as DwGame;
+            const game: DwGame = this.game;
 
             game.assets.addImage('title', 'res/title.png');
             game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, 1, true);
@@ -160,7 +160,7 @@ export class LoadingState extends _BaseState {
                 const enemyJson: ImageAtlasInfo = game.assets.get('enemyAtlas');
                 const atlas: ImageAtlas = new ImageAtlas(game.assets.get('enemiesImage'), enemyJson);
                 // delete game.assets.get('monsters');
-                const images: ImageMap = atlas.parse(game._scale);
+                const images: ImageMap = atlas.parse(game.scale);
                 for (const id in images) {
                     if (images.hasOwnProperty(id)) {
                         game.assets.set(id, images[ id ]);
@@ -179,7 +179,7 @@ export class LoadingState extends _BaseState {
                 game.assets.set('shieldArray', LoadingState._createShieldArray(shieldMap));
 
                 const font: Image = game.assets.get('font');
-                game.assets.set('font', new BitmapFont(font, 8, 10, 8, 6, game._scale));
+                game.assets.set('font', new BitmapFont(font, 8, 10, 8, 6, game.scale));
 
                 game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
                 game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));

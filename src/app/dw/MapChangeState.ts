@@ -3,14 +3,16 @@
  * if necessary.
  */
 import { FadeOutInState, State } from 'gtp';
+import DwGame from './DwGame';
 
-export default class MapChangeState extends FadeOutInState {
+export default class MapChangeState extends FadeOutInState<DwGame> {
 
-    constructor(leavingState: State, enteringState: State, transitionLogic?: Function, timeMillis?: number) {
+    constructor(leavingState: State<DwGame>, enteringState: State<DwGame>, transitionLogic?: Function,
+                timeMillis?: number) {
         super(leavingState, enteringState, transitionLogic, timeMillis);
 
 // TODO: Dynamically load scripts?
-//         var mapLogic = game.map.properties.logicFile;
+//         const mapLogic: string = game.map.getProperty('logicFile');
 //         if (!game.hasLogic(mapLogic)) {
 //            game.assets
 //         }

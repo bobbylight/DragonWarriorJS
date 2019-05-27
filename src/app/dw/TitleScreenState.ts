@@ -1,5 +1,5 @@
 import { _BaseState } from './_BaseState';
-import { Delay, Game, Image, InputManager } from 'gtp';
+import { Delay, Image, InputManager } from 'gtp';
 import DwGame from './DwGame';
 import Sounds from './Sounds';
 
@@ -14,7 +14,7 @@ export class TitleScreenState extends _BaseState {
         this.assetsLoaded = false;
     }
 
-    enter(game: Game) {
+    enter(game: DwGame) {
         super.enter(game);
         game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
         this._delay = new Delay({millis: [600, 400]});
@@ -22,7 +22,7 @@ export class TitleScreenState extends _BaseState {
         game.audio.playMusic(Sounds.MUSIC_TITLE_SCREEN);
     }
 
-    leaving(game: Game) {
+    leaving(game: DwGame) {
         game.canvas.removeEventListener('touchstart', this.handleStart.bind(this), false);
     }
 
@@ -49,7 +49,7 @@ export class TitleScreenState extends _BaseState {
 
     render(ctx: CanvasRenderingContext2D) {
 
-        const game: DwGame = this.game as DwGame;
+        const game: DwGame = this.game;
         game.clearScreen();
         const w: number = game.getWidth();
 
@@ -82,6 +82,6 @@ export class TitleScreenState extends _BaseState {
     }
 
     _startGame() {
-        (this.game as DwGame).startNewGame();
+        this.game.startNewGame();
     }
 }

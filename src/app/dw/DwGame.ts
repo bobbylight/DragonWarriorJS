@@ -187,7 +187,7 @@ export default class DwGame extends Game {
     }
 
     getMapLogic() {
-        let logicFile: string = this.map.properties.logicFile;
+        let logicFile: string = this.map.getProperty('logicFile')!;
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
         return this._mapLogics[logicFile];
@@ -237,7 +237,7 @@ export default class DwGame extends Game {
             this.hero.direction = typeof dir === 'undefined' ? Direction.SOUTH : dir;
             this.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
         };
-        this.setState(new /*FadeOutInState*/MapChangeState(this.state, this.state, updatePlayer));
+        this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
     }
 
     /**
@@ -275,12 +275,12 @@ export default class DwGame extends Game {
         console.log('Setting map to: ' + assetName);
         this.map = this.maps[ assetName ];
         this._resetMap(this.map);
-        if (prevMap && prevMap.properties.requiresTorch !== this.map.properties.requiresTorch) {
+        if (prevMap && prevMap.getProperty('requiresTorch') !== this.map.getProperty('requiresTorch')) {
             // You blow your torch out leaving a dungeon, but it stays lit
             // when going into another map in the same dungeon that is also dark
             this.setUsingTorch(false);
         }
-        const newMusic: string = Sounds[this.map.properties.music];
+        const newMusic: string = Sounds[this.map.getProperty('music')!];
         if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);
         }
@@ -303,7 +303,7 @@ export default class DwGame extends Game {
             screenWidth: this.getWidth(), screenHeight: this.getHeight()
         });
         this._adjustGameMap(map);
-        map.setScale(this._scale);
+        map.setScale(this.scale);
 
         this.maps[ asset ] = map;
         return map;
@@ -381,7 +381,7 @@ export default class DwGame extends Game {
     private _parseDoor(obj: any): Door {
         const name: string = obj.name;
         const replacementTileIndex: number =
-            parseInt(obj.properties.replacementTileIndex, 10);
+            parseInt(obj.getProperty('replacementTileIndex'), 10);
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
@@ -392,8 +392,8 @@ export default class DwGame extends Game {
         //var index = 0;
         const name: string = obj.name;
         let type: number | null = null;
-        if (obj.properties.type) {
-            type = NpcType[ obj.properties.type.toUpperCase() ];
+        if (obj.getProperty('type')) {
+            type = NpcType[ obj.getProperty('type').toUpperCase() ];
         }
         if (type == null) { // 0 is a valid value
             type = NpcType.MERCHANT_GREEN;
@@ -402,7 +402,7 @@ export default class DwGame extends Game {
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
         let dir: number = Direction.SOUTH;
-        const tempDir: string | null = obj.properties.dir;
+        const tempDir: string | null = obj.getProperty('dir');
         if (tempDir) {
             dir = Direction[ tempDir.toUpperCase() ]; // || Direction.SOUTH;
             if (typeof dir === 'undefined') {
@@ -410,11 +410,11 @@ export default class DwGame extends Game {
             }
         }
         let wanders: boolean = true;
-        const wanderStr: string = obj.properties.wanders;
+        const wanderStr: string = obj.getProperty('wanders');
         if (wanderStr) {
             wanders = wanderStr === 'true';
         }
-        const range: number[] = this._parseRange(obj.properties.range);
+        const range: number[] = this._parseRange(obj.getProperty('range'));
         const npc: Npc = new Npc({
             name: name, type: type, direction: dir,
             range: range, wanders: wanders, mapRow: row, mapCol: col
@@ -554,7 +554,7 @@ export default class DwGame extends Game {
     }
 
     getTileSize(): number {
-        return 16 * this._scale;
+        return 16 * this.scale;
     }
 
     getCollisionLayer(): TiledLayer {
@@ -622,7 +622,7 @@ export default class DwGame extends Game {
                         const territories: any = this.assets.get('enemyTerritories');
                         const possibleEnemies: any[] = territories[territory];
                         const enemyName: string = possibleEnemies[Utils.randomInt(0, possibleEnemies.length)];
-                        this.setState(new BattleTransitionState(this.state, new BattleState(enemyName)));
+                        this.setState(new BattleTransitionState(this.state as any, new BattleState(enemyName)));
                         return true;
                     }
                 }

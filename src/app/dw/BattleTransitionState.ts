@@ -8,14 +8,14 @@ import Sounds from './Sounds';
 
 export default class BattleTransitionState extends _BaseState {
 
-    private readonly _enteringState: State;
+    private readonly _enteringState: State<DwGame>;
     private readonly _enteringStateScreenshot: HTMLCanvasElement;
     state: number;
     tick: number;
 
     private static readonly _TICK_COUNT: number = 25;
 
-    constructor(leavingState: State, enteringState: _BaseState) {
+    constructor(leavingState: State<DwGame>, enteringState: _BaseState) {
         super();
         this._enteringState = enteringState;
         this._enteringStateScreenshot = enteringState.createScreenshot();
@@ -25,7 +25,7 @@ export default class BattleTransitionState extends _BaseState {
         super.enter(game);
 
 // TODO: Dynamically load scripts?
-//         var mapLogic = game.map.properties.logicFile;
+//         var mapLogic = game.map.getProperty('logicFile');
 //         if (!game.hasLogic(mapLogic)) {
 //            game.assets
 //         }
@@ -38,14 +38,14 @@ export default class BattleTransitionState extends _BaseState {
 
     render(ctx: CanvasRenderingContext2D) {
 
-        (this.game as DwGame).drawMap(ctx);
+        this.game.drawMap(ctx);
         this._renderBattleBG(ctx);
     }
 
     /* tslint:disable:cyclomatic-complexity */
     private _renderBattleBG(ctx: CanvasRenderingContext2D) {
 
-        const game: DwGame = this.game as DwGame;
+        const game: DwGame = this.game;
 
         const w: number = game.getWidth();
         const h: number = game.getHeight();

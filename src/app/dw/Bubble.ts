@@ -19,7 +19,7 @@ export default class Bubble {
 
         this.game = (window as any).game;
         this.title = title;
-        const scale: number = 1; //game._scale;
+        const scale: number = 1; //game.scale;
         this.x = x * scale;
         this.y = y * scale;
         this.w = w * scale;
@@ -146,7 +146,7 @@ export default class Bubble {
             ctx.clip();
         }
 
-        const scale: number = this.game._scale;
+        const scale: number = this.game.scale;
         const fontHeight: number = this.game.stringHeight();
 
         ctx.fillStyle = 'rgb(0,0,0)';
@@ -179,11 +179,11 @@ export default class Bubble {
     }
 
     getXMargin(): number {
-        return 8 * this.game._scale;
+        return 8 * this.game.scale;
     }
 
     getYMargin(): number {
-        return this.title ? this.game.getTileSize() : (8 * this.game._scale);
+        return this.title ? this.game.getTileSize() : (8 * this.game.scale);
     }
 
     _isAnimating(): Delay {

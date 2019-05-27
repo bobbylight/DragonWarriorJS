@@ -25,7 +25,7 @@ export default class RoamingEntity {
         this.yOffs = this.yOffs || 0;
         this._stepTick = 0;
         // TODO: Make this time-dependent!
-        this._moveInc = this.game._scale * (this.game._targetFps === 30 ? 2 : 1);
+        this._moveInc = this.game.scale * (this.game.targetFps === 30 ? 2 : 1);
     }
 
     getMoveIncrement() {

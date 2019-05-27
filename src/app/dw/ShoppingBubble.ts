@@ -47,7 +47,7 @@ export default class ShoppingBubble extends Bubble {
 
    paintContent(ctx: CanvasRenderingContext2D, y: number) {
 
-      const x: number = this.x + Bubble.MARGIN + 10 * this.game._scale;
+      const x: number = this.x + Bubble.MARGIN + 10 * this.game.scale;
 
       ctx.fillStyle = 'rgb(255,255,255)';
       for (let i: number = 0; i < this._choices.length; i++) {
@@ -55,7 +55,7 @@ export default class ShoppingBubble extends Bubble {
             this.game.drawArrow(this.x + Bubble.MARGIN, y);
          }
          this.game.drawString(this._choices[i].displayName, x, y);
-         y += 10 * this.game._scale;
+         y += 10 * this.game.scale;
       }
 
    }

@@ -11,7 +11,7 @@ export default class CommandBubble extends Bubble {
 
       const game: DwGame = (window as any).game;
 
-      const scale: number = game._scale;
+      const scale: number = game.scale;
       const tileSize: number = game.getTileSize();
       const w: number = 140 * scale;
       const h: number = 90 * scale;
@@ -90,7 +90,7 @@ export default class CommandBubble extends Bubble {
 
    paintContent(ctx: CanvasRenderingContext2D, y: number) {
 
-      const SCALE: number = this.game._scale;
+      const SCALE: number = this.game.scale;
       let x: number = this.x + 20 * SCALE;
       let y0: number = y;
       const Y_INC: number = this.game.stringHeight() + 7 * SCALE;

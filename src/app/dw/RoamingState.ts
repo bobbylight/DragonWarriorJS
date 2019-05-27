@@ -43,10 +43,9 @@ export default class RoamingState extends _BaseState {
    constructor(args?: any) {
 
       super(args);
-      const game: DwGame = (window as any).game;
 
       this._commandBubble = new CommandBubble();
-      this._statBubble = new StatBubble(game);
+      this._statBubble = new StatBubble(this.game);
       this._stationaryTimer = new Delay({millis: 1000});
 
       this._setSubstate(_RoamingSubState.ROAMING);
@@ -57,13 +56,13 @@ export default class RoamingState extends _BaseState {
       this._updateMethods[_RoamingSubState.TALKING] = this._updateTalking;
       this._updateMethods[_RoamingSubState.OVERNIGHT] = this._updateOvernight;
 
-      this._textBubble = new TextBubble(game);
+      this._textBubble = new TextBubble(this.game);
       this._showTextBubble = false;
    }
 
    update(delta: number) {
 
-      const game: DwGame = this.game as DwGame;
+      const game: DwGame = this.game;
 
       this.handleDefaultKeys();
       if (game.inputManager.isKeyDown(Keys.KEY_R, true)) {
@@ -85,11 +84,9 @@ export default class RoamingState extends _BaseState {
 
    _updateMenu(delta: number) {
 
-      const game: DwGame = this.game as DwGame;
-
       if (this._statusBubble) {
          this._statusBubble.update(delta);
-         if (game.anyKeyDown()) {
+         if (this.game.anyKeyDown()) {
             delete this._statusBubble;
             return;
          }
@@ -120,25 +117,23 @@ export default class RoamingState extends _BaseState {
 
    _updateRoaming(delta: number) {
 
-      const game: DwGame = this.game as DwGame;
-
       if (this._substate !== _RoamingSubState.ROAMING || this._showStats) {
          this._statBubble.update(delta);
       }
 
-      const hero: Hero = game.hero;
-      const im: InputManager = game.inputManager;
+      const hero: Hero = this.game.hero;
+      const im: InputManager = this.game.inputManager;
 
-      if (game.actionKeyPressed()) {
-         game.setNpcsPaused(true);
+      if (this.game.actionKeyPressed()) {
+         this.game.setNpcsPaused(true);
          this._commandBubble.reset();
-         game.audio.playSound('menu');
+         this.game.audio.playSound('menu');
          this._setSubstate(_RoamingSubState.MENU);
          return;
       }
 
       // Make sure we're not in BattleTransitionState
-      if (!hero.isMoving() && game.state === this) {
+      if (!hero.isMoving() && this.game.state === this) {
 
          if (im.up()) {
             hero.tryToMoveUp();
@@ -168,17 +163,17 @@ export default class RoamingState extends _BaseState {
 
       if (im.isKeyDown(Keys.KEY_SHIFT)) {
          if (im.isKeyDown(Keys.KEY_C, true)) {
-            game.toggleShowCollisionLayer();
+            this.game.toggleShowCollisionLayer();
          }
          if (im.isKeyDown(Keys.KEY_T, true)) {
-            game.toggleShowTerritoryLayer();
+            this.game.toggleShowTerritoryLayer();
          }
          if (im.isKeyDown(Keys.KEY_S, true)) {
-            game.audio.playSound('stairs');
+            this.game.audio.playSound('stairs');
          }
       }
 
-      game.map.npcs.forEach((npc: Npc) => {
+      this.game.map.npcs.forEach((npc: Npc) => {
          npc.update(delta);
       });
 
@@ -222,9 +217,7 @@ export default class RoamingState extends _BaseState {
 
    openDoor() {
 
-      const game: DwGame = this.game as DwGame;
-
-      if (!game.openDoorHeroIsFacing()) {
+      if (!this.game.openDoorHeroIsFacing()) {
          const conversation: Conversation = new Conversation();
          conversation.addSegment('There is no door there to open!');
          this._showTextBubble = true;
@@ -237,41 +230,38 @@ export default class RoamingState extends _BaseState {
 
    _possiblyRenderNpc(npc: Npc, ctx: CanvasRenderingContext2D) {
 
-      const game: DwGame = this.game as DwGame;
-
       const row: number = npc.mapRow;
       const col: number = npc.mapCol;
-      const underRoof: boolean = game.hasRoofTile(row, col);
-      if ((underRoof && game.inside) || (!underRoof && !game.inside)) {
+      const underRoof: boolean = this.game.hasRoofTile(row, col);
+      if ((underRoof && this.game.inside) || (!underRoof && !this.game.inside)) {
          npc.render(ctx);
       }
    }
 
    render(ctx: CanvasRenderingContext2D) {
 
-      const game: DwGame = this.game as DwGame;
-
-      if (game.map.properties.requiresTorch) {
-         game.clearScreen('#000000');
+      if (this.game.map.propertiesByName.requiresTorch) {
+         this.game.clearScreen('#000000');
          ctx.save();
-         const clipRadius: number = game.getUsingTorch() ? game.getTileSize() * 3 / 2 : game.getTileSize() / 2;
-         const x0: number = game.getWidth() / 2 - clipRadius;
-         const y0: number = game.getHeight() / 2 - clipRadius;
+         const clipRadius: number = this.game.getUsingTorch() ? this.game.getTileSize() * 3 / 2 :
+             this.game.getTileSize() / 2;
+         const x0: number = this.game.getWidth() / 2 - clipRadius;
+         const y0: number = this.game.getHeight() / 2 - clipRadius;
          ctx.beginPath();
          ctx.rect(x0, y0, 2 * clipRadius, 2 * clipRadius);
          ctx.clip();
-      } else if (game.inside) {
-         game.clearScreen('#000000');
+      } else if (this.game.inside) {
+         this.game.clearScreen('#000000');
       }
 
-      game.drawMap(ctx);
-      game.hero.render(ctx);
+      this.game.drawMap(ctx);
+      this.game.hero.render(ctx);
 
-      game.map.npcs.forEach((npc: Npc) => {
+      this.game.map.npcs.forEach((npc: Npc) => {
          this._possiblyRenderNpc(npc, ctx);
       });
 
-      if (game.map.properties.requiresTorch) {
+      if (this.game.map.propertiesByName.requiresTorch) {
          ctx.restore();
       }
 
@@ -307,7 +297,7 @@ export default class RoamingState extends _BaseState {
          } else {
             ctx.fillStyle = 'rgba(0, 0, 0, 1)';
          }
-         ctx.fillRect(0, 0, game.getWidth(), game.getHeight());
+         ctx.fillRect(0, 0, this.game.getWidth(), this.game.getHeight());
          ctx.restore();
       }
    }
@@ -329,11 +319,11 @@ export default class RoamingState extends _BaseState {
    }
 
    showStatus() {
-      this._statusBubble = new StatusBubble(this.game as DwGame);
+      this._statusBubble = new StatusBubble(this.game);
    }
 
    startRoaming() {
-      (this.game as DwGame).setNpcsPaused(false);
+      this.game.setNpcsPaused(false);
       this._showTextBubble = false;
       this._setSubstate(_RoamingSubState.ROAMING);
       this._stationaryTimer.reset();
@@ -341,9 +331,7 @@ export default class RoamingState extends _BaseState {
 
    talkToNpc() {
 
-      const game: DwGame = this.game as DwGame;
-
-      const logic: MapLogic = game.getMapLogic();
+      const logic: MapLogic = this.game.getMapLogic();
       if (!logic) {
          console.log('Error: No map logic found for this map!  Cannot talk to NPCs!');
          return;
@@ -351,9 +339,9 @@ export default class RoamingState extends _BaseState {
 
       const conversation: Conversation = new Conversation();
 
-      const npc: Npc | null = game.getNpcHeroIsFacing();
+      const npc: Npc | null = this.game.getNpcHeroIsFacing();
       if (npc) {
-         const hero: Hero = game.hero;
+         const hero: Hero = this.game.hero;
          //var newNpcDir = this.getHero().direction.opposite();
          const newNpcDir: number = (hero.direction + 2) % 4;
          npc.direction = newNpcDir;

@@ -26,10 +26,8 @@ export default class DeadState extends _BaseState {
 
    update(delta: number) {
 
-      const game: DwGame = this.game as DwGame;
-
-      if (game.anyKeyDown()) {
-         game.setState(new FadeOutInState(this, new TitleScreenState()));
+      if (this.game.anyKeyDown()) {
+         this.game.setState(new FadeOutInState(this, new TitleScreenState()));
       }
    }
 }

@@ -1,15 +1,15 @@
-import { BaseStateArgs, Game, ImageUtils, InputManager, Keys, State } from 'gtp';
+import { BaseStateArgs, ImageUtils, InputManager, Keys, State } from 'gtp';
 import Direction from './Direction';
 import DwGame from './DwGame';
 
 /**
  * Functionality common amongst all states in this game.
  */
-export class _BaseState extends State {
+export class _BaseState extends State<DwGame> {
 
-    constructor(args?: DwGame | BaseStateArgs) {
+    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
 
-        const game: Game = (window as any).game;
+        const game: DwGame = (window as any).game;
 
         if (!args) {
             args = { game };
@@ -29,9 +29,8 @@ export class _BaseState extends State {
     }
 
     _warpTo(mapName: string, row: number, col: number, desc: string, dir: number = Direction.SOUTH) {
-        const game: DwGame = this.game as DwGame;
-        game.loadMap(mapName, row, col, dir);
-        game.setStatusMessage(`Warping to ${desc}...`);
+        this.game.loadMap(mapName, row, col, dir);
+        this.game.setStatusMessage(`Warping to ${desc}...`);
     }
 
     private static handleCanvasResizingKeys(im: InputManager, canvas: HTMLCanvasElement, game: DwGame): boolean {
@@ -80,7 +79,7 @@ export class _BaseState extends State {
 
         const im: InputManager = this.game.inputManager;
         const canvas: HTMLCanvasElement = this.game.canvas;
-        const game: DwGame = this.game as DwGame;
+        const game: DwGame = this.game;
 
         if (_BaseState.handleCanvasResizingKeys(im, canvas, game)) {
             return;

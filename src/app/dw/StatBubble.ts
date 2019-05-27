@@ -8,7 +8,7 @@ export default class StatBubble extends Bubble {
    selection: number;
 
    constructor(game: DwGame) {
-      const scale: number = game._scale;
+      const scale: number = game.scale;
       const tileSize: number = game.getTileSize();
       const w: number = 60 * scale;
       const h: number = 100 * scale;
@@ -29,7 +29,7 @@ export default class StatBubble extends Bubble {
 //            digits++;
 //            val /= 10;
 //         }
-//         return digits * 10 * this.game._scale;
+//         return digits * 10 * this.game.scale;
    }
 
    handleInput() {
@@ -37,7 +37,7 @@ export default class StatBubble extends Bubble {
 
    paintContent(ctx: CanvasRenderingContext2D, y: number) {
 
-      const SCALE: number = this.game._scale;
+      const SCALE: number = this.game.scale;
       const x: number = this.x + Bubble.MARGIN;
       const x2: number = this.x + this.w - Bubble.MARGIN;
       let y0: number = y;

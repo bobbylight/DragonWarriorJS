@@ -242,7 +242,7 @@ export default class TextBubble extends Bubble {
                     text = text.substring(0, end);
                 }
                 this.game.drawString(text, x, y);
-                y += 10 * this.game._scale;
+                y += 10 * this.game.scale;
             }
             if (this._textDone && this._conversation.hasNext()) {
                 // TODO: Remove magic constants

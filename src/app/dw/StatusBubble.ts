@@ -8,7 +8,7 @@ export default class StatusBubble extends Bubble {
 
     constructor(game: DwGame) {
 
-        const scale: number = game._scale;
+        const scale: number = game.scale;
         const tileSize: number = game.getTileSize();
         const w: number = 172 * scale;
         const x: number = game.getWidth() - tileSize - w;
@@ -31,7 +31,7 @@ export default class StatusBubble extends Bubble {
 
     paintContent(ctx: CanvasRenderingContext2D, y: number) {
 
-        const SCALE: number = this.game._scale;
+        const SCALE: number = this.game.scale;
         const x: number = this.x + Bubble.MARGIN;
         const x2: number = this.x + this.w - Bubble.MARGIN;
         let y0: number = y;

@@ -55,9 +55,8 @@ export default class BattleState extends _BaseState {
    private _enemyFlashCallback() {
 
       delete this._enemyFlashDelay;
-      const game: DwGame = this.game as DwGame;
 
-      const damage: number = game.hero.computePhysicalAttackDamage(this._enemy);
+      const damage: number = this.game.hero.computePhysicalAttackDamage(this._enemy);
       const dead: boolean = this._enemy.takeDamage(damage);
 
       const text: string = 'Direct hit! Thy enemy\'s hit points have been reduced by ' + damage + '.';
@@ -77,9 +76,8 @@ export default class BattleState extends _BaseState {
           '\nThy gold increases by ' + this._enemy.gp + '.';
       this._enemiesDead = true;
 
-      const game: DwGame = this.game as DwGame;
-      game.hero.exp += this._enemy.xp;
-      game.party.gold += this._enemy.gp;
+      this.game.hero.exp += this._enemy.xp;
+      this.game.party.gold += this._enemy.gp;
 
       // TODO: Check for level up
 
@@ -115,12 +113,10 @@ export default class BattleState extends _BaseState {
       delete this._enemyAttackShakeDelay;
       this._shake = false;
 
-      const game: DwGame = this.game as DwGame;
-
-      const damage: number = this._enemy.ai(game.hero, this._enemy).damage;
-      game.hero.takeDamage(damage);
+      const damage: number = this._enemy.ai(this.game.hero, this._enemy).damage;
+      this.game.hero.takeDamage(damage);
       let text: string = 'Thy hit points are reduced by ' + damage + '.';
-      if (game.hero.isDead()) {
+      if (this.game.hero.isDead()) {
          text += '\nThou art dead.';
          this._textBubble.addToConversation({text: text}, true);
          this._dead = true;
@@ -151,7 +147,7 @@ export default class BattleState extends _BaseState {
 
    render(ctx: CanvasRenderingContext2D) {
 
-      const game: DwGame = this.game as DwGame;
+      const game: DwGame = this.game;
 
       if (this._shake) {
          game.setCameraOffset(this._shakeXOffs, 0);
@@ -203,7 +199,7 @@ export default class BattleState extends _BaseState {
 
    run() {
 
-      const game: DwGame = this.game as DwGame;
+      const game: DwGame = this.game;
 
       this._commandExecuting = true;
       this._fightDelay = new Delay({ millis: [600], callback: this._runCallback.bind(this) });
@@ -228,7 +224,7 @@ export default class BattleState extends _BaseState {
 
    update(delta: number) {
 
-      const game: DwGame = this.game as DwGame;
+      const game: DwGame = this.game;
 
       if (this._dead && this._textBubble.isDone()) {
          game.setState(new DeadState(game, this));

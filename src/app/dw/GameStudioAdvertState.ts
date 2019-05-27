@@ -16,16 +16,14 @@ export class GameStudioAdvertState extends _BaseState {
 
         this.handleDefaultKeys();
 
-        const game: DwGame = this.game as DwGame;
-
-        if (this._delay.update(delta) || game.anyKeyDown(true)) {
+        if (this._delay.update(delta) || this.game.anyKeyDown(true)) {
             this._startGame();
         }
     }
 
     render(ctx: CanvasRenderingContext2D) {
 
-        const game: DwGame = this.game as DwGame;
+        const game: DwGame = this.game;
         game.clearScreen();
         const w: number = game.getWidth();
 
