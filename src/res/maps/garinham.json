@@ -152,17 +152,17 @@
                 {
                  "height":16,
                  "id":5,
-                 "name":"npc1",
+                 "name":"merchant1",
                  "properties":[
                         {
                          "name":"dir",
                          "type":"string",
-                         "value":"left"
+                         "value":"west"
                         }, 
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"soldier"
+                         "value":"merchant_green"
                         }, 
                         {
                          "name":"wanders",
@@ -175,6 +175,17 @@
                  "width":16,
                  "x":96,
                  "y":176
+                }, 
+                {
+                 "height":16,
+                 "id":6,
+                 "name":"table1",
+                 "rotation":0,
+                 "type":"talkAcross",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":176
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -183,9 +194,14 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":6,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "properties":[
+        {
+         "name":"logicFile",
+         "type":"string",
+         "value":"garinham"
+        }, 
         {
          "name":"music",
          "type":"string",

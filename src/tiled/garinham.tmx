@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="29" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="6">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="29" height="28" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="7">
  <properties>
+  <property name="logicFile" value="garinham"/>
   <property name="music" value="MUSIC_TOWN"/>
  </properties>
  <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16" spacing="1" tilecount="360" columns="24">
@@ -104,12 +105,13 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="npcLayer">
-  <object id="5" name="npc1" type="npc" x="96" y="176" width="16" height="16">
+  <object id="5" name="merchant1" type="npc" x="96" y="176" width="16" height="16">
    <properties>
-    <property name="dir" value="left"/>
-    <property name="type" value="soldier"/>
+    <property name="dir" value="west"/>
+    <property name="type" value="merchant_green"/>
     <property name="wanders" value="false"/>
    </properties>
   </object>
+  <object id="6" name="table1" type="talkAcross" x="80" y="176" width="16" height="16"/>
  </objectgroup>
 </map>

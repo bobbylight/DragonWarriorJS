@@ -18,6 +18,7 @@ import BattleTransitionState from './BattleTransitionState';
 import Brecconary from './mapLogic/brecconary';
 import ErdricksCave1 from './mapLogic/erdricksCave1';
 import ErdricksCave2 from './mapLogic/erdricksCave2';
+import Garinham from './mapLogic/garinham';
 import Overworld from './mapLogic/overworld';
 import TantegelCastle from './mapLogic/tantegelCastle';
 import MapLogic from './MapLogic';
@@ -56,12 +57,12 @@ export default class DwGame extends Game {
 
     start() {
         Game.prototype.start.apply(this, arguments);
-        this._init();
+        this.init();
     }
 
-    _init() {
+    private init() {
 
-        this._createPartyAndHero();
+        this.createPartyAndHero();
         this.npcs = [];
         this._bumpSoundDelay = 0;
         this.setCameraOffset(0, 0);
@@ -73,6 +74,7 @@ export default class DwGame extends Game {
             'Brecconary': new Brecconary(),
             'erdricksCave1': new ErdricksCave1(),
             'erdricksCave2': new ErdricksCave2(),
+            'Garinham': new Garinham(),
             'Overworld': new Overworld(),
             'TantegelCastle': new TantegelCastle()
         };
@@ -92,7 +94,7 @@ export default class DwGame extends Game {
         return this.inputManager.isKeyDown(Keys.KEY_X, true);
     }
 
-    _createPartyAndHero() {
+    private createPartyAndHero() {
         this.hero = new Hero({ name: 'Erdrick' });
         this.party = new Party(this);
         this.party.addMember(this.hero);
@@ -182,11 +184,11 @@ export default class DwGame extends Game {
         font.drawString(textStr, x, y);
     }
 
-    getEnemy(name: string) {
+    getEnemy(name: string): any {
         return this.assets.get('enemies')[ name ];
     }
 
-    getMapLogic() {
+    getMapLogic(): MapLogic | null {
         let logicFile: string = this.map.getProperty('logicFile')!;
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
@@ -218,7 +220,7 @@ export default class DwGame extends Game {
     /**
      * Returns whether the tile at a given location has a "roof" layer tile.
      */
-    hasRoofTile(row: number, col: number) {
+    hasRoofTile(row: number, col: number): boolean {
         const roofLayer: TiledLayer | null = this.map.getLayer('tileLayer2');
         return roofLayer && roofLayer.getData(row, col) > 0;
     }
@@ -246,7 +248,7 @@ export default class DwGame extends Game {
      *
      * @return Whether there was a door to open.
      */
-    openDoorHeroIsFacing() {
+    openDoorHeroIsFacing(): boolean {
         const door: Door | null = this._getDoorHeroIsFacing();
         if (door) {
             this.audio.playSound('door');
@@ -286,7 +288,7 @@ export default class DwGame extends Game {
         }
     }
 
-    initLoadedMap(asset: string) {
+    initLoadedMap(asset: string): DwMap {
 
         const data: number = this.assets.get(asset);
         const imagePathModifier: Function = (imagePath: string) => {
@@ -593,23 +595,23 @@ export default class DwGame extends Game {
         this.npcsPaused = paused;
     }
 
-    setUsingTorch(usingTorch: boolean) {
+    setUsingTorch(usingTorch: boolean): boolean {
         this._torch = usingTorch;
         this.setStatusMessage('Using torch: ' + usingTorch);
         return true;
     }
 
-    stringHeight() {
+    stringHeight(): number {
         const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
         return font.cellH; //charHeight();
     }
 
-    stringWidth(str?: string) {
+    stringWidth(str?: string): number {
         const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
         return str ? (str.length * font.cellW) : 0;
     }
 
-    startRandomEncounter() {
+    startRandomEncounter(): boolean {
         if (this._randomEncounters) {
             const enemyTerritoryLayer: TiledLayer = this.getEnemyTerritoryLayer();
             if (enemyTerritoryLayer) {
@@ -631,7 +633,7 @@ export default class DwGame extends Game {
         return false;
     }
 
-    toggleMuted() {
+    toggleMuted(): boolean {
         const muted: boolean = this.audio.toggleMuted();
         this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
         return muted;

@@ -51,10 +51,10 @@ export default class RoamingState extends _BaseState {
       this._setSubstate(_RoamingSubState.ROAMING);
 
       this._updateMethods = {};
-      this._updateMethods[_RoamingSubState.ROAMING] = this._updateRoaming;
-      this._updateMethods[_RoamingSubState.MENU] = this._updateMenu;
-      this._updateMethods[_RoamingSubState.TALKING] = this._updateTalking;
-      this._updateMethods[_RoamingSubState.OVERNIGHT] = this._updateOvernight;
+      this._updateMethods[_RoamingSubState.ROAMING] = this.updateRoaming;
+      this._updateMethods[_RoamingSubState.MENU] = this.updateMenu;
+      this._updateMethods[_RoamingSubState.TALKING] = this.updateTalking;
+      this._updateMethods[_RoamingSubState.OVERNIGHT] = this.updateOvernight;
 
       this._textBubble = new TextBubble(this.game);
       this._showTextBubble = false;
@@ -82,7 +82,7 @@ export default class RoamingState extends _BaseState {
       this._updateMethods[this._substate].call(this, delta);
    }
 
-   _updateMenu(delta: number) {
+   private updateMenu(delta: number) {
 
       if (this._statusBubble) {
          this._statusBubble.update(delta);
@@ -115,7 +115,7 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   _updateRoaming(delta: number) {
+   private updateRoaming(delta: number) {
 
       if (this._substate !== _RoamingSubState.ROAMING || this._showStats) {
          this._statBubble.update(delta);
@@ -179,7 +179,7 @@ export default class RoamingState extends _BaseState {
 
    }
 
-   _updateTalking(delta: number) {
+   private updateTalking(delta: number) {
 
       const done: boolean = this._textBubble.handleInput();
       if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
@@ -195,7 +195,7 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   _updateOvernight(delta: number) {
+   private updateOvernight(delta: number) {
 
       if (this._overnightDelay) {
          this._overnightDelay.update(delta);
@@ -203,12 +203,12 @@ export default class RoamingState extends _BaseState {
          this.game.audio.playMusic('overnight', false);
          this._overnightDelay = new Delay({
             millis: [RoamingState._OVERNIGHT_DARK_TIME],
-            callback: this._overnightOver.bind(this)
+            callback: this.overnightOver.bind(this)
          });
       }
    }
 
-   _overnightOver() {
+   private overnightOver() {
       this.game.audio.playMusic(Sounds.MUSIC_TOWN);
       delete this._overnightDelay;
       this._setSubstate(_RoamingSubState.TALKING);
@@ -228,7 +228,7 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   _possiblyRenderNpc(npc: Npc, ctx: CanvasRenderingContext2D) {
+   private possiblyRenderNpc(npc: Npc, ctx: CanvasRenderingContext2D) {
 
       const row: number = npc.mapRow;
       const col: number = npc.mapCol;
@@ -258,7 +258,7 @@ export default class RoamingState extends _BaseState {
       this.game.hero.render(ctx);
 
       this.game.map.npcs.forEach((npc: Npc) => {
-         this._possiblyRenderNpc(npc, ctx);
+         this.possiblyRenderNpc(npc, ctx);
       });
 
       if (this.game.map.propertiesByName.requiresTorch) {
@@ -331,7 +331,7 @@ export default class RoamingState extends _BaseState {
 
    talkToNpc() {
 
-      const logic: MapLogic = this.game.getMapLogic();
+      const logic: MapLogic | null = this.game.getMapLogic();
       if (!logic) {
          console.log('Error: No map logic found for this map!  Cannot talk to NPCs!');
          return;

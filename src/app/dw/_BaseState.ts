@@ -134,23 +134,26 @@ export class _BaseState extends State<DwGame> {
 
     private handleWarpKeys(im: InputManager): boolean {
 
-        if (im.isKeyDown(Keys[ '1' ], true)) {
+        if (im.isKeyDown(Keys.KEY_1, true)) {
             this._warpTo('brecconary', 15, 2, 'Brecconary', Direction.EAST);
             return true;
-        } else if (im.isKeyDown(Keys[ '2' ], true)) {
+        } else if (im.isKeyDown(Keys.KEY_2, true)) {
             this._warpTo('tantegelCastle', 15, 7, 'Tantegel Castle', Direction.WEST);
             return true;
-        } else if (im.isKeyDown(Keys[ '3' ], true)) {
+        } else if (im.isKeyDown(Keys.KEY_3, true)) {
             this._warpTo('tantegelCastle', 51, 11, 'the King at Tantegel Castle', Direction.WEST);
             return true;
-        } else if (im.isKeyDown(Keys[ '4' ], true)) {
+        } else if (im.isKeyDown(Keys.KEY_4, true)) {
             this._warpTo('erdricksCave1', 1, 1, 'Erdrick\'s Cave');
             return true;
-        } else if (im.isKeyDown(Keys[ '5' ], true)) {
+        } else if (im.isKeyDown(Keys.KEY_5, true)) {
             this._warpTo('overworld', 51, 41, 'Outside Tantegel Castle');
             return true;
-        } else if (im.isKeyDown(Keys[ '6' ], true)) {
+        } else if (im.isKeyDown(Keys.KEY_6, true)) {
             this._warpTo('erdricksCave1', 1, 1, 'Erdrick\'s Cave');
+            return true;
+        } else if (im.isKeyDown(Keys.KEY_7, true)) {
+            this._warpTo('garinham', 14, 1, 'Garinham');
             return true;
         }
 

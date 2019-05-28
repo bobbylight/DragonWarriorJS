@@ -21,7 +21,7 @@ export default class Hero extends PartyMember {
         if ('warp' === obj.type) {
             const newRow: number = parseInt(obj.propertiesByName.row.value, 10);
             const newCol: number = parseInt(obj.propertiesByName.col.value, 10);
-            const newDir: number = Direction.fromString(obj.getProperty('dir')!);
+            const newDir: number = Direction.fromString(obj.getProperty('dir'));
             this.game.loadMap(obj.getProperty('map')!, newRow, newCol, newDir);
         } else if ('insideOutside' === obj.type) {
             this.game.setInsideOutside(obj.getProperty('inside') as string === 'true');
