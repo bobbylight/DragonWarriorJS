@@ -20,6 +20,7 @@ export default class PartyMember extends RoamingEntity {
     weapon?: Weapon;
     armor?: Armor;
     shield?: Shield;
+    readonly spells: any[];
 
     constructor(args: any) {
 
@@ -37,6 +38,8 @@ export default class PartyMember extends RoamingEntity {
         this.maxHp = args.hp || 0;
         this.mp = args.mp || 0;
         this.maxMp = args.mp || 0;
+
+        this.spells = [];
 
         //BattleEntity.call(this, args); // TODO: Better way to do a mixin?
         //Utils.mixin(RoamingEntityMixin.prototype, this);

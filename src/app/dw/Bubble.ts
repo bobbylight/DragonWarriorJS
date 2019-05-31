@@ -130,7 +130,6 @@ export default class Bubble {
                 if (this._paintH >= this.h) {
                     delete this._animator;
                     delete this._paintH;
-                    console.log('DONE!!!');
                 }
             }
         });

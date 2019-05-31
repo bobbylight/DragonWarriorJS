@@ -24,7 +24,7 @@ export default class ItemBubble extends Bubble {
         this._curChoice = 0;
     }
 
-    getAndRemoveSelectedItem() {
+    getAndRemoveSelectedItem(): Item | null {
         if (this._curChoice === -1) {
             return null;
         }

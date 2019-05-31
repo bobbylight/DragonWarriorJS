@@ -60,6 +60,14 @@ export default class RoamingState extends _BaseState {
       this._showTextBubble = false;
    }
 
+   search() {
+       this.showOneLineConversation('\\w{hero.name} searched the ground all about.', 'But there found nothing.');
+   }
+
+   takeStairs() {
+       this.showOneLineConversation('There are no stairs here.');
+   }
+
    update(delta: number) {
 
       const game: DwGame = this.game;
@@ -97,9 +105,9 @@ export default class RoamingState extends _BaseState {
          this._itemBubble.update(delta);
          done = this._itemBubble.handleInput();
          if (done) {
-            const selectedItem: Item = this._itemBubble.getAndRemoveSelectedItem()!;
+            const selectedItem: Item | null = this._itemBubble.getAndRemoveSelectedItem()!;
             delete this._itemBubble;
-            const success: boolean = selectedItem.use();
+            const success: boolean = !selectedItem || selectedItem.use(); // Either canceled the dialog or selected item
             if (success) {
                this._setSubstate(_RoamingSubState.ROAMING);
             }
@@ -218,11 +226,7 @@ export default class RoamingState extends _BaseState {
    openDoor() {
 
       if (!this.game.openDoorHeroIsFacing()) {
-         const conversation: Conversation = new Conversation();
-         conversation.addSegment('There is no door there to open!');
-         this._showTextBubble = true;
-         this._textBubble.setConversation(conversation);
-         this._setSubstate(_RoamingSubState.TALKING);
+         this.showOneLineConversation('There is no door there to open!');
       } else {
          this._setSubstate(_RoamingSubState.ROAMING);
       }
@@ -316,6 +320,38 @@ export default class RoamingState extends _BaseState {
 
    showInventory() {
       this._itemBubble = new ItemBubble();
+   }
+
+   private showNoSpellsMessage() {
+       this.showOneLineConversation('You have not learned any spells yet!');
+   }
+
+    /**
+     * Displays one or more static lines of text in the conversation bubble.
+     *
+     * @param text The text to display.
+     */
+   private showOneLineConversation(...text: string[]) {
+
+       const conversation: Conversation = new Conversation();
+       for (let i: number = 0; i < text.length; i++) {
+           conversation.addSegment(text[i]);
+       }
+       this._showTextBubble = true;
+       this._textBubble.setConversation(conversation);
+       this._setSubstate(_RoamingSubState.TALKING);
+   }
+
+   showSpellList() {
+
+       const hero: Hero = this.game.hero;
+
+       if (!hero.spells.length) {
+           this.showNoSpellsMessage();
+           return;
+       }
+
+       // TODO: Show spells bubble
    }
 
    showStatus() {
