@@ -14,17 +14,17 @@ export default class BattleState extends _BaseState {
 
    private readonly _enemyName: string;
    private _commandExecuting: boolean;
-   private _fightDelay: Delay;
+   private _fightDelay?: Delay;
    private _textBubble: TextBubble;
    private _commandBubble: BattleCommandBubble;
    private _statBubble: StatBubble;
-   private _enemyFlashDelay: Delay;
+   private _enemyFlashDelay?: Delay;
    private _enemy: Enemy;
    private _flashMillis: number;
    private _enemiesDead: boolean;
-   private _enemyAttackDelay: Delay;
+   private _enemyAttackDelay?: Delay;
    private _shake: boolean;
-   private _enemyAttackShakeDelay: Delay;
+   private _enemyAttackShakeDelay?: Delay;
    private _shakeXOffs: number;
    private _shakeMillisCount: number;
    private _dead: boolean;

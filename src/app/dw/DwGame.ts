@@ -185,7 +185,7 @@ export default class DwGame extends Game {
     }
 
     getEnemy(name: string): any {
-        return this.assets.get('enemies')[ name ];
+        return this.assets.get<any>('enemies')[ name ];
     }
 
     getMapLogic(): MapLogic | null {
@@ -544,15 +544,15 @@ export default class DwGame extends Game {
     }
 
     getWeapon(weapon: string): Weapon {
-        return this.assets.get('weapons')[ weapon ];
+        return this.assets.get<any>('weapons')[ weapon ];
     }
 
     getArmor(armor: string): Armor {
-        return this.assets.get('armors')[ armor ];
+        return this.assets.get<any>('armors')[ armor ];
     }
 
     getShield(shield: string): Shield {
-        return this.assets.get('shields')[ shield ];
+        return this.assets.get<any>('shields')[ shield ];
     }
 
     getTileSize(): number {

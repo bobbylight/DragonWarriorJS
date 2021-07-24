@@ -1,4 +1,7 @@
 # DragonWarriorJS - A recreation of Dragon Warrior for the NES in TypeScript
+![Build](https://github.com/bobbylight/DragonWarriorJS/actions/workflows/build.yml/badge.svg)
+![CodeQL](https://github.com/bobbylight/DragonWarriorJS/actions/workflows/codeql-analysis.yml/badge.svg)
+
 Like it says on the tin.  This reproduction will try to be as authentic as
 possible, warts and all.
 

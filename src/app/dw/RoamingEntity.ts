@@ -124,7 +124,7 @@ export default class RoamingEntity {
 
         // TODO: Is there a better way to determine that I'm the hero?
         else if (data === 361 && this.constructor === Hero) { // i.e., not an NPC
-            this.game.bump();
+            (this as Hero).game.bump();
         }
         /*
         else {

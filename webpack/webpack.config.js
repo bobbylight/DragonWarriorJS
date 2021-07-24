@@ -29,10 +29,12 @@ module.exports = {
             }
         }),
         // Simply copies the files over
-        new CopyWebpackPlugin([
-            { from: 'src/css', to: 'css' },
-            { from: 'src/res', to: 'res' }
-        ]),
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: 'src/css', to: 'css'},
+                {from: 'src/res', to: 'res'}
+            ],
+        }),
         new HtmlWebpackPlugin({
             template: 'src/html/index.html',
             inject: 'body',

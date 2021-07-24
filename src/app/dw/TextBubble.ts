@@ -16,12 +16,12 @@ export default class TextBubble extends Bubble {
     private _curOffs: number;
     private _curCharMillis: number;
     private _textDone: boolean;
-    private _questionBubble: QuestionBubble | null;
-    private _shoppingBubble: ShoppingBubble | null;
-    private _delay: Delay;
+    private _questionBubble?: QuestionBubble | null;
+    private _shoppingBubble?: ShoppingBubble | null;
+    private _delay?: Delay;
     private _doneCallbacks: any[];
     private _afterSound: any;
-    private _overnight: boolean;
+    private _overnight?: boolean;
 
     static readonly CHAR_RENDER_MILLIS: number = 0;
     static readonly MAX_LINE_COUNT: number = 6;
@@ -156,7 +156,7 @@ export default class TextBubble extends Bubble {
     }
 
     isOvernight(): boolean {
-        return this._overnight;
+        return !!this._overnight;
     }
 
     clearOvernight(overnight?: any): void {

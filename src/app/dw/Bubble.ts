@@ -10,8 +10,8 @@ export default class Bubble {
     w: number;
     h: number;
     private readonly _fontWidth: number;
-    private _paintH: number;
-    private _animator: Delay;
+    private _paintH?: number;
+    private _animator?: Delay;
 
     static readonly MARGIN: number = 10; // 5 * SCALE; TODO
 
@@ -125,7 +125,7 @@ export default class Bubble {
         this._animator = new Delay({
             millis: 20, loop: true,
             callback: () => {
-                this._paintH = Math.min(this._paintH + this.game.getTileSize(), this.h);
+                this._paintH = Math.min(this._paintH! + this.game.getTileSize(), this.h);
                 //console.log('--- ' + self._paintH);
                 if (this._paintH >= this.h) {
                     delete this._animator;
@@ -140,7 +140,7 @@ export default class Bubble {
         if (this._animator) {
             ctx.save();
             ctx.beginPath();
-            ctx.rect(this.x, this.y, this.w, this._paintH);
+            ctx.rect(this.x, this.y, this.w, this._paintH!);
             //console.log('Setting clip to: ' + this.x + ',' + this.y + ',' + this.w + ',' + this._paintH);
             ctx.clip();
         }
@@ -185,8 +185,8 @@ export default class Bubble {
         return this.title ? this.game.getTileSize() : (8 * this.game.scale);
     }
 
-    _isAnimating(): Delay {
-        return this._animator;
+    _isAnimating(): boolean {
+        return !!this._animator;
     }
 
     /**

@@ -24,10 +24,10 @@ export default class RoamingState extends _BaseState {
 
    private readonly _commandBubble: CommandBubble;
    private readonly _statBubble: StatBubble;
-   private _statusBubble: StatusBubble;
-   private _itemBubble: ItemBubble;
+   private _statusBubble?: StatusBubble;
+   private _itemBubble?: ItemBubble;
    private readonly _stationaryTimer: Delay;
-   private _overnightDelay: Delay;
+   private _overnightDelay?: Delay;
    private readonly _updateMethods: any;
    private readonly _textBubble: TextBubble;
    private _showTextBubble: boolean;

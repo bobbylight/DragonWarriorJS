@@ -25,7 +25,6 @@ export default class Npc extends RoamingEntity {
 
         if (this.wanders) {
             this._stepDelay = new Delay({millis: 3000, minDelta: -500, maxDelta: 500});
-            delete this.wanders;
         }
 
         this.dirFuncs = [ this.tryToMoveUp.bind(this), this.tryToMoveDown.bind(this),

@@ -7,13 +7,7 @@ module.exports = [
         test: /\.ts$/,
         exclude: /src\/tiled|node_modules/,
         use: [
-            { loader: 'ts-loader' },
-            {
-                loader: 'tslint-loader',
-                options: {
-                    typeCheck: true
-                }
-            }
+            { loader: 'ts-loader' }
         ]
     },
     {
