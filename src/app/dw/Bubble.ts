@@ -66,7 +66,7 @@ export default class Bubble {
         let delay: number;
         let index: number;
         let lastOffs: number = 0;
-        while ((index = text.indexOf('\\d', lastOffs)) > -1) { // tslint:disable-line
+        while ((index = text.indexOf('\\d', lastOffs)) > -1) {
 
             if ((index + 2) < text.length && text.charAt(index + 2) === '{') {
                 const end: number = text.indexOf('}', index + 3);

@@ -42,7 +42,6 @@ export default class BattleTransitionState extends _BaseState {
         this._renderBattleBG(ctx);
     }
 
-    /* tslint:disable:cyclomatic-complexity */
     private _renderBattleBG(ctx: CanvasRenderingContext2D) {
 
         const game: DwGame = this.game;
@@ -165,7 +164,6 @@ export default class BattleTransitionState extends _BaseState {
         }
 
     }
-    /* tslint:enable:cyclomatic-complexity */
 
     update(delta: number) {
 

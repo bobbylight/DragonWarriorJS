@@ -56,7 +56,7 @@ export default class DwGame extends Game {
     }
 
     start() {
-        Game.prototype.start.apply(this, arguments);
+        Game.prototype.start.apply(this);
         this.init();
     }
 
@@ -452,9 +452,9 @@ export default class DwGame extends Game {
         hero.mp = hero.maxMp = 15;
         hero._strength = 4;
         hero.agility = 4;
-        hero.weapon = (this.assets.get('weapons') as EquipmentMap<Weapon>).club; // tslint:disable-line
-        hero.armor = (this.assets.get('armor') as EquipmentMap<Armor>).clothes; // tslint:disable-line
-        hero.shield = (this.assets.get('shields') as EquipmentMap<Shield>).smallShield; // tslint:disable-line
+        hero.weapon = (this.assets.get('weapons') as EquipmentMap<Weapon>).club;
+        hero.armor = (this.assets.get('armor') as EquipmentMap<Armor>).clothes;
+        hero.shield = (this.assets.get('shields') as EquipmentMap<Shield>).smallShield;
     }
 
     setCameraOffset(dx: number, dy: number) {

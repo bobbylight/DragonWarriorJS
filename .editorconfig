@@ -1,5 +1,3 @@
-# A minimal configuration for some of the formatting basics enforced by tslint.
-
 # This is the top-most EditorConfig file
 root = true
 
