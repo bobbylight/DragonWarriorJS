@@ -125,6 +125,9 @@ export class LoadingState extends _BaseState {
             game.assets.addJson('enemyTerritories', 'res/enemyTerritories.json');
             game.assets.addCanvas('enemiesImage', 'res/monsters.png');
             game.assets.addJson('enemyAtlas', 'res/enemyAtlas.json');
+            game.assets.addJson('tileset_tiles.json', 'res/maps/tileset_tiles.json');
+            game.assets.addJson('enemy_territory_tiles.json', 'res/maps/enemy_territory_tiles.json');
+            game.assets.addJson('collision_tiles.json', 'res/maps/collision_tiles.json');
             game.assets.addJson('overworld.json', 'res/maps/overworld.json');
             game.assets.addJson('equipment', 'res/equipment.json');
             game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');

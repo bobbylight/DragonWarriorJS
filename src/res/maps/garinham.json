@@ -1,4 +1,5 @@
-{ "height":28,
+{ "compressionlevel":-1,
+ "height":28,
  "infinite":false,
  "layers":[
         {
@@ -208,37 +209,19 @@
          "value":"MUSIC_TOWN"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.2.4",
+ "tiledversion":"1.8.2",
  "tileheight":16,
  "tilesets":[
-        {
-         "columns":24,
-         "firstgid":1,
-         "image":"..\/tiles.png",
-         "imageheight":254,
-         "imagewidth":407,
-         "margin":0,
-         "name":"tiles",
-         "spacing":1,
-         "tilecount":360,
-         "tileheight":16,
-         "tilewidth":16
-        }, 
-        {
-         "columns":3,
-         "firstgid":361,
-         "image":"..\/collision.png",
-         "imageheight":50,
-         "imagewidth":50,
-         "margin":0,
-         "name":"collision",
-         "spacing":1,
-         "tilecount":9,
-         "tileheight":16,
-         "tilewidth":16
-        }],
+   {
+     "firstgid":1,
+     "source":"tileset_tiles.json"
+   },
+   {
+     "firstgid":361,
+     "source":"collision_tiles.json"
+   }],
  "tilewidth":16,
  "type":"map",
- "version":1.2,
+ "version":"1.8",
  "width":29
 }

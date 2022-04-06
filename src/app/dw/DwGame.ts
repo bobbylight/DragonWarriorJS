@@ -1,4 +1,15 @@
-import { BitmapFont, FadeOutInState, Game, InputManager, Keys, TiledLayer, TiledObject, Utils } from 'gtp';
+import {
+    BitmapFont,
+    FadeOutInState,
+    Game,
+    InputManager,
+    Keys,
+    TiledImagePathModifier,
+    TiledLayer,
+    TiledMapData,
+    TiledObject,
+    Utils
+} from 'gtp';
 import Hero from './Hero';
 import Shield from './Shield';
 import Npc from './Npc';
@@ -23,6 +34,7 @@ import Overworld from './mapLogic/overworld';
 import TantegelCastle from './mapLogic/tantegelCastle';
 import MapLogic from './MapLogic';
 import { EquipmentMap } from './dw';
+import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
 
 interface MapLogicMap {
     [ name: string ]: MapLogic;
@@ -189,7 +201,7 @@ export default class DwGame extends Game {
     }
 
     getMapLogic(): MapLogic | null {
-        let logicFile: string = this.map.getProperty('logicFile')!;
+        let logicFile: string = this.map.getProperty('logicFile');
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
         return this._mapLogics[logicFile];
@@ -221,8 +233,8 @@ export default class DwGame extends Game {
      * Returns whether the tile at a given location has a "roof" layer tile.
      */
     hasRoofTile(row: number, col: number): boolean {
-        const roofLayer: TiledLayer | null = this.map.getLayer('tileLayer2');
-        return roofLayer && roofLayer.getData(row, col) > 0;
+        const roofLayer: TiledLayer | undefined = this.map.getLayerIfExists('tileLayer2');
+        return roofLayer ? roofLayer.getData(row, col) > 0 : false;
     }
 
     /**
@@ -277,12 +289,12 @@ export default class DwGame extends Game {
         console.log('Setting map to: ' + assetName);
         this.map = this.maps[ assetName ];
         this._resetMap(this.map);
-        if (prevMap && prevMap.getProperty('requiresTorch') !== this.map.getProperty('requiresTorch')) {
+        if (prevMap && prevMap.getProperty('requiresTorch', false) !== this.map.getProperty('requiresTorch', false)) {
             // You blow your torch out leaving a dungeon, but it stays lit
             // when going into another map in the same dungeon that is also dark
             this.setUsingTorch(false);
         }
-        const newMusic: string = Sounds[this.map.getProperty('music')!];
+        const newMusic: string = Sounds[this.map.getProperty('music') as string];
         if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);
         }
@@ -290,8 +302,8 @@ export default class DwGame extends Game {
 
     initLoadedMap(asset: string): DwMap {
 
-        const data: number = this.assets.get(asset);
-        const imagePathModifier: Function = (imagePath: string) => {
+        const data: TiledMapData = this.assets.get(asset);
+        const imagePathModifier: TiledImagePathModifier = (imagePath: string) => {
             return imagePath.replace('../', 'res/');
         };
 
@@ -301,11 +313,12 @@ export default class DwGame extends Game {
 
         const map: DwMap = new DwMap(data, {
             imagePathModifier: imagePathModifier,
-            tileWidth: 16, tileHeight: 16,
-            screenWidth: this.getWidth(), screenHeight: this.getHeight()
+            screenWidth: this.getWidth(),
+            screenHeight: this.getHeight(),
+            assets: this.assets,
         });
-        this._adjustGameMap(map);
         map.setScale(this.scale);
+        this._adjustGameMap(map);
 
         this.maps[ asset ] = map;
         return map;
@@ -330,8 +343,8 @@ export default class DwGame extends Game {
         const newNpcs: Npc[] = [];
         const newDoors: Door[] = [];
         const newTalkAcrosses: any = {};
-        const temp: TiledLayer | null = map.getLayer('npcLayer');
-        if (temp && temp.isObjectGroup()) {
+        const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
+        if (temp?.isObjectGroup()) {
 
             const npcLayer: TiledLayer = temp;
 
@@ -383,19 +396,18 @@ export default class DwGame extends Game {
     private _parseDoor(obj: any): Door {
         const name: string = obj.name;
         const replacementTileIndex: number =
-            parseInt(obj.getProperty('replacementTileIndex'), 10);
+            parseInt(getProperty(obj, 'replacementTileIndex'), 10);
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
         return new Door(name, row, col, replacementTileIndex);
     }
 
-    private _parseNpc(obj: any): Npc {
-        //var index = 0;
+    private _parseNpc(obj: TiledObject): Npc {
         const name: string = obj.name;
         let type: number | null = null;
-        if (obj.getProperty('type')) {
-            type = NpcType[ obj.getProperty('type').toUpperCase() ];
+        if (obj.propertiesByName.has('type')) {
+            type = NpcType[ (getProperty(obj, 'type') as string).toUpperCase() ];
         }
         if (type == null) { // 0 is a valid value
             type = NpcType.MERCHANT_GREEN;
@@ -403,23 +415,17 @@ export default class DwGame extends Game {
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
-        let dir: number = Direction.SOUTH;
-        const tempDir: string | null = obj.getProperty('dir');
-        if (tempDir) {
-            dir = Direction[ tempDir.toUpperCase() ]; // || Direction.SOUTH;
-            if (typeof dir === 'undefined') {
-                dir = Direction.SOUTH;
-            }
+        const tempDir: string = getProperty(obj, 'dir', 'SOUTH');
+        let dir = Direction[ tempDir.toUpperCase() ]; // || Direction.SOUTH;
+        if (typeof dir === 'undefined') {
+            dir = Direction.SOUTH;
         }
-        let wanders: boolean = true;
-        const wanderStr: string = obj.getProperty('wanders');
-        if (wanderStr) {
-            wanders = wanderStr === 'true';
-        }
-        const range: number[] = this._parseRange(obj.getProperty('range'));
+        const wanderStr: string = getProperty(obj, 'wanders', 'true');
+        const wanders: boolean = wanderStr === 'true';
+        const range: number[] = this._parseRange(getProperty(obj, 'range', ''));
         const npc: Npc = new Npc({
-            name: name, type: type, direction: dir,
-            range: range, wanders: wanders, mapRow: row, mapCol: col
+            name, type, direction: dir,
+            range, wanders, mapRow: row, mapCol: col
         });
         return npc;
     }
@@ -563,10 +569,6 @@ export default class DwGame extends Game {
         return this.map.getLayer('collisionLayer');
     }
 
-    getEnemyTerritoryLayer(): TiledLayer {
-        return this.map.getLayer('enemyTerritoryLayer');
-    }
-
     bump() {
         if (this.playTime > this._bumpSoundDelay) {
             this.audio.playSound('bump');
@@ -613,13 +615,13 @@ export default class DwGame extends Game {
 
     startRandomEncounter(): boolean {
         if (this._randomEncounters) {
-            const enemyTerritoryLayer: TiledLayer = this.getEnemyTerritoryLayer();
+            const enemyTerritoryLayer: TiledLayer | undefined = this.map.layersByName.get('enemyTerritoryLayer');
             if (enemyTerritoryLayer) {
                 let territory: number = enemyTerritoryLayer.getData(this.hero.mapRow, this.hero.mapCol);
                 if (territory > 0) {
                     // dw.Enemy territory index is offset by the Tiled tileset's firstgid
                     // TODO: Remove call to private method
-                    territory = territory - (this.map as any)._getImageForGid(territory).firstgid;
+                    territory = territory - (this.map as any).getTilesetForGid(territory).firstgid;
                     if (territory >= 0) {
                         const territories: any = this.assets.get('enemyTerritories');
                         const possibleEnemies: any[] = territories[territory];

@@ -1,0 +1,14 @@
+{ "columns":8,
+ "image":"..\/enemy_territory_colors.png",
+ "imageheight":135,
+ "imagewidth":135,
+ "margin":0,
+ "name":"territories",
+ "spacing":1,
+ "tilecount":64,
+ "tiledversion":"1.8.4",
+ "tileheight":16,
+ "tilewidth":16,
+ "type":"tileset",
+ "version":"1.8"
+}

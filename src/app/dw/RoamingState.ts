@@ -244,7 +244,7 @@ export default class RoamingState extends _BaseState {
 
    render(ctx: CanvasRenderingContext2D) {
 
-      if (this.game.map.propertiesByName.requiresTorch) {
+      if (this.game.map.propertiesByName.get('requiresTorch')) {
          this.game.clearScreen('#000000');
          ctx.save();
          const clipRadius: number = this.game.getUsingTorch() ? this.game.getTileSize() * 3 / 2 :
@@ -265,7 +265,7 @@ export default class RoamingState extends _BaseState {
          this.possiblyRenderNpc(npc, ctx);
       });
 
-      if (this.game.map.propertiesByName.requiresTorch) {
+      if (this.game.map.propertiesByName.get('requiresTorch')) {
          ctx.restore();
       }
 

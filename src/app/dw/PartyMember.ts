@@ -92,7 +92,6 @@ export default class PartyMember extends RoamingEntity {
      * implementation does nothing; subclasses can override.
      */
     handleIntersectedObject(obj: TiledObject) {
-        'use strict';
         // Do nothing
     }
 
@@ -152,7 +151,7 @@ export default class PartyMember extends RoamingEntity {
         const x: number = this.mapCol * tileSize;
         const y: number = this.mapRow * tileSize;
 
-        const obj: TiledObject | null = warpLayer.getObjectIntersecting(x, y, tileSize, tileSize);
+        const obj: TiledObject | undefined = warpLayer.getObjectIntersecting(x, y, tileSize, tileSize);
         if (obj) {
             this.handleIntersectedObject(obj);
         }
