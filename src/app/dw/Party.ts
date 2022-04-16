@@ -79,16 +79,11 @@ export default class Party {
      * Returns a member of the party.
      *
      * @param name The name of the party member.
-     * @return The party member, or <code>null</code> if there
+     * @return The party member, or <code>undefined</code> if there
      *         is no party member by that name.
      */
-    getMember(name: string): PartyMember | null {
-        for (let i: number = 0; i < this._members.length; i++) {
-            if (this._members[i].name === name) {
-                return this._members[i];
-            }
-        }
-        return null;
+    getMember(name: string): PartyMember | undefined {
+        return this._members.find(member => name === member.name);
     }
 
     /**

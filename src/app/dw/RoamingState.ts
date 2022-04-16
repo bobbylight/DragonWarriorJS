@@ -13,7 +13,7 @@ import Npc from './Npc';
 import Hero from './Hero';
 import MapLogic from './MapLogic';
 
-const _RoamingSubState: any = Object.freeze({
+const RoamingSubState: any = Object.freeze({
    ROAMING: 0,
    MENU: 1,
    TALKING: 2,
@@ -48,13 +48,13 @@ export default class RoamingState extends _BaseState {
       this._statBubble = new StatBubble(this.game);
       this._stationaryTimer = new Delay({millis: 1000});
 
-      this._setSubstate(_RoamingSubState.ROAMING);
+      this.setSubstate(RoamingSubState.ROAMING);
 
       this._updateMethods = {};
-      this._updateMethods[_RoamingSubState.ROAMING] = this.updateRoaming;
-      this._updateMethods[_RoamingSubState.MENU] = this.updateMenu;
-      this._updateMethods[_RoamingSubState.TALKING] = this.updateTalking;
-      this._updateMethods[_RoamingSubState.OVERNIGHT] = this.updateOvernight;
+      this._updateMethods[RoamingSubState.ROAMING] = this.updateRoaming;
+      this._updateMethods[RoamingSubState.MENU] = this.updateMenu;
+      this._updateMethods[RoamingSubState.TALKING] = this.updateTalking;
+      this._updateMethods[RoamingSubState.OVERNIGHT] = this.updateOvernight;
 
       this._textBubble = new TextBubble(this.game);
       this._showTextBubble = false;
@@ -77,7 +77,7 @@ export default class RoamingState extends _BaseState {
          game.startRandomEncounter();
          return;
       } else if (game.inputManager.isKeyDown(Keys.KEY_O, true)) {
-         this._setSubstate(_RoamingSubState.OVERNIGHT);
+         this.setSubstate(RoamingSubState.OVERNIGHT);
       }
 
       game.hero.update(delta);
@@ -109,7 +109,7 @@ export default class RoamingState extends _BaseState {
             delete this._itemBubble;
             const success: boolean = !selectedItem || selectedItem.use(); // Either canceled the dialog or selected item
             if (success) {
-               this._setSubstate(_RoamingSubState.ROAMING);
+               this.setSubstate(RoamingSubState.ROAMING);
             }
          }
          return;
@@ -125,7 +125,7 @@ export default class RoamingState extends _BaseState {
 
    private updateRoaming(delta: number) {
 
-      if (this._substate !== _RoamingSubState.ROAMING || this._showStats) {
+      if (this._substate !== RoamingSubState.ROAMING || this._showStats) {
          this._statBubble.update(delta);
       }
 
@@ -136,7 +136,7 @@ export default class RoamingState extends _BaseState {
          this.game.setNpcsPaused(true);
          this._commandBubble.reset();
          this.game.audio.playSound('menu');
-         this._setSubstate(_RoamingSubState.MENU);
+         this.setSubstate(RoamingSubState.MENU);
          return;
       }
 
@@ -191,7 +191,7 @@ export default class RoamingState extends _BaseState {
 
       const done: boolean = this._textBubble.handleInput();
       if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
-         this._setSubstate(_RoamingSubState.OVERNIGHT);
+         this.setSubstate(RoamingSubState.OVERNIGHT);
          this._textBubble.clearOvernight();
       } else if (this._showTextBubble) {
          this._textBubble.update(delta);
@@ -219,7 +219,7 @@ export default class RoamingState extends _BaseState {
    private overnightOver() {
       this.game.audio.playMusic(Sounds.MUSIC_TOWN);
       delete this._overnightDelay;
-      this._setSubstate(_RoamingSubState.TALKING);
+      this.setSubstate(RoamingSubState.TALKING);
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key
    }
 
@@ -228,7 +228,7 @@ export default class RoamingState extends _BaseState {
       if (!this.game.openDoorHeroIsFacing()) {
          this.showOneLineConversation('There is no door there to open!');
       } else {
-         this._setSubstate(_RoamingSubState.ROAMING);
+         this.setSubstate(RoamingSubState.ROAMING);
       }
    }
 
@@ -269,7 +269,7 @@ export default class RoamingState extends _BaseState {
          ctx.restore();
       }
 
-      if (this._substate === _RoamingSubState.MENU) {
+      if (this._substate === RoamingSubState.MENU) {
          this._commandBubble.paint(ctx);
       }
 
@@ -277,7 +277,7 @@ export default class RoamingState extends _BaseState {
          this._textBubble.paint(ctx);
       }
 
-      if (this._substate !== _RoamingSubState.ROAMING || this._showStats) {
+      if (this._substate !== RoamingSubState.ROAMING || this._showStats) {
          this._statBubble.paint(ctx);
       }
       if (this._statusBubble) {
@@ -306,14 +306,14 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   _setSubstate(substate: number) {
+   private setSubstate(substate: number) {
       const prevSubstate: number = this._substate;
       this._substate = substate;
       this._statBubble.init(); // Reset this guy
-      if (substate === _RoamingSubState.MENU) {
+      if (substate === RoamingSubState.MENU) {
          this._commandBubble.init();
-      } else if (substate === _RoamingSubState.TALKING &&
-          prevSubstate !== _RoamingSubState.OVERNIGHT) {
+      } else if (substate === RoamingSubState.TALKING &&
+          prevSubstate !== RoamingSubState.OVERNIGHT) {
          this._textBubble.init();
       }
    }
@@ -334,12 +334,10 @@ export default class RoamingState extends _BaseState {
    private showOneLineConversation(...text: string[]) {
 
        const conversation: Conversation = new Conversation();
-       for (let i: number = 0; i < text.length; i++) {
-           conversation.addSegment(text[i]);
-       }
+       text.forEach(line => conversation.addSegment(line));
        this._showTextBubble = true;
        this._textBubble.setConversation(conversation);
-       this._setSubstate(_RoamingSubState.TALKING);
+       this.setSubstate(RoamingSubState.TALKING);
    }
 
    showSpellList() {
@@ -361,7 +359,7 @@ export default class RoamingState extends _BaseState {
    startRoaming() {
       this.game.setNpcsPaused(false);
       this._showTextBubble = false;
-      this._setSubstate(_RoamingSubState.ROAMING);
+      this.setSubstate(RoamingSubState.ROAMING);
       this._stationaryTimer.reset();
    }
 
@@ -375,7 +373,7 @@ export default class RoamingState extends _BaseState {
 
       const conversation: Conversation = new Conversation();
 
-      const npc: Npc | null = this.game.getNpcHeroIsFacing();
+      const npc: Npc | undefined = this.game.getNpcHeroIsFacing();
       if (npc) {
          const hero: Hero = this.game.hero;
          //var newNpcDir = this.getHero().direction.opposite();
@@ -387,6 +385,6 @@ export default class RoamingState extends _BaseState {
       }
       this._showTextBubble = true;
       this._textBubble.setConversation(conversation);
-      this._setSubstate(_RoamingSubState.TALKING);
+      this.setSubstate(RoamingSubState.TALKING);
    }
 }

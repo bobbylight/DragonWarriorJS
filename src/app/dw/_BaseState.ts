@@ -150,9 +150,6 @@ export class _BaseState extends State<DwGame> {
             this._warpTo('overworld', 51, 41, 'Outside Tantegel Castle');
             return true;
         } else if (im.isKeyDown(Keys.KEY_6, true)) {
-            this._warpTo('erdricksCave1', 1, 1, 'Erdrick\'s Cave');
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_7, true)) {
             this._warpTo('garinham', 14, 1, 'Garinham');
             return true;
         }

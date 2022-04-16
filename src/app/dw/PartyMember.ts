@@ -52,7 +52,7 @@ export default class PartyMember extends RoamingEntity {
         const strength: number = this.getStrength();
         let min: number;
         let max: number;
-        if (!enemy.cannotBeExcellentMoved && this._getPerformExcellentMove()) {
+        if (!enemy.cannotBeExcellentMoved && PartyMember.getPerformExcellentMove()) {
             min = Math.floor(strength / 2);
             max = this._strength;
         } else {
@@ -79,7 +79,7 @@ export default class PartyMember extends RoamingEntity {
         return defense;
     }
 
-    private _getPerformExcellentMove(): boolean {
+    private static getPerformExcellentMove(): boolean {
         return Utils.randomInt(0, 32) === 0;
     }
 

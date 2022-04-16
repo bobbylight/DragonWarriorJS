@@ -42,10 +42,7 @@ export default class Bubble {
         text = Bubble._removeSpecialEscapes(text, result.delays);
         const lineList: string[] = text.split('\n');
 
-        for (let i: number = 0; i < lineList.length; i++) {
-            this._breakApartLine(lineList[i], w, result);
-        }
-
+        lineList.forEach(line => this.breakApartLine(line, w, result));
         return result;
     }
 
@@ -91,7 +88,7 @@ export default class Bubble {
         return text;
     }
 
-    _breakApartLine(line: string, w: number, result: any) {
+    private breakApartLine(line: string, w: number, result: any) {
 
         const optimal: number = Math.floor(w / this._fontWidth);
 

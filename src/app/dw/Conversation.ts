@@ -86,12 +86,8 @@ export default class Conversation {
     }
 
     private _findIndexById(id: string): number {
-        for (let i: number = 0; i < this._segments.length; i++) {
-            if (this._segments[i].id === id) {
-                return i;
-            }
-        }
-        return this._segments.length;
+        const index: number = this._segments.findIndex(segment => id === segment.id);
+        return index !== -1 ? index : this._segments.length;
     }
 
     _getNextIndex(): number {

@@ -54,12 +54,12 @@ export default class ItemBubble extends Bubble {
         const x: number = this.x + Bubble.MARGIN + 10 * this.game.scale;
 
         ctx.fillStyle = 'rgb(255,255,255)';
-        for (let i: number = 0; i < this._choices.length; i++) {
-            if (this._curChoice === i) {
+        this._choices.forEach((choice, index) => {
+            if (this._curChoice === index) {
                 this.game.drawArrow(this.x + Bubble.MARGIN, y);
             }
-            this.game.drawString(this._choices[i].displayName, x, y);
+            this.game.drawString(choice.displayName, x, y);
             y += 10 * this.game.scale;
-        }
+        });
     }
 }

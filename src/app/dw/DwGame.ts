@@ -245,7 +245,7 @@ export default class DwGame extends Game {
         this.newCol = newCol;
         this.audio.playSound('stairs');
         const updatePlayer: Function = () => {
-            this.hero.setMapLocation(-1, -1); // Free the location he was in in the map
+            this.hero.setMapLocation(-1, -1); // Free the location he was in the map
             this.setMap(mapName + '.json');
             this.hero.setMapLocation(newRow, newCol);
             this.hero.direction = typeof dir === 'undefined' ? Direction.SOUTH : dir;
@@ -279,9 +279,7 @@ export default class DwGame extends Game {
     }
 
     _resetMap(map: any) {
-        for (let i: number = 0; i < map.npcs.length; i++) {
-            map.npcs[ i ].reset();
-        }
+        map.npcs.forEach(npc => npc.reset());
     }
 
     setMap(assetName: string) {
@@ -445,10 +443,10 @@ export default class DwGame extends Game {
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
-        return this._getTalkAcrossKey(row, col);
+        return DwGame.getTalkAcrossKey(row, col);
     }
 
-    private _getTalkAcrossKey(row: number, col: number): string {
+    private static getTalkAcrossKey(row: number, col: number): string {
         return row + ',' + col;
     }
 
@@ -513,9 +511,11 @@ export default class DwGame extends Game {
         return null;
     }
 
-    getNpcHeroIsFacing(): Npc | null {
+    getNpcHeroIsFacing(): Npc | undefined {
+
         let row: number = this.hero.mapRow;
         let col: number = this.hero.mapCol;
+
         do {
             switch (this.hero.direction) {
                 case Direction.NORTH:
@@ -532,17 +532,12 @@ export default class DwGame extends Game {
                     break;
             }
         } while (this.getShouldTalkAcross(row, col));
-        for (let i: number = 0; i < this.map.npcs.length; i++) {
-            const npc: Npc = this.map.npcs[i];
-            if (npc.isAt(row, col)) {
-                return npc;
-            }
-        }
-        return null;
+
+        return this.map.npcs.find(npc => npc.isAt(row, col));
     }
 
     getShouldTalkAcross(row: number, col: number): boolean {
-        return this.map.talkAcrosses[ this._getTalkAcrossKey(row, col) ];
+        return this.map.talkAcrosses[ DwGame.getTalkAcrossKey(row, col) ];
     }
 
     getUsingTorch(): boolean {

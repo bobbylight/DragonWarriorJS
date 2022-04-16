@@ -72,7 +72,7 @@ export default class RoamingEntity {
 
     /**
      * If this entity is only allowed to walk around in a certain range, this
-     * method returns true iff the specified location is outside of that range.
+     * method returns true iff the specified location is outside that range.
      */
     _isOutOfRange(row: number, col: number) {
         if (this.range) {
