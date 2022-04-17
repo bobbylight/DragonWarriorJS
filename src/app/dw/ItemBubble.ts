@@ -18,7 +18,7 @@ export default class ItemBubble extends Bubble {
         const h: number = 100 * scale;
         const x: number = 9 * tileSize;
         const y: number = 3 * tileSize;
-        super(null, x, y, w, h);
+        super(undefined, x, y, w, h);
 
         this._choices = game.party.getInventory().getItems();
         this._curChoice = 0;

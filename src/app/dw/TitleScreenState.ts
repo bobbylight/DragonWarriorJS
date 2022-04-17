@@ -2,6 +2,7 @@ import { _BaseState } from './_BaseState';
 import { Delay, Image, InputManager } from 'gtp';
 import DwGame from './DwGame';
 import Sounds from './Sounds';
+import { InitialMenuState } from './InitialMenuState';
 
 export class TitleScreenState extends _BaseState {
 
@@ -28,7 +29,7 @@ export class TitleScreenState extends _BaseState {
 
     handleStart() {
         console.log('yee, touch detected!');
-        this._startGame();
+        this.loadNextState();
     }
 
     update(delta: number) {
@@ -41,8 +42,8 @@ export class TitleScreenState extends _BaseState {
         }
 
         const im: InputManager = this.game.inputManager;
-        if (im.enter()) {
-            this._startGame();
+        if (im.enter(true)) {
+            this.loadNextState();
         }
 
     }
@@ -81,7 +82,7 @@ export class TitleScreenState extends _BaseState {
         }
     }
 
-    _startGame() {
-        this.game.startNewGame();
+    private loadNextState() {
+        this.game.setState(new InitialMenuState());
     }
 }

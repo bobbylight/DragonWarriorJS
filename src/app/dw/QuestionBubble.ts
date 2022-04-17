@@ -14,7 +14,7 @@ export default class QuestionBubble extends Bubble {
       const y: number = tileSize;
       const width: number = tileSize * 5;
       const height: number = tileSize * 5;
-      super(null, x, y, width, height);
+      super(undefined, x, y, width, height);
 
       this._choices = choices;
       this._curChoice = 0;

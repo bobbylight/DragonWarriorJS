@@ -4,7 +4,7 @@ import { BitmapFont, Delay } from 'gtp';
 export default class Bubble {
 
     game: DwGame;
-    title: string | null;
+    title: string | undefined;
     x: number;
     y: number;
     w: number;
@@ -15,7 +15,7 @@ export default class Bubble {
 
     static readonly MARGIN: number = 10; // 5 * SCALE; TODO
 
-    constructor(title: string | null, x: number, y: number, w: number, h: number) {
+    constructor(title: string | undefined, x: number, y: number, w: number, h: number) {
 
         this.game = (window as any).game;
         this.title = title;

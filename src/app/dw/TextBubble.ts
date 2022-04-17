@@ -33,7 +33,7 @@ export default class TextBubble extends Bubble {
         const width: number = game.getWidth() - 2 * x;
         const height: number = game.getTileSize() * 5;
         const y: number = game.getHeight() - tileSize - height;
-        super(null, x, y, width, height);
+        super(undefined, x, y, width, height);
         this._doneCallbacks = [];
     }
 
