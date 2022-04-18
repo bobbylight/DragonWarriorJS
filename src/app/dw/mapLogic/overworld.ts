@@ -14,7 +14,7 @@ const talks: any = {
 
 };
 
-import AbstractMapLogic from '../AbstractMapLogic';
+import AbstractMapLogic from './AbstractMapLogic';
 
 export default class Overworld extends AbstractMapLogic {
 

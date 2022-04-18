@@ -1,5 +1,5 @@
 import DwGame from '../DwGame';
-import AbstractMapLogic from '../AbstractMapLogic';
+import AbstractMapLogic from './AbstractMapLogic';
 
 const talks: any = {
 

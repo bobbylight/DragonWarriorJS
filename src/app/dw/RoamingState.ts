@@ -11,7 +11,7 @@ import ItemBubble from './ItemBubble';
 import Item from './Item';
 import Npc from './Npc';
 import Hero from './Hero';
-import MapLogic from './MapLogic';
+import MapLogic from './mapLogic/MapLogic';
 
 const RoamingSubState: any = Object.freeze({
    ROAMING: 0,
@@ -365,7 +365,7 @@ export default class RoamingState extends _BaseState {
 
    talkToNpc() {
 
-      const logic: MapLogic | null = this.game.getMapLogic();
+      const logic: MapLogic | undefined = this.game.getMapLogic();
       if (!logic) {
          console.log('Error: No map logic found for this map!  Cannot talk to NPCs!');
          return;

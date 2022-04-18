@@ -32,13 +32,9 @@ import ErdricksCave2 from './mapLogic/erdricksCave2';
 import Garinham from './mapLogic/garinham';
 import Overworld from './mapLogic/overworld';
 import TantegelCastle from './mapLogic/tantegelCastle';
-import MapLogic from './MapLogic';
+import MapLogic from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
-
-interface MapLogicMap {
-    [ name: string ]: MapLogic;
-}
 
 export interface TiledMapMap {
     [ name: string ]: DwMap;
@@ -52,7 +48,7 @@ export default class DwGame extends Game {
     party: Party;
     npcs: Npc[];
     private _bumpSoundDelay: number;
-    private _mapLogics: MapLogicMap;
+    private _mapLogics: Map<String, MapLogic>;
     private _randomEncounters: boolean;
     private _torch: boolean;
     inside: boolean;
@@ -82,14 +78,13 @@ export default class DwGame extends Game {
         this._randomEncounters = true;
         this._torch = false;
 
-        this._mapLogics = {
-            'Brecconary': new Brecconary(),
-            'erdricksCave1': new ErdricksCave1(),
-            'erdricksCave2': new ErdricksCave2(),
-            'Garinham': new Garinham(),
-            'Overworld': new Overworld(),
-            'TantegelCastle': new TantegelCastle()
-        };
+        this._mapLogics = new Map<String, MapLogic>();
+        this._mapLogics.set('Brecconary', new Brecconary());
+        this._mapLogics.set('erdricksCave1', new ErdricksCave1());
+        this._mapLogics.set('erdricksCave2', new ErdricksCave2());
+        this._mapLogics.set('Garinham', new Garinham());
+        this._mapLogics.set('Overworld', new Overworld());
+        this._mapLogics.set('TantegelCastle', new TantegelCastle());
     }
 
     actionKeyPressed() {
@@ -200,11 +195,11 @@ export default class DwGame extends Game {
         return this.assets.get<any>('enemies')[ name ];
     }
 
-    getMapLogic(): MapLogic | null {
+    getMapLogic(): MapLogic | undefined {
         let logicFile: string = this.map.getProperty('logicFile');
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
-        return this._mapLogics[logicFile];
+        return this._mapLogics.get(logicFile);
     }
 
     getMapXOffs(): number {
@@ -248,7 +243,7 @@ export default class DwGame extends Game {
             this.hero.setMapLocation(-1, -1); // Free the location he was in the map
             this.setMap(mapName + '.json');
             this.hero.setMapLocation(newRow, newCol);
-            this.hero.direction = typeof dir === 'undefined' ? Direction.SOUTH : dir;
+            this.hero.direction = dir ?? Direction.SOUTH;
             this.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
         };
         this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
@@ -322,7 +317,7 @@ export default class DwGame extends Game {
         return map;
     }
 
-    private _adjustGameMap(map: any) {
+    private _adjustGameMap(map: DwMap) {
 
         let i: number;
         let npc: Npc;
@@ -391,7 +386,7 @@ export default class DwGame extends Game {
 
     }
 
-    private _parseDoor(obj: any): Door {
+    private _parseDoor(obj: TiledObject): Door {
         const name: string = obj.name;
         const replacementTileIndex: number =
             parseInt(getProperty(obj, 'replacementTileIndex'), 10);

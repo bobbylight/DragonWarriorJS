@@ -38,11 +38,11 @@ export class InitialMenuState extends _BaseState {
         return new ChoiceBubble(x, y, w, h, choices);
     }
 
-    private createSaveSelectBubble() {
+    private createSaveSelectBubble(): ChoiceBubble {
 
         if (this.saveSelectBubble) {
             this.saveSelectBubble.reset();
-            return;
+            return this.saveSelectBubble;
         }
 
         const game: DwGame = this.game;
@@ -55,7 +55,7 @@ export class InitialMenuState extends _BaseState {
         const choices: string[] = [
             'ADVENTURE LOG 1: Test',
         ];
-        this.saveSelectBubble = new ChoiceBubble(x,  y, w, h, choices, true);
+        return new ChoiceBubble(x,  y, w, h, choices, true);
     }
 
     enter(game: DwGame) {
@@ -80,8 +80,9 @@ export class InitialMenuState extends _BaseState {
                 if (this.menuBubble.handleInput()) {
                     const selection: number = this.menuBubble.getSelectedIndex();
                     if (0 === selection) { // Continue a game
+                        this.game.audio.playSound('menu');
                         this.substate = 'saveSelect';
-                        this.createSaveSelectBubble();
+                        this.saveSelectBubble = this.createSaveSelectBubble();
                     }
                     else { // Nothing else is implemented
                         this.game.audio.playSound('missed1');
@@ -98,6 +99,7 @@ export class InitialMenuState extends _BaseState {
                     }
                     else {
                         // For now there's only one selectable game
+                        this.game.audio.playSound('menu');
                         this.game.startNewGame();
                     }
                 }

@@ -34,7 +34,7 @@ Most of the data is in map files.
 The actual data files live in `src/tiled`.  There is one `.tmx` file per map
 in the game, including the overworld.  Please be sure to use the latest
 version of `Tiled` when editing these files, as the XML schema of the `.tmx`
-file format changes over time.  The game is currently being built using 1.2.4.
+file format changes over time.  The game is currently being built using 1.8.4.
 
 All maps follow the same conventions and structure.  Layers include:
 
@@ -78,13 +78,8 @@ All maps follow the same conventions and structure.  Layers include:
   randomly fight when stepping in it.  If this layer does not exist, no
   random battles occur in the map (e.g. in towns).
 
-The `.tmx` files in `src/tiled` are the raw map data, but whenever changes
-are made, the data is exported into JSON files in `src/res/maps`.  These JSON
-files are what the game actually loads.  Note that each Tiled map is configured
-to export tile data in CSV format, and that `Tiled` itself has the following
-options set:  "Embed Tilesets" and "Resolve object types and properties".  This
-allows the JSON files to be self-contained and contain relative paths to the
-actual images used for tiles.
+The Tiled project lives in `src/res/maps`. All data is stored in `.json` files
+instead of `.tmx` for simplicity.
 
 # Editing NPC Conversations
 NPC's as defined in `npcLayer` above have their conversations defined in "map

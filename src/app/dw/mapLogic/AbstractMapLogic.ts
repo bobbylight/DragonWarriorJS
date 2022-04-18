@@ -1,7 +1,10 @@
 import MapLogic from './MapLogic';
-import DwGame from './DwGame';
-import Npc from './Npc';
+import DwGame from '../DwGame';
+import Npc from '../Npc';
 
+/**
+ * A base class for map logics.
+ */
 export default class AbstractMapLogic implements MapLogic {
 
     protected readonly game: DwGame;
@@ -15,7 +18,7 @@ export default class AbstractMapLogic implements MapLogic {
     init() {
     }
 
-    npcText(npc: Npc) {
+    npcText(npc: Npc): string {
         console.log('Talking to: ' + JSON.stringify(npc.name));
         const data: any = this.conversationMap[npc.name];
         return data ? data.call(this, this.game) : 'I have nothing to say...';

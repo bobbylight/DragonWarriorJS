@@ -1,8 +1,10 @@
+import Npc from '../Npc';
+
 /**
  * Logic for an RPG map.  Handles things such as what an NPC should say.
+ * Implementations of this interface map one-to-one with Tiled maps, and
+ * represent everything the hero can do on that map.
  */
-import Npc from './Npc';
-
 export default interface MapLogic {
 
    /**

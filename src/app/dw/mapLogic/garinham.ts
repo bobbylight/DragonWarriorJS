@@ -1,7 +1,7 @@
 /**
  * Logic for Garinham.
  */
-import AbstractMapLogic from '../AbstractMapLogic';
+import AbstractMapLogic from './AbstractMapLogic';
 import DwGame from '../DwGame';
 
 const talks: any = {
