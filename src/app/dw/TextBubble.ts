@@ -257,9 +257,7 @@ export default class TextBubble extends Bubble {
 
     }
 
-    paintContent(ctx: CanvasRenderingContext2D, y: number): void {
-
-        const x: number = this.x + Bubble.MARGIN;
+    override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number): void {
 
         ctx.fillStyle = 'rgb(255,255,255)';
         if (this._lines) {

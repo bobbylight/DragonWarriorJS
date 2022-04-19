@@ -65,9 +65,7 @@ export default class ChoiceBubble<T> extends Bubble {
         return false;
     }
 
-    paintContent(ctx: CanvasRenderingContext2D, y: number) {
-
-        const x: number = this.x + Bubble.MARGIN + 10 * this.game.scale;
+    override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         ctx.fillStyle = 'rgb(255,255,255)';
         this.choices.forEach((choice, index) => {

@@ -68,10 +68,9 @@ export default class BattleCommandBubble extends Bubble {
 
     }
 
-    paintContent(ctx: CanvasRenderingContext2D, y: number) {
+    override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         const SCALE: number = this.game.scale;
-        let x: number = this.x + 20 * SCALE;
         let y0: number = y;
         const Y_INC: number = this.game.stringHeight() + 6 * SCALE;
 

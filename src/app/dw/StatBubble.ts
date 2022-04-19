@@ -32,13 +32,22 @@ export default class StatBubble extends Bubble {
 //         return digits * 10 * this.game.scale;
    }
 
+    /**
+     * This bubble is a little more space-constrained so its
+     * x-margin is smaller.
+     */
+   override getXMargin(): number {
+       const scale: number = this.game.scale;
+       // Inset + border width + inner spacing
+       return (1 + 2 + 2) * scale;
+   }
+
    handleInput() {
    }
 
-   paintContent(ctx: CanvasRenderingContext2D, y: number) {
+   override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
       const SCALE: number = this.game.scale;
-      const x: number = this.x + Bubble.MARGIN;
       const x2: number = this.x + this.w - Bubble.MARGIN;
       let y0: number = y;
       const Y_INC: number = this.game.stringHeight() + 7 * SCALE;

@@ -142,31 +142,16 @@ export default class Bubble {
             ctx.clip();
         }
 
-        const scale: number = this.game.scale;
-        const fontHeight: number = this.game.stringHeight();
-
         ctx.fillStyle = 'rgb(0,0,0)';
         ctx.fillRect(this.x, this.y, this.w, this.h);
-
-        // TODO: border via graphics
-        ctx.strokeStyle = this._getDefaultTextColor();
-        ctx.lineWidth = 2;
-        const doubleScale: number = 2 * scale;
-        ctx.strokeRect(this.x + doubleScale, this.y + doubleScale, this.w - 2 * doubleScale, this.h - 2 * doubleScale);
+        this.paintBorder(ctx);
 
         if (this.title) {
-            ctx.fillStyle = 'rgb(0,0,0)';
-            let stringW: number = this.game.stringWidth(this.title);
-            stringW += 4 * scale;
-            const x: number = this.x + Math.floor((this.w - stringW) / 2);
-            ctx.fillRect(x, this.y, stringW, fontHeight);
-
-            ctx.fillStyle = this._getDefaultTextColor();
-            this.game.drawString(this.title, x + 2 * scale, this.y);
+            this.paintTitle(ctx);
         }
 
         if (!this._isAnimating()) {
-            this.paintContent(ctx, this.y + this.getYMargin());
+            this.paintContent(ctx, this.x + this.getXMargin(), this.y + this.getYMargin());
         }
 
         if (this._animator) {
@@ -174,12 +159,88 @@ export default class Bubble {
         }
     }
 
+    private paintBorder(ctx: CanvasRenderingContext2D) {
+
+        ctx.fillStyle = 'rgb(255,255,255)';
+        const scale: number = this.game.scale;
+        const insets: number = scale;
+        const lineSize: number = 2 * scale;
+
+        // top
+        let x: number = this.x + insets + (lineSize / 2);
+        let y: number = this.y + insets;
+        ctx.fillRect(x, y, this.w - 2 * lineSize, lineSize);
+
+        // bottom
+        y = this.y + this.h - insets - lineSize;
+        ctx.fillRect(x, y, this.w - 2 * lineSize, lineSize);
+
+        // right
+        x = this.x + this.w - insets - lineSize;
+        y = this.y + lineSize;
+        ctx.fillRect(x, y, lineSize, this.h - 2 * lineSize);
+
+        // left
+        x = this.x + insets;
+        ctx.fillRect(x, y, lineSize, this.h - 2 * lineSize);
+
+        // Four dots in inner corners
+        ctx.fillRect(this.x + insets + lineSize, this.y + insets + lineSize,
+            scale, scale); // top-left
+        ctx.fillRect(this.x + this.w - insets - lineSize - scale, this.y + insets + lineSize,
+            scale, scale); // top-right
+        ctx.fillRect(this.x + this.w - insets - lineSize - scale, this.y + this.h - insets - lineSize - scale,
+            scale, scale); // bottom-right
+        ctx.fillRect(this.x + insets + lineSize, this.y + this.h - insets - lineSize - scale,
+            scale, scale); // bottom-left
+    }
+
+    /**
+     * Paints the content of this bubble. Subclasses should override.
+     *
+     * @param ctx The context to paint into.
+     * @param x The x-offset at which text should be painted. Selection arrows can be
+     *        to the left of this.
+     * @param y The y-offset at which to start painting.
+     */
+    paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
+        // Should be overridden
+    }
+
+    private paintTitle(ctx: CanvasRenderingContext2D) {
+
+        const scale: number = this.game.scale;
+        const fontHeight: number = this.game.stringHeight();
+
+        ctx.fillStyle = 'rgb(0,0,0)';
+        let stringW: number = this.game.stringWidth(this.title);
+        stringW += 4 * scale;
+        const x: number = this.x + Math.floor((this.w - stringW) / 2);
+        ctx.fillRect(x, this.y, stringW, fontHeight);
+
+        ctx.fillStyle = this._getDefaultTextColor();
+        this.game.drawString(this.title!, x + 2 * scale, this.y);
+    }
+
     getXMargin(): number {
-        return 8 * this.game.scale;
+
+        const scale: number = this.game.scale;
+
+        // Left inset + border thickness + 13 pixels of spacing
+        return (1 + 2) * scale + 13 * scale;
     }
 
     getYMargin(): number {
-        return this.title ? this.game.getTileSize() : (8 * this.game.scale);
+
+        if (this.title) {
+            return this.game.getTileSize();
+        }
+
+        const scale: number = this.game.scale;
+
+        // Top inset + border thickness + 5 pixels of spacing
+        return (1 + 2) * scale + (5 * scale);
+        //return this.title ? this.game.getTileSize() : (8 * this.game.scale);
     }
 
     _isAnimating(): boolean {
@@ -212,10 +273,6 @@ export default class Bubble {
      * @see update()
      */
     updateImpl(delta: number) {
-        // Should be overridden
-    }
-
-    paintContent(ctx: CanvasRenderingContext2D, y: number) {
         // Should be overridden
     }
 }
