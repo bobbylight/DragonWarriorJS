@@ -4,18 +4,21 @@ import { InputManager } from 'gtp';
 /**
  * A bubble that lets the user choose between several choices.
  */
-export default class ChoiceBubble extends Bubble {
+export default class ChoiceBubble<T> extends Bubble {
 
-    private choices: string[];
+    private readonly choices: T[];
+    private readonly choiceDisplayField?: string;
     private curChoice: number;
     private readonly cancellable: boolean;
 
     constructor(x: number, y: number, w: number, h: number,
-                choices: string[] = [],
+                choices: T[] = [],
+                choiceDisplayField?: string,
                 cancellable: boolean = false,
                 title: string | undefined = undefined) {
         super(title, x, y, w, h);
         this.choices = choices;
+        this.choiceDisplayField = choiceDisplayField;
         this.cancellable = cancellable;
         this.curChoice = 0;
     }
@@ -32,7 +35,7 @@ export default class ChoiceBubble extends Bubble {
      * Returns the item selected, or <code>undefined</code> if the user
      * cancelled this dialog.
      */
-    getSelectedItem(): string | undefined {
+    getSelectedItem(): T | undefined {
         return this.curChoice > -1 ? this.choices[this.curChoice] : undefined;
     }
 
@@ -41,7 +44,7 @@ export default class ChoiceBubble extends Bubble {
      *
      * @return Whether a choice was made.
      */
-    handleInput() {
+    handleInput(): boolean {
 
         const im: InputManager = this.game.inputManager;
 
@@ -71,13 +74,19 @@ export default class ChoiceBubble extends Bubble {
             if (this.curChoice === index) {
                 this.game.drawArrow(this.x + Bubble.MARGIN, y);
             }
-            this.game.drawString(choice, x, y);
+            this.game.drawString(this.stringify(choice), x, y);
             y += 18 * this.game.scale;
         });
-
     }
 
     reset() {
         this.curChoice = 0;
+    }
+
+    private stringify(choice: T): string {
+        if (this.choiceDisplayField) {
+            return choice[this.choiceDisplayField];
+        }
+        return choice as unknown as string;
     }
 }

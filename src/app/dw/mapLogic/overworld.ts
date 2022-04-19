@@ -1,11 +1,10 @@
-/**
- * Logic for the overworld.
- */
 import DwGame from '../DwGame';
+import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
+import { NpcText } from './MapLogic';
 
-const talks: any = {
+const talks: NpcTextGeneratorMap = {
 
-   npc: (game: DwGame) => {
+   npc: (game: DwGame): NpcText => {
       return [
          'I speak with... \\ddelays...',
          'Did you notice that?'
@@ -14,8 +13,9 @@ const talks: any = {
 
 };
 
-import AbstractMapLogic from './AbstractMapLogic';
-
+/**
+ * Logic for the overworld.
+ */
 export default class Overworld extends AbstractMapLogic {
 
    constructor() {

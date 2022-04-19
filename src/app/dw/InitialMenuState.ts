@@ -10,15 +10,15 @@ type Substate = 'mainMenu' | 'saveSelect';
  */
 export class InitialMenuState extends _BaseState {
 
-    private menuBubble: ChoiceBubble;
-    private saveSelectBubble: ChoiceBubble | undefined;
+    private menuBubble: ChoiceBubble<string>;
+    private saveSelectBubble: ChoiceBubble<string> | undefined;
     private substate: Substate;
 
     constructor(args?: any) {
         super(args);
     }
 
-    private createMenuBubble(): ChoiceBubble {
+    private createMenuBubble(): ChoiceBubble<string> {
 
         const game: DwGame = this.game;
         const tileSize: number = game.getTileSize();
@@ -38,7 +38,7 @@ export class InitialMenuState extends _BaseState {
         return new ChoiceBubble(x, y, w, h, choices);
     }
 
-    private createSaveSelectBubble(): ChoiceBubble {
+    private createSaveSelectBubble(): ChoiceBubble<string> {
 
         if (this.saveSelectBubble) {
             this.saveSelectBubble.reset();
@@ -55,7 +55,7 @@ export class InitialMenuState extends _BaseState {
         const choices: string[] = [
             'ADVENTURE LOG 1: Test',
         ];
-        return new ChoiceBubble(x,  y, w, h, choices, true);
+        return new ChoiceBubble(x,  y, w, h, choices, undefined, true);
     }
 
     enter(game: DwGame) {

@@ -2,25 +2,71 @@ import { Utils } from 'gtp';
 import DwGame from './DwGame';
 import Conversation from './Conversation';
 
-export default class ConversationSegment {
+/**
+ * Some conversations provide the user with a list of choices. These choices are
+ * either static strings, or strings that map you to a specific step in the conversation
+ * if they are selected. The former is typically used in shops, whereas the latter
+ * is typically used in complex conversations where the user's choices dictate the
+ * flow of the conversation.
+ */
+export type ConversationSegmentArgsChoice = string | ConversationSegmentArgsChoiceWithNextStep;
+
+export interface ConversationSegmentArgsChoiceWithNextStep {
+    text: string;
+    next: string | (() => string);
+}
+
+/**
+ * For NPC chats more complex than static strings, this interface represents
+ * the data that defines all possibilities.
+ */
+export interface ConversationSegmentArgs {
+    action?: () => void;
+    afterSound?: string;/*SoundEffect*/
+    choices?: ConversationSegmentArgsChoice[];
+    clear?: boolean;
+    conversationType?: 'merchant' | 'innkeeper';
+    cost?: number;
+    id?: string;
+    introText?: string;
+    music?: string;
+    next?: string;
+    overnight?: boolean;
+    shopping?: {
+        choices: string[];
+    }
+    sound?: string;/*SoundEffect*/
+    text?: string;
+}
+
+export default class ConversationSegment implements ConversationSegmentArgs {
 
    private readonly game: DwGame;
    parentConversation: Conversation;
-   action: any | null;
-   next: string | null;
-   id: string | null;
-   overnight: boolean | null;
-   clear: boolean | null;
-   private readonly text: string;
 
-   constructor(parentConversation: Conversation, args: any) {
+   action?: () => void;
+   afterSound?: string;/*SoundEffect*/
+   choices?: ConversationSegmentArgsChoice[];
+   clear?: boolean;
+   id?: string;
+   introText?: string;
+   music?: string;
+   next?: string;
+   overnight?: boolean;
+   shopping?: {
+      choices: string[];
+   }
+   sound?: string;/*SoundEffect*/
+   readonly text: string;
+
+   constructor(parentConversation: Conversation, args: ConversationSegmentArgs) {
 
       this.parentConversation = parentConversation;
       this.game = (window as any).game;
       Utils.mixin(args, this);
    }
 
-   _getParameterizedText() {
+   private getParameterizedText(): string {
 
       let text: string = this.text;
 
@@ -55,7 +101,7 @@ export default class ConversationSegment {
       return text;
    }
 
-   currentText() {
-      return this._getParameterizedText();
+   currentText(): string {
+      return this.getParameterizedText();
    }
 }

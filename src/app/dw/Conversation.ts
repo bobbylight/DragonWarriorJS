@@ -1,7 +1,9 @@
-import ConversationSegment from './ConversationSegment';
+import ConversationSegment, { ConversationSegmentArgs } from './ConversationSegment';
 import merchantConversationTemplate from './MerchantConversationTemplate';
 import innkeeperConversationTemplate from './InnkeeperConversationTemplate';
 import Item from './Item';
+import { NpcText } from './mapLogic/MapLogic';
+import DwGame from './DwGame';
 
 export default class Conversation {
 
@@ -31,9 +33,9 @@ export default class Conversation {
      * @param atCurIndex Whether to insert at the current index,
      *        as opposed to the end of the conversation.
      */
-    addSegment(segmentArgs: any, atCurIndex: boolean = false) {
-        if (segmentArgs.length) { // A string
-            segmentArgs = {text: segmentArgs};
+    addSegment(segmentArgs: string | ConversationSegmentArgs, atCurIndex: boolean = false) {
+        if (typeof segmentArgs === 'string') {
+            segmentArgs = { text: segmentArgs };
         }
         const segment: ConversationSegment = new ConversationSegment(this, segmentArgs);
         if (atCurIndex) {
@@ -49,33 +51,32 @@ export default class Conversation {
      * @param segmentArgs Either a single segment argument map, or
      *        an array of them.
      */
-    setSegments(segmentArgs: any) {
-        if (segmentArgs.conversationType) { // A dw.Conversation object
+    setSegments(segmentArgs: NpcText) {
+
+        const game: DwGame = (window as any).game;
+
+        // One of our special templated conversation types. Note our if-check here
+        // is a little more verbose than necessary just to appease tsc.
+        if (typeof segmentArgs !== 'string' && 'conversationType' in segmentArgs) {
             switch (segmentArgs.conversationType) {
                 case 'merchant':
-                    if (!segmentArgs.choices) {
-                        throw 'No choices specified in conversation: ' + JSON.stringify(segmentArgs);
-                    }
                     // Add the standard segments for a merchant.
                     // TODO: Allow user-defined segments to override these.
-                    this.setSegments(merchantConversationTemplate(this, segmentArgs));
+                    this.setSegments(merchantConversationTemplate(game, this, segmentArgs));
                     break;
                 case 'innkeeper':
-                    if (!segmentArgs.cost) {
-                        throw 'No cost for the inn specified in conversation: ' + JSON.stringify(segmentArgs);
-                    }
                     // Add the standard segments for an innkeeper.
                     // TODO: Allow user-defined segments to override these.
-                    this.setSegments(innkeeperConversationTemplate(this, segmentArgs));
+                    this.setSegments(innkeeperConversationTemplate(game, segmentArgs));
                     break;
                 default:
                     throw 'Unknown conversation type: ' + segmentArgs.conversationType;
             }
         } else if (Array.isArray(segmentArgs)) {
-            segmentArgs.forEach((args: any) => {
+            segmentArgs.forEach((args: string | ConversationSegmentArgs) => {
                 this.addSegment(args);
             });
-        } else {
+        } else { // A (string | ConversationSegmentArgs) that isn't merchant/innkeeper
             this.addSegment(segmentArgs);
         }
     }
@@ -90,7 +91,7 @@ export default class Conversation {
         return index !== -1 ? index : this._segments.length;
     }
 
-    _getNextIndex(): number {
+    private getNextIndex(): number {
         const current: ConversationSegment | null = this.current();
         if (!current) { // Already done
             return this._segments.length;
@@ -105,7 +106,7 @@ export default class Conversation {
     }
 
     hasNext(): boolean {
-        return this._getNextIndex() < this._segments.length;
+        return this.getNextIndex() < this._segments.length;
     }
 
     current(performAction: boolean = false): ConversationSegment | null {
@@ -118,7 +119,7 @@ export default class Conversation {
     }
 
     next(performAction: boolean): ConversationSegment | null {
-        const nextIndex: number = this._getNextIndex();
+        const nextIndex: number = this.getNextIndex();
         if (nextIndex < this._segments.length) {
             this._segmentIndex = nextIndex;
             const segment: ConversationSegment | null = this._segments[this._segmentIndex];
@@ -131,7 +132,7 @@ export default class Conversation {
     }
 
     peekNext(): ConversationSegment | null {
-        const nextIndex: number = this._getNextIndex();
+        const nextIndex: number = this.getNextIndex();
         if (nextIndex < this._segments.length) {
             return this._segments[nextIndex];
         }

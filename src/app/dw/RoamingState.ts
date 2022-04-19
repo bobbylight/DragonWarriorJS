@@ -379,7 +379,7 @@ export default class RoamingState extends _BaseState {
          //var newNpcDir = this.getHero().direction.opposite();
          const newNpcDir: number = (hero.direction + 2) % 4;
          npc.direction = newNpcDir;
-         conversation.setSegments(logic.npcText(npc));
+         conversation.setSegments(logic.npcText(npc, this.game));
       } else {
          conversation.addSegment('There is nobody in that direction!');
       }

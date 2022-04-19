@@ -1,4 +1,6 @@
 import Npc from '../Npc';
+import DwGame from '../DwGame';
+import { ConversationSegmentArgs } from '../ConversationSegment';
 
 /**
  * Logic for an RPG map.  Handles things such as what an NPC should say.
@@ -14,9 +16,18 @@ export default interface MapLogic {
    init();
 
    /**
-    * Returns the text for a specific NPC to say.
+    * Returns the conversation flow when talking to a particular NPC.
     *
     * @param npc The NPC.
+    * @param game The game being played.
     */
-   npcText(npc: Npc): string;
+   npcText(npc: Npc, game: DwGame): NpcText;
 }
+
+/**
+ * This defines the conversation with an NPC. In the simplest case, it is a
+ * static string or array of strings. Alternatively, it can be a complex
+ * conversation, with logic and different results depending on things such
+ * as user choices.
+ */
+export type NpcText = string | ConversationSegmentArgs | (string | ConversationSegmentArgs)[];

@@ -27,7 +27,7 @@ export default class ShoppingBubble extends Bubble {
     * Returns whether the user is "done" talking; that is, whether the entire
     * conversation has been rendered (including multiple pages, if necessary).
     */
-   handleInput() {
+   handleInput(): boolean {
 
       const im: InputManager = this.game.inputManager;
 

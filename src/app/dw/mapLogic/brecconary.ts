@@ -1,26 +1,27 @@
 import DwGame from '../DwGame';
-import AbstractMapLogic from './AbstractMapLogic';
+import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
+import { NpcText } from './MapLogic';
 
-const talks: any = {
+const talks: NpcTextGeneratorMap = {
 
-   greeter: (game: DwGame) => {
+   greeter: (game: DwGame): NpcText => {
       return 'Thou art most welcome in Brecconary.';
    },
 
-   oldman1: (game: DwGame) => {
+   oldman1: (game: DwGame): NpcText => {
       return 'Watch thy Hit Points when in the Poisonous Marsh.';
    },
 
-   woman_at_shop: (game: DwGame) => {
+   woman_at_shop: (game: DwGame): NpcText => {
       return 'Welcome!\nEnter the shop and speak to its keeper across the desk.';
    },
 
-   soldier1: (game: DwGame) => {
+   soldier1: (game: DwGame): NpcText => {
       return [ 'Many have been the warriors who have perished on this quest.',
          'But for thee I wish success, \\w{hero.name}.' ];
    },
 
-   oldman_test: (game: DwGame) => {
+   oldman_test: (game: DwGame): NpcText => {
 
       if (game.hero.getStrength() < 100) {
          return [
@@ -51,14 +52,14 @@ const talks: any = {
       }
    },
 
-   innkeeper: (game: DwGame) => {
+   innkeeper: (game: DwGame): NpcText => {
       return {
          conversationType: 'innkeeper',
          cost: 6
       };
    },
 
-   merchant1: (game: DwGame) => {
+   merchant1: (game: DwGame): NpcText => {
       return {
          conversationType: 'merchant',
          choices: [ 'bambooPole', 'club', 'copperSword' ],
@@ -66,7 +67,7 @@ const talks: any = {
       };
    },
 
-   itemMerchant: (game: DwGame) => {
+   itemMerchant: (game: DwGame): NpcText => {
       return {
          conversationType: 'merchant',
          choices: [ 'bambooPole', 'club', 'copperSword' ],

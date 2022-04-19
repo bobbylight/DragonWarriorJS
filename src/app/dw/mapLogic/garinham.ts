@@ -1,12 +1,10 @@
-/**
- * Logic for Garinham.
- */
-import AbstractMapLogic from './AbstractMapLogic';
+import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
 import DwGame from '../DwGame';
+import { NpcText } from './MapLogic';
 
-const talks: any = {
+const talks: NpcTextGeneratorMap = {
 
-    merchant1: (game: DwGame) => {
+    merchant1: (game: DwGame): NpcText => {
         return {
             conversationType: 'merchant',
             choices: [ 'bambooPole', 'club', 'copperSword' ],
@@ -15,6 +13,9 @@ const talks: any = {
     },
 };
 
+/**
+ * Logic for Garinham.
+ */
 export default class Garinham extends AbstractMapLogic {
 
    constructor() {
