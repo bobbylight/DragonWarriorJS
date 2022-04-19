@@ -83,24 +83,29 @@ instead of `.tmx` for simplicity.
 
 # Editing NPC Conversations
 NPC's as defined in `npcLayer` above have their conversations defined in "map
-logic" files that live in `src/app/dw/mapLogic`.  There is one map logic file
-per map.  They all follow the same pattern.  Essentially, an object maps each
-`npc`'s `name` property to a function that returns the conversation for that
-NPC.  The function is called each time the hero talks to the NPC, and its return
-value can be one of the following:
+logic" files that live in
+[src/app/dw/mapLogic](src/app/dw/mapLogic).
+There is one map logic file per map.  They all follow the same pattern.  Essentially, an object maps
+each `npc`'s `name` property to a generator function that returns the
+[NpcText](src/app/dw/mapLogic/MapLogic.ts#L33)
+(i.e., the conversation that NPC will have with the hero) for that NPC. This function is passed the
+`game` instance so that it can dynamically return different values depending on how far along the
+player is.
 
-* A string, in which case the NPC always says the same thing
+The `NpcText` itself can be simple or complex, depending on how complex the NPC's conversation
+with the hero should be. Essentially, it can be:
+
+* A string, in which case the NPC says just that. This is the simple case
 * An array of strings, in which case each string is rendered, but the user
   has to press a key to advance the conversation between each string
 * An array containing a mixture of strings and
-  [ConversationSegments](src/app/dw/ConversationSegment.ts), which allow for
+  [ConversationSegmentArgs](src/app/dw/ConversationSegment.ts#L23), which allow for
   logic in a conversation (question/answer, give/take money, etc.).  This type
   of conversation data is not well doc'd yet and is best observed by example
-  in the source (note I don't think the type definitions are quite right yet
-  either).
-* An object representing a "special" conversation type, as described by the
-  `conversationType` property.  This property must currently be set to either
-  `innkeeper` or `merchant`.  This type of conversation is essentially a
-  configurable template for these common types of conversations.  Again, this is
-  not currently well documented and is best learned by looking at the examples
-  in the source code.
+  in the source. It's essentially a grab-bag of optional fields that are each
+  used in certain conditions.
+  * Note that `ConversationSegmentArgs` can denote a "special" conversation type,
+    as described by the `conversationType` property.  If this property is defined, it
+    must currently be set to either `innkeeper` or `merchant`. In these cases, the
+    logic for staying at an inn or purchasing items is automatically applied.
+
