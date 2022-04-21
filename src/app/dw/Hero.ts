@@ -20,10 +20,9 @@ export default class Hero extends PartyMember {
      */
     handleIntersectedObject(obj: TiledObject) {
         if ('warp' === obj.type) {
-            // TODO: Can we update gtp to avoid needing these non-null assertions?
-            const newRow: number = parseInt(obj.propertiesByName.get('row')!.value, 10);
-            const newCol: number = parseInt(obj.propertiesByName.get('col')!.value, 10);
-            const newDir: number = Direction.fromString(obj.propertiesByName['dir']);
+            const newRow: number = parseInt(getProperty(obj, 'row'), 10);
+            const newCol: number = parseInt(getProperty(obj, 'col'), 10);
+            const newDir: number = Direction.fromString(getProperty(obj, 'dir', 'SOUTH'));
             this.game.loadMap(getProperty(obj, 'map'), newRow, newCol, newDir);
         } else if ('insideOutside' === obj.type) {
             this.game.setInsideOutside(getProperty(obj, 'inside') === 'true');

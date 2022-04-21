@@ -5,9 +5,7 @@ export default class Direction {
     static readonly SOUTH: number = 2;
     static readonly WEST: number = 3;
 
-    static fromString(str: string | null = 'SOUTH'): number {
-
-        str = str || 'SOUTH'; // Default value still needed here for null
+    static fromString(str: string = 'SOUTH'): number {
 
         switch (str.toUpperCase()) {
             case 'NORTH':
