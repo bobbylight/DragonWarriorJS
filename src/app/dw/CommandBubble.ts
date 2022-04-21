@@ -5,80 +5,125 @@ import { InputManager } from 'gtp';
 
 export default class CommandBubble extends Bubble {
 
-    selection: number;
+    private readonly choices: string[];
+    private readonly yInc;
+    private selection: number;
 
     constructor() {
 
         const game: DwGame = (window as any).game;
-
         const scale: number = game.scale;
+        const yInc: number = game.stringHeight() + 7 * scale;
+
         const tileSize: number = game.getTileSize();
         const w: number = 140 * scale;
-        const h: number = 90 * scale;
+        let h: number = 90 * scale;
+        if (game.getCheatsEnabled()) {
+            h += yInc;
+        }
         const x: number = game.getWidth() - tileSize - w;
         const y: number = tileSize;
         super('COMMAND', x, y, w, h);
         this.selection = 0;
+        this.yInc = yInc;
+
+        this.choices = CommandBubble.createChoices(game);
+    }
+
+    private static createChoices(game: DwGame): string[] {
+
+        const choices: string[] = [
+            'TALK',
+            'STATUS',
+            'STAIRS',
+            'SEARCH',
+            'SPELL',
+            'ITEM',
+            'DOOR',
+            'TAKE',
+        ];
+
+        if (game.getCheatsEnabled()) {
+            choices.splice(choices.length / 2, 0, 'WARP*');
+            choices.push('EQUIP*');
+        }
+
+        return choices;
+    }
+
+    private getRowCount(): number {
+        return this.choices.length / 2;
     }
 
     handleCommandChosen(screen: RoamingState) {
 
-        switch (this.selection) {
+        // If the user canceled, close the dialog
+        if (this.selection === -1) {
+            screen.startRoaming();
+            return;
+        }
 
-            case -1: // Canceled
-                screen.startRoaming();
-                break;
+        switch (this.choices[this.selection]) {
 
-            case 0: // TALK
+            case 'TALK':
                 screen.talkToNpc();
                 break;
 
-            case 1: // STATUS
+            case 'STATUS':
                 screen.showStatus();
                 break;
 
-            case 2: // STAIRS
+            case 'STAIRS':
                 screen.takeStairs();
                 break;
 
-            case 3: // SEARCH
+            case 'SEARCH':
                 screen.search();
                 break;
 
-            case 4: // SPELL
+            case 'WARP*':
+                screen.showWarpBubble();
+                break;
+
+            case 'SPELL':
                 screen.showSpellList();
                 break;
 
-            case 5: // ITEM
+            case 'ITEM':
                 screen.showInventory();
                 break;
 
-            case 6: // DOOR
+            case 'DOOR':
                 screen.openDoor();
                 break;
 
-            case 7: // TAKE
+            case 'TAKE':
+                break;
+
+            case 'EQUIP*':
                 break;
 
         }
 
     }
 
-    handleInput() {
+    handleInput(): boolean {
 
         const im: InputManager = this.game.inputManager;
+
+        const rowCount: number = this.getRowCount();
 
         if (im.up(true)) {
             this.selection = this.selection - 1;
             if (this.selection < 0) {
-                this.selection = 7;
+                this.selection = rowCount * 2 - 1;
             }
         } else if (im.down(true)) {
-            this.selection = Math.floor((this.selection + 1) % 8);
-        } else if (this.selection > 3 && im.left(true)) {
-            this.selection -= 4;
-        } else if (this.selection < 4 && im.right(true)) {
-            this.selection += 4;
+            this.selection = Math.floor((this.selection + 1) % (rowCount * 2));
+        } else if (this.selection >= rowCount && im.left(true)) {
+            this.selection -= rowCount;
+        } else if (this.selection < rowCount && im.right(true)) {
+            this.selection += rowCount;
         } else if (this.game.cancelKeyPressed()) {
             this.selection = -1;
             return true;
@@ -95,36 +140,28 @@ export default class CommandBubble extends Bubble {
 
         const SCALE: number = this.game.scale;
         let y0: number = y;
-        const Y_INC: number = this.game.stringHeight() + 7 * SCALE;
 
-        this.game.drawString('TALK', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('STATUS', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('STAIRS', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('SEARCH', x, y0);
-        y0 += Y_INC;
+        // Draw the choices in 2 columns
+        const rowCount: number = this.getRowCount();
+        this.choices.forEach((choice, index) => {
+            this.game.drawString(choice, x, y0);
+            if (index !== rowCount - 1) {
+                y0 += this.yInc;
+            }
+            else {
+                x += 70 * SCALE;
+                y0 -= (rowCount - 1) * this.yInc;
+            }
+        });
 
-        x += 70 * SCALE;
-        y0 -= 4 * Y_INC;
-        this.game.drawString('SPELL', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('ITEM', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('DOOR', x, y0);
-        y0 += Y_INC;
-        this.game.drawString('TAKE', x, y0);
-        y0 += Y_INC;
-
-        if (this.selection < 4) {
+        // Draw the arrow beside the active item
+        if (this.selection < rowCount) {
             x -= 70 * SCALE;
         }
         x -= this.game.stringWidth('>') + 2 * SCALE;
-        y0 = y + Y_INC * (this.selection % 4);
+        y0 = y + this.yInc * (this.selection % rowCount);
 
-        this.game.drawArrow(x, y0); // DEL, but we use for our arrow
-
+        this.game.drawArrow(x, y0);
     }
 
     reset() {

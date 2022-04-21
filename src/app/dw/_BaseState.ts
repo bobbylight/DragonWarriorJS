@@ -1,5 +1,4 @@
 import { BaseStateArgs, ImageUtils, InputManager, Keys, State } from 'gtp';
-import Direction from './Direction';
 import DwGame from './DwGame';
 
 /**
@@ -26,11 +25,6 @@ export class _BaseState extends State<DwGame> {
         const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
         this.render(ctx);
         return canvas;
-    }
-
-    _warpTo(mapName: string, row: number, col: number, desc: string, dir: number = Direction.SOUTH) {
-        this.game.loadMap(mapName, row, col, dir);
-        this.game.setStatusMessage(`Warping to ${desc}...`);
     }
 
     private static handleCanvasResizingKeys(im: InputManager, canvas: HTMLCanvasElement, game: DwGame): boolean {
@@ -85,10 +79,6 @@ export class _BaseState extends State<DwGame> {
             return;
         }
 
-        if (this.handleWarpKeys(im)) {
-            return;
-        }
-
         // Audio stuff
         if (im.isKeyDown(Keys.KEY_M, true)) {
             game.toggleMuted();
@@ -130,30 +120,5 @@ export class _BaseState extends State<DwGame> {
         } else if (im.isKeyDown(Keys.KEY_E, true)) {
             game.toggleRandomEncounters();
         }
-    }
-
-    private handleWarpKeys(im: InputManager): boolean {
-
-        if (im.isKeyDown(Keys.KEY_1, true)) {
-            this._warpTo('brecconary', 15, 2, 'Brecconary', Direction.EAST);
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_2, true)) {
-            this._warpTo('tantegelCastle', 15, 7, 'Tantegel Castle', Direction.WEST);
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_3, true)) {
-            this._warpTo('tantegelCastle', 51, 11, 'the King at Tantegel Castle', Direction.WEST);
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_4, true)) {
-            this._warpTo('erdricksCave1', 1, 1, 'Erdrick\'s Cave');
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_5, true)) {
-            this._warpTo('overworld', 51, 41, 'Outside Tantegel Castle');
-            return true;
-        } else if (im.isKeyDown(Keys.KEY_6, true)) {
-            this._warpTo('garinham', 14, 1, 'Garinham');
-            return true;
-        }
-
-        return false;
     }
 }

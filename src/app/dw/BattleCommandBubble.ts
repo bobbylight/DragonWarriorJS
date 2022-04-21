@@ -92,7 +92,7 @@ export default class BattleCommandBubble extends Bubble {
         x -= this.game.stringWidth('>') + 2 * SCALE;
         y0 = y + Y_INC * (this.selection % 2);
 
-        this.game.drawArrow(x, y0); // DEL, but we use for our arrow
+        this.game.drawArrow(x, y0);
 
     }
 

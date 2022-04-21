@@ -12,12 +12,16 @@ import Item from './Item';
 import Npc from './Npc';
 import Hero from './Hero';
 import MapLogic from './mapLogic/MapLogic';
+import Cheats from './Cheats';
+import Direction from './Direction';
+import ChoiceBubble from './ChoiceBubble';
 
 const RoamingSubState: any = Object.freeze({
    ROAMING: 0,
    MENU: 1,
    TALKING: 2,
-   OVERNIGHT: 3
+   OVERNIGHT: 3,
+   WARP_SELECTION: 4,
 });
 
 export default class RoamingState extends _BaseState {
@@ -26,6 +30,7 @@ export default class RoamingState extends _BaseState {
    private readonly _statBubble: StatBubble;
    private _statusBubble?: StatusBubble;
    private _itemBubble?: ItemBubble;
+   private warpBubble?: ChoiceBubble<string>;
    private readonly _stationaryTimer: Delay;
    private _overnightDelay?: Delay;
    private readonly _updateMethods: any;
@@ -55,6 +60,7 @@ export default class RoamingState extends _BaseState {
       this._updateMethods[RoamingSubState.MENU] = this.updateMenu;
       this._updateMethods[RoamingSubState.TALKING] = this.updateTalking;
       this._updateMethods[RoamingSubState.OVERNIGHT] = this.updateOvernight;
+      this._updateMethods[RoamingSubState.WARP_SELECTION] = this.updateWarpSelection;
 
       this._textBubble = new TextBubble(this.game);
       this._showTextBubble = false;
@@ -216,6 +222,28 @@ export default class RoamingState extends _BaseState {
       }
    }
 
+   private updateWarpSelection(delta: number) {
+
+       // Do check here to appease tsc of warpBubble being defined
+       if (!this.warpBubble) {
+           this.warpBubble = Cheats.createWarpBubble(this.game);
+       }
+
+       this.warpBubble.update(delta);
+       if (this.warpBubble.handleInput()) {
+           const warpTo: string | undefined = this.warpBubble.getSelectedItem();
+           this.warpBubble = undefined;
+           if (warpTo) {
+               this.warpTo(warpTo); // TODO: Make me cleaner
+               this.setSubstate(RoamingSubState.ROAMING);
+           }
+           else {
+               this.setSubstate(RoamingSubState.MENU);
+           }
+           this.warpBubble = undefined;
+       }
+   }
+
    private overnightOver() {
       this.game.audio.playMusic(Sounds.MUSIC_TOWN);
       delete this._overnightDelay;
@@ -269,7 +297,7 @@ export default class RoamingState extends _BaseState {
          ctx.restore();
       }
 
-      if (this._substate === RoamingSubState.MENU) {
+      if (this._substate === RoamingSubState.MENU || this._substate === RoamingSubState.WARP_SELECTION) {
          this._commandBubble.paint(ctx);
       }
 
@@ -285,6 +313,9 @@ export default class RoamingState extends _BaseState {
       }
       if (this._itemBubble) {
          this._itemBubble.paint(ctx);
+      }
+      if (this.warpBubble) {
+         this.warpBubble.paint(ctx);
       }
 
       if (this._overnightDelay) {
@@ -356,6 +387,10 @@ export default class RoamingState extends _BaseState {
       this._statusBubble = new StatusBubble(this.game);
    }
 
+   showWarpBubble() {
+       this.setSubstate(RoamingSubState.WARP_SELECTION);
+   }
+
    startRoaming() {
       this.game.setNpcsPaused(false);
       this._showTextBubble = false;
@@ -386,5 +421,28 @@ export default class RoamingState extends _BaseState {
       this._showTextBubble = true;
       this._textBubble.setConversation(conversation);
       this.setSubstate(RoamingSubState.TALKING);
+   }
+
+   warpTo(location: string) {
+
+       this.setSubstate(RoamingSubState.ROAMING);
+
+       switch (location) {
+           case 'Brecconary':
+               Cheats.warpTo(this.game, 'brecconary', 15, 2, 'Brecconary', Direction.EAST);
+               break;
+           case 'Tantegel (1st floor)':
+               Cheats.warpTo(this.game, 'tantegelCastle', 15, 7, 'Tantegel Castle', Direction.WEST);
+               break;
+           case 'Tantegel (throne room)':
+               Cheats.warpTo(this.game, 'tantegelCastle', 51, 11, 'the King at Tantegel Castle', Direction.WEST);
+               break;
+           case 'Garinham':
+               Cheats.warpTo(this.game, 'garinham', 14, 1, 'Garinham');
+               break;
+           case 'Erdrick\'s Cave':
+               Cheats.warpTo(this.game, 'erdricksCave1', 1, 1, 'Erdrick\'s Cave');
+               break;
+       }
    }
 }

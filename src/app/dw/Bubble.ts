@@ -109,7 +109,7 @@ export default class Bubble {
         //}
     }
 
-    _getDefaultTextColor() {
+    _getDefaultTextColor(): string {
         return this.game.hero.isDead() ? 'rgb(255, 0, 0)' : 'rgb(255, 255, 255)';
     }
 

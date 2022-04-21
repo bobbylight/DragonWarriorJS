@@ -160,7 +160,7 @@ export default class DwGame extends Game {
     }
 
     drawArrow(x: number, y: number) {
-        this.drawString('\u007f', x, y);
+        this.drawString('\u007f', x, y); // DEL, but we use for our arrow
     }
 
     drawDownArrow(x: number, y: number) {
@@ -545,6 +545,10 @@ export default class DwGame extends Game {
 
     getArmor(armor: string): Armor {
         return this.assets.get<any>('armors')[ armor ];
+    }
+
+    getCheatsEnabled(): boolean {
+        return true;
     }
 
     getShield(shield: string): Shield {
