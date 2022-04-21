@@ -144,20 +144,8 @@ export default class PartyMember extends RoamingEntity {
     }
 
     handlePostMove() {
-
-        // See if we're supposed to warp to another map
-        const warpLayer: TiledLayer = this.game.map.getLayer('warpLayer');
-        const tileSize: number = this.game.getTileSize();
-        const x: number = this.mapCol * tileSize;
-        const y: number = this.mapRow * tileSize;
-
-        const obj: TiledObject | undefined = warpLayer.getObjectIntersecting(x, y, tileSize, tileSize);
-        if (obj) {
-            this.handleIntersectedObject(obj);
-        }
-
-        // See if we should fight a monster
-        else {
+        // If we didn't e.g. move to another map, see if we should fight a monster
+        if (!this.possiblyHandleIntersectedObject()) {
             this._possiblyStartRandomEncounter();
         }
     }
@@ -179,6 +167,29 @@ export default class PartyMember extends RoamingEntity {
 
     isDead(): boolean {
         return this.hp <= 0;
+    }
+
+    /**
+     * Verifies whether the party member is intersecting an object in the Tiled
+     * map, and if so, handles that intersection.
+     *
+     * @return Whether an object was intersected.
+     */
+    possiblyHandleIntersectedObject(): boolean {
+
+        // See if we're supposed to warp to another map
+        const warpLayer: TiledLayer = this.game.map.getLayer('warpLayer');
+        const tileSize: number = this.game.getTileSize();
+        const x: number = this.mapCol * tileSize;
+        const y: number = this.mapRow * tileSize;
+
+        const obj: TiledObject | undefined = warpLayer.getObjectIntersecting(x, y, tileSize, tileSize);
+        if (obj) {
+            this.handleIntersectedObject(obj);
+            return true;
+        }
+
+        return false;
     }
 
     _possiblyStartRandomEncounter() {

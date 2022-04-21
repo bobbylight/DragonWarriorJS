@@ -71,7 +71,12 @@ export default class RoamingState extends _BaseState {
    }
 
    takeStairs() {
-       this.showOneLineConversation('There are no stairs here.');
+       if (this.game.hero.possiblyHandleIntersectedObject()) {
+           this.setSubstate(RoamingSubState.ROAMING);
+       }
+       else {
+           this.showOneLineConversation('There are no stairs here.');
+       }
    }
 
    update(delta: number) {
