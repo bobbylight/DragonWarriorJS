@@ -54,12 +54,15 @@ export default class ChoiceBubble<T> extends Bubble {
                 return true;
             }
             this.curChoice = 0;
+            this.resetArrowTimer();
         } else if (this.game.actionKeyPressed()) {
             return true;
         } else if (im.up(true)) {
             this.curChoice = Math.max(0, this.curChoice - 1);
+            this.resetArrowTimer();
         } else if (im.down(true)) {
             this.curChoice = Math.min(this.curChoice + 1, this.choices.length - 1);
+            this.resetArrowTimer();
         }
 
         return false;
@@ -70,7 +73,7 @@ export default class ChoiceBubble<T> extends Bubble {
         ctx.fillStyle = 'rgb(255,255,255)';
         this.choices.forEach((choice, index) => {
             if (this.curChoice === index) {
-                this.game.drawArrow(this.x + Bubble.MARGIN, y);
+                this.drawArrow(this.x + Bubble.MARGIN, y);
             }
             this.game.drawString(this.stringify(choice), x, y);
             y += 18 * this.game.scale;

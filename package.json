@@ -24,6 +24,6 @@
     "webpack-dev-server": "4.7.4"
   },
   "dependencies": {
-    "gtp": "3.0.0"
+    "gtp": "3.0.1"
   }
 }

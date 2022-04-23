@@ -50,7 +50,7 @@ export default class ShoppingBubble extends Bubble {
       ctx.fillStyle = 'rgb(255,255,255)';
       this._choices.forEach((choice, index) => {
          if (this._curChoice === index) {
-            this.game.drawArrow(this.x + Bubble.MARGIN, y);
+            this.drawArrow(this.x + Bubble.MARGIN, y);
          }
          this.game.drawString(choice.displayName, x, y);
          y += 10 * this.game.scale;

@@ -1,17 +1,46 @@
 import DwGame from './DwGame';
 import { BitmapFont, Delay } from 'gtp';
 
+/**
+ * A base class for all bubbles in the game (e.g. white text
+ * against a black background).
+ */
 export default class Bubble {
 
     game: DwGame;
-    title: string | undefined;
+    title?: string;
     x: number;
     y: number;
     w: number;
     h: number;
-    private readonly _fontWidth: number;
-    private _paintH?: number;
-    private _animator?: Delay;
+
+    /**
+     * The width of the game's font. Cached for performance.
+     */
+    private readonly fontWidth: number;
+
+    /**
+     * How much to paint vertically of this bubble. Only used when
+     * it is animating in.
+     */
+    private paintH?: number;
+
+    /**
+     * Animates the initial rendering of this bubble. Bubbles in Dragon
+     * Warrior expand vertically before initially rendering.
+     */
+    private animator?: Delay;
+
+    /**
+     * Toggles the blinking state of the arrow in this bubble, if any.
+     */
+    private arrowDelay?: Delay;
+
+    /**
+     * Whether the arrow in this bubble, if any, should be painted.
+     * Toggled by <code>arrowDelay</code>.
+     */
+    private paintArrow: boolean;
 
     static readonly MARGIN: number = 10; // 5 * SCALE; TODO
 
@@ -27,11 +56,8 @@ export default class Bubble {
         this.init();
 
         const font: BitmapFont = this.game.assets.get('font'); // Need to split this to appease linter
-        this._fontWidth = font.cellW;
-
-//      int strokeW = 2 * SCALE;
-//      borderStroke = new BasicStroke(strokeW, BasicStroke.CAP_ROUND,
-//                              BasicStroke.JOIN_ROUND);
+        this.fontWidth = font.cellW;
+        this.setActive(true);
     }
 
     _breakApart(text: string, w: number): any {
@@ -90,7 +116,7 @@ export default class Bubble {
 
     private breakApartLine(line: string, w: number, result: any) {
 
-        const optimal: number = Math.floor(w / this._fontWidth);
+        const optimal: number = Math.floor(w / this.fontWidth);
 
         while (line.length > optimal) {
 
@@ -109,8 +135,41 @@ export default class Bubble {
         //}
     }
 
+    protected drawArrow(x: number, y: number) {
+        if (this.paintArrow) {
+            this.game.drawArrow(x, y);
+        }
+    }
+
+    protected drawDownArrow(x: number, y: number) {
+        if (this.paintArrow) {
+            this.game.drawDownArrow(x, y);
+        }
+    }
+
     _getDefaultTextColor(): string {
         return this.game.hero.isDead() ? 'rgb(255, 0, 0)' : 'rgb(255, 255, 255)';
+    }
+
+    getXMargin(): number {
+
+        const scale: number = this.game.scale;
+
+        // Left inset + border thickness + 13 pixels of spacing
+        return (1 + 2) * scale + 13 * scale;
+    }
+
+    getYMargin(): number {
+
+        if (this.title) {
+            return this.game.getTileSize();
+        }
+
+        const scale: number = this.game.scale;
+
+        // Top inset + border thickness + 5 pixels of spacing
+        return (1 + 2) * scale + (5 * scale);
+        //return this.title ? this.game.getTileSize() : (8 * this.game.scale);
     }
 
     init() {
@@ -118,26 +177,30 @@ export default class Bubble {
     }
 
     _initAnimation() {
-        this._paintH = 0;
-        this._animator = new Delay({
+        this.paintH = 0;
+        this.animator = new Delay({
             millis: 20, loop: true,
             callback: () => {
-                this._paintH = Math.min(this._paintH! + this.game.getTileSize(), this.h);
+                this.paintH = Math.min(this.paintH! + this.game.getTileSize(), this.h);
                 //console.log('--- ' + self._paintH);
-                if (this._paintH >= this.h) {
-                    delete this._animator;
-                    delete this._paintH;
+                if (this.paintH >= this.h) {
+                    delete this.animator;
+                    delete this.paintH;
                 }
             }
         });
     }
 
+    _isAnimating(): boolean {
+        return !!this.animator;
+    }
+
     paint(ctx: CanvasRenderingContext2D) {
 
-        if (this._animator) {
+        if (this.animator) {
             ctx.save();
             ctx.beginPath();
-            ctx.rect(this.x, this.y, this.w, this._paintH!);
+            ctx.rect(this.x, this.y, this.w, this.paintH!);
             //console.log('Setting clip to: ' + this.x + ',' + this.y + ',' + this.w + ',' + this._paintH);
             ctx.clip();
         }
@@ -154,7 +217,7 @@ export default class Bubble {
             this.paintContent(ctx, this.x + this.getXMargin(), this.y + this.getYMargin());
         }
 
-        if (this._animator) {
+        if (this.animator) {
             ctx.restore();
         }
     }
@@ -222,29 +285,26 @@ export default class Bubble {
         this.game.drawString(this.title!, x + 2 * scale, this.y);
     }
 
-    getXMargin(): number {
-
-        const scale: number = this.game.scale;
-
-        // Left inset + border thickness + 13 pixels of spacing
-        return (1 + 2) * scale + 13 * scale;
+    protected resetArrowTimer() {
+        this.paintArrow = true;
+        this.arrowDelay?.reset();
     }
 
-    getYMargin(): number {
-
-        if (this.title) {
-            return this.game.getTileSize();
+    setActive(active: boolean) {
+        if (active !== !!this.arrowDelay) {
+            if (active) {
+                this.paintArrow = true;
+                this.arrowDelay = new Delay({
+                    millis: [ 500, 300 ],
+                    loop: true,
+                    callback: () => { this.paintArrow = !this.paintArrow; }
+                });
+            }
+            else {
+                this.paintArrow = true;
+                this.arrowDelay = undefined;
+            }
         }
-
-        const scale: number = this.game.scale;
-
-        // Top inset + border thickness + 5 pixels of spacing
-        return (1 + 2) * scale + (5 * scale);
-        //return this.title ? this.game.getTileSize() : (8 * this.game.scale);
-    }
-
-    _isAnimating(): boolean {
-        return !!this._animator;
     }
 
     /**
@@ -256,10 +316,11 @@ export default class Bubble {
      * @see updateImpl()
      */
     update(delta: number) {
-        if (this._animator) {
+        if (this.animator) {
             //console.log(this.title + ' - updating animator with delta === ' + delta);
-            this._animator.update(delta);
+            this.animator.update(delta);
         } else {
+            this.arrowDelay?.update(delta);
             this.updateImpl(delta);
         }
     }

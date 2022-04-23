@@ -118,12 +118,16 @@ export default class CommandBubble extends Bubble {
             if (this.selection < 0) {
                 this.selection = rowCount * 2 - 1;
             }
+            this.resetArrowTimer();
         } else if (im.down(true)) {
             this.selection = Math.floor((this.selection + 1) % (rowCount * 2));
+            this.resetArrowTimer();
         } else if (this.selection >= rowCount && im.left(true)) {
             this.selection -= rowCount;
+            this.resetArrowTimer();
         } else if (this.selection < rowCount && im.right(true)) {
             this.selection += rowCount;
+            this.resetArrowTimer();
         } else if (this.game.cancelKeyPressed()) {
             this.selection = -1;
             return true;
@@ -161,7 +165,7 @@ export default class CommandBubble extends Bubble {
         x -= this.game.stringWidth('>') + 2 * SCALE;
         y0 = y + this.yInc * (this.selection % rowCount);
 
-        this.game.drawArrow(x, y0);
+        this.drawArrow(x, y0);
     }
 
     reset() {

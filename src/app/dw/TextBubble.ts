@@ -65,8 +65,10 @@ export default class TextBubble extends Bubble {
         console.log('>>> textDone set to false');
         if (segment.choices) {
             this._choiceBubble = this.createChoiceBubble(segment.choices);
+            this.setActive(false);
         } else if (segment.shopping) {
             this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
+            this.setActive(false);
         }
     }
 
@@ -109,6 +111,7 @@ export default class TextBubble extends Bubble {
                 if (result) {
                     const item: any = this._shoppingBubble.getSelectedItem();
                     delete this._shoppingBubble;
+                    this.setActive(true);
                     if (item) {
                         this._conversation.setItem(item);
                         nextState = item.baseCost > this.game.party.gold ?
@@ -126,6 +129,7 @@ export default class TextBubble extends Bubble {
                     nextState = TextBubble.getNextState(choice);
                     //this._conversation.setDialogueState(nextState);
                     delete this._choiceBubble;
+                    this.setActive(true);
                     return !this._updateConversation(nextState);
                 }
                 return false;
@@ -272,7 +276,7 @@ export default class TextBubble extends Bubble {
             }
             if (this._textDone && this._conversation.hasNext()) {
                 // TODO: Remove magic constants
-                this.game.drawDownArrow(this.x + this.w - 30, this.y + this.h - 30);
+                this.drawDownArrow(this.x + this.w - 30, this.y + this.h - 30);
                 /*
                 var conv = this._conversation;
                 console.log('--- ' +
@@ -320,8 +324,10 @@ export default class TextBubble extends Bubble {
         }
         if (segment.choices) {
             this._choiceBubble = this.createChoiceBubble(segment.choices);
+            this.setActive(false);
         } else if (segment.shopping) {
             this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping.choices);
+            this.setActive(false);
         }
     }
 

@@ -42,8 +42,10 @@ export default class ItemBubble extends Bubble {
             return true;
         } else if (im.up(true)) {
             this._curChoice = Math.max(0, this._curChoice - 1);
+            this.resetArrowTimer();
         } else if (im.down(true)) {
             this._curChoice = Math.min(this._curChoice + 1, this._choices.length - 1);
+            this.resetArrowTimer();
         }
 
         return false;
@@ -54,7 +56,7 @@ export default class ItemBubble extends Bubble {
         ctx.fillStyle = 'rgb(255,255,255)';
         this._choices.forEach((choice, index) => {
             if (this._curChoice === index) {
-                this.game.drawArrow(this.x + Bubble.MARGIN, y);
+                this.drawArrow(this.x + Bubble.MARGIN, y);
             }
             this.game.drawString(choice.displayName, x, y);
             y += 10 * this.game.scale;

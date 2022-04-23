@@ -82,6 +82,7 @@ export class InitialMenuState extends _BaseState {
                     if (0 === selection) { // Continue a game
                         this.game.audio.playSound('menu');
                         this.substate = 'saveSelect';
+                        this.menuBubble.setActive(false);
                         this.saveSelectBubble = this.createSaveSelectBubble();
                     }
                     else { // Nothing else is implemented
@@ -96,6 +97,7 @@ export class InitialMenuState extends _BaseState {
                     const selection: number = this.saveSelectBubble!.getSelectedIndex();
                     if (-1 === selection) {
                         this.substate = 'mainMenu';
+                        this.menuBubble.setActive(true);
                     }
                     else {
                         // For now there's only one selectable game
