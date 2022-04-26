@@ -125,8 +125,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 161.5,
-                "y": 241.5
+                "x": 859.5,
+                "y": 705.5
             }
         },
         "overworld.json#territories": {
@@ -145,10 +145,10 @@
         },
         "tantegelCastle.json": {
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 186.5,
-                "y": 541.5
+                "x": 345.5,
+                "y": 262.5
             }
         },
         "tantegelCastle.tmx": {
@@ -189,6 +189,7 @@
         "brecconary.tmx",
         "brecconary.js"
     ],
+    "textEdit.monospace": true,
     "tileset.lastUsedFormat": "json",
     "tileset.margin": 0,
     "tileset.spacing": 0,

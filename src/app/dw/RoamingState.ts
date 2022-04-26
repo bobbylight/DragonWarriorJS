@@ -1,5 +1,5 @@
 import { _BaseState } from './_BaseState';
-import { Delay, InputManager, Keys } from 'gtp';
+import { Delay, InputManager, Keys, SpriteSheet } from 'gtp';
 import DwGame from './DwGame';
 import Sounds from './Sounds';
 import CommandBubble from './CommandBubble';
@@ -69,7 +69,21 @@ export default class RoamingState extends _BaseState {
    }
 
    search() {
-       this.showOneLineConversation('\\w{hero.name} searched the ground all about.', 'But there found nothing.');
+
+       const messages: string[] = [ '\\w{hero.name} searched the ground all about.' ];
+
+       const heroPos: string = DwGame.getTalkAcrossKey(this.game.hero.mapRow, this.game.hero.mapCol);
+       const chest: boolean = this.game.map.chests.has(heroPos);
+
+       // In this game, you must "TAKE" treasure, not "SEARCH" for it.
+       if (chest) {
+           messages.push('There is a treasure box.');
+       }
+       else {
+           messages.push('But there found nothing.');
+       }
+
+       this.showOneLineConversation(...messages);
    }
 
    takeStairs() {
@@ -317,6 +331,20 @@ export default class RoamingState extends _BaseState {
       }
 
       this.game.drawMap(ctx);
+
+      // TODO: Be more efficient here
+      this.game.map.chests.forEach((gold: number, key: string) => {
+
+          const row: number = parseInt(key.substring(0, key.indexOf(',')), 10);
+          const col: number = parseInt(key.substring(key.indexOf(',') + 1), 10);
+
+          let x: number = col * this.game.getTileSize();
+          x -= this.game.getMapXOffs();
+          let y: number = row * this.game.getTileSize();
+          y -= this.game.getMapYOffs();
+          this.game.map.drawTile(ctx, x, y, 5, {} as any);
+      });
+
       this.game.hero.render(ctx);
 
       this.game.map.npcs.forEach((npc: Npc) => {

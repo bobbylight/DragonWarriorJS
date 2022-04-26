@@ -312,6 +312,7 @@ export default class DwGame extends Game {
         const newNpcs: Npc[] = [];
         const newDoors: Door[] = [];
         const newTalkAcrosses: any = {};
+        map.chests = new Map<string, number>();
         const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
         if (temp?.isObjectGroup()) {
 
@@ -321,17 +322,20 @@ export default class DwGame extends Game {
                 const obj: TiledObject = npcLayer.objects![i];
                 switch (obj.type) {
                     case 'npc':
-                        npc = this._parseNpc(obj);
+                        npc = this.parseNpc(obj);
                         npc.setNpcIndex(newNpcs.length + 1);
                         newNpcs.push(npc);
                         break;
                     case 'door':
-                        door = this._parseDoor(obj);
+                        door = this.parseDoor(obj);
                         //door.setDoorIndex(newDoors.length + 1);
                         newDoors.push(door);
                         break;
                     case 'talkAcross':
-                        newTalkAcrosses[ this._parseTalkAcrossKey(obj) ] = true;
+                        newTalkAcrosses[ this.parseTalkAcrossKey(obj) ] = true;
+                        break;
+                    case 'chest':
+                        map.chests.set(this.parseTalkAcrossKey(obj), DwGame.parseChestContents(obj));
                         break;
                     default:
                         console.error(`Unhandled object type in tiled map: ${obj.type}`);
@@ -362,7 +366,16 @@ export default class DwGame extends Game {
 
     }
 
-    private _parseDoor(obj: TiledObject): Door {
+    private static parseChestContents(chest: TiledObject): number {
+        const value: string = getProperty(chest, 'contents');
+        if (value.startsWith('gold=')) {
+            return parseInt(value.substring('gold='.length, 10));
+        }
+        console.error(`Invalid chest contents for chest ${chest.name}: ${value}`);
+        return 1;
+    }
+
+    private parseDoor(obj: TiledObject): Door {
         const name: string = obj.name;
         const replacementTileIndex: number =
             parseInt(getProperty(obj, 'replacementTileIndex'), 10);
@@ -372,7 +385,7 @@ export default class DwGame extends Game {
         return new Door(name, row, col, replacementTileIndex);
     }
 
-    private _parseNpc(obj: TiledObject): Npc {
+    private parseNpc(obj: TiledObject): Npc {
         const name: string = obj.name;
         let type: number | null = null;
         if (obj.propertiesByName.has('type')) {
@@ -391,7 +404,7 @@ export default class DwGame extends Game {
         }
         const wanderStr: string = getProperty(obj, 'wanders', 'true');
         const wanders: boolean = wanderStr === 'true';
-        const range: number[] = this._parseRange(getProperty(obj, 'range', ''));
+        const range: number[] = this.parseRange(getProperty(obj, 'range', ''));
         const npc: Npc = new Npc({
             name, type, direction: dir,
             range, wanders, mapRow: row, mapCol: col
@@ -399,7 +412,7 @@ export default class DwGame extends Game {
         return npc;
     }
 
-    private _parseRange(rangeStr?: string): number[] {
+    private parseRange(rangeStr?: string): number[] {
         let range: number[] = [];
         if (rangeStr) {
             const temp: string[] = rangeStr.split(/,\s*/);
@@ -410,14 +423,14 @@ export default class DwGame extends Game {
         return range;
     }
 
-    private _parseTalkAcrossKey(obj: any): string {
+    parseTalkAcrossKey(obj: TiledObject): string {
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
         return DwGame.getTalkAcrossKey(row, col);
     }
 
-    private static getTalkAcrossKey(row: number, col: number): string {
+    static getTalkAcrossKey(row: number, col: number): string {
         return row + ',' + col;
     }
 

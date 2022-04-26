@@ -291,7 +291,7 @@
                  "visible":true,
                  "width":16,
                  "x":144,
-                 "y":144
+                 "y":148
                 }, 
                 {
                  "height":16,
@@ -327,7 +327,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -962,6 +962,74 @@
                  "width":16,
                  "x":176,
                  "y":864
+                }, 
+                {
+                 "height":16,
+                 "id":36,
+                 "name":"chest_1",
+                 "properties":[
+                        {
+                         "name":"contents",
+                         "type":"string",
+                         "value":"gold=10"
+                        }],
+                 "rotation":0,
+                 "type":"chest",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":37,
+                 "name":"chest_2",
+                 "properties":[
+                        {
+                         "name":"contents",
+                         "type":"string",
+                         "value":"gold=11"
+                        }],
+                 "rotation":0,
+                 "type":"chest",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":272
+                }, 
+                {
+                 "height":16,
+                 "id":38,
+                 "name":"chest_3",
+                 "properties":[
+                        {
+                         "name":"contents",
+                         "type":"string",
+                         "value":"gold=10"
+                        }],
+                 "rotation":0,
+                 "type":"chest",
+                 "visible":true,
+                 "width":16,
+                 "x":64,
+                 "y":256
+                }, 
+                {
+                 "height":16,
+                 "id":39,
+                 "name":"chest_4",
+                 "properties":[
+                        {
+                         "name":"contents",
+                         "type":"string",
+                         "value":"gold=9"
+                        }],
+                 "rotation":0,
+                 "type":"chest",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":240
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -970,7 +1038,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":33,
+ "nextobjectid":40,
  "orientation":"orthogonal",
  "properties":[
         {
