@@ -71,7 +71,7 @@ export default class Party {
      *         be <code>null</code>.
      * @see #addInventoryItem(Item)
      */
-    getInventory() {
+    getInventory(): Inventory {
         return this._inventory;
     }
 
@@ -103,7 +103,7 @@ export default class Party {
      * @see #getInventory()
      */
     isInventoryFull(): boolean {
-        return this._inventory.size() >= Party.INVENTORY_MAX_SIZE;
+        return this._inventory.getItemTypeCount() >= Party.INVENTORY_MAX_SIZE;
     }
 
     /**

@@ -15,6 +15,8 @@ import MapLogic from './mapLogic/MapLogic';
 import Cheats from './Cheats';
 import Direction from './Direction';
 import ChoiceBubble from './ChoiceBubble';
+import Door from './Door';
+import DwMap from './DwMap';
 
 const RoamingSubState: any = Object.freeze({
    ROAMING: 0,
@@ -116,12 +118,13 @@ export default class RoamingState extends _BaseState {
          this._itemBubble.update(delta);
          done = this._itemBubble.handleInput();
          if (done) {
-            const selectedItem: Item | null = this._itemBubble.getAndRemoveSelectedItem()!;
-            delete this._itemBubble;
-            const success: boolean = !selectedItem || selectedItem.use(); // Either canceled the dialog or selected item
+            const selectedItem: Item | null = this._itemBubble.getSelectedItem()!;
+            const success: boolean = !selectedItem || selectedItem.use(this.game); // Either canceled the dialog or selected item
             if (success) {
+               this._itemBubble.removeSelectedItem();
                this.setSubstate(RoamingSubState.ROAMING);
             }
+            delete this._itemBubble;
          }
          return;
       }
@@ -256,13 +259,35 @@ export default class RoamingState extends _BaseState {
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key
    }
 
-   openDoor() {
+   openDoor(): boolean {
 
-      if (!this.game.openDoorHeroIsFacing()) {
-         this.showOneLineConversation('There is no door there to open!');
-      } else {
+
+      const door: Door | undefined = this.game.getDoorHeroIsFacing();
+
+      if (door) {
+
+         const game: DwGame = this.game;
+         if (!game.party.getInventory().remove('Magic Key')) {
+            this.showOneLineConversation('You do not have a key!'); // TODO: Verify text
+             return false;
+         }
+
+         this.game.audio.playSound('door');
+         const map: DwMap = this.game.map;
+         map.getLayer('tileLayer').setData(door.row, door.col, door.replacementTileIndex);
+         const index: number = map.doors.indexOf(door);
+         if (index > -1) {
+             map.doors.splice(index, 1);
+             map.getLayer('collisionLayer').setData(door.row, door.col, 0);
+         } else { // Should never happen
+             console.error('Door not found in map.doors! - ' + door);
+         }
          this.setSubstate(RoamingSubState.ROAMING);
+         return true;
       }
+
+      this.showOneLineConversation('There is no door here.');
+      return false;
    }
 
    private possiblyRenderNpc(npc: Npc, ctx: CanvasRenderingContext2D) {

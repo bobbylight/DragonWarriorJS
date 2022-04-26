@@ -2,10 +2,11 @@ import DwGame from './DwGame';
 import Bubble from './Bubble';
 import Item from './Item';
 import { InputManager } from 'gtp';
+import { ItemCountPair } from './Inventory';
 
 export default class ItemBubble extends Bubble {
 
-    private readonly _choices: Item[];
+    private readonly _choices: ItemCountPair[];
     private _curChoice: number;
 
     constructor() {
@@ -24,11 +25,8 @@ export default class ItemBubble extends Bubble {
         this._curChoice = 0;
     }
 
-    getAndRemoveSelectedItem(): Item | null {
-        if (this._curChoice === -1) {
-            return null;
-        }
-        return this._choices.splice(this._curChoice, 1)[0];
+    getSelectedItem(): Item | undefined {
+        return this._curChoice > -1 ? this._choices[this._curChoice].item : undefined;
     }
 
     handleInput() {
@@ -58,8 +56,14 @@ export default class ItemBubble extends Bubble {
             if (this._curChoice === index) {
                 this.drawArrow(this.x + Bubble.MARGIN, y);
             }
-            this.game.drawString(choice.displayName, x, y);
+            this.game.drawString(choice.item.displayName, x, y);
             y += 10 * this.game.scale;
         });
+    }
+
+    removeSelectedItem() {
+        if (this._curChoice > -1) {
+            this._choices.splice(this._curChoice, 1)[0];
+        }
     }
 }

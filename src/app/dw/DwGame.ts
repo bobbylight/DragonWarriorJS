@@ -249,30 +249,6 @@ export default class DwGame extends Game {
         this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
     }
 
-    /**
-     * If the hero is facing a door, it is opened.  Otherwise, nothing
-     * happens.
-     *
-     * @return Whether there was a door to open.
-     */
-    openDoorHeroIsFacing(): boolean {
-        const door: Door | null = this._getDoorHeroIsFacing();
-        if (door) {
-            this.audio.playSound('door');
-            this.map.getLayer('tileLayer').setData(door.row, door.col,
-                door.replacementTileIndex);
-            const index: number = this.map.doors.indexOf(door);
-            if (index > -1) {
-                this.map.doors.splice(index, 1);
-                this.map.getLayer('collisionLayer').setData(door.row, door.col, 0);
-            } else { // Should never happen
-                console.error('Door not found in map.doors! - ' + door);
-            }
-            return true;
-        }
-        return false;
-    }
-
     _resetMap(map: any) {
         map.npcs.forEach(npc => npc.reset());
     }
@@ -478,7 +454,7 @@ export default class DwGame extends Game {
         this.map.getLayer('tileLayer2').visible = this.inside;
     }
 
-    private _getDoorHeroIsFacing(): Door | null {
+    getDoorHeroIsFacing(): Door | undefined {
         let row: number = this.hero.mapRow;
         let col: number = this.hero.mapCol;
         switch (this.hero.direction) {
@@ -496,14 +472,7 @@ export default class DwGame extends Game {
                 break;
         }
         console.log('Checking for door at: ' + row + ', ' + col);
-        for (let i: number = 0; i < this.map.doors.length; i++) {
-            const door: Door = this.map.doors[i];
-            console.log('... ' + door);
-            if (door.isAt(row, col)) {
-                return door;
-            }
-        }
-        return null;
+        return this.map.doors.find(door => door.isAt(row, col));
     }
 
     getNpcHeroIsFacing(): Npc | undefined {
