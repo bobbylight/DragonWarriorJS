@@ -1,13 +1,14 @@
 import Bubble from './Bubble';
 import DwGame from './DwGame';
 import { InputManager } from 'gtp';
+import { ShoppingInfo } from './ConversationSegment';
 
 export default class ShoppingBubble extends Bubble {
 
    private _choices: any[];
    private _curChoice: number;
 
-   constructor(game: DwGame, shoppingInfo: any) {
+   constructor(game: DwGame, shoppingInfo: ShoppingInfo) {
 
       const tileSize: number = game.getTileSize();
       const x: number = 5 * tileSize;

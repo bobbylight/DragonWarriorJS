@@ -53,9 +53,7 @@ export default class ConversationSegment implements ConversationSegmentArgs {
    music?: string;
    next?: string;
    overnight?: boolean;
-   shopping?: {
-      choices: string[];
-   }
+   shopping?: ShoppingInfo;
    sound?: string;/*SoundEffect*/
    readonly text: string;
 
@@ -104,4 +102,8 @@ export default class ConversationSegment implements ConversationSegmentArgs {
    currentText(): string {
       return this.getParameterizedText();
    }
+}
+
+export interface ShoppingInfo {
+    choices: string[];
 }

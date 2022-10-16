@@ -332,7 +332,7 @@ export default class TextBubble extends Bubble {
             this._choiceBubble = this.createChoiceBubble(segment.choices);
             this.setActive(false);
         } else if (segment.shopping) {
-            this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping.choices);
+            this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
             this.setActive(false);
         }
     }
