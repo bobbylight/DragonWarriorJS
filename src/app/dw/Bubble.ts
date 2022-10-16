@@ -60,7 +60,7 @@ export default class Bubble {
         this.setActive(true);
     }
 
-    _breakApart(text: string, w: number): any {
+    protected _breakApart(text: string, w: number): any {
 
         const result: any = {lines: [], delays: []};
 

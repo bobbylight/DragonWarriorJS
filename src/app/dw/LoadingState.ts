@@ -158,6 +158,7 @@ export class LoadingState extends _BaseState {
             game.assets.addSound('missed2', 'res/sound/41 Dragon Quest 1 - Missed! (2) (22khz mono).wav');
             game.assets.addSound('bump', 'res/sound/42 Dragon Quest 1 - Bumping into Walls (22khz mono).wav');
             game.assets.addSound('door', 'res/sound/45 Dragon Quest 1 - Open Door (22khz mono).ogg');
+            game.assets.addSound('talk', 'res/sound/Dragon Warrior [Dragon Quest] SFX (1).wav');
             game.assets.onLoad(() => {
 
                 // TODO: This could be done much, much more cleanly

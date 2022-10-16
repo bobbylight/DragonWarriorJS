@@ -12,6 +12,7 @@ import ChoiceBubble from './ChoiceBubble';
 export default class TextBubble extends Bubble {
 
     private _conversation: Conversation;
+    private _talking: boolean;
     private _text: string;
     private _curLine: number;
     private _lines: string[];
@@ -38,6 +39,7 @@ export default class TextBubble extends Bubble {
         const y: number = game.getHeight() - tileSize - height;
         super(undefined, x, y, width, height);
         this._doneCallbacks = [];
+        this._talking = false;
     }
 
     addToConversation(text: string | ConversationSegmentArgs, autoAdvance: boolean = false): void {
@@ -245,6 +247,10 @@ export default class TextBubble extends Bubble {
                     }
                     this._curOffs = -1;
                 }
+                else if (this._conversation.getVoice() &&
+                        this._curOffs % 2 === 0 && this._lines[this._curLine][this._curOffs] !== ' ') {
+                    this.game.audio.playSound('talk');
+                }
             }
         } else if (this._shoppingBubble) {
             this._shoppingBubble.update(delta);
@@ -309,7 +315,7 @@ export default class TextBubble extends Bubble {
      *
      * @param segment The text to render.
      */
-    _setText(segment: ConversationSegment): void {
+    private _setText(segment: ConversationSegment): void {
         this._text = segment.currentText();
         if (this._text) {
             const w: number = this.w - 2 * Bubble.MARGIN;
@@ -340,7 +346,7 @@ export default class TextBubble extends Bubble {
         this.handleSegmentAudio(segment);
     }
 
-    _updateConversation(forcedNextState?: string): boolean {
+    private _updateConversation(forcedNextState?: string): boolean {
 
         if (forcedNextState || this._conversation.hasNext()) {
             if (this._conversation.current()!.overnight && this._textDone) {

@@ -7,6 +7,7 @@ import DwGame from './DwGame';
 
 export default class Conversation {
 
+    private readonly voice: boolean;
     private readonly _segments: ConversationSegment[];
     private _segmentIndex: number;
     item: any;
@@ -20,7 +21,8 @@ export default class Conversation {
     static readonly DECLINED_PURCHASE_SEGMENT: string = 'declinedPurchase';
     static readonly BID_FAREWELL_SEGMENT: string = 'bidFarewell';
 
-    constructor() {
+    constructor(voice: boolean = false) {
+        this.voice = voice;
         this._segments = [];
     }
 
@@ -43,6 +45,15 @@ export default class Conversation {
         } else {
             this._segments.push(segment);
         }
+    }
+
+    /**
+     * Returns whether to play the "talking" sound effect for this conversation.
+     *
+     * @return Whether to play the sound effect.
+     */
+    getVoice(): boolean {
+        return this.voice;
     }
 
     /**

@@ -83,7 +83,7 @@ export default class RoamingState extends _BaseState {
            messages.push('But there found nothing.');
        }
 
-       this.showOneLineConversation(...messages);
+       this.showOneLineConversation(false, ...messages);
    }
 
    takeStairs() {
@@ -91,7 +91,7 @@ export default class RoamingState extends _BaseState {
            this.setSubstate(RoamingSubState.ROAMING);
        }
        else {
-           this.showOneLineConversation('There are no stairs here.');
+           this.showOneLineConversation(false, 'There are no stairs here.');
        }
    }
 
@@ -282,7 +282,7 @@ export default class RoamingState extends _BaseState {
 
          const game: DwGame = this.game;
          if (!game.party.getInventory().remove('Magic Key')) {
-            this.showOneLineConversation('You do not have a key!'); // TODO: Verify text
+            this.showOneLineConversation(false, 'You do not have a key!'); // TODO: Verify text
              return false;
          }
 
@@ -300,7 +300,7 @@ export default class RoamingState extends _BaseState {
          return true;
       }
 
-      this.showOneLineConversation('There is no door here.');
+      this.showOneLineConversation(false, 'There is no door here.');
       return false;
    }
 
@@ -412,17 +412,18 @@ export default class RoamingState extends _BaseState {
    }
 
    private showNoSpellsMessage() {
-       this.showOneLineConversation('You have not learned any spells yet!');
+       this.showOneLineConversation(false, 'You have not learned any spells yet!');
    }
 
     /**
      * Displays one or more static lines of text in the conversation bubble.
      *
+     * @param voice Whether to play the "talking" sound effect.
      * @param text The text to display.
      */
-   private showOneLineConversation(...text: string[]) {
+   private showOneLineConversation(voice: boolean, ...text: string[]) {
 
-       const conversation: Conversation = new Conversation();
+       const conversation: Conversation = new Conversation(voice);
        text.forEach(line => conversation.addSegment(line));
        this._showTextBubble = true;
        this._textBubble.setConversation(conversation);
@@ -464,9 +465,9 @@ export default class RoamingState extends _BaseState {
          return;
       }
 
-      const conversation: Conversation = new Conversation();
-
       const npc: Npc | undefined = this.game.getNpcHeroIsFacing();
+      const conversation: Conversation = new Conversation(!!npc);
+
       if (npc) {
          const hero: Hero = this.game.hero;
          //var newNpcDir = this.getHero().direction.opposite();
