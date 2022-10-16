@@ -1,5 +1,5 @@
 import { _BaseState } from './_BaseState';
-import { Delay, InputManager, Keys, SpriteSheet } from 'gtp';
+import { Delay, InputManager, Keys } from 'gtp';
 import DwGame from './DwGame';
 import Sounds from './Sounds';
 import CommandBubble from './CommandBubble';
@@ -18,13 +18,11 @@ import ChoiceBubble from './ChoiceBubble';
 import Door from './Door';
 import DwMap from './DwMap';
 
-const RoamingSubState: any = Object.freeze({
-   ROAMING: 0,
-   MENU: 1,
-   TALKING: 2,
-   OVERNIGHT: 3,
-   WARP_SELECTION: 4,
-});
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION';
+
+interface UpdateFunction {
+    (delta: number): void;
+}
 
 export default class RoamingState extends _BaseState {
 
@@ -35,10 +33,10 @@ export default class RoamingState extends _BaseState {
    private warpBubble?: ChoiceBubble<string>;
    private readonly _stationaryTimer: Delay;
    private _overnightDelay?: Delay;
-   private readonly _updateMethods: any;
+   private readonly _updateMethods: Map<RoamingSubState, UpdateFunction>;
    private readonly _textBubble: TextBubble;
    private _showTextBubble: boolean;
-   private _substate: number;
+   private _substate: RoamingSubState;
    private _showStats: boolean;
 
    private static readonly _OVERNIGHT_DARK_TIME: number = 2500;
@@ -55,14 +53,14 @@ export default class RoamingState extends _BaseState {
       this._statBubble = new StatBubble(this.game);
       this._stationaryTimer = new Delay({millis: 1000});
 
-      this.setSubstate(RoamingSubState.ROAMING);
+      this.setSubstate('ROAMING');
 
-      this._updateMethods = {};
-      this._updateMethods[RoamingSubState.ROAMING] = this.updateRoaming;
-      this._updateMethods[RoamingSubState.MENU] = this.updateMenu;
-      this._updateMethods[RoamingSubState.TALKING] = this.updateTalking;
-      this._updateMethods[RoamingSubState.OVERNIGHT] = this.updateOvernight;
-      this._updateMethods[RoamingSubState.WARP_SELECTION] = this.updateWarpSelection;
+      this._updateMethods = new Map<RoamingSubState, UpdateFunction>();
+      this._updateMethods.set('ROAMING', this.updateRoaming);
+      this._updateMethods.set('MENU',  this.updateMenu);
+      this._updateMethods.set('TALKING',  this.updateTalking);
+      this._updateMethods.set('OVERNIGHT',  this.updateOvernight);
+      this._updateMethods.set('WARP_SELECTION',  this.updateWarpSelection);
 
       this._textBubble = new TextBubble(this.game);
       this._showTextBubble = false;
@@ -88,7 +86,7 @@ export default class RoamingState extends _BaseState {
 
    takeStairs() {
        if (this.game.hero.possiblyHandleIntersectedObject()) {
-           this.setSubstate(RoamingSubState.ROAMING);
+           this.setSubstate('ROAMING');
        }
        else {
            this.showOneLineConversation(false, 'There are no stairs here.');
@@ -104,7 +102,7 @@ export default class RoamingState extends _BaseState {
          game.startRandomEncounter();
          return;
       } else if (game.inputManager.isKeyDown(Keys.KEY_O, true)) {
-         this.setSubstate(RoamingSubState.OVERNIGHT);
+         this.setSubstate('OVERNIGHT');
       }
 
       game.hero.update(delta);
@@ -114,7 +112,7 @@ export default class RoamingState extends _BaseState {
          RoamingState._totalTime = 0;
       }
 
-      this._updateMethods[this._substate].call(this, delta);
+      this._updateMethods.get(this._substate)!.call(this, delta);
    }
 
    private updateMenu(delta: number) {
@@ -136,7 +134,7 @@ export default class RoamingState extends _BaseState {
             const success: boolean = !selectedItem || selectedItem.use(this.game); // Either canceled the dialog or selected item
             if (success) {
                this._itemBubble.removeSelectedItem();
-               this.setSubstate(RoamingSubState.ROAMING);
+               this.setSubstate('ROAMING');
             }
             delete this._itemBubble;
          }
@@ -153,7 +151,7 @@ export default class RoamingState extends _BaseState {
 
    private updateRoaming(delta: number) {
 
-      if (this._substate !== RoamingSubState.ROAMING || this._showStats) {
+      if (this._substate !== 'ROAMING' || this._showStats) {
          this._statBubble.update(delta);
       }
 
@@ -164,7 +162,7 @@ export default class RoamingState extends _BaseState {
          this.game.setNpcsPaused(true);
          this._commandBubble.reset();
          this.game.audio.playSound('menu');
-         this.setSubstate(RoamingSubState.MENU);
+         this.setSubstate('MENU');
          return;
       }
 
@@ -219,7 +217,7 @@ export default class RoamingState extends _BaseState {
 
       const done: boolean = this._textBubble.handleInput();
       if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
-         this.setSubstate(RoamingSubState.OVERNIGHT);
+         this.setSubstate('OVERNIGHT');
          this._textBubble.clearOvernight();
       } else if (this._showTextBubble) {
          this._textBubble.update(delta);
@@ -257,10 +255,10 @@ export default class RoamingState extends _BaseState {
            this.warpBubble = undefined;
            if (warpTo) {
                this.warpTo(warpTo); // TODO: Make me cleaner
-               this.setSubstate(RoamingSubState.ROAMING);
+               this.setSubstate('ROAMING');
            }
            else {
-               this.setSubstate(RoamingSubState.MENU);
+               this.setSubstate('MENU');
            }
            this.warpBubble = undefined;
        }
@@ -269,7 +267,7 @@ export default class RoamingState extends _BaseState {
    private overnightOver() {
       this.game.audio.playMusic(Sounds.MUSIC_TOWN);
       delete this._overnightDelay;
-      this.setSubstate(RoamingSubState.TALKING);
+      this.setSubstate('TALKING');
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key
    }
 
@@ -296,7 +294,7 @@ export default class RoamingState extends _BaseState {
          } else { // Should never happen
              console.error('Door not found in map.doors! - ' + door);
          }
-         this.setSubstate(RoamingSubState.ROAMING);
+         this.setSubstate('ROAMING');
          return true;
       }
 
@@ -355,7 +353,7 @@ export default class RoamingState extends _BaseState {
          ctx.restore();
       }
 
-      if (this._substate === RoamingSubState.MENU || this._substate === RoamingSubState.WARP_SELECTION) {
+      if (this._substate === 'MENU' || this._substate === 'WARP_SELECTION') {
          this._commandBubble.paint(ctx);
       }
 
@@ -363,7 +361,7 @@ export default class RoamingState extends _BaseState {
          this._textBubble.paint(ctx);
       }
 
-      if (this._substate !== RoamingSubState.ROAMING || this._showStats) {
+      if (this._substate !== 'ROAMING' || this._showStats) {
          this._statBubble.paint(ctx);
       }
       if (this._statusBubble) {
@@ -395,14 +393,14 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   private setSubstate(substate: number) {
-      const prevSubstate: number = this._substate;
+   private setSubstate(substate: RoamingSubState) {
+      const prevSubstate: RoamingSubState = this._substate;
       this._substate = substate;
       this._statBubble.init(); // Reset this guy
-      if (substate === RoamingSubState.MENU) {
+      if (substate === 'MENU') {
          this._commandBubble.init();
-      } else if (substate === RoamingSubState.TALKING &&
-          prevSubstate !== RoamingSubState.OVERNIGHT) {
+      } else if (substate === 'TALKING' &&
+          prevSubstate !== 'OVERNIGHT') {
          this._textBubble.init();
       }
    }
@@ -427,7 +425,7 @@ export default class RoamingState extends _BaseState {
        text.forEach(line => conversation.addSegment(line));
        this._showTextBubble = true;
        this._textBubble.setConversation(conversation);
-       this.setSubstate(RoamingSubState.TALKING);
+       this.setSubstate('TALKING');
    }
 
    showSpellList() {
@@ -447,13 +445,13 @@ export default class RoamingState extends _BaseState {
    }
 
    showWarpBubble() {
-       this.setSubstate(RoamingSubState.WARP_SELECTION);
+       this.setSubstate('WARP_SELECTION');
    }
 
    startRoaming() {
       this.game.setNpcsPaused(false);
       this._showTextBubble = false;
-      this.setSubstate(RoamingSubState.ROAMING);
+      this.setSubstate('ROAMING');
       this._stationaryTimer.reset();
    }
 
@@ -479,12 +477,12 @@ export default class RoamingState extends _BaseState {
       }
       this._showTextBubble = true;
       this._textBubble.setConversation(conversation);
-      this.setSubstate(RoamingSubState.TALKING);
+      this.setSubstate('TALKING');
    }
 
    warpTo(location: string) {
 
-       this.setSubstate(RoamingSubState.ROAMING);
+       this.setSubstate('ROAMING');
 
        switch (location) {
            case 'Brecconary':

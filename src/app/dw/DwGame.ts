@@ -405,11 +405,10 @@ export default class DwGame extends Game {
         const wanderStr: string = getProperty(obj, 'wanders', 'true');
         const wanders: boolean = wanderStr === 'true';
         const range: number[] = this.parseRange(getProperty(obj, 'range', ''));
-        const npc: Npc = new Npc({
+        return new Npc({
             name, type, direction: dir,
             range, wanders, mapRow: row, mapCol: col
         });
-        return npc;
     }
 
     private parseRange(rangeStr?: string): number[] {
