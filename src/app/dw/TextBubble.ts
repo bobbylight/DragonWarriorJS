@@ -8,6 +8,7 @@ import ConversationSegment, {
     ConversationSegmentArgsChoice
 } from './ConversationSegment';
 import ChoiceBubble from './ChoiceBubble';
+import Sellable from './Sellable';
 
 export default class TextBubble extends Bubble {
 
@@ -111,7 +112,7 @@ export default class TextBubble extends Bubble {
             if (this._shoppingBubble) {
                 result = this._shoppingBubble.handleInput();
                 if (result) {
-                    const item: any = this._shoppingBubble.getSelectedItem();
+                    const item: Sellable | undefined = this._shoppingBubble.getSelectedItem();
                     delete this._shoppingBubble;
                     this.setActive(true);
                     if (item) {
@@ -193,7 +194,7 @@ export default class TextBubble extends Bubble {
         return !!this._overnight;
     }
 
-    clearOvernight(overnight?: any): void {
+    clearOvernight(): void {
         delete this._overnight;
     }
 

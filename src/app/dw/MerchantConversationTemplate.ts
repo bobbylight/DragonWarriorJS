@@ -2,6 +2,7 @@ import Conversation from './Conversation';
 import DwGame from './DwGame';
 import { NpcText } from './mapLogic/MapLogic';
 import { ConversationSegmentArgs } from './ConversationSegment';
+import Item from './Item';
 
 export default (game: DwGame, conversation: Conversation, segmentArgs: ConversationSegmentArgs): NpcText => {
 
@@ -38,7 +39,7 @@ export default (game: DwGame, conversation: Conversation, segmentArgs: Conversat
       {
          id: Conversation.PURCHASE_SEGMENT,
          action: () => {
-            game.party.addInventoryItem(conversation.item);
+            game.party.addInventoryItem(conversation.item as Item);
             game.party.gold -= conversation.item.baseCost;
          },
          text: 'I thank thee!',

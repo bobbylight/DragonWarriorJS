@@ -2,10 +2,11 @@ import Bubble from './Bubble';
 import DwGame from './DwGame';
 import { InputManager } from 'gtp';
 import { ShoppingInfo } from './ConversationSegment';
+import Sellable from './Sellable';
 
 export default class ShoppingBubble extends Bubble {
 
-   private _choices: any[];
+   private _choices: Sellable[];
    private _curChoice: number;
 
    constructor(game: DwGame, shoppingInfo: ShoppingInfo) {
@@ -59,12 +60,12 @@ export default class ShoppingBubble extends Bubble {
 
    }
 
-   getSelectedItem(): any {
-      return this._curChoice === -1 ? null :
+   getSelectedItem(): Sellable | undefined {
+      return this._curChoice === -1 ? undefined :
           this._choices[this._curChoice];
    }
 
-   setChoices(choices: any[]) {
+   setChoices(choices: Sellable[]) {
       this._choices = choices;
    }
 }

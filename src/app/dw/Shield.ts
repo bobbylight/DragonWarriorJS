@@ -1,15 +1,17 @@
-export default class Shield {
+import Sellable from './Sellable';
+
+export default class Shield implements Sellable {
 
     name: string;
+    displayName: string;
     baseCost: number;
     defense: number;
-    displayName: string;
 
     constructor(name: string, args: any) {
         this.name = name;
+        this.displayName = args.displayName || this.name;
         this.baseCost = args.baseCost || 0;
         this.defense = args.defense || 1;
-        this.displayName = args.displayName || this.name;
     }
 
     toString(): string {

@@ -1,16 +1,16 @@
 import ConversationSegment, { ConversationSegmentArgs } from './ConversationSegment';
 import merchantConversationTemplate from './MerchantConversationTemplate';
 import innkeeperConversationTemplate from './InnkeeperConversationTemplate';
-import Item from './Item';
 import { NpcText } from './mapLogic/MapLogic';
 import DwGame from './DwGame';
+import Sellable from './Sellable';
 
 export default class Conversation {
 
     private readonly voice: boolean;
     private readonly _segments: ConversationSegment[];
     private _segmentIndex: number;
-    item: any;
+    item: Sellable;
 
     static readonly DONE: string = '_done';
     static readonly CHOICES_SEGMENT: string = 'choicesSegment';
@@ -171,7 +171,7 @@ export default class Conversation {
      * item being haggled over.  This allows us to refer to the item by name
      * and state its price.
      */
-    setItem(item: Item) {
+    setItem(item: Sellable) {
         this.item = item;
     }
 
