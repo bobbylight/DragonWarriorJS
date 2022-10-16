@@ -1,6 +1,11 @@
 import DwGame from './DwGame';
 import { BitmapFont, Delay } from 'gtp';
 
+export interface BreakApartResult {
+    lines: string[];
+    delays: any[];
+}
+
 /**
  * A base class for all bubbles in the game (e.g. white text
  * against a black background).
@@ -60,9 +65,9 @@ export default class Bubble {
         this.setActive(true);
     }
 
-    protected _breakApart(text: string, w: number): any {
+    protected _breakApart(text: string, w: number): BreakApartResult {
 
-        const result: any = {lines: [], delays: []};
+        const result: BreakApartResult = {lines: [], delays: []};
 
         // Newlines are automatic line breaks
         text = Bubble._removeSpecialEscapes(text, result.delays);
@@ -114,7 +119,7 @@ export default class Bubble {
         return text;
     }
 
-    private breakApartLine(line: string, w: number, result: any) {
+    private breakApartLine(line: string, w: number, result: BreakApartResult) {
 
         const optimal: number = Math.floor(w / this.fontWidth);
 

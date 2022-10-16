@@ -1,4 +1,4 @@
-import Bubble from './Bubble';
+import Bubble, { BreakApartResult } from './Bubble';
 import DwGame from './DwGame';
 import ShoppingBubble from './ShoppingBubble';
 import { Delay } from 'gtp';
@@ -59,7 +59,7 @@ export default class TextBubble extends Bubble {
         this._text = this._text + '\n' + curText;
         this._curLine = this._lines.length;
         const w: number = this.w - 2 * Bubble.MARGIN;
-        const breakApartResult: any = this._breakApart(curText, w);
+        const breakApartResult: BreakApartResult = this._breakApart(curText, w);
         this._lines = this._lines.concat(breakApartResult.lines);
         this._delays = breakApartResult.delays;
         this._curOffs = -1;
@@ -320,7 +320,7 @@ export default class TextBubble extends Bubble {
         this._text = segment.currentText();
         if (this._text) {
             const w: number = this.w - 2 * Bubble.MARGIN;
-            const breakApartResult: any = this._breakApart(this._text, w);
+            const breakApartResult: BreakApartResult = this._breakApart(this._text, w);
             this._lines = breakApartResult.lines;
             this._delays = breakApartResult.delays;
             this._curLine = 0;
