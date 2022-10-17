@@ -152,7 +152,7 @@ export default class Bubble {
         }
     }
 
-    _getDefaultTextColor(): string {
+    private _getDefaultTextColor(): string {
         return this.game.hero.isDead() ? 'rgb(255, 0, 0)' : 'rgb(255, 255, 255)';
     }
 
@@ -181,7 +181,7 @@ export default class Bubble {
         this._initAnimation();
     }
 
-    _initAnimation() {
+    private _initAnimation() {
         this.paintH = 0;
         this.animator = new Delay({
             millis: 20, loop: true,
@@ -196,7 +196,7 @@ export default class Bubble {
         });
     }
 
-    _isAnimating(): boolean {
+    private _isAnimating(): boolean {
         return !!this.animator;
     }
 

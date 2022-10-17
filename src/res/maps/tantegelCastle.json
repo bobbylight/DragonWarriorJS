@@ -932,7 +932,7 @@
                         {
                          "name":"type",
                          "type":"string",
-                         "value":"soldier_gray"
+                         "value":"king"
                         }, 
                         {
                          "name":"wanders",

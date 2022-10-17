@@ -85,7 +85,7 @@ export default class BattleState extends _BaseState {
       this._commandExecuting = false;
    }
 
-   _enemyAttack() {
+   private _enemyAttack() {
       console.log('_enemyAttack called');
       const text: string = 'The ' + this._enemy.name + ' attacks!';
       this._textBubble.addToConversation({text: text, sound: 'prepareToAttack'}, true);
@@ -97,7 +97,7 @@ export default class BattleState extends _BaseState {
       });
    }
 
-   _enemyAttackCallback() {
+    private _enemyAttackCallback() {
       delete this._enemyAttackDelay;
       this._shake = true;
       this.game.audio.playSound('receiveDamage');
@@ -108,7 +108,7 @@ export default class BattleState extends _BaseState {
 
    }
 
-   _enemyAttackShakeCallback() {
+    private _enemyAttackShakeCallback() {
 
       delete this._enemyAttackShakeDelay;
       this._shake = false;

@@ -22,8 +22,8 @@ export default class StatBubble extends Bubble {
       this.selection = 0;
    }
 
-   _calculateX2Offs(val: any) {
-      return this.game.stringWidth('' + val);
+   private _calculateX2Offs(val: number) {
+      return this.game.stringWidth(val.toString(10));
 //         var digits = 1;
 //         while (val > 10) {
 //            digits++;

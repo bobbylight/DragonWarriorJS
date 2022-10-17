@@ -192,7 +192,7 @@ export default class PartyMember extends RoamingEntity {
         return false;
     }
 
-    _possiblyStartRandomEncounter() {
+    private _possiblyStartRandomEncounter() {
         if (this.game.randomInt(20) === 0) {
             this.game.startRandomEncounter();
         }

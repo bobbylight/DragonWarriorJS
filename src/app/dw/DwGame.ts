@@ -249,7 +249,7 @@ export default class DwGame extends Game {
         this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
     }
 
-    _resetMap(map: any) {
+    private _resetMap(map: any) {
         map.npcs.forEach(npc => npc.reset());
     }
 
@@ -433,7 +433,7 @@ export default class DwGame extends Game {
         return row + ',' + col;
     }
 
-    _loadGame() {
+    private _loadGame() {
         const hero: Hero = this.hero;
         hero.hp = hero.maxHp = 15;
         hero.mp = hero.maxMp = 15;

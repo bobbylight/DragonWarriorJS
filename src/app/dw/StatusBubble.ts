@@ -18,10 +18,9 @@ export default class StatusBubble extends Bubble {
         this.selection = 0;
     }
 
-    _calculateX2Offs(val: any) {
-        // We're assuming a string or a number here
-        if (!val.length) {
-            val = '' + val;
+    private _calculateX2Offs(val: number | string) {
+        if (typeof val === 'number') {
+            val = val.toString();
         }
         return this.game.stringWidth(val);
     }

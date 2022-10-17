@@ -74,7 +74,7 @@ export default class RoamingEntity {
      * If this entity is only allowed to walk around in a certain range, this
      * method returns true iff the specified location is outside that range.
      */
-    _isOutOfRange(row: number, col: number) {
+    private _isOutOfRange(row: number, col: number) {
         if (this.range) {
             return col < this.range[0] || col > this.range[2] ||
                 row < this.range[1] || row > this.range[3];
@@ -110,7 +110,7 @@ export default class RoamingEntity {
      * @param col The column to attempt to move to.
      * @return Whether the move was successful.
      */
-    _tryToMove(row: number, col: number) {
+    private _tryToMove(row: number, col: number) {
 
         if (this._isOutOfRange(row, col)) {
             return false;

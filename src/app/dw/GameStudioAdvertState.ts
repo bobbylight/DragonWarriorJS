@@ -38,7 +38,7 @@ export class GameStudioAdvertState extends _BaseState {
         game.drawString(prompt, x, y);
     }
 
-    _startGame() {
+    private _startGame() {
         this.game.setState(new FadeOutInState(this, new TitleScreenState()));
     }
 }

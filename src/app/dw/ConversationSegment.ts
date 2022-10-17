@@ -79,6 +79,11 @@ export default class ConversationSegment implements ConversationSegmentArgs {
                   text = text.substring(0, lbrace) + this.game.hero.name + text.substring(rbrace + 1);
                   lbrace = text.indexOf('\\w{', lbrace + this.game.hero.name.length);
                   break;
+                case 'hero.expRemaining':
+                    const expRemaining = this.game.hero.exp.toString(); // TODO: Correct value
+                    text = text.substring(0, lbrace) + expRemaining + text.substring(rbrace + 1);
+                    lbrace = text.indexOf('\\w{', lbrace + expRemaining.length);
+                    break;
                case 'item.name':
                   const itemName: string = this.parentConversation.item.displayName;
                   text = text.substring(0, lbrace) + itemName + text.substring(rbrace + 1);

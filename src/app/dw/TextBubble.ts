@@ -216,6 +216,14 @@ export default class TextBubble extends Bubble {
             }
         }
 
+        // Ensure the blinking "down" arrow is always on a line
+        if (this._textDone &&
+                this._curOffs === -1 && this._curLine === TextBubble.MAX_LINE_COUNT - 1 &&
+                this._conversation.hasNext()) {
+            this._lines.shift();
+            this._curLine--;
+        }
+
         if (!this._textDone) {
             this._curCharMillis += delta;
             if (this._curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
@@ -283,7 +291,8 @@ export default class TextBubble extends Bubble {
             }
             if (this._textDone && this._conversation.hasNext()) {
                 // TODO: Remove magic constants
-                this.drawDownArrow(this.x + this.w - 30, this.y + this.h - 30);
+                const x: number = this.x + (this.w - this.game.stringWidth('\\')) / 2;
+                this.drawDownArrow(x, y);
                 /*
                 var conv = this._conversation;
                 console.log('--- ' +

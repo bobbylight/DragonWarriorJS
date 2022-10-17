@@ -1,6 +1,7 @@
 import DwGame from '../DwGame';
 import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
 import { NpcText } from './MapLogic';
+import Conversation from '../Conversation';
 
 const talks: NpcTextGeneratorMap = {
 
@@ -117,7 +118,43 @@ const talks: NpcTextGeneratorMap = {
   },
 
   king: (game: DwGame): NpcText => {
-     return 'You cannot save yet.  Sorry!';
+     return [
+         {
+             text: 'I am greatly pleased that thou has returned, \\w{hero.name}.'
+         },
+         {
+             text: 'Before reaching thy next level of experience thou must gain \\w{hero.expRemaining} Points.'
+         },
+         {
+             text: "Will thou tell me now of thy deeds so they won't be forgotten?",
+             choices: [
+                 { text: 'Yes', next: 'tell' },
+                 { text: 'No', next: 'dontTell' }
+             ]
+         },
+         {
+             id: 'tell',
+             text: 'Thy deeds have been recorded on the Imperial Scrolls of Honor.'
+         },
+         {
+             id: 'dontTell',
+             text: 'Dost thou wish to continue thy quest?',
+             choices: [
+                 { text: 'Yes', next: 'continue' },
+                 { text: 'No', next: 'dontContinue' }
+             ]
+         },
+         {
+             id: 'dontContinue',
+             text: 'Rest then for awhile.',
+             next: Conversation.DONE // TODO: Reset to title screen
+         },
+         {
+             id: 'continue',
+             text: 'Goodbye now, \\w{hero.name}. Take care and tempt not the Fates.',
+             next: Conversation.DONE
+         },
+     ];
   }
 
 };
