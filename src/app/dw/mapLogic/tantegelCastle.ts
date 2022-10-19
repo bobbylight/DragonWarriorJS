@@ -2,6 +2,8 @@ import DwGame from '../DwGame';
 import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
 import { NpcText } from './MapLogic';
 import Conversation from '../Conversation';
+import { FadeOutInState } from 'gtp';
+import { TitleScreenState } from '../TitleScreenState';
 
 const talks: NpcTextGeneratorMap = {
 
@@ -98,7 +100,6 @@ const talks: NpcTextGeneratorMap = {
      return [
         {
            text: 'Dost thou know about Princess Gwaelin?',
-           afterSound: 'confirmation',
            choices: [
               { text: 'Yes', next: 'knows' },
               { text: 'No', next: 'doesntKnow' }
@@ -147,6 +148,11 @@ const talks: NpcTextGeneratorMap = {
          {
              id: 'dontContinue',
              text: 'Rest then for awhile.',
+         },
+         {
+             action: () => {
+                 game.setState(new FadeOutInState(game.state, new TitleScreenState()));
+             },
              next: Conversation.DONE // TODO: Reset to title screen
          },
          {

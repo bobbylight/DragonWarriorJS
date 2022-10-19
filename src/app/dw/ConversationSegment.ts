@@ -32,9 +32,7 @@ export interface ConversationSegmentArgs {
     music?: string;
     next?: string;
     overnight?: boolean;
-    shopping?: {
-        choices: string[];
-    }
+    shopping?: ShoppingInfo;
     sound?: string;/*SoundEffect*/
     text?: string;
 }
@@ -55,7 +53,7 @@ export default class ConversationSegment implements ConversationSegmentArgs {
    overnight?: boolean;
    shopping?: ShoppingInfo;
    sound?: string;/*SoundEffect*/
-   readonly text: string;
+   readonly text?: string;
 
    constructor(parentConversation: Conversation, args: ConversationSegmentArgs) {
 
@@ -64,9 +62,12 @@ export default class ConversationSegment implements ConversationSegmentArgs {
       Utils.mixin(args, this);
    }
 
-   private getParameterizedText(): string {
+   private getParameterizedText(): string | undefined {
 
-      let text: string = this.text;
+      let text: string | undefined = this.text;
+      if (!text) {
+          return text;
+      }
 
       // TODO: This could be much, much better
       let lbrace: number = text.indexOf('\\w{');
@@ -104,7 +105,7 @@ export default class ConversationSegment implements ConversationSegmentArgs {
       return text;
    }
 
-   currentText(): string {
+   currentText(): string | undefined {
       return this.getParameterizedText();
    }
 }

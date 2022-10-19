@@ -55,7 +55,11 @@ export default class TextBubble extends Bubble {
 
     private append(segment: ConversationSegment): void {
 
-        const curText: string = segment.currentText();
+        const curText: string | undefined = segment.currentText();
+        if (!curText) {
+            return;
+        }
+
         this._text = this._text + '\n' + curText;
         this._curLine = this._lines.length;
         const w: number = this.w - 2 * Bubble.MARGIN;
@@ -166,6 +170,9 @@ export default class TextBubble extends Bubble {
         }
         if (segment.afterSound) {
             this._afterSound = segment.afterSound;
+        }
+        else if (segment.choices) {
+            this._afterSound = 'confirmation';
         }
     }
 
@@ -326,7 +333,7 @@ export default class TextBubble extends Bubble {
      * @param segment The text to render.
      */
     private _setText(segment: ConversationSegment): void {
-        this._text = segment.currentText();
+        this._text = segment.currentText() || '';
         if (this._text) {
             const w: number = this.w - 2 * Bubble.MARGIN;
             const breakApartResult: BreakApartResult = this._breakApart(this._text, w);

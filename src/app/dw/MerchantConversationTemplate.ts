@@ -14,7 +14,6 @@ export default (game: DwGame, conversation: Conversation, segmentArgs: Conversat
       {
          clear: false,
          text: segmentArgs.introText || 'Welcome! Would you like to see our wares?',
-         afterSound: 'confirmation',
          choices: [
             { text: 'Yes', next: Conversation.CHOICES_SEGMENT },
             { text: 'No', next: Conversation.BID_FAREWELL_SEGMENT }
@@ -29,8 +28,7 @@ export default (game: DwGame, conversation: Conversation, segmentArgs: Conversat
       },
       {
          id: Conversation.CONFIRM_SEGMENT,
-         text: 'The \\w{item.name}? That will be \\w{item.baseCost} gold.  Is that okay?',
-         afterSound: 'confirmation',
+         text: 'The \\w{item.name}? That will be \\w{item.baseCost} gold. Is that okay?',
          choices: [
             { text: 'Yes', next: Conversation.PURCHASE_SEGMENT },
             { text: 'No', next: Conversation.DECLINED_PURCHASE_SEGMENT }
@@ -52,7 +50,6 @@ export default (game: DwGame, conversation: Conversation, segmentArgs: Conversat
       {
          id: Conversation.SOMETHING_ELSE_SEGMENT,
          text: 'Would you like to buy something else?',
-         afterSound: 'confirmation',
          choices: [
             { text: 'Yes', next: Conversation.CHOICES_SEGMENT },
             { text: 'No', next: Conversation.BID_FAREWELL_SEGMENT }

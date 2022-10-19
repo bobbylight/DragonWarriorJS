@@ -31,7 +31,6 @@ const talks: NpcTextGeneratorMap = {
                id: 'makeUserChoose',
                clear: false,
                text: 'Do you want my help?',
-               afterSound: 'confirmation',
                choices: [
                   { text: 'Yes', next: () => {
                         game.party.addGold(10);

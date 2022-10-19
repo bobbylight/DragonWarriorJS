@@ -17,8 +17,7 @@ export default (game: DwGame, segmentArgs: ConversationSegmentArgs): NpcText => 
    return [
       {
          clear: false,
-         text: `Welcome to the inn.  Our price is ${segmentArgs.cost} gold per night.  Wilst thou stay?`,
-         afterSound: 'confirmation',
+         text: `Welcome to the traveler's inn. Room and board ${segmentArgs.cost} GOLD per night. Dost thou want a room?`,
          choices: [
             { text: 'Yes', next: 'stay' },
             { text: 'No',  next: 'leave' }
