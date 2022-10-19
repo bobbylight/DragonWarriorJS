@@ -85,7 +85,7 @@ export default class TextBubble extends Bubble {
         const x: number = this.game.getWidth() - tileSize * 6;
         const y: number = tileSize;
         const width: number = tileSize * 5;
-        const height: number = tileSize * 5;
+        const height: number = tileSize * (choices.length + 1);
 
         return new ChoiceBubble(x, y, width, height, choices, 'text');
     }

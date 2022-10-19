@@ -13,7 +13,7 @@ export default class StatBubble extends Bubble {
       const w: number = 60 * scale;
       const h: number = 100 * scale;
       const x: number = tileSize;
-      const y: number = tileSize;
+      const y: number = tileSize * 3 / 2;
       let title: string = game.hero.name;
       if (title.length > 4) {
          title = title.substring(0, 4);

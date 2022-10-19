@@ -89,7 +89,7 @@ export default class RoamingState extends _BaseState {
            this.setSubstate('ROAMING');
        }
        else {
-           this.showOneLineConversation(false, 'There are no stairs here.');
+           this.showOneLineConversation(true, 'There are no stairs here.');
        }
    }
 
@@ -116,6 +116,10 @@ export default class RoamingState extends _BaseState {
    }
 
    private updateMenu(delta: number) {
+
+      if (this._statBubble) {
+         this._statBubble.update(delta);
+      }
 
       if (this._statusBubble) {
          this._statusBubble.update(delta);
@@ -151,7 +155,7 @@ export default class RoamingState extends _BaseState {
 
    private updateRoaming(delta: number) {
 
-      if (this._substate !== 'ROAMING' || this._showStats) {
+      if (this._showStats) {
          this._statBubble.update(delta);
       }
 
@@ -163,6 +167,7 @@ export default class RoamingState extends _BaseState {
          this._commandBubble.reset();
          this.game.audio.playSound('menu');
          this.setSubstate('MENU');
+         this._showStats = true;
          return;
       }
 
@@ -201,9 +206,6 @@ export default class RoamingState extends _BaseState {
          }
          if (im.isKeyDown(Keys.KEY_T, true)) {
             this.game.toggleShowTerritoryLayer();
-         }
-         if (im.isKeyDown(Keys.KEY_S, true)) {
-            this.game.audio.playSound('stairs');
          }
       }
 
@@ -396,7 +398,6 @@ export default class RoamingState extends _BaseState {
    private setSubstate(substate: RoamingSubState) {
       const prevSubstate: RoamingSubState = this._substate;
       this._substate = substate;
-      this._statBubble.init(); // Reset this guy
       if (substate === 'MENU') {
          this._commandBubble.init();
       } else if (substate === 'TALKING' &&
@@ -452,7 +453,6 @@ export default class RoamingState extends _BaseState {
       this.game.setNpcsPaused(false);
       this._showTextBubble = false;
       this.setSubstate('ROAMING');
-      this._stationaryTimer.reset();
    }
 
    talkToNpc() {
@@ -464,7 +464,7 @@ export default class RoamingState extends _BaseState {
       }
 
       const npc: Npc | undefined = this.game.getNpcHeroIsFacing();
-      const conversation: Conversation = new Conversation(!!npc);
+      const conversation: Conversation = new Conversation(true);
 
       if (npc) {
          const hero: Hero = this.game.hero;
@@ -473,7 +473,7 @@ export default class RoamingState extends _BaseState {
          npc.direction = newNpcDir;
          conversation.setSegments(logic.npcText(npc, this.game));
       } else {
-         conversation.addSegment('There is nobody in that direction!');
+         conversation.addSegment('There is no one there.');
       }
       this._showTextBubble = true;
       this._textBubble.setConversation(conversation);

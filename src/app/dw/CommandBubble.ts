@@ -17,12 +17,12 @@ export default class CommandBubble extends Bubble {
 
         const tileSize: number = game.getTileSize();
         const w: number = 140 * scale;
-        let h: number = 90 * scale;
+        let h: number = 85 * scale;
         if (game.getCheatsEnabled()) {
             h += yInc;
         }
-        const x: number = game.getWidth() - tileSize - w;
-        const y: number = tileSize;
+        const x: number = game.getWidth() - tileSize * 2 - w;
+        const y: number = tileSize / 2;
         super('COMMAND', x, y, w, h);
         this.selection = 0;
         this.yInc = yInc;
