@@ -98,6 +98,7 @@ export default class CommandBubble extends Bubble {
                 break;
 
             case 'TAKE':
+                screen.take();
                 break;
 
             case 'EQUIP*':

@@ -969,9 +969,14 @@
                  "name":"chest_1",
                  "properties":[
                         {
-                         "name":"contents",
+                         "name":"contentType",
                          "type":"string",
-                         "value":"gold=10"
+                         "value":"gold"
+                        }, 
+                        {
+                         "name":"contents",
+                         "type":"int",
+                         "value":10
                         }],
                  "rotation":0,
                  "type":"chest",
@@ -986,9 +991,14 @@
                  "name":"chest_2",
                  "properties":[
                         {
-                         "name":"contents",
+                         "name":"contentType",
                          "type":"string",
-                         "value":"gold=11"
+                         "value":"gold"
+                        }, 
+                        {
+                         "name":"contents",
+                         "type":"int",
+                         "value":11
                         }],
                  "rotation":0,
                  "type":"chest",
@@ -1003,9 +1013,14 @@
                  "name":"chest_3",
                  "properties":[
                         {
-                         "name":"contents",
+                         "name":"contentType",
                          "type":"string",
-                         "value":"gold=10"
+                         "value":"gold"
+                        }, 
+                        {
+                         "name":"contents",
+                         "type":"int",
+                         "value":10
                         }],
                  "rotation":0,
                  "type":"chest",
@@ -1020,9 +1035,14 @@
                  "name":"chest_4",
                  "properties":[
                         {
-                         "name":"contents",
+                         "name":"contentType",
                          "type":"string",
-                         "value":"gold=9"
+                         "value":"gold"
+                        }, 
+                        {
+                         "name":"contents",
+                         "type":"int",
+                         "value":9
                         }],
                  "rotation":0,
                  "type":"chest",

@@ -27,7 +27,7 @@ export default class AbstractMapLogic implements MapLogic {
     npcText(npc: Npc, game: DwGame): NpcText {
         console.log('Talking to: ' + JSON.stringify(npc.name));
         const data: NpcTextGenerator = this.conversationMap[npc.name];
-        return data ? data.call(this, game) : 'I have nothing to say...';
+        return data?.call(this, game) ?? 'I have nothing to say...';
     }
 
 }

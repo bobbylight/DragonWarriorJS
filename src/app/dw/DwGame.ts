@@ -35,6 +35,10 @@ import TantegelCastle from './mapLogic/tantegelCastle';
 import MapLogic from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
+import { GameArgs } from 'gtp/lib/gtp/Game';
+import DwGameState, { createDefaultGameState } from './DwGameState';
+import { Chest, ChestContentType } from './Chest';
+import { toLocationString, LocationString } from './LocationString';
 
 export interface TiledMapMap {
     [ name: string ]: DwMap;
@@ -47,6 +51,7 @@ export default class DwGame extends Game {
     hero: Hero;
     party: Party;
     npcs: Npc[];
+    gameState: DwGameState;
     private _bumpSoundDelay: number;
     private _mapLogics: Map<String, MapLogic>;
     private _randomEncounters: boolean;
@@ -58,19 +63,19 @@ export default class DwGame extends Game {
     private _cameraDx: number;
     private _cameraDy: number;
 
-    constructor(args?: any) {
-
+    constructor(args?: GameArgs) {
         super(args);
     }
 
     start() {
-        Game.prototype.start.apply(this);
+        super.start();
         this.init();
     }
 
     private init() {
 
         this.createPartyAndHero();
+        this.gameState = createDefaultGameState();
         this.npcs = [];
         this._bumpSoundDelay = 0;
         this.setCameraOffset(0, 0);
@@ -108,7 +113,7 @@ export default class DwGame extends Game {
     }
 
     update() {
-        Game.prototype.update.call(this);
+        super.update();
     }
 
     cycleArmor() {
@@ -280,7 +285,8 @@ export default class DwGame extends Game {
             this.maps = {};
         }
 
-        const map: DwMap = new DwMap(data, {
+        const mapName: string = asset.substring(0, asset.indexOf('.')); // Remove trailing '.json'
+        const map: DwMap = new DwMap(mapName, data, {
             imagePathModifier: imagePathModifier,
             screenWidth: this.getWidth(),
             screenHeight: this.getHeight(),
@@ -312,7 +318,7 @@ export default class DwGame extends Game {
         const newNpcs: Npc[] = [];
         const newDoors: Door[] = [];
         const newTalkAcrosses: any = {};
-        map.chests = new Map<string, number>();
+        map.chests = new Map<LocationString, Chest>();
         const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
         if (temp?.isObjectGroup()) {
 
@@ -335,7 +341,8 @@ export default class DwGame extends Game {
                         newTalkAcrosses[ this.parseTalkAcrossKey(obj) ] = true;
                         break;
                     case 'chest':
-                        map.chests.set(this.parseTalkAcrossKey(obj), DwGame.parseChestContents(obj));
+                        const chest: Chest = this.parseChestContents(obj);
+                        map.chests.set(chest.location, chest);
                         break;
                     default:
                         console.error(`Unhandled object type in tiled map: ${obj.type}`);
@@ -366,13 +373,32 @@ export default class DwGame extends Game {
 
     }
 
-    private static parseChestContents(chest: TiledObject): number {
-        const value: string = getProperty(chest, 'contents');
-        if (value.startsWith('gold=')) {
-            return parseInt(value.substring('gold='.length, 10));
+    private parseChestContents(chest: TiledObject): Chest {
+
+        const id: string = chest.name;
+        let value: any;
+
+        const contentType: ChestContentType = getProperty(chest, 'contentType');
+        switch (contentType) {
+            case 'gold':
+                value = getProperty(chest, 'contents');
+                break;
+            default:
+                console.error(`Invalid contentType for chest ${chest.name}: ${contentType}`);
+                value = 1;
+                break;
         }
-        console.error(`Invalid chest contents for chest ${chest.name}: ${value}`);
-        return 1;
+
+        const tileSize: number = this.getTileSize();
+        const row: number = chest.y / tileSize;
+        const col: number = chest.x / tileSize;
+
+        return {
+            id,
+            contentType,
+            contents: value as number,
+            location: toLocationString(row, col)
+        };
     }
 
     private parseDoor(obj: TiledObject): Door {
@@ -422,15 +448,11 @@ export default class DwGame extends Game {
         return range;
     }
 
-    parseTalkAcrossKey(obj: TiledObject): string {
+    private parseTalkAcrossKey(obj: TiledObject): LocationString {
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
-        return DwGame.getTalkAcrossKey(row, col);
-    }
-
-    static getTalkAcrossKey(row: number, col: number): string {
-        return row + ',' + col;
+        return toLocationString(row, col);
     }
 
     private _loadGame() {
@@ -512,8 +534,8 @@ export default class DwGame extends Game {
         return this.map.npcs.find(npc => npc.isAt(row, col));
     }
 
-    getShouldTalkAcross(row: number, col: number): boolean {
-        return this.map.talkAcrosses[ DwGame.getTalkAcrossKey(row, col) ];
+    private getShouldTalkAcross(row: number, col: number): boolean {
+        return this.map.talkAcrosses[ toLocationString(row, col) ];
     }
 
     getUsingTorch(): boolean {
@@ -549,6 +571,11 @@ export default class DwGame extends Game {
             this.audio.playSound('bump');
             this._bumpSoundDelay = this.playTime + 300;
         }
+    }
+
+    removeChest(chest: Chest) {
+        this.gameState.mapStates[this.map.name].openedChests.push(chest.id);
+        this.map.removeChest(chest);
     }
 
     setHeroStats(hp: number | null, maxHp: number | null, mp?: number, maxMp?: number) {
