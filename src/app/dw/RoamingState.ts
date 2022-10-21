@@ -17,6 +17,9 @@ import Direction from './Direction';
 import ChoiceBubble from './ChoiceBubble';
 import Door from './Door';
 import DwMap from './DwMap';
+import { Chest } from './Chest';
+import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
+import getChestConversation from './ChestConversations';
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION';
 
@@ -70,7 +73,7 @@ export default class RoamingState extends _BaseState {
 
        const messages: string[] = [ '\\w{hero.name} searched the ground all about.' ];
 
-       const heroPos: string = DwGame.getTalkAcrossKey(this.game.hero.mapRow, this.game.hero.mapCol);
+       const heroPos: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
        const chest: boolean = this.game.map.chests.has(heroPos);
 
        // In this game, you must "TAKE" treasure, not "SEARCH" for it.
@@ -82,6 +85,16 @@ export default class RoamingState extends _BaseState {
        }
 
        this.showOneLineConversation(false, ...messages);
+   }
+
+   take() {
+
+       const location: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
+       const chest: Chest | undefined = this.game.map.chests.get(location);
+
+       this._showTextBubble = true;
+       this._textBubble.setConversation(getChestConversation(this, chest));
+       this.setSubstate('TALKING');
    }
 
    takeStairs() {
@@ -333,10 +346,9 @@ export default class RoamingState extends _BaseState {
       this.game.drawMap(ctx);
 
       // TODO: Be more efficient here
-      this.game.map.chests.forEach((gold: number, key: string) => {
+      this.game.map.chests.forEach((chest: Chest) => {
 
-          const row: number = parseInt(key.substring(0, key.indexOf(',')), 10);
-          const col: number = parseInt(key.substring(key.indexOf(',') + 1), 10);
+          const { row, col } = toRowAndColumn(chest.location);
 
           let x: number = col * this.game.getTileSize();
           x -= this.game.getMapXOffs();
@@ -420,7 +432,7 @@ export default class RoamingState extends _BaseState {
      * @param voice Whether to play the "talking" sound effect.
      * @param text The text to display.
      */
-   private showOneLineConversation(voice: boolean, ...text: string[]) {
+   showOneLineConversation(voice: boolean, ...text: string[]) {
 
        const conversation: Conversation = new Conversation(voice);
        text.forEach(line => conversation.addSegment(line));

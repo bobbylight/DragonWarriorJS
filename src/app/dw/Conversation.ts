@@ -94,7 +94,11 @@ export default class Conversation {
 
     start(): ConversationSegment {
         this._segmentIndex = 0;
-        return this._segments[0];
+        const segment: ConversationSegment = this._segments[0];
+        if (segment && segment.action) {
+            segment.action();
+        }
+        return segment;
     }
 
     private _findIndexById(id: string): number {

@@ -145,10 +145,10 @@
         },
         "tantegelCastle.json": {
             "scale": 1,
-            "selectedLayer": 2,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 345.5,
-                "y": 262.5
+                "x": 127.5,
+                "y": 795.5
             }
         },
         "tantegelCastle.tmx": {
@@ -177,13 +177,13 @@
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
+        "tantegelCastle.json",
         "erdricksCave2.json",
         "collision_tiles.json",
         "tileset_tiles.json",
         "erdricksCave1.json",
         "brecconary.json",
         "overworld.json",
-        "tantegelCastle.json",
         "garinham.json",
         "erdricksCave1.tmx",
         "brecconary.tmx",
