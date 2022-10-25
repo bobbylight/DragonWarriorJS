@@ -512,6 +512,8 @@ export default class RoamingState extends _BaseState {
            case 'Erdrick\'s Cave':
                Cheats.warpTo(this.game, 'erdricksCave1', 1, 1, 'Erdrick\'s Cave');
                break;
+           case 'Far Reaches':
+               Cheats.warpTo(this.game, 'overworld', 46, 85, 'Overworld');
        }
    }
 }

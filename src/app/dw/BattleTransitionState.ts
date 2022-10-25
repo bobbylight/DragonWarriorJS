@@ -51,7 +51,7 @@ export default class BattleTransitionState extends _BaseState {
         const tileSize: number = game.getTileSize();
 
         const cx: number = w / 2;
-        const cy: number = h / 2 - tileSize; // Matches where battle bg is draw in dw.BattleState
+        const cy: number = h / 2 - tileSize; // Matches where battle bg is draw in BattleState
         const battleBG: Image = game.assets.get('battleBG');
         const xts: number = battleBG.width / 5;
         const yts: number = battleBG.height / 5;

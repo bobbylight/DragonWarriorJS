@@ -621,7 +621,7 @@ export default class DwGame extends Game {
             if (enemyTerritoryLayer) {
                 let territory: number = enemyTerritoryLayer.getData(this.hero.mapRow, this.hero.mapCol);
                 if (territory > 0) {
-                    // dw.Enemy territory index is offset by the Tiled tileset's firstgid
+                    // Enemy territory index is offset by the Tiled tileset's firstgid
                     // TODO: Remove call to private method
                     territory = territory - (this.map as any).getTilesetForGid(territory).firstgid;
                     if (territory >= 0) {

@@ -17,7 +17,7 @@ export default class Door {
     }
 
     toString(): string {
-        return '[dw.Door: ' +
+        return '[Door: ' +
             'name=' + this.name +
             ', row=' + this.row +
             ', col=' + this.col +

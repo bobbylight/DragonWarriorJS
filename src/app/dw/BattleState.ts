@@ -9,6 +9,7 @@ import Enemy from './Enemy';
 import BattleCommandBubble from './BattleCommandBubble';
 import TextBubble from './TextBubble';
 import Conversation from './Conversation';
+import { EnemyAiResult } from './EnemyAI';
 
 export default class BattleState extends _BaseState {
 
@@ -86,18 +87,33 @@ export default class BattleState extends _BaseState {
    }
 
    private _enemyAttack() {
-      console.log('_enemyAttack called');
-      const text: string = 'The ' + this._enemy.name + ' attacks!';
-      this._textBubble.addToConversation({text: text, sound: 'prepareToAttack'}, true);
-      this._textBubble.onDone(() => {
-         this._enemyAttackDelay = new Delay({
-            millis: 200,
-            callback: this._enemyAttackCallback.bind(this)
-         });
-      });
+
+      const result: EnemyAiResult = this._enemy.ai(this.game.hero, this._enemy);
+
+      if (result.type === 'physical') {
+          const text: string = `The ${this._enemy.name} attacks!`;
+          this._textBubble.addToConversation({  text, afterSound: 'prepareToAttack' }, true);
+          this._textBubble.onDone(() => {
+              this._enemyAttackDelay = new Delay({
+                  millis: 350,
+                  callback: this._enemyAttackCallback.bind(this)
+              });
+          });
+      }
+      else { // 'magic'
+          const text: string = `The ${this._enemy.name} chants the spell of ${result.spellName}.`
+          // TODO: Should conversations auto-wait for afterSounds to complete?
+          this._textBubble.addToConversation({  text, afterSound: 'castSpell' }, true);
+          this._textBubble.onDone(() => {
+              this._enemyAttackDelay = new Delay({
+                  millis: 900,
+                  callback: this._enemyAttackCallback.bind(this)
+              });
+          });
+      }
    }
 
-    private _enemyAttackCallback() {
+    private _enemyAttackCallback(result: EnemyAiResult) {
       delete this._enemyAttackDelay;
       this._shake = true;
       this.game.audio.playSound('receiveDamage');
@@ -108,21 +124,21 @@ export default class BattleState extends _BaseState {
 
    }
 
-    private _enemyAttackShakeCallback() {
+    private _enemyAttackShakeCallback(result: EnemyAiResult) {
 
       delete this._enemyAttackShakeDelay;
       this._shake = false;
 
       const damage: number = this._enemy.ai(this.game.hero, this._enemy).damage;
       this.game.hero.takeDamage(damage);
-      let text: string = 'Thy hit points are reduced by ' + damage + '.';
+      let text: string = `Thy Hit Points decreased by ${damage}.`;
       if (this.game.hero.isDead()) {
          text += '\nThou art dead.';
-         this._textBubble.addToConversation({text: text}, true);
+         this._textBubble.addToConversation({ text }, true);
          this._dead = true;
       } else {
          text += '\nCommand?';
-         this._textBubble.addToConversation({text: text}, true);
+         this._textBubble.addToConversation({ text }, true);
       }
 
       this._commandExecuting = false;

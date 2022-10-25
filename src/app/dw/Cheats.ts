@@ -18,6 +18,7 @@ export default class Cheats {
             'Tantegel (throne room)',
             'Garinham',
             'Erdrick\'s Cave',
+            'Far Reaches',
         ];
 
         return new ChoiceBubble(x, y, w, h, choices, undefined, true);

@@ -1,10 +1,17 @@
 {
-   "firstPixelIsTranslucent": true,
-   "images": [
-      { "id": "Slime", "dim": "5,0,19,18"},
-      { "id": "Slime_damaged", "dim": "68,0,19,18" },
-      { "id": "RedSlime", "dim": "26,0,19,18"},
-      { "id": "Drakee", "dim": "90,0,24,36"},
-      { "id": "Drakee_damaged", "dim": "168,0,24,36"}
-   ]
+  "firstPixelIsTranslucent": true,
+  "images": [
+    { "id": "Slime", "dim": "5,0,19,18"},
+    { "id": "Slime_damaged", "dim": "68,0,19,18" },
+    { "id": "RedSlime", "dim": "26,0,19,18"},
+    { "id": "Drakee", "dim": "90,0,24,36"},
+    { "id": "Drakee_damaged", "dim": "168,0,24,36"},
+    { "id": "Ghost", "dim": "2,38,24,43"},
+    { "id": "Ghost_damaged", "dim": "80,38,24,43"},
+    { "id": "Magician", "dim": "6,107,36,35"},
+    { "id": "Magician_damaged", "dim": "120,107,36,35"},
+    { "id": "Magidrakee", "dim": "116,0,24,33"},
+    { "id": "Scorpion", "dim": "6,146,41,32"},
+    { "id": "Scorpion_damaged", "dim": "135,145,41,32"}
+  ]
 }

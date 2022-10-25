@@ -30,8 +30,8 @@ export default class Npc extends RoamingEntity {
         this.dirFuncs = [ this.tryToMoveUp.bind(this), this.tryToMoveDown.bind(this),
             this.tryToMoveRight.bind(this), this.tryToMoveLeft.bind(this) ];
 
-        //gtp.Utils.mixin(dw.RoamingEntityMixin.prototype, this);
-        //dw.RoamingEntityMixin.call(this);
+        //gtp.Utils.mixin(RoamingEntityMixin.prototype, this);
+        //RoamingEntityMixin.call(this);
     }
 
     // TODO: Change NPC image to remove the need for this

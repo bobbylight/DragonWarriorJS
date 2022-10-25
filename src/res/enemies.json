@@ -37,5 +37,57 @@
       "xp": 2,
       "gp": 2,
       "ai": "attackOnly"
-   }
+   },
+  "Ghost": {
+    "name": "Ghost",
+    "image": "Ghost",
+    "damagedImage": "Ghost_damaged",
+    "str": 11,
+    "agility": 8,
+    "hp": [6, 7],
+    "resist":{"sleep":0,"stopSpell":15,"hurt":0},
+    "dodge": 4,
+    "xp": 3,
+    "gp": [3, 4],
+    "ai": "attackOnly"
+  },
+  "Magician": {
+    "name": "Magician",
+    "image": "Magician",
+    "damagedImage": "Magician_damaged",
+    "str": 11,
+    "agility": 12,
+    "hp": [10, 13],
+    "resist":{"sleep":0,"stopSpell":0,"hurt":0},
+    "dodge": 1,
+    "xp": 4,
+    "gp": [9, 11],
+    "ai": "halfHurtHalfAttack"
+  },
+  "Magidrakee": {
+    "name": "Magidrakee",
+    "image": "Magidrakee",
+    "damagedImage": "Drakee_damaged",
+    "str": 14,
+    "agility": 14,
+    "hp": [12, 15],
+    "resist":{"sleep":0,"stopSpell":0,"hurt":0},
+    "dodge": 1,
+    "xp": 5,
+    "gp": [9, 11],
+    "ai": "halfHurtHalfAttack"
+  },
+  "Scorpion": {
+    "name": "Scorpion",
+    "image": "Scorpion",
+    "damagedImage": "Scorpion_damaged",
+    "str": 18,
+    "agility": 16,
+    "hp": [16, 20],
+    "resist":{"sleep":0,"stopSpell":15,"hurt":0},
+    "dodge": 1,
+    "xp": 6,
+    "gp": [12, 15],
+    "ai": "attackOnly"
+  }
 }

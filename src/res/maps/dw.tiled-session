@@ -37,6 +37,9 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "enemy_territory_tiles.json": {
+            "scaleInDock": 1
+        },
         "erdricksCave1.json": {
             "scale": 1,
             "selectedLayer": 0,
@@ -125,7 +128,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 859.5,
+                "x": 350.5,
                 "y": 705.5
             }
         },
@@ -144,11 +147,11 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
-            "scale": 1,
+            "scale": 3,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 127.5,
-                "y": 795.5
+                "x": 86.5,
+                "y": 310.8333333333333
             }
         },
         "tantegelCastle.tmx": {
@@ -177,13 +180,13 @@
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
+        "overworld.json",
         "tantegelCastle.json",
         "erdricksCave2.json",
         "collision_tiles.json",
         "tileset_tiles.json",
         "erdricksCave1.json",
         "brecconary.json",
-        "overworld.json",
         "garinham.json",
         "erdricksCave1.tmx",
         "brecconary.tmx",
