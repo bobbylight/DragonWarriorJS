@@ -22,8 +22,8 @@ What's currently being worked on (half-baked):
 
 ```bash
 npm install
-npm run watch
-# View http://localhost:8080
+npm run dev
+# View http://localhost:5173
 ```
 
 # Editing the Map Data
