@@ -2,10 +2,11 @@ import RoamingEntity from './RoamingEntity';
 import Direction from './Direction';
 import { Delay, SpriteSheet, Utils } from 'gtp';
 import Hero from './Hero';
+import NpcType from './NpcType';
 
 export default class Npc extends RoamingEntity {
 
-    type: number;
+    type: NpcType;
     wanders: boolean;
     npcIndex: number;
     private readonly _origMapRow: number;
@@ -62,7 +63,7 @@ export default class Npc extends RoamingEntity {
     render(ctx: CanvasRenderingContext2D) {
 
         const ss: SpriteSheet = this.game.assets.get('npcs');
-        const ssRow: number = this.type;
+        const ssRow: number = this.type as number;
         let ssCol: number = this._computeColumn();
         let x: number = this.mapCol * this.game.getTileSize();
         x -= this.game.getMapXOffs();

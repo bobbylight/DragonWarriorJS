@@ -9,7 +9,7 @@ import { TiledMapArgs } from 'gtp/lib/tiled/TiledMapArgs';
 export default class DwMap extends TiledMap {
 
     npcs: Npc[];
-    talkAcrosses: boolean[];
+    talkAcrosses: { [ key: string ]: boolean }
     doors: Door[];
     chests: Map<LocationString, Chest>;
 

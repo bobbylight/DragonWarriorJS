@@ -280,7 +280,7 @@ export default class RoamingState extends _BaseState {
    }
 
    private overnightOver() {
-      this.game.audio.playMusic(Sounds.MUSIC_TOWN);
+      this.game.audio.playMusic('MUSIC_TOWN');
       delete this._overnightDelay;
       this.setSubstate('TALKING');
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key

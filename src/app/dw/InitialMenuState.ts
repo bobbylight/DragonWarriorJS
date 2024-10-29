@@ -62,7 +62,7 @@ export class InitialMenuState extends _BaseState {
         super.enter(game);
         this.menuBubble = this.createMenuBubble();
         this.substate = 'mainMenu';
-        game.audio.playMusic(Sounds.MUSIC_TOWN);
+        game.audio.playMusic('MUSIC_TOWN');
     }
 
     override leaving(game: DwGame) {

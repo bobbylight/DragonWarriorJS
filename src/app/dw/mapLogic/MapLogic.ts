@@ -13,7 +13,7 @@ export default interface MapLogic {
     * Called when a map is entered.  This gives the logic a chance to
     * initialize based on the game state, etc.
     */
-   init();
+   init(): void;
 
    /**
     * Returns the conversation flow when talking to a particular NPC.

@@ -36,7 +36,7 @@ export default class BattleState extends _BaseState {
    }
 
    private _backToRoaming() {
-      this.game.audio.fadeOutMusic(Sounds.MUSIC_OVERWORLD);
+      this.game.audio.fadeOutMusic('MUSIC_OVERWORLD');
       this.game.setState(new RoamingState());
    }
 

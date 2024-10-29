@@ -16,7 +16,7 @@ import Npc from './Npc';
 import Armor from './Armor';
 import Weapon from './Weapon';
 import Direction from './Direction';
-import NpcType from './NpcType';
+import NpcType, { getNpcType } from './NpcType';
 import Door from './Door';
 import Party from './Party';
 import Sounds from './Sounds';
@@ -254,7 +254,7 @@ export default class DwGame extends Game {
         this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
     }
 
-    private _resetMap(map: any) {
+    private _resetMap(map: DwMap) {
         map.npcs.forEach(npc => npc.reset());
     }
 
@@ -268,7 +268,7 @@ export default class DwGame extends Game {
             // when going into another map in the same dungeon that is also dark
             this.setUsingTorch(false);
         }
-        const newMusic: string = Sounds[this.map.getProperty('music') as string];
+        const newMusic: string | undefined = this.map.getProperty('music') as Sounds;
         if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);
         }
@@ -413,18 +413,15 @@ export default class DwGame extends Game {
 
     private parseNpc(obj: TiledObject): Npc {
         const name: string = obj.name;
-        let type: number | null = null;
+        let type: NpcType | null = null;
         if (obj.propertiesByName.has('type')) {
-            type = NpcType[ (getProperty(obj, 'type') as string).toUpperCase() ];
-        }
-        if (type == null) { // 0 is a valid value
-            type = NpcType.MERCHANT_GREEN;
+            type = getNpcType(getProperty(obj, 'type') as string);
         }
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
         const tempDir: string = getProperty(obj, 'dir', 'SOUTH');
-        let dir = Direction[ tempDir.toUpperCase() ]; // || Direction.SOUTH;
+        let dir = Direction.fromString(tempDir); // || Direction.SOUTH;
         if (typeof dir === 'undefined') {
             dir = Direction.SOUTH;
         }

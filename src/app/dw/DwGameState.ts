@@ -3,13 +3,15 @@ export interface MapState {
     unlockedDoors: string[];
 }
 
+export interface MapStateMap {
+    [ mapName: string ]: MapState;
+}
+
 export default interface DwGameState {
 
     savedGwaelin?: boolean;
 
-    mapStates: {
-        tantegelCastle: MapState;
-    };
+    mapStates: MapStateMap;
 }
 
 const createEmtpyMapState = (): MapState => {

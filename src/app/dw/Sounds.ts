@@ -1,10 +1,25 @@
-export default class Sounds {
+type Sounds =
+    'MUSIC_TITLE_SCREEN' |
+    'MUSIC_TANTEGEL' |
+    'MUSIC_TANTEGEL_LOWER' |
+    'MUSIC_OVERWORLD' |
+    'MUSIC_BATTLE' |
+    'MUSIC_TOWN' |
+    'MUSIC_DUNGEON_FLOOR_1'
+;
 
-    static readonly MUSIC_TITLE_SCREEN: string = 'titleMusic';
-    static readonly MUSIC_TANTEGEL: string = 'tantegelMusic';
-    static readonly MUSIC_TANTEGEL_LOWER: string = 'tantegelLowerMusic';
-    static readonly MUSIC_OVERWORLD: string = 'overworldMusic';
-    static readonly MUSIC_BATTLE: string = 'battleMusic';
-    static readonly MUSIC_TOWN: string = 'villageMusic';
-    static readonly MUSIC_DUNGEON_FLOOR_1: string = 'dungeonFloor1';
+const SoundMap = new Map<Sounds, string>([
+    [ 'MUSIC_TITLE_SCREEN', 'titleMusic' ],
+    [ 'MUSIC_TANTEGEL', 'tantegelMusic' ],
+    [ 'MUSIC_TANTEGEL_LOWER', 'tantegelLowerMusic' ],
+    [ 'MUSIC_OVERWORLD', 'overworldMusic' ],
+    [ 'MUSIC_BATTLE', 'battleMusic' ],
+    [ 'MUSIC_TOWN', 'villageMusic' ],
+    [ 'MUSIC_DUNGEON_FLOOR_1', 'dungeonFloor1' ]
+]);
+
+export const getSound = (sound: Sounds): string | undefined => {
+    return SoundMap.get(sound);
 }
+export default Sounds;
+

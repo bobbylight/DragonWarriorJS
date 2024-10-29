@@ -1,18 +1,23 @@
 import Bubble from './Bubble';
 import { InputManager } from 'gtp';
 
+interface ChoiceBubbleStringMap {
+    [ key: string ]: string;
+}
+export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
+
 /**
  * A bubble that lets the user choose between several choices.
  */
-export default class ChoiceBubble<T> extends Bubble {
+export default class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
-    private readonly choices: T[];
+    private readonly choices: ChoiceBubbleChoice[];
     private readonly choiceDisplayField?: string;
     private curChoice: number;
     private readonly cancellable: boolean;
 
     constructor(x: number, y: number, w: number, h: number,
-                choices: T[] = [],
+                choices: ChoiceBubbleChoice[] = [],
                 choiceDisplayField?: string,
                 cancellable: boolean = false,
                 title: string | undefined = undefined) {
@@ -35,7 +40,7 @@ export default class ChoiceBubble<T> extends Bubble {
      * Returns the item selected, or <code>undefined</code> if the user
      * cancelled this dialog.
      */
-    getSelectedItem(): T | undefined {
+    getSelectedItem(): ChoiceBubbleChoice | undefined {
         return this.curChoice > -1 ? this.choices[this.curChoice] : undefined;
     }
 
@@ -84,9 +89,9 @@ export default class ChoiceBubble<T> extends Bubble {
         this.curChoice = 0;
     }
 
-    private stringify(choice: T): string {
+    private stringify(choice: ChoiceBubbleChoice): string {
         if (this.choiceDisplayField) {
-            return choice[this.choiceDisplayField];
+            return (choice as ChoiceBubbleStringMap)[this.choiceDisplayField];
         }
         return choice as unknown as string;
     }

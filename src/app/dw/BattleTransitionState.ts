@@ -4,7 +4,6 @@
 import { _BaseState } from './_BaseState';
 import { Image, State } from 'gtp';
 import DwGame from './DwGame';
-import Sounds from './Sounds';
 
 export default class BattleTransitionState extends _BaseState {
 
@@ -32,7 +31,7 @@ export default class BattleTransitionState extends _BaseState {
 
         this.state = 0;
         this.tick = 0;
-        game.audio.playMusic(Sounds.MUSIC_BATTLE);
+        game.audio.playMusic('MUSIC_BATTLE');
 
     }
 
