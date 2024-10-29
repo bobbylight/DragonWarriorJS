@@ -36,7 +36,8 @@ in the game, including the overworld.  Please be sure to use the latest
 version of `Tiled` when editing these files, as the XML schema of the `.tmx`
 file format changes over time.  The game is currently being built using 1.8.4.
 
-All maps follow the same conventions and structure.  Layers include:
+All maps follow the same conventions and structure. All data should be typed,
+but typing is improving over time and isn't doc'd except in code. Layers include:
 
 * `tileLayer` - The actual map graphics.  Constitutes most of what you see.
 * `tileLayer2` (optional) - A second layer of tiles.  Used for the inside
