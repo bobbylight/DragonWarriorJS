@@ -58,17 +58,17 @@ export class InitialMenuState extends _BaseState {
         return new ChoiceBubble(x,  y, w, h, choices, undefined, true);
     }
 
-    enter(game: DwGame) {
+    override enter(game: DwGame) {
         super.enter(game);
         this.menuBubble = this.createMenuBubble();
         this.substate = 'mainMenu';
         game.audio.playMusic(Sounds.MUSIC_TOWN);
     }
 
-    leaving(game: DwGame) {
+    override leaving(game: DwGame) {
     }
 
-    update(delta: number) {
+    override update(delta: number) {
 
         this.handleDefaultKeys();
 
@@ -109,7 +109,7 @@ export class InitialMenuState extends _BaseState {
         }
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
         const game: DwGame = this.game;
         game.clearScreen();

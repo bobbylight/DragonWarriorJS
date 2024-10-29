@@ -107,7 +107,7 @@ export class LoadingState extends _BaseState {
         return map;
     }
 
-    update(delta: number) {
+    override update(delta: number) {
 
         this.handleDefaultKeys();
 
@@ -208,7 +208,7 @@ export class LoadingState extends _BaseState {
 
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
         const game: Game = this.game;
         game.clearScreen('rgb(0,0,255)');

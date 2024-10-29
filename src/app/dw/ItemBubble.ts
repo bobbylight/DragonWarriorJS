@@ -63,7 +63,7 @@ export default class ItemBubble extends Bubble {
 
     removeSelectedItem() {
         if (this._curChoice > -1) {
-            this._choices.splice(this._curChoice, 1)[0];
+            this._choices.splice(this._curChoice, 1);
         }
     }
 }

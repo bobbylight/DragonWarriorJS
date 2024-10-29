@@ -18,7 +18,7 @@ export default class Hero extends PartyMember {
      * Overridden to check for warps and other interesting things we can
      * intersect on the map.
      */
-    handleIntersectedObject(obj: TiledObject) {
+    override handleIntersectedObject(obj: TiledObject) {
         if ('warp' === obj.type) {
             const newRow: number = parseInt(getProperty(obj, 'row'), 10);
             const newCol: number = parseInt(getProperty(obj, 'col'), 10);

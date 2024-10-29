@@ -53,7 +53,7 @@ export default class DwGame extends Game {
     npcs: Npc[];
     gameState: DwGameState;
     private _bumpSoundDelay: number;
-    private _mapLogics: Map<String, MapLogic>;
+    private _mapLogics: Map<string, MapLogic>;
     private _randomEncounters: boolean;
     private _torch: boolean;
     inside: boolean;
@@ -67,7 +67,7 @@ export default class DwGame extends Game {
         super(args);
     }
 
-    start() {
+    override start() {
         super.start();
         this.init();
     }
@@ -83,7 +83,7 @@ export default class DwGame extends Game {
         this._randomEncounters = true;
         this._torch = false;
 
-        this._mapLogics = new Map<String, MapLogic>();
+        this._mapLogics = new Map<string, MapLogic>();
         this._mapLogics.set('Brecconary', new Brecconary());
         this._mapLogics.set('erdricksCave1', new ErdricksCave1());
         this._mapLogics.set('erdricksCave2', new ErdricksCave2());
@@ -112,7 +112,7 @@ export default class DwGame extends Game {
         this.party.addMember(this.hero);
     }
 
-    update() {
+    override update() {
         super.update();
     }
 
@@ -637,7 +637,7 @@ export default class DwGame extends Game {
         return false;
     }
 
-    toggleMuted(): boolean {
+    override toggleMuted(): boolean {
         const muted: boolean = this.audio.toggleMuted();
         this.setStatusMessage(muted ? 'Audio muted' : 'Audio enabled');
         return muted;

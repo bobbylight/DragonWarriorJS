@@ -106,7 +106,7 @@ export default class RoamingState extends _BaseState {
        }
    }
 
-   update(delta: number) {
+    override update(delta: number) {
 
       const game: DwGame = this.game;
 
@@ -327,7 +327,7 @@ export default class RoamingState extends _BaseState {
       }
    }
 
-   render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
       if (this.game.map.propertiesByName.get('requiresTorch')) {
          this.game.clearScreen('#000000');

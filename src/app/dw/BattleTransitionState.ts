@@ -21,7 +21,7 @@ export default class BattleTransitionState extends _BaseState {
         this._enteringStateScreenshot = enteringState.createScreenshot();
     }
 
-    enter(game: DwGame) {
+    override enter(game: DwGame) {
         super.enter(game);
 
 // TODO: Dynamically load scripts?
@@ -36,7 +36,7 @@ export default class BattleTransitionState extends _BaseState {
 
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
         this.game.drawMap(ctx);
         this._renderBattleBG(ctx);
@@ -165,7 +165,7 @@ export default class BattleTransitionState extends _BaseState {
 
     }
 
-    update(delta: number) {
+    override update(delta: number) {
 
         this.handleDefaultKeys();
 

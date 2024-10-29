@@ -22,6 +22,7 @@ module.exports = {
         "@typescript-eslint/no-explicit-any": 0,
         "@typescript-eslint/no-inferrable-types": 0,
         "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/no-unsafe-function-type": 0,  // Remove when gtp removes generic "Function" args
         "@typescript-eslint/no-unused-vars": 0,
     },
 };

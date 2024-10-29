@@ -13,7 +13,6 @@ export default class Enemy extends BattleEntity {
     damagedImage: string;
     str: number;
     agility: number;
-    hp: number;
     dodge: number;
     xp: number;
     gp: number;

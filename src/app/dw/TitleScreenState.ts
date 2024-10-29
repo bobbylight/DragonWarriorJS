@@ -15,7 +15,7 @@ export class TitleScreenState extends _BaseState {
         this.assetsLoaded = false;
     }
 
-    enter(game: DwGame) {
+    override enter(game: DwGame) {
         super.enter(game);
         game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
         this._delay = new Delay({millis: [600, 400]});
@@ -23,7 +23,7 @@ export class TitleScreenState extends _BaseState {
         game.audio.playMusic(Sounds.MUSIC_TITLE_SCREEN);
     }
 
-    leaving(game: DwGame) {
+    override leaving(game: DwGame) {
         game.canvas.removeEventListener('touchstart', this.handleStart.bind(this), false);
     }
 
@@ -32,7 +32,7 @@ export class TitleScreenState extends _BaseState {
         this.loadNextState();
     }
 
-    update(delta: number) {
+    override update(delta: number) {
 
         this.handleDefaultKeys();
 
@@ -48,7 +48,7 @@ export class TitleScreenState extends _BaseState {
 
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
         const game: DwGame = this.game;
         game.clearScreen();

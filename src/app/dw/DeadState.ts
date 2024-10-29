@@ -18,11 +18,11 @@ export default class DeadState extends _BaseState {
        });
    }
 
-   render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
       this._battleState.render(ctx);
    }
 
-   update(delta: number) {
+    override update(delta: number) {
       if (this.allowUserInput && this.game.anyKeyDown()) {
          this.game.setState(new FadeOutInState(this, new TitleScreenState()));
       }

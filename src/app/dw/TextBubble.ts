@@ -213,7 +213,7 @@ export default class TextBubble extends Bubble {
         }
     }
 
-    updateImpl(delta: number): void {
+    override updateImpl(delta: number): void {
 
         if (this._delay) {
             if (this._delay.update(delta)) {

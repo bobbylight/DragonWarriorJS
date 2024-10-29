@@ -12,7 +12,7 @@ export class GameStudioAdvertState extends _BaseState {
         this._delay = new Delay({ millis: 3000 });
     }
 
-    update(delta: number) {
+    override update(delta: number) {
 
         this.handleDefaultKeys();
 
@@ -21,7 +21,7 @@ export class GameStudioAdvertState extends _BaseState {
         }
     }
 
-    render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
         const game: DwGame = this.game;
         game.clearScreen();

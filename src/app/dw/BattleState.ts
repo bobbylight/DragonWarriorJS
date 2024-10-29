@@ -144,7 +144,7 @@ export default class BattleState extends _BaseState {
       this._commandExecuting = false;
    }
 
-   enter(game: DwGame) {
+    override enter(game: DwGame) {
 
       super.enter(game); // Not defined in super, but in parent of super (?)
       this._commandBubble = new BattleCommandBubble(game);
@@ -161,7 +161,7 @@ export default class BattleState extends _BaseState {
       this._textBubble.addToConversation({text: 'Not implemented, command?'});
    }
 
-   render(ctx: CanvasRenderingContext2D) {
+    override render(ctx: CanvasRenderingContext2D) {
 
       const game: DwGame = this.game;
 
@@ -238,7 +238,7 @@ export default class BattleState extends _BaseState {
       }
    }
 
-   update(delta: number) {
+    override update(delta: number) {
 
       const game: DwGame = this.game;
 

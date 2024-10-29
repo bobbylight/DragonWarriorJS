@@ -143,7 +143,7 @@ export default class PartyMember extends RoamingEntity {
 
     }
 
-    handlePostMove() {
+    override handlePostMove() {
         // If we didn't e.g. move to another map, see if we should fight a monster
         if (!this.possiblyHandleIntersectedObject()) {
             this._possiblyStartRandomEncounter();
