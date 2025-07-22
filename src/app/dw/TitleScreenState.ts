@@ -1,7 +1,6 @@
 import { _BaseState } from './_BaseState';
 import { Delay, Image, InputManager } from 'gtp';
 import DwGame from './DwGame';
-import Sounds from './Sounds';
 import { InitialMenuState } from './InitialMenuState';
 
 export class TitleScreenState extends _BaseState {

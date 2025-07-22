@@ -13,7 +13,6 @@ import Sellable from './Sellable';
 export default class TextBubble extends Bubble {
 
     private _conversation: Conversation;
-    private _talking: boolean;
     private _text: string;
     private _curLine: number;
     private _lines: string[];
@@ -40,7 +39,6 @@ export default class TextBubble extends Bubble {
         const y: number = game.getHeight() - tileSize - height;
         super(undefined, x, y, width, height);
         this._doneCallbacks = [];
-        this._talking = false;
     }
 
     addToConversation(text: string | ConversationSegmentArgs, autoAdvance: boolean = false): void {

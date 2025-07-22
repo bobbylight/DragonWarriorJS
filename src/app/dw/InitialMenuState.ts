@@ -1,6 +1,5 @@
 import { _BaseState } from './_BaseState';
 import DwGame from './DwGame';
-import Sounds from './Sounds';
 import ChoiceBubble from './ChoiceBubble';
 
 type Substate = 'mainMenu' | 'saveSelect';
@@ -113,7 +112,6 @@ export class InitialMenuState extends _BaseState {
 
         const game: DwGame = this.game;
         game.clearScreen();
-        const w: number = game.getWidth();
 
         this.menuBubble.paint(ctx);
 
