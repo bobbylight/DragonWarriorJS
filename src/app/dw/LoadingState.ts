@@ -1,5 +1,4 @@
 import { _BaseState } from './_BaseState';
-import Sounds from './Sounds';
 import Weapon from './Weapon';
 import Armor from './Armor';
 import Shield from './Shield';

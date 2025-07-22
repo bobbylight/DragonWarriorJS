@@ -1,6 +1,5 @@
 import { _BaseState } from './_BaseState';
 import DwGame from './DwGame';
-import Sounds from './Sounds';
 import RoamingState from './RoamingState';
 import { Delay, Image, Utils } from 'gtp';
 import DeadState from './DeadState';
