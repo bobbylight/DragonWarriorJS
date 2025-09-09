@@ -15,7 +15,7 @@
     "eslint": "8.57.1",
     "rimraf": "6.0.1",
     "typescript": "5.8.3",
-    "vite": "7.0.5"
+    "vite": "7.0.7"
   },
   "dependencies": {
     "gtp": "3.0.1"
