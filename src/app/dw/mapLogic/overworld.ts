@@ -4,12 +4,12 @@ import { NpcText } from './MapLogic';
 
 const talks: NpcTextGeneratorMap = {
 
-   npc: (game: DwGame): NpcText => {
-      return [
-         'I speak with... \\ddelays...',
-         'Did you notice that?',
-      ];
-   },
+    npc: (game: DwGame): NpcText => {
+        return [
+            'I speak with... \\ddelays...',
+            'Did you notice that?',
+        ];
+    },
 
 };
 
@@ -18,7 +18,7 @@ const talks: NpcTextGeneratorMap = {
  */
 export class Overworld extends AbstractMapLogic {
 
-   constructor() {
-      super(talks);
-   }
+    constructor() {
+        super(talks);
+    }
 }

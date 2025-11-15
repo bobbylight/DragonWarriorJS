@@ -27,10 +27,10 @@ export class GameStudioAdvertState extends BaseState {
         game.clearScreen();
         const w: number = game.getWidth();
 
-//         var img = game.assets.get('gameStudioLogo');
-//         var x = (w - img.width) / 2;
-//         var y = 30;
-//         img.draw(ctx, x, y);
+        //         var img = game.assets.get('gameStudioLogo');
+        //         var x = (w - img.width) / 2;
+        //         var y = 30;
+        //         img.draw(ctx, x, y);
 
         const prompt = 'OutOnBail Games Presents';
         const x: number = (w - game.stringWidth(prompt)) / 2;

@@ -3,27 +3,27 @@ import {EnemyData} from "./Enemy";
 
 export class BattleEntity {
 
-   hp: number;
-   maxHp: number;
-   mp: number;
-   maxMp: number;
+    hp: number;
+    maxHp: number;
+    mp: number;
+    maxMp: number;
 
-   constructor(args: EnemyData) {
-       if (typeof args.hp === 'number') {
-           this.hp = args.hp;
-       } else {
-           this.hp = Utils.randomInt(args.hp[0], args.hp[1] + 1);
-       }
-       this.maxHp = this.hp;
-       this.mp = this.maxMp = 0; // args.mp;
-   }
+    constructor(args: EnemyData) {
+        if (typeof args.hp === 'number') {
+            this.hp = args.hp;
+        } else {
+            this.hp = Utils.randomInt(args.hp[0], args.hp[1] + 1);
+        }
+        this.maxHp = this.hp;
+        this.mp = this.maxMp = 0; // args.mp;
+    }
 
-   isDead(): boolean {
-      return this.hp <= 0;
-   }
+    isDead(): boolean {
+        return this.hp <= 0;
+    }
 
-   takeDamage(amount: number) {
-      this.hp = Math.max(0, this.hp - amount);
-      return this.isDead();
-   }
+    takeDamage(amount: number) {
+        this.hp = Math.max(0, this.hp - amount);
+        return this.isDead();
+    }
 }

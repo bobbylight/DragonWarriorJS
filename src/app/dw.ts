@@ -18,7 +18,7 @@ declare global {
 
 window.init = function(parent: HTMLElement, assetRoot?: string) {
     window.game = new DwGame({ parent: parent, scale: SCALE, width: CANVAS_WIDTH, height: CANVAS_HEIGHT,
-         assetRoot: assetRoot, keyRefreshMillis: 300, targetFps: 60 });
+        assetRoot: assetRoot, keyRefreshMillis: 300, targetFps: 60 });
     window.game.setState(new LoadingState(window.game));
     window.game.start();
 };

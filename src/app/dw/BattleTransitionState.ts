@@ -23,11 +23,11 @@ export class BattleTransitionState extends BaseState {
     override enter(game: DwGame) {
         super.enter(game);
 
-// TODO: Dynamically load scripts?
-//         var mapLogic = game.map.getProperty('logicFile');
-//         if (!game.hasLogic(mapLogic)) {
-//            game.assets
-//         }
+        // TODO: Dynamically load scripts?
+        //         var mapLogic = game.map.getProperty('logicFile');
+        //         if (!game.hasLogic(mapLogic)) {
+        //            game.assets
+        //         }
 
         this.state = 0;
         this.tick = 0;

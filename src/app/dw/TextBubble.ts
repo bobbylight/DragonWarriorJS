@@ -373,9 +373,9 @@ export class TextBubble extends Bubble {
             } else {
                 segment = this.conversation.next(true)!;
             }
-//            if (segment.overnight) {
-//               this._overnight = true;
-//            } else
+            //            if (segment.overnight) {
+            //               this._overnight = true;
+            //            } else
             if (segment.clear) {
                 this.setText(segment);
             } else {
