@@ -1,24 +1,10 @@
-import { BaseStateArgs, ImageUtils, InputManager, Keys, State } from 'gtp';
+import { ImageUtils, InputManager, Keys, State } from 'gtp';
 import DwGame from './DwGame';
 
 /**
  * Functionality common amongst all states in this game.
  */
 export class BaseState extends State<DwGame> {
-
-    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
-
-        const game: DwGame = (window as any).game;
-
-        if (!args) {
-            args = { game };
-        }
-        else if (!(args instanceof DwGame) && !args.game) {
-            args.game = game;
-        }
-
-        super(args);
-    }
 
     createScreenshot() {
         const canvas: HTMLCanvasElement = ImageUtils.createCanvas(this.game.getWidth(), this.game.getHeight());

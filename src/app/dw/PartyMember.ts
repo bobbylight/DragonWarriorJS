@@ -1,4 +1,4 @@
-import RoamingEntity from './RoamingEntity';
+import RoamingEntity, {RoamingEntityArgs} from './RoamingEntity';
 import { SpriteSheet, TiledLayer, TiledObject, Utils } from 'gtp';
 import Hero from './Hero';
 import Direction from './Direction';
@@ -6,9 +6,9 @@ import Shield from './Shield';
 import Weapon from './Weapon';
 import Armor from './Armor';
 import Enemy from "./Enemy";
+import DwGame from "./DwGame";
 
-export interface PartyMemberArgs {
-    name: string;
+export interface PartyMemberArgs extends RoamingEntityArgs {
     hp?: number;
     maxHp?: number;
     mp?: number;
@@ -29,13 +29,11 @@ export default class PartyMember extends RoamingEntity {
     weapon?: Weapon;
     armor?: Armor;
     shield?: Shield;
-    readonly spells: any[];
+    readonly spells: string[]; // TODO
 
-    constructor(args: PartyMemberArgs) {
+    constructor(game: DwGame, args: PartyMemberArgs) {
 
-        super(args);
-
-        this.name = args.name;
+        super(game, args);
         this.level = 1;
         this.exp = 12345;
 

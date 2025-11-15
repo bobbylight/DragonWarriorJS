@@ -14,7 +14,7 @@ export default class StatusBubble extends Bubble {
         const x: number = game.getWidth() - tileSize - w;
         const y: number = tileSize * 3;
         const h: number = game.getHeight() - y - tileSize;
-        super(undefined, x, y, w, h);
+        super(game, undefined, x, y, w, h);
         this.selection = 0;
     }
 

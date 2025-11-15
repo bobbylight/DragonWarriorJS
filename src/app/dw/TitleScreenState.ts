@@ -1,5 +1,5 @@
 import { BaseState } from './BaseState';
-import {BaseStateArgs, Delay, Image, InputManager} from 'gtp';
+import {Delay, Image, InputManager} from 'gtp';
 import DwGame from './DwGame';
 import { InitialMenuState } from './InitialMenuState';
 
@@ -9,8 +9,8 @@ export class TitleScreenState extends BaseState {
     private delay: Delay;
     private blink: boolean;
 
-    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
-        super(args);
+    constructor(game: DwGame) {
+        super(game);
         this.assetsLoaded = false;
     }
 
@@ -82,6 +82,6 @@ export class TitleScreenState extends BaseState {
     }
 
     private loadNextState() {
-        this.game.setState(new InitialMenuState());
+        this.game.setState(new InitialMenuState(this.game));
     }
 }

@@ -1,5 +1,5 @@
 import { BaseState } from './BaseState';
-import {BaseStateArgs, Delay, FadeOutInState} from 'gtp';
+import {Delay, FadeOutInState} from 'gtp';
 import DwGame from './DwGame';
 import { TitleScreenState } from './TitleScreenState';
 
@@ -7,8 +7,8 @@ export class GameStudioAdvertState extends BaseState {
 
     private readonly delay: Delay;
 
-    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
-        super(args);
+    constructor(game: DwGame) {
+        super(game);
         this.delay = new Delay({ millis: 3000 });
     }
 
@@ -39,6 +39,6 @@ export class GameStudioAdvertState extends BaseState {
     }
 
     private startGame() {
-        this.game.setState(new FadeOutInState(this, new TitleScreenState()));
+        this.game.setState(new FadeOutInState(this, new TitleScreenState(this.game)));
     }
 }

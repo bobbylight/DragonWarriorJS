@@ -11,7 +11,7 @@ export default class BattleCommandBubble extends Bubble {
 
         const tileSize: number = game.getTileSize();
 
-        super('COMMAND', 8 * tileSize, tileSize, tileSize * 8, tileSize * 3);
+        super(game, 'COMMAND', 8 * tileSize, tileSize, tileSize * 8, tileSize * 3);
 
         this.selection = 0;
     }

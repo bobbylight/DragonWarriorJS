@@ -1,4 +1,4 @@
-import Bubble, { BreakApartResult } from './Bubble';
+import Bubble, {BreakApartDelay, BreakApartResult} from './Bubble';
 import DwGame from './DwGame';
 import ShoppingBubble from './ShoppingBubble';
 import { Delay } from 'gtp';
@@ -10,20 +10,22 @@ import ConversationSegment, {
 import ChoiceBubble from './ChoiceBubble';
 import Sellable from './Sellable';
 
+type DoneCallback = () => void;
+
 export default class TextBubble extends Bubble {
 
     private conversation: Conversation;
     private text: string;
     private curLine: number;
     private lines: string[];
-    private delays: any[];
+    private delays: BreakApartDelay[];
     private curOffs: number;
     private curCharMillis: number;
     private textDone: boolean;
     private choiceBubble?: ChoiceBubble<ConversationSegmentArgsChoice> | null;
     private shoppingBubble?: ShoppingBubble | null;
     private delay?: Delay;
-    private doneCallbacks: any[];
+    private doneCallbacks: DoneCallback[];
     private afterSound: string | undefined;
     private overnight?: boolean;
 
@@ -37,7 +39,7 @@ export default class TextBubble extends Bubble {
         const width: number = game.getWidth() - 2 * x;
         const height: number = game.getTileSize() * 5;
         const y: number = game.getHeight() - tileSize - height;
-        super(undefined, x, y, width, height);
+        super(game, undefined, x, y, width, height);
         this.doneCallbacks = [];
     }
 
@@ -85,7 +87,7 @@ export default class TextBubble extends Bubble {
         const width: number = tileSize * 5;
         const height: number = tileSize * (choices.length + 1);
 
-        return new ChoiceBubble(x, y, width, height, choices, 'text');
+        return new ChoiceBubble(this.game, x, y, width, height, choices, 'text');
     }
 
     /**
@@ -202,7 +204,7 @@ export default class TextBubble extends Bubble {
         delete this.overnight;
     }
 
-    onDone(callback: () => void): void {
+    onDone(callback: DoneCallback): void {
         if (this.isDone()) {
             callback();
         } else {
@@ -238,7 +240,7 @@ export default class TextBubble extends Bubble {
                 }
                 // TODO: This could be more performant...
                 if (this.delays && this.delays.length > 0) {
-                    const elem: any = this.delays[0];
+                    const elem = this.delays[0];
                     if (elem.offs === this.curOffs + 1) {
                         this.delays.shift();
                         this.delay = new Delay({millis: elem.millis});

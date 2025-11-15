@@ -9,9 +9,8 @@ export default class CommandBubble extends Bubble {
     private readonly yInc;
     private selection: number;
 
-    constructor() {
+    constructor(game: DwGame) {
 
-        const game: DwGame = (window as any).game;
         const scale: number = game.scale;
         const yInc: number = game.stringHeight() + 7 * scale;
 
@@ -23,7 +22,7 @@ export default class CommandBubble extends Bubble {
         }
         const x: number = game.getWidth() - tileSize * 2 - w;
         const y: number = tileSize / 2;
-        super('COMMAND', x, y, w, h);
+        super(game, 'COMMAND', x, y, w, h);
         this.selection = 0;
         this.yInc = yInc;
 

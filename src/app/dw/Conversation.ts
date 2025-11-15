@@ -21,7 +21,7 @@ export default class Conversation {
     static readonly DECLINED_PURCHASE_SEGMENT: string = 'declinedPurchase';
     static readonly BID_FAREWELL_SEGMENT: string = 'bidFarewell';
 
-    constructor(voice = false) {
+    constructor(private readonly game: DwGame, voice = false) {
         this.voice = voice;
         this.segments = [];
     }
@@ -39,7 +39,7 @@ export default class Conversation {
         if (typeof segmentArgs === 'string') {
             segmentArgs = { text: segmentArgs };
         }
-        const segment: ConversationSegment = new ConversationSegment(this, segmentArgs);
+        const segment: ConversationSegment = new ConversationSegment(this, this.game, segmentArgs);
         if (atCurIndex) {
             this.segments.splice(this.segmentIndex, 0, segment);
         } else {
@@ -64,8 +64,6 @@ export default class Conversation {
      */
     setSegments(segmentArgs: NpcText) {
 
-        const game: DwGame = (window as any).game;
-
         // One of our special templated conversation types. Note our if-check here
         // is a little more verbose than necessary just to appease tsc.
         if (typeof segmentArgs !== 'string' && 'conversationType' in segmentArgs) {
@@ -73,12 +71,12 @@ export default class Conversation {
                 case 'merchant':
                     // Add the standard segments for a merchant.
                     // TODO: Allow user-defined segments to override these.
-                    this.setSegments(merchantConversationTemplate(game, this, segmentArgs));
+                    this.setSegments(merchantConversationTemplate(this.game, this, segmentArgs));
                     break;
                 case 'innkeeper':
                     // Add the standard segments for an innkeeper.
                     // TODO: Allow user-defined segments to override these.
-                    this.setSegments(innkeeperConversationTemplate(game, segmentArgs));
+                    this.setSegments(innkeeperConversationTemplate(this.game, segmentArgs));
                     break;
                 default:
                     throw new Error(`Unknown conversation type: ${segmentArgs.conversationType}`);

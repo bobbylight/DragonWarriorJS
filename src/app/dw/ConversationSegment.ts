@@ -55,10 +55,10 @@ export default class ConversationSegment implements ConversationSegmentArgs {
    sound?: string;/*SoundEffect*/
    readonly text?: string;
 
-   constructor(parentConversation: Conversation, args: ConversationSegmentArgs) {
+   constructor(parentConversation: Conversation, game: DwGame, args: ConversationSegmentArgs) {
 
       this.parentConversation = parentConversation;
-      this.game = (window as any).game;
+      this.game = game;
       Utils.mixin(args, this);
    }
 

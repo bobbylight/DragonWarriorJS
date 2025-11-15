@@ -1,10 +1,16 @@
-import RoamingEntity from './RoamingEntity';
+import RoamingEntity, {RoamingEntityArgs} from './RoamingEntity';
 import Direction from './Direction';
 import { Delay, SpriteSheet, Utils } from 'gtp';
 import Hero from './Hero';
 import NpcType from './NpcType';
+import DwGame from "./DwGame";
 
 type DirFunctionType = () => void;
+
+export interface NpcArgs extends RoamingEntityArgs {
+    type?: NpcType;
+    wanders: boolean;
+}
 
 export default class Npc extends RoamingEntity {
 
@@ -18,9 +24,10 @@ export default class Npc extends RoamingEntity {
 
     private readonly dirFuncs: DirFunctionType[];
 
-    constructor(args: any) {
-        super(args);
-        Utils.mixin(args, this);
+    constructor(game: DwGame, args: NpcArgs) {
+        super(game, args);
+        this.type = args.type ?? NpcType.MERCHANT_GREEN;
+        this.wanders = args.wanders;
 
         this.origMapRow = this.mapRow;
         this.origMapCol = this.mapCol;

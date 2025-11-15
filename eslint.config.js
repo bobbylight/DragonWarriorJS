@@ -59,7 +59,6 @@ export default [
                 { selector: "variable", modifiers: ["const"], format: ["camelCase", "UPPER_CASE"] },
             ],
             "@typescript-eslint/no-empty-function": 0,
-            "@typescript-eslint/no-explicit-any": 0, // TODO: Remove me
             "@typescript-eslint/no-non-null-assertion": 0, // TODO: Remove me
             // TODO: Re-enable when "any" situation is addressed
             "@typescript-eslint/no-unnecessary-condition": 0,

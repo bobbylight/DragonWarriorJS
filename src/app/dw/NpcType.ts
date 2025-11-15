@@ -11,7 +11,7 @@ export default class NpcType {
 }
 
 export const getNpcType = (type: string): NpcType => {
-    switch (type) {
+    switch (type.toUpperCase()) {
         case 'SOLDIER_GRAY':
             return 0;
         case 'SOLDIER_RED':

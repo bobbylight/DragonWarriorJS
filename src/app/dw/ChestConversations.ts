@@ -7,7 +7,7 @@ import Conversation from './Conversation';
  */
 export default (state: RoamingState, chest: Chest | undefined): Conversation => {
 
-    const conversation: Conversation = new Conversation(false);
+    const conversation: Conversation = new Conversation(state.game, false);
 
     if (!chest) {
         conversation.addSegment('There is nothing to do here, \\w{hero.name}.');

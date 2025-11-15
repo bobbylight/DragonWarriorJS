@@ -151,7 +151,7 @@ const talks: NpcTextGeneratorMap = {
          },
          {
              action: () => {
-                 game.setState(new FadeOutInState(game.state, new TitleScreenState()));
+                 game.setState(new FadeOutInState(game.state, new TitleScreenState(game)));
              },
              next: Conversation.DONE // TODO: Reset to title screen
          },
