@@ -1,5 +1,5 @@
-import Npc from '../Npc';
-import DwGame from '../DwGame';
+import { Npc } from '../Npc';
+import { DwGame } from '../DwGame';
 import { ConversationSegmentArgs } from '../ConversationSegment';
 
 /**
@@ -7,7 +7,7 @@ import { ConversationSegmentArgs } from '../ConversationSegment';
  * Implementations of this interface map one-to-one with Tiled maps, and
  * represent everything the hero can do on that map.
  */
-export default interface MapLogic {
+export interface MapLogic {
 
    /**
     * Called when a map is entered.  This gives the logic a chance to

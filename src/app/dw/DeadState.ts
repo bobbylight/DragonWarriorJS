@@ -1,10 +1,10 @@
-import { BaseState } from './BaseState';
 import { FadeOutInState } from 'gtp';
-import DwGame from './DwGame';
+import { BaseState } from './BaseState';
+import { DwGame } from './DwGame';
 import { TitleScreenState } from './TitleScreenState';
-import BattleState from './BattleState';
+import { BattleState } from './BattleState';
 
-export default class DeadState extends BaseState {
+export class DeadState extends BaseState {
 
    private readonly battleState: BattleState;
    private allowUserInput?: boolean;

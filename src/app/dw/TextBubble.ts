@@ -1,18 +1,18 @@
-import Bubble, {BreakApartDelay, BreakApartResult} from './Bubble';
-import DwGame from './DwGame';
-import ShoppingBubble from './ShoppingBubble';
 import { Delay } from 'gtp';
-import Conversation from './Conversation';
-import ConversationSegment, {
+import { Bubble,BreakApartDelay, BreakApartResult} from './Bubble';
+import { DwGame } from './DwGame';
+import { ShoppingBubble } from './ShoppingBubble';
+import { Conversation } from './Conversation';
+import { ConversationSegment,
     ConversationSegmentArgs,
     ConversationSegmentArgsChoice,
 } from './ConversationSegment';
-import ChoiceBubble from './ChoiceBubble';
-import Sellable from './Sellable';
+import { ChoiceBubble } from './ChoiceBubble';
+import { Sellable } from './Sellable';
 
 type DoneCallback = () => void;
 
-export default class TextBubble extends Bubble {
+export class TextBubble extends Bubble {
 
     private conversation: Conversation;
     private text: string;

@@ -5,7 +5,7 @@ export interface MapState {
 
 export type MapStateMap = Record<string, MapState>;
 
-export default interface DwGameState {
+export interface DwGameState {
 
     savedGwaelin?: boolean;
 

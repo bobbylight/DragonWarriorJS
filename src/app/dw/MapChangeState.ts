@@ -3,9 +3,9 @@
  * if necessary.
  */
 import { FadeOutInState } from 'gtp';
-import DwGame from './DwGame';
+import { DwGame } from './DwGame';
 
-export default class MapChangeState extends FadeOutInState<DwGame> {
+export class MapChangeState extends FadeOutInState<DwGame> {
 
 //     constructor(leavingState: State<DwGame>, enteringState: State<DwGame>, transitionLogic?: Function,
 //                 timeMillis?: number) {

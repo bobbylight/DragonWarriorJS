@@ -1,11 +1,11 @@
 import { Chest } from './Chest';
-import RoamingState from './RoamingState';
-import Conversation from './Conversation';
+import { RoamingState } from './RoamingState';
+import { Conversation } from './Conversation';
 
 /**
  * Returns the text to display when the player opens a treasure chest.
  */
-export default (state: RoamingState, chest: Chest | undefined): Conversation => {
+export const getChestConversation = (state: RoamingState, chest: Chest | undefined): Conversation => {
 
     const conversation: Conversation = new Conversation(state.game, false);
 

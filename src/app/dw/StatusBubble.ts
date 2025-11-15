@@ -1,8 +1,8 @@
-import Bubble from './Bubble';
-import DwGame from './DwGame';
-import Hero from './Hero';
+import { Bubble } from './Bubble';
+import { DwGame } from './DwGame';
+import { Hero } from './Hero';
 
-export default class StatusBubble extends Bubble {
+export class StatusBubble extends Bubble {
 
     selection: number;
 

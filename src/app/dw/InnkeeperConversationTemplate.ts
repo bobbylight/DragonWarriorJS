@@ -1,4 +1,4 @@
-import DwGame from './DwGame';
+import { DwGame } from './DwGame';
 import { NpcText } from './mapLogic/MapLogic';
 import { ConversationSegmentArgs } from './ConversationSegment';
 
@@ -8,7 +8,7 @@ import { ConversationSegmentArgs } from './ConversationSegment';
  * @param game
  * @param segmentArgs
  */
-export default (game: DwGame, segmentArgs: ConversationSegmentArgs): NpcText => {
+export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: ConversationSegmentArgs): NpcText => {
 
    if (!segmentArgs.cost) {
       throw new Error(`No cost for the inn specified in conversation: ${JSON.stringify(segmentArgs)}`);

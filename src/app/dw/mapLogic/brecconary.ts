@@ -1,5 +1,5 @@
-import DwGame from '../DwGame';
-import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
+import { DwGame } from '../DwGame';
+import { AbstractMapLogic, NpcTextGeneratorMap } from './AbstractMapLogic';
 import { NpcText } from './MapLogic';
 
 const talks: NpcTextGeneratorMap = {
@@ -76,7 +76,7 @@ const talks: NpcTextGeneratorMap = {
 /**
  * Logic for the town of Brecconary.
  */
-export default class Brecconary extends AbstractMapLogic {
+export class Brecconary extends AbstractMapLogic {
 
    constructor() {
       super(talks);

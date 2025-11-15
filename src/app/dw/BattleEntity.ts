@@ -1,7 +1,7 @@
-import {EnemyData} from "./Enemy";
 import {Utils} from "gtp";
+import {EnemyData} from "./Enemy";
 
-export default class BattleEntity {
+export class BattleEntity {
 
    hp: number;
    maxHp: number;

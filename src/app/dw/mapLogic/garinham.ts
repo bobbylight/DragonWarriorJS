@@ -1,5 +1,5 @@
-import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
-import DwGame from '../DwGame';
+import { DwGame } from '../DwGame';
+import { AbstractMapLogic, NpcTextGeneratorMap } from './AbstractMapLogic';
 import { NpcText } from './MapLogic';
 
 const talks: NpcTextGeneratorMap = {
@@ -16,7 +16,7 @@ const talks: NpcTextGeneratorMap = {
 /**
  * Logic for Garinham.
  */
-export default class Garinham extends AbstractMapLogic {
+export class Garinham extends AbstractMapLogic {
 
    constructor() {
       super(talks);

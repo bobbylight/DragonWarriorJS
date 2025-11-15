@@ -1,10 +1,10 @@
-import DwGame from './DwGame';
-import Bubble from './Bubble';
-import Item from './Item';
 import { InputManager } from 'gtp';
+import { DwGame } from './DwGame';
+import { Bubble } from './Bubble';
+import { Item } from './Item';
 import { ItemCountPair } from './Inventory';
 
-export default class ItemBubble extends Bubble {
+export class ItemBubble extends Bubble {
 
     private readonly choices: ItemCountPair[];
     private curChoice: number;

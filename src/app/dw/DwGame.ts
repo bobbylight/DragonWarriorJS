@@ -10,31 +10,31 @@ import {
     TiledObject,
     Utils,
 } from 'gtp';
-import Hero from './Hero';
-import Shield from './Shield';
-import Npc from './Npc';
-import Armor from './Armor';
-import Weapon from './Weapon';
-import Direction from './Direction';
-import NpcType, { getNpcType } from './NpcType';
-import Door from './Door';
-import Party from './Party';
-import MapChangeState from './MapChangeState';
-import RoamingState from './RoamingState';
-import DwMap from './DwMap';
-import BattleState from './BattleState';
-import BattleTransitionState from './BattleTransitionState';
-
-import Brecconary from './mapLogic/brecconary';
-import ErdricksCave1 from './mapLogic/erdricksCave1';
-import ErdricksCave2 from './mapLogic/erdricksCave2';
-import Garinham from './mapLogic/garinham';
-import Overworld from './mapLogic/overworld';
-import TantegelCastle from './mapLogic/tantegelCastle';
-import MapLogic from './mapLogic/MapLogic';
-import { EquipmentMap } from './dw';
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
-import DwGameState, { createDefaultGameState } from './DwGameState';
+import { Hero } from './Hero';
+import { Shield } from './Shield';
+import { Npc } from './Npc';
+import { Armor } from './Armor';
+import { Weapon } from './Weapon';
+import { Direction } from './Direction';
+import { NpcType, getNpcType } from './NpcType';
+import { Door } from './Door';
+import { Party } from './Party';
+import { MapChangeState } from './MapChangeState';
+import { RoamingState } from './RoamingState';
+import { DwMap } from './DwMap';
+import { BattleState } from './BattleState';
+import { BattleTransitionState } from './BattleTransitionState';
+
+import {Brecconary} from './mapLogic/brecconary';
+import {ErdricksCave1} from './mapLogic/erdricksCave1';
+import {ErdricksCave2} from './mapLogic/erdricksCave2';
+import {Garinham} from './mapLogic/garinham';
+import {Overworld} from './mapLogic/overworld';
+import {TantegelCastle} from './mapLogic/tantegelCastle';
+import { MapLogic } from './mapLogic/MapLogic';
+import { EquipmentMap } from './dw';
+import { DwGameState, createDefaultGameState } from './DwGameState';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
 import {BaseState} from "./BaseState";
@@ -42,7 +42,7 @@ import {EnemyData} from "./Enemy";
 
 export type TiledMapMap = Record<string, DwMap>;
 
-export default class DwGame extends Game {
+export class DwGame extends Game {
 
     map: DwMap;
     maps: TiledMapMap;

@@ -1,11 +1,11 @@
-import ConversationSegment, { ConversationSegmentArgs } from './ConversationSegment';
-import merchantConversationTemplate from './MerchantConversationTemplate';
-import innkeeperConversationTemplate from './InnkeeperConversationTemplate';
+import { ConversationSegment, ConversationSegmentArgs } from './ConversationSegment';
+import { merchantConversationTemplate } from './MerchantConversationTemplate';
+import { innkeeperConversationTemplate } from './InnkeeperConversationTemplate';
 import { NpcText } from './mapLogic/MapLogic';
-import DwGame from './DwGame';
-import Sellable from './Sellable';
+import { DwGame } from './DwGame';
+import { Sellable } from './Sellable';
 
-export default class Conversation {
+export class Conversation {
 
     private readonly voice: boolean;
     private readonly segments: ConversationSegment[];

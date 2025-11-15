@@ -1,6 +1,6 @@
-import { BaseState } from './BaseState';
 import {Delay, FadeOutInState} from 'gtp';
-import DwGame from './DwGame';
+import { BaseState } from './BaseState';
+import { DwGame } from './DwGame';
 import { TitleScreenState } from './TitleScreenState';
 
 export class GameStudioAdvertState extends BaseState {

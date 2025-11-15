@@ -1,11 +1,11 @@
 /**
  * Transitions from the map to a battle
  */
-import { BaseState } from './BaseState';
 import { Image, State } from 'gtp';
-import DwGame from './DwGame';
+import { BaseState } from './BaseState';
+import { DwGame } from './DwGame';
 
-export default class BattleTransitionState extends BaseState {
+export class BattleTransitionState extends BaseState {
 
     private readonly enteringState: State<DwGame>;
     private readonly enteringStateScreenshot: HTMLCanvasElement;

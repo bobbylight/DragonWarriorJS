@@ -1,10 +1,10 @@
-import Bubble from './Bubble';
-import DwGame from './DwGame';
 import { InputManager } from 'gtp';
+import { Bubble } from './Bubble';
+import { DwGame } from './DwGame';
 import { ShoppingInfo } from './ConversationSegment';
-import Sellable from './Sellable';
+import { Sellable } from './Sellable';
 
-export default class ShoppingBubble extends Bubble {
+export class ShoppingBubble extends Bubble {
 
    private choices: Sellable[];
    private curChoice: number;

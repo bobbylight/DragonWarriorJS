@@ -1,9 +1,9 @@
-import RoamingEntity, {RoamingEntityArgs} from './RoamingEntity';
-import Direction from './Direction';
 import { Delay, SpriteSheet, Utils } from 'gtp';
-import Hero from './Hero';
-import NpcType from './NpcType';
-import DwGame from "./DwGame";
+import {RoamingEntity, RoamingEntityArgs} from './RoamingEntity';
+import { Direction } from './Direction';
+import { Hero } from './Hero';
+import { NpcType } from './NpcType';
+import {DwGame} from "./DwGame";
 
 type DirFunctionType = () => void;
 
@@ -12,7 +12,7 @@ export interface NpcArgs extends RoamingEntityArgs {
     wanders: boolean;
 }
 
-export default class Npc extends RoamingEntity {
+export class Npc extends RoamingEntity {
 
     type: NpcType;
     wanders: boolean;

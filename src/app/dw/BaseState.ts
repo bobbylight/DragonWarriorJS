@@ -1,5 +1,5 @@
 import { ImageUtils, InputManager, Keys, State } from 'gtp';
-import DwGame from './DwGame';
+import { DwGame } from './DwGame';
 
 /**
  * Functionality common amongst all states in this game.

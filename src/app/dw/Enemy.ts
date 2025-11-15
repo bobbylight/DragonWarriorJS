@@ -1,9 +1,9 @@
-import BattleEntity from './BattleEntity';
 import { Image, Utils } from 'gtp';
-import RoamingEntity from './RoamingEntity';
-import getEnemyAi, { EnemyAiFunc } from './EnemyAI';
-import Hero from './Hero';
-import DwGame from './DwGame';
+import { BattleEntity } from './BattleEntity';
+import { RoamingEntity } from './RoamingEntity';
+import { getEnemyAi, EnemyAiFunc } from './EnemyAI';
+import { Hero } from './Hero';
+import { DwGame } from './DwGame';
 
 export interface EnemyData {
     name: string;
@@ -19,7 +19,7 @@ export interface EnemyData {
     ai: string; // TODO: improve
 }
 
-export default class Enemy extends BattleEntity {
+export class Enemy extends BattleEntity {
 
     game: DwGame;
     name: string;

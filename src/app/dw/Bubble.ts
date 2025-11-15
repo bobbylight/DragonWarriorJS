@@ -1,5 +1,5 @@
-import DwGame from './DwGame';
 import { BitmapFont, Delay } from 'gtp';
+import { DwGame } from './DwGame';
 
 export interface BreakApartDelay {
     offs: number;
@@ -15,7 +15,7 @@ export interface BreakApartResult {
  * A base class for all bubbles in the game (e.g. white text
  * against a black background).
  */
-export default class Bubble {
+export class Bubble {
 
     game: DwGame;
     title?: string;
