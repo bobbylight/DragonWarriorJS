@@ -37,8 +37,7 @@ export default class Inventory {
         if (count > 0) {
             if (count === 1) {
                 this.items.delete(item);
-            }
-            else {
+            } else {
                 this.items.set(item, count - 1);
             }
             return true;

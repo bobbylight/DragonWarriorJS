@@ -58,10 +58,10 @@ export default class RoamingState extends BaseState {
 
       this.updateMethods = new Map<RoamingSubState, UpdateFunction>();
       this.updateMethods.set('ROAMING', this.updateRoaming.bind(this));
-      this.updateMethods.set('MENU',  this.updateMenu.bind(this));
-      this.updateMethods.set('TALKING',  this.updateTalking.bind(this));
-      this.updateMethods.set('OVERNIGHT',  this.updateOvernight.bind(this));
-      this.updateMethods.set('WARP_SELECTION',  this.updateWarpSelection.bind(this));
+      this.updateMethods.set('MENU', this.updateMenu.bind(this));
+      this.updateMethods.set('TALKING', this.updateTalking.bind(this));
+      this.updateMethods.set('OVERNIGHT', this.updateOvernight.bind(this));
+      this.updateMethods.set('WARP_SELECTION', this.updateWarpSelection.bind(this));
 
       this.textBubble = new TextBubble(this.game);
       this.showTextBubble = false;
@@ -77,8 +77,7 @@ export default class RoamingState extends BaseState {
        // In this game, you must "TAKE" treasure, not "SEARCH" for it.
        if (chest) {
            messages.push('There is a treasure box.');
-       }
-       else {
+       } else {
            messages.push('But there found nothing.');
        }
 
@@ -98,8 +97,7 @@ export default class RoamingState extends BaseState {
    takeStairs() {
        if (this.game.hero.possiblyHandleIntersectedObject()) {
            this.setSubstate('ROAMING');
-       }
-       else {
+       } else {
            this.showOneLineConversation(true, 'There are no stairs here.');
        }
    }
@@ -249,8 +247,8 @@ export default class RoamingState extends BaseState {
       } else {
          this.game.audio.playMusic('overnight', false);
          this.overnightDelay = new Delay({
-            millis: [RoamingState.OVERNIGHT_DARK_TIME],
-            callback: this.overnightOver.bind(this)
+            millis: [ RoamingState.OVERNIGHT_DARK_TIME ],
+            callback: this.overnightOver.bind(this),
          });
       }
    }
@@ -267,8 +265,7 @@ export default class RoamingState extends BaseState {
            if (warpTo) {
                this.warpTo(warpTo); // TODO: Make me cleaner
                this.setSubstate('ROAMING');
-           }
-           else {
+           } else {
                this.setSubstate('MENU');
            }
            this.warpBubble = undefined;

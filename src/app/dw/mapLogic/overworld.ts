@@ -7,9 +7,9 @@ const talks: NpcTextGeneratorMap = {
    npc: (game: DwGame): NpcText => {
       return [
          'I speak with... \\ddelays...',
-         'Did you notice that?'
+         'Did you notice that?',
       ];
-   }
+   },
 
 };
 

@@ -54,8 +54,7 @@ export default class Enemy extends BattleEntity {
         // TODO: Merge with BattleEntity and make ths a utility method since it's used there too
         if (typeof args.gp === 'number') {
             this.gp = args.gp;
-        }
-        else {
+        } else {
             this.gp = Utils.randomInt(args.gp[0], args.gp[1] + 1);
         }
     }
@@ -68,8 +67,7 @@ export default class Enemy extends BattleEntity {
         if (hero.armor?.name === 'magicArmor' || hero.armor?.name === 'erdricksArmor') {
             min = 2;
             max = 6;
-        }
-        else {
+        } else {
             min = 3;
             max = 10;
         }

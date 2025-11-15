@@ -151,8 +151,7 @@ export default class CommandBubble extends Bubble {
             this.game.drawString(choice, x, y0);
             if (index !== rowCount - 1) {
                 y0 += this.yInc;
-            }
-            else {
+            } else {
                 x += 70 * SCALE;
                 y0 -= (rowCount - 1) * this.yInc;
             }

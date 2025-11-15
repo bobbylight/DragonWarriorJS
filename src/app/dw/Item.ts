@@ -38,21 +38,21 @@ export const HERB: Item = new Item('Herb', {
     baseCost: 24,
     use: (game: DwGame) => {
         return game.hero.incHp(24);
-    }
+    },
 });
 
 export const KEY: Item = new Item('Magic Key', {
     baseCost: 53, // TODO: and 83 depending on where you buy!
     use: (game: DwGame) => {
         return (game.state as RoamingState).openDoor();
-    }
+    },
 });
 
 export const TORCH: Item = new Item('Torch', {
     baseCost: 8,
     use: (game: DwGame) => {
         return game.setUsingTorch(true);
-    }
+    },
 });
 
 const ITEMS: Item[] = [ HERB, KEY, TORCH ];

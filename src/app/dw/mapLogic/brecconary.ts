@@ -35,18 +35,16 @@ const talks: NpcTextGeneratorMap = {
                   { text: 'Yes', next: () => {
                         game.party.addGold(10);
                         return 'iGaveYouMoney';
-                     }
+                     },
                   },
-                  { text: 'Nope', next: 'makeUserChoose' }
-               ]
+                  { text: 'Nope', next: 'makeUserChoose' },
+               ],
             },
             {
-               id: 'iGaveYouMoney', text: "I've given you all I have... 100 gold.  Good luck, my child."
-            }
+               id: 'iGaveYouMoney', text: "I've given you all I have... 100 gold.  Good luck, my child.",
+            },
          ];
-      }
-
-      else {
+      } else {
          return 'Wow, you are strong! I cannot help you.  Go, defeat the Dragon Lord!';
       }
    },
@@ -54,7 +52,7 @@ const talks: NpcTextGeneratorMap = {
    innkeeper: (game: DwGame): NpcText => {
       return {
          conversationType: 'innkeeper',
-         cost: 6
+         cost: 6,
       };
    },
 
@@ -62,7 +60,7 @@ const talks: NpcTextGeneratorMap = {
       return {
          conversationType: 'merchant',
          choices: [ 'bambooPole', 'club', 'copperSword' ],
-         introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?'
+         introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?',
       };
    },
 
@@ -70,9 +68,9 @@ const talks: NpcTextGeneratorMap = {
       return {
          conversationType: 'merchant',
          choices: [ 'bambooPole', 'club', 'copperSword' ],
-         introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?'
+         introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?',
       };
-   }
+   },
 };
 
 /**

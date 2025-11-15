@@ -78,7 +78,9 @@ export default class Bubble {
         text = Bubble.removeSpecialEscapes(text, result.delays);
         const lineList: string[] = text.split('\n');
 
-        lineList.forEach(line => { this.breakApartLine(line, w, result) });
+        lineList.forEach(line => {
+ this.breakApartLine(line, w, result)
+});
         return result;
     }
 
@@ -197,7 +199,7 @@ export default class Bubble {
                     delete this.animator;
                     delete this.paintH;
                 }
-            }
+            },
         });
     }
 
@@ -307,10 +309,11 @@ export default class Bubble {
                 this.arrowDelay = new Delay({
                     millis: [ 500, 300 ],
                     loop: true,
-                    callback: () => { this.paintArrow = !this.paintArrow; }
+                    callback: () => {
+ this.paintArrow = !this.paintArrow;
+},
                 });
-            }
-            else {
+            } else {
                 this.paintArrow = true;
                 this.arrowDelay = undefined;
             }

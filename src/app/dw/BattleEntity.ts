@@ -11,8 +11,7 @@ export default class BattleEntity {
    constructor(args: EnemyData) {
        if (typeof args.hp === 'number') {
            this.hp = args.hp;
-       }
-       else {
+       } else {
            this.hp = Utils.randomInt(args.hp[0], args.hp[1] + 1);
        }
        this.maxHp = this.hp;

@@ -130,10 +130,8 @@ export default class RoamingEntity {
         const canWalk: boolean = data === 0; // -1;
         if (canWalk) {
             this.setMapLocation(row, col);
-        }
-
-        // TODO: Is there a better way to determine that I'm the hero?
-        else if (data === 361 && this.constructor === Hero) { // i.e., not an NPC
+        } else if (data === 361 && this.constructor === Hero) { // i.e., not an NPC
+            // TODO: Is there a better way to determine that I'm the hero?
             (this as Hero).game.bump();
         }
         /*

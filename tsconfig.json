@@ -5,6 +5,7 @@
     "allowUnusedLabels": false,
     "declaration": false,
     "forceConsistentCasingInFileNames": true,
+    "newLine": "lf",
     "noImplicitAny": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,

@@ -102,18 +102,18 @@ const talks: NpcTextGeneratorMap = {
            text: 'Dost thou know about Princess Gwaelin?',
            choices: [
               { text: 'Yes', next: 'knows' },
-              { text: 'No', next: 'doesntKnow' }
-           ]
+              { text: 'No', next: 'doesntKnow' },
+           ],
         },
         {
            id: 'doesntKnow',
-           text: 'Half a year hath passed since the Princess was kidnapped by the enemy.'
+           text: 'Half a year hath passed since the Princess was kidnapped by the enemy.',
         },
         'Never does the King speak of it, but he must be suffering much.',
         {
            id: 'knows',
            text: '\\w{hero.name}, please save the Princess.',
-           next: '_done'
+           next: '_done',
         },
      ];
   },
@@ -121,29 +121,29 @@ const talks: NpcTextGeneratorMap = {
   king: (game: DwGame): NpcText => {
      return [
          {
-             text: 'I am greatly pleased that thou has returned, \\w{hero.name}.'
+             text: 'I am greatly pleased that thou has returned, \\w{hero.name}.',
          },
          {
-             text: 'Before reaching thy next level of experience thou must gain \\w{hero.expRemaining} Points.'
+             text: 'Before reaching thy next level of experience thou must gain \\w{hero.expRemaining} Points.',
          },
          {
              text: "Will thou tell me now of thy deeds so they won't be forgotten?",
              choices: [
                  { text: 'Yes', next: 'tell' },
-                 { text: 'No', next: 'dontTell' }
-             ]
+                 { text: 'No', next: 'dontTell' },
+             ],
          },
          {
              id: 'tell',
-             text: 'Thy deeds have been recorded on the Imperial Scrolls of Honor.'
+             text: 'Thy deeds have been recorded on the Imperial Scrolls of Honor.',
          },
          {
              id: 'dontTell',
              text: 'Dost thou wish to continue thy quest?',
              choices: [
                  { text: 'Yes', next: 'continue' },
-                 { text: 'No', next: 'dontContinue' }
-             ]
+                 { text: 'No', next: 'dontContinue' },
+             ],
          },
          {
              id: 'dontContinue',
@@ -153,15 +153,15 @@ const talks: NpcTextGeneratorMap = {
              action: () => {
                  game.setState(new FadeOutInState(game.state, new TitleScreenState(game)));
              },
-             next: Conversation.DONE // TODO: Reset to title screen
+             next: Conversation.DONE, // TODO: Reset to title screen
          },
          {
              id: 'continue',
              text: 'Goodbye now, \\w{hero.name}. Take care and tempt not the Fates.',
-             next: Conversation.DONE
+             next: Conversation.DONE,
          },
      ];
-  }
+  },
 
 };
 

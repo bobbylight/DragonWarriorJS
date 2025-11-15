@@ -8,7 +8,7 @@ const talks: NpcTextGeneratorMap = {
         return {
             conversationType: 'merchant',
             choices: [ 'bambooPole', 'club', 'copperSword' ],
-            introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?'
+            introText: 'We deal in weapons and armor.\nDost thou wish to buy anything today?',
         };
     },
 };
