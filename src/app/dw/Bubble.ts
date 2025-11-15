@@ -1,9 +1,14 @@
 import DwGame from './DwGame';
 import { BitmapFont, Delay } from 'gtp';
 
+export interface BreakApartDelay {
+    offs: number;
+    millis: number;
+}
+
 export interface BreakApartResult {
     lines: string[];
-    delays: any[];
+    delays: BreakApartDelay[];
 }
 
 /**
@@ -49,9 +54,9 @@ export default class Bubble {
 
     static readonly MARGIN: number = 10; // 5 * SCALE; TODO
 
-    constructor(title: string | undefined, x: number, y: number, w: number, h: number) {
+    constructor(game: DwGame, title: string | undefined, x: number, y: number, w: number, h: number) {
 
-        this.game = (window as any).game;
+        this.game = game;
         this.title = title;
         const scale = 1; //game.scale;
         this.x = x * scale;
@@ -85,7 +90,7 @@ export default class Bubble {
      * @param delays The array to put delays into.
      * @return The text, with any escapes removed.
      */
-    static removeSpecialEscapes(text: string, delays: any[]) {
+    static removeSpecialEscapes(text: string, delays: BreakApartDelay[]) {
 
         // Delay formats:
         //    \d      - default ms

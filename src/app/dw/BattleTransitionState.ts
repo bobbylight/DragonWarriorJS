@@ -14,8 +14,8 @@ export default class BattleTransitionState extends BaseState {
 
     private static readonly TICK_COUNT: number = 25;
 
-    constructor(leavingState: BaseState, enteringState: BaseState) {
-        super();
+    constructor(game: DwGame, leavingState: BaseState, enteringState: BaseState) {
+        super(game);
         this.enteringState = enteringState;
         this.enteringStateScreenshot = enteringState.createScreenshot();
     }

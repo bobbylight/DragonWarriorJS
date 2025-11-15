@@ -1,5 +1,6 @@
 import Bubble from './Bubble';
 import { InputManager } from 'gtp';
+import DwGame from "./DwGame";
 
 type ChoiceBubbleStringMap = Record<string, string>;
 export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
@@ -14,12 +15,12 @@ export default class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     private curChoice: number;
     private readonly cancellable: boolean;
 
-    constructor(x: number, y: number, w: number, h: number,
+    constructor(game: DwGame, x: number, y: number, w: number, h: number,
                 choices: ChoiceBubbleChoice[] = [],
                 choiceDisplayField?: string,
                 cancellable = false,
                 title: string | undefined = undefined) {
-        super(title, x, y, w, h);
+        super(game, title, x, y, w, h);
         this.choices = choices;
         this.choiceDisplayField = choiceDisplayField;
         this.cancellable = cancellable;

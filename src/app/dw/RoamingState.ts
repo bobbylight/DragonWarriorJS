@@ -1,5 +1,5 @@
 import { BaseState } from './BaseState';
-import {BaseStateArgs, Delay, InputManager, Keys} from 'gtp';
+import {Delay, InputManager, Keys} from 'gtp';
 import DwGame from './DwGame';
 import CommandBubble from './CommandBubble';
 import StatBubble from './StatBubble';
@@ -46,11 +46,11 @@ export default class RoamingState extends BaseState {
 
    private static totalTime = 0;
 
-   constructor(args?: DwGame | BaseStateArgs<DwGame>) {
+   constructor(game: DwGame) {
 
-      super(args);
+      super(game);
 
-      this.commandBubble = new CommandBubble();
+      this.commandBubble = new CommandBubble(game);
       this.statBubble = new StatBubble(this.game);
       this.stationaryTimer = new Delay({millis: 1000});
 
@@ -415,7 +415,7 @@ export default class RoamingState extends BaseState {
    }
 
    showInventory() {
-      this.itemBubble = new ItemBubble();
+      this.itemBubble = new ItemBubble(this.game);
    }
 
    private showNoSpellsMessage() {
@@ -430,7 +430,7 @@ export default class RoamingState extends BaseState {
      */
    showOneLineConversation(voice: boolean, ...text: string[]) {
 
-       const conversation: Conversation = new Conversation(voice);
+       const conversation: Conversation = new Conversation(this.game, voice);
        text.forEach(line => {
            conversation.addSegment(line)
        });
@@ -474,7 +474,7 @@ export default class RoamingState extends BaseState {
       }
 
       const npc: Npc | undefined = this.game.getNpcHeroIsFacing();
-      const conversation: Conversation = new Conversation(true);
+      const conversation: Conversation = new Conversation(this.game, true);
 
       if (npc) {
          const hero: Hero = this.game.hero;

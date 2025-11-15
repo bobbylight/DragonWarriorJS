@@ -1,11 +1,17 @@
 import { BaseState } from './BaseState';
-import Weapon from './Weapon';
-import Armor from './Armor';
-import Shield from './Shield';
-import {BaseStateArgs, BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils} from 'gtp';
+import Weapon, {WeaponData} from './Weapon';
+import Armor, {ArmorData} from './Armor';
+import Shield, {ShieldData} from './Shield';
+import {BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils} from 'gtp';
 import DwGame from './DwGame';
 import { GameStudioAdvertState } from './GameStudioAdvertState';
 import { EquipmentMap } from './dw';
+
+export interface EquipmentData {
+    weapons: Record<string, WeaponData>;
+    armor: Record<string, ArmorData>;
+    shields: Record<string, ShieldData>;
+}
 
 export class LoadingState extends BaseState {
 
@@ -13,8 +19,8 @@ export class LoadingState extends BaseState {
     private textX: number;
     private textY: number;
 
-    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
-        super(args);
+    constructor(game: DwGame) {
+        super(game);
         this.assetsLoaded = false;
     }
 
@@ -35,7 +41,7 @@ export class LoadingState extends BaseState {
         return armorArray;
     }
 
-    private static createArmorMap(armors: any): EquipmentMap<Armor> {
+    private static createArmorMap(armors: Record<string, ArmorData>): EquipmentMap<Armor> {
 
         const map: EquipmentMap<Armor> = {};
 
@@ -65,7 +71,7 @@ export class LoadingState extends BaseState {
         return shieldArray;
     }
 
-    private static createShieldMap(shields: any): EquipmentMap<Shield> {
+    private static createShieldMap(shields: Record<string, ShieldData>): EquipmentMap<Shield> {
 
         const map: EquipmentMap<Shield> = {};
 
@@ -94,7 +100,7 @@ export class LoadingState extends BaseState {
         return weaponArray;
     }
 
-    private static createWeaponsMap(weapons: any): EquipmentMap<Weapon> {
+    private static createWeaponsMap(weapons: Record<string, WeaponData>): EquipmentMap<Weapon> {
 
         const map: EquipmentMap<Weapon> = {};
 
@@ -173,7 +179,7 @@ export class LoadingState extends BaseState {
                     }
                 }
 
-                const equipment: any = game.assets.get('equipment');
+                const equipment: EquipmentData = game.assets.get('equipment');
                 const weaponsMap: EquipmentMap<Weapon> = LoadingState.createWeaponsMap(equipment.weapons);
                 game.assets.set('weapons', weaponsMap);
                 game.assets.set('weaponsArray', LoadingState.createWeaponsArray(weaponsMap));
@@ -198,7 +204,7 @@ export class LoadingState extends BaseState {
                     if (skipTitle !== null) { // Allow empty strings
                         game.startNewGame();
                     } else {
-                        game.setState(new FadeOutInState(this, new GameStudioAdvertState()));
+                        game.setState(new FadeOutInState(this, new GameStudioAdvertState(this.game)));
                     }
                 });
             });

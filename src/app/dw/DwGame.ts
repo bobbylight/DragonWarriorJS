@@ -101,7 +101,7 @@ export default class DwGame extends Game {
     }
 
     private createPartyAndHero() {
-        this.hero = new Hero({ name: 'Erdrick' });
+        this.hero = new Hero(this, { name: 'Erdrick' });
         this.party = new Party(this);
         this.party.addMember(this.hero);
     }
@@ -185,7 +185,7 @@ export default class DwGame extends Game {
     }
 
     drawString(text: string | number, x: number, y: number) {
-        const textStr: string = (text as any).charAt ? text as string : text.toString();
+        const textStr: string = typeof text === 'number' ? text.toString() : text;
         const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
         font.drawString(textStr, x, y);
     }
@@ -235,7 +235,7 @@ export default class DwGame extends Game {
     /**
      * Starts loading a new map.  Fades out of the old one and into the new one.
      */
-    loadMap(mapName: string, newRow: number, newCol: number, dir: any) {
+    loadMap(mapName: string, newRow: number, newCol: number, dir?: number) {
         this.newRow = newRow;
         this.newCol = newCol;
         this.audio.playSound('stairs');
@@ -313,7 +313,7 @@ export default class DwGame extends Game {
         // We special-case the NPC layer
         const newNpcs: Npc[] = [];
         const newDoors: Door[] = [];
-        const newTalkAcrosses: any = {};
+        const newTalkAcrosses: Record<LocationString, boolean> = {};
         map.chests = new Map<LocationString, Chest>();
         const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
         if (temp?.isObjectGroup()) {
@@ -373,7 +373,7 @@ export default class DwGame extends Game {
     private parseChestContents(chest: TiledObject): Chest {
 
         const id: string = chest.name;
-        let value: any;
+        let value: number;
 
         const contentType: ChestContentType = getProperty(chest, 'contentType');
         switch (contentType) {
@@ -393,7 +393,7 @@ export default class DwGame extends Game {
         return {
             id,
             contentType,
-            contents: value as number,
+            contents: value,
             location: toLocationString(row, col)
         };
     }
@@ -410,7 +410,7 @@ export default class DwGame extends Game {
 
     private parseNpc(obj: TiledObject): Npc {
         const name: string = obj.name;
-        let type: NpcType | null = null;
+        let type: NpcType | undefined;
         if (obj.propertiesByName.has('type')) {
             type = getNpcType(getProperty(obj, 'type'));
         }
@@ -424,15 +424,15 @@ export default class DwGame extends Game {
         }
         const wanderStr: string = getProperty(obj, 'wanders', 'true');
         const wanders: boolean = wanderStr === 'true';
-        const range: number[] = this.parseRange(getProperty(obj, 'range', ''));
-        return new Npc({
+        const range = this.parseRange(getProperty(obj, 'range', ''));
+        return new Npc(this, {
             name, type, direction: dir,
             range, wanders, mapRow: row, mapCol: col
         });
     }
 
-    private parseRange(rangeStr?: string): number[] {
-        let range: number[] = [];
+    private parseRange(rangeStr?: string): number[] | undefined {
+        let range: number[] | undefined;
         if (rangeStr) {
             const temp: string[] = rangeStr.split(/,\s*/);
             range = temp.map((value: string) => {
@@ -477,7 +477,7 @@ export default class DwGame extends Game {
             this.setMap('brecconary.json');
             this.hero.setMapLocation(7, 6);
         };
-        this.setState(new FadeOutInState(this.state, new RoamingState(), transitionLogic));
+        this.setState(new FadeOutInState(this.state, new RoamingState(this), transitionLogic));
     }
 
     setInsideOutside(inside: boolean) {
@@ -624,13 +624,15 @@ export default class DwGame extends Game {
                 if (territory > 0) {
                     // Enemy territory index is offset by the Tiled tileset's firstgid
                     // TODO: Remove call to private method
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
                     territory = territory - (this.map as any).getTilesetForGid(territory).firstgid;
                     if (territory >= 0) {
-                        const territories: any = this.assets.get('enemyTerritories');
-                        const possibleEnemies: any[] = territories[territory];
+                        const territories: string[][] = this.assets.get('enemyTerritories');
+                        const possibleEnemies: string[] = territories[territory];
                         const enemyName: string = possibleEnemies[Utils.randomInt(0, possibleEnemies.length)];
-                        this.setState(new BattleTransitionState(this.state as BaseState, new BattleState(enemyName)));
+                        this.setState(new BattleTransitionState(this,
+                            this.state as BaseState, new BattleState(this, enemyName)
+                        ));
                         return true;
                     }
                 }

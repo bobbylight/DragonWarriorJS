@@ -29,14 +29,14 @@ export default class BattleState extends BaseState {
    private shakeMillisCount: number;
    private dead: boolean;
 
-   constructor(enemyName: string) {
-      super();
+   constructor(game: DwGame, enemyName: string) {
+      super(game);
       this.enemyName = enemyName;
    }
 
    private backToRoaming() {
       this.game.audio.fadeOutMusic('MUSIC_OVERWORLD');
-      this.game.setState(new RoamingState());
+      this.game.setState(new RoamingState(this.game));
    }
 
    fight() {
@@ -150,8 +150,8 @@ Thy gold increases by ${this.enemy.gp}.`;
       this.commandBubble = new BattleCommandBubble(game);
       this.commandExecuting = false;
       this.textBubble = new TextBubble(game);
-      const conversation: Conversation = new Conversation();
-      this.enemy = new Enemy(game.getEnemy(this.enemyName)).prepare();
+      const conversation: Conversation = new Conversation(game);
+      this.enemy = new Enemy(game, game.getEnemy(this.enemyName)).prepare();
       conversation.addSegment({text: 'A ' + this.enemy.name + ' draws near!  Command?'});
       this.textBubble.setConversation(conversation);
       this.statBubble = new StatBubble(game);

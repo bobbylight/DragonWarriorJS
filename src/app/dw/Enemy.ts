@@ -32,7 +32,7 @@ export default class Enemy extends BattleEntity {
     gp: number;
     ai: EnemyAiFunc;
 
-    constructor(args: EnemyData) {
+    constructor(game: DwGame, args: EnemyData) {
 
         super(args);
         this.name = args.name;
@@ -47,7 +47,7 @@ export default class Enemy extends BattleEntity {
 
         Utils.mixin(RoamingEntity.prototype, this);
 
-        this.game = (window as any).game;
+        this.game = game;
 
         // Convert arrays into a single value.
         // These values can be an array of form [min, max], both inclusive

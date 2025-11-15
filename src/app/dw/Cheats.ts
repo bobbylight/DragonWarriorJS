@@ -22,7 +22,7 @@ export default class Cheats {
             'Far Reaches',
         ];
 
-        return new ChoiceBubble(x, y, w, h, choices, undefined, true);
+        return new ChoiceBubble(game, x, y, w, h, choices, undefined, true);
     }
 
     static warpTo(game: DwGame, mapName: string, row: number, col: number, desc: string, dir: number = Direction.SOUTH) {

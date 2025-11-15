@@ -18,7 +18,7 @@ export default class StatBubble extends Bubble {
       if (title.length > 4) {
          title = title.substring(0, 4);
       }
-      super(title, x, y, w, h);
+      super(game, title, x, y, w, h);
       this.selection = 0;
    }
 

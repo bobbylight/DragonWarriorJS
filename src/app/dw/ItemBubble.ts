@@ -9,9 +9,7 @@ export default class ItemBubble extends Bubble {
     private readonly choices: ItemCountPair[];
     private curChoice: number;
 
-    constructor() {
-
-        const game: DwGame = (window as any).game as DwGame;
+    constructor(game: DwGame) {
 
         const scale: number = game.scale;
         const tileSize: number = game.getTileSize();
@@ -19,7 +17,7 @@ export default class ItemBubble extends Bubble {
         const h: number = 100 * scale;
         const x: number = 9 * tileSize;
         const y: number = 3 * tileSize;
-        super(undefined, x, y, w, h);
+        super(game, undefined, x, y, w, h);
 
         this.choices = game.party.getInventory().getItems();
         this.curChoice = 0;

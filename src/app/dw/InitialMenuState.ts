@@ -30,7 +30,7 @@ export class InitialMenuState extends BaseState {
             'ERASE A QUEST',
         ]
 
-        return new ChoiceBubble(x, y, w, h, choices);
+        return new ChoiceBubble(this.game, x, y, w, h, choices);
     }
 
     private createSaveSelectBubble(): ChoiceBubble<string> {
@@ -50,7 +50,7 @@ export class InitialMenuState extends BaseState {
         const choices: string[] = [
             'ADVENTURE LOG 1: Test',
         ];
-        return new ChoiceBubble(x,  y, w, h, choices, undefined, true);
+        return new ChoiceBubble(this.game, x,  y, w, h, choices, undefined, true);
     }
 
     override enter(game: DwGame) {

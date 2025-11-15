@@ -3,6 +3,14 @@ import DwGame from './DwGame';
 import Hero from './Hero';
 import { TiledLayer } from 'gtp';
 
+export interface RoamingEntityArgs {
+    name: string;
+    direction?: number;
+    mapRow?: number;
+    mapCol?: number;
+    range?: number[];
+}
+
 export default class RoamingEntity {
 
     protected game: DwGame;
@@ -12,17 +20,19 @@ export default class RoamingEntity {
     mapCol: number;
     xOffs: number;
     yOffs: number;
+    private readonly range?: number[];
     protected stepTick: number;
     private moveInc: number;
-    protected range: number[];
 
-    constructor(args?: any) {
-        this.game = (window as any).game as DwGame;
-        this.direction = this.direction || Direction.SOUTH;
-        this.mapCol = this.mapCol || 0;
-        this.mapRow = this.mapRow || 0;
-        this.xOffs = this.xOffs || 0;
-        this.yOffs = this.yOffs || 0;
+    constructor(game: DwGame, args: RoamingEntityArgs) {
+        this.game = game;
+        this.name = args.name;
+        this.direction = args.direction ?? Direction.SOUTH;
+        this.mapCol = args.mapCol ?? 0;
+        this.mapRow = args.mapRow ?? 0;
+        this.range = args.range;
+        this.xOffs = 0;
+        this.yOffs = 0;
         this.stepTick = 0;
         // TODO: Make this time-dependent!
         this.moveInc = this.game.scale * (this.game.targetFps === 30 ? 2 : 1);

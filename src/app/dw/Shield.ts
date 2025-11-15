@@ -1,5 +1,12 @@
 import Sellable from './Sellable';
 
+export interface ShieldData {
+    name: string;
+    displayName?: string;
+    baseCost?: number;
+    defense?: number;
+}
+
 export default class Shield implements Sellable {
 
     name: string;
@@ -7,7 +14,7 @@ export default class Shield implements Sellable {
     baseCost: number;
     defense: number;
 
-    constructor(name: string, args: any) {
+    constructor(name: string, args: ShieldData) {
         this.name = name;
         this.displayName = args.displayName ?? this.name;
         this.baseCost = args.baseCost ?? 0;

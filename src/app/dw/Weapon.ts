@@ -1,5 +1,12 @@
 import Sellable from './Sellable';
 
+export interface WeaponData {
+    name: string;
+    displayName?: string;
+    baseCost?: number;
+    power?: number;
+}
+
 export default class Weapon implements Sellable {
 
     name: string;
@@ -7,7 +14,7 @@ export default class Weapon implements Sellable {
     baseCost: number;
     power: number;
 
-    constructor(name: string, args: any) {
+    constructor(name: string, args: WeaponData) {
         this.name = name;
         this.displayName = args.displayName ?? this.name;
         this.baseCost = args.baseCost ?? 0;

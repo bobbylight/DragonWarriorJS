@@ -1,5 +1,12 @@
 import Sellable from './Sellable';
 
+export interface ArmorData {
+    name: string;
+    displayName?: string;
+    baseCost?: number;
+    defense?: number;
+}
+
 export default class Armor implements Sellable {
 
     name: string;
@@ -7,7 +14,7 @@ export default class Armor implements Sellable {
     baseCost: number;
     defense: number;
 
-    constructor(name: string, args: any) {
+    constructor(name: string, args: ArmorData) {
         this.name = name;
         this.displayName = args.displayName ?? this.name;
         this.baseCost = args.baseCost ?? 0;

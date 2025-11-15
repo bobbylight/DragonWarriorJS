@@ -16,7 +16,7 @@ export default class ShoppingBubble extends Bubble {
       const y: number = 1 * tileSize;
       const width: number = 9 * tileSize;
       const height: number = 6 * tileSize;
-      super(undefined, x, y, width, height);
+      super(game, undefined, x, y, width, height);
 
       this.choices = shoppingInfo.choices.map((choice) => {
          return game.getWeapon(choice) || game.getArmor(choice) || game.getShield(choice);

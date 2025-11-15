@@ -24,7 +24,7 @@ export default class DeadState extends BaseState {
 
     override update(delta: number) {
       if (this.allowUserInput && this.game.anyKeyDown()) {
-         this.game.setState(new FadeOutInState(this, new TitleScreenState()));
+         this.game.setState(new FadeOutInState(this, new TitleScreenState(this.game)));
       }
    }
 }
