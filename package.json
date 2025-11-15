@@ -10,6 +10,7 @@
     "build:dev": "vite build --mode development",
     "serve": "vite preview",
     "lint": "eslint src/",
+    "lint:fix": "eslint --fix src/",
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {

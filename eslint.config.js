@@ -64,8 +64,6 @@ export default [
             "@typescript-eslint/no-unnecessary-condition": 0,
             //"@typescript-eslint/no-unnecessary-condition": ["error", { "allowConstantLoopConditions": true }],
             "@typescript-eslint/no-unused-vars": 0,
-            "@typescript-eslint/no-unsafe-assignment": 0, // TODO: Remove me
-            "@typescript-eslint/no-unsafe-member-access": 0, // TODO: Remove me
             "@typescript-eslint/prefer-readonly": "error",
             "@typescript-eslint/restrict-template-expressions": ["error", { "allowNumber": true }],
             // "import/no-default-export": "error",
