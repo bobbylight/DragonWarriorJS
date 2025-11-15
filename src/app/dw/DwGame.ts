@@ -624,7 +624,7 @@ export default class DwGame extends Game {
                 if (territory > 0) {
                     // Enemy territory index is offset by the Tiled tileset's firstgid
                     // TODO: Remove call to private method
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                     territory = territory - (this.map as any).getTilesetForGid(territory).firstgid;
                     if (territory >= 0) {
                         const territories: string[][] = this.assets.get('enemyTerritories');
