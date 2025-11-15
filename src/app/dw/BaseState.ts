@@ -71,19 +71,17 @@ export class BaseState extends State<DwGame> {
         // Audio stuff
         if (im.isKeyDown(Keys.KEY_M, true)) {
             game.toggleMuted();
-        }
 
-        // Equipment testing
-        else if (im.isKeyDown(Keys.KEY_W, true)) {
+            // Equipment testing
+        } else if (im.isKeyDown(Keys.KEY_W, true)) {
             game.cycleWeapon();
         } else if (im.isKeyDown(Keys.KEY_A, true)) {
             game.cycleArmor();
         } else if (im.isKeyDown(Keys.KEY_S, true)) {
             game.cycleShield();
-        }
 
-        // Stat testing
-        else if (im.isKeyDown(Keys.KEY_H, true)) {
+            // Stat testing
+        } else if (im.isKeyDown(Keys.KEY_H, true)) {
             if (im.ctrl()) {
                 game.setHeroStats(1, 1);
             } else {
@@ -97,10 +95,9 @@ export class BaseState extends State<DwGame> {
             }
         } else if (im.isKeyDown(Keys.KEY_T, true)) {
             game.setUsingTorch(!game.getUsingTorch());
-        }
 
-        // Options generally useful for debugging
-        else if (im.isKeyDown(Keys.KEY_U, true)) {
+            // Options generally useful for debugging
+        } else if (im.isKeyDown(Keys.KEY_U, true)) {
             game.hero.setMoveIncrement(4);
             game.setStatusMessage('Hero speed === 4');
         } else if (im.isKeyDown(Keys.KEY_D, true)) {

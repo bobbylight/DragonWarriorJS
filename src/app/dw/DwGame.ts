@@ -8,7 +8,7 @@ import {
     TiledLayer,
     TiledMapData,
     TiledObject,
-    Utils
+    Utils,
 } from 'gtp';
 import Hero from './Hero';
 import Shield from './Shield';
@@ -251,7 +251,9 @@ export default class DwGame extends Game {
     }
 
     private resetMap(map: DwMap) {
-        map.npcs.forEach(npc => { npc.reset() });
+        map.npcs.forEach(npc => {
+ npc.reset()
+});
     }
 
     setMap(assetName: string) {
@@ -394,7 +396,7 @@ export default class DwGame extends Game {
             id,
             contentType,
             contents: value,
-            location: toLocationString(row, col)
+            location: toLocationString(row, col),
         };
     }
 
@@ -427,7 +429,7 @@ export default class DwGame extends Game {
         const range = this.parseRange(getProperty(obj, 'range', ''));
         return new Npc(this, {
             name, type, direction: dir,
-            range, wanders, mapRow: row, mapCol: col
+            range, wanders, mapRow: row, mapCol: col,
         });
     }
 
@@ -631,7 +633,7 @@ export default class DwGame extends Game {
                         const possibleEnemies: string[] = territories[territory];
                         const enemyName: string = possibleEnemies[Utils.randomInt(0, possibleEnemies.length)];
                         this.setState(new BattleTransitionState(this,
-                            this.state as BaseState, new BattleState(this, enemyName)
+                            this.state as BaseState, new BattleState(this, enemyName),
                         ));
                         return true;
                     }

@@ -23,6 +23,6 @@ export const createDefaultGameState = (): DwGameState => {
     return {
         mapStates: {
             tantegelCastle: createEmtpyMapState(),
-        }
+        },
     };
 };

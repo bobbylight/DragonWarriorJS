@@ -26,7 +26,7 @@ export default (state: RoamingState, chest: Chest | undefined): Conversation => 
                 action: () => {
                     state.game.removeChest(chest);
                     state.game.party.gold += gold;
-                }
+                },
             });
             break;
 
@@ -36,7 +36,7 @@ export default (state: RoamingState, chest: Chest | undefined): Conversation => 
                 text: 'Fortune smiles upon thee, \\w{hero.name}.',
                 action: () => {
                     state.game.removeChest(chest);
-                }
+                },
             });
             conversation.addSegment('Thou hast found the Magic Key');
             break;

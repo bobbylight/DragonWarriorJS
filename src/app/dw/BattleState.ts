@@ -41,7 +41,7 @@ export default class BattleState extends BaseState {
 
    fight() {
       this.commandExecuting = true;
-      this.fightDelay = new Delay({ millis: [300], callback: this.fightCallback.bind(this) });
+      this.fightDelay = new Delay({ millis: [ 300 ], callback: this.fightCallback.bind(this) });
       this.textBubble.addToConversation({text: 'You attack!', sound: 'attack'}, true);
    }
 
@@ -92,22 +92,21 @@ Thy gold increases by ${this.enemy.gp}.`;
 
       if (result.type === 'physical') {
           const text = `The ${this.enemy.name} attacks!`;
-          this.textBubble.addToConversation({  text, afterSound: 'prepareToAttack' }, true);
+          this.textBubble.addToConversation({ text, afterSound: 'prepareToAttack' }, true);
           this.textBubble.onDone(() => {
               this.enemyAttackDelay = new Delay({
                   millis: 350,
-                  callback: this.enemyAttackCallback.bind(this)
+                  callback: this.enemyAttackCallback.bind(this),
               });
           });
-      }
-      else { // 'magic'
+      } else { // 'magic'
           const text = `The ${this.enemy.name} chants the spell of ${result.spellName}.`
           // TODO: Should conversations auto-wait for afterSounds to complete?
-          this.textBubble.addToConversation({  text, afterSound: 'castSpell' }, true);
+          this.textBubble.addToConversation({ text, afterSound: 'castSpell' }, true);
           this.textBubble.onDone(() => {
               this.enemyAttackDelay = new Delay({
                   millis: 900,
-                  callback: this.enemyAttackCallback.bind(this)
+                  callback: this.enemyAttackCallback.bind(this),
               });
           });
       }
@@ -119,7 +118,7 @@ Thy gold increases by ${this.enemy.gp}.`;
       this.game.audio.playSound('receiveDamage');
       this.enemyAttackShakeDelay = new Delay({
          millis: 1000,
-         callback: this.enemyAttackShakeCallback.bind(this)
+         callback: this.enemyAttackShakeCallback.bind(this),
       });
 
    }
@@ -218,7 +217,7 @@ Thy gold increases by ${this.enemy.gp}.`;
       const game: DwGame = this.game;
 
       this.commandExecuting = true;
-      this.fightDelay = new Delay({ millis: [600], callback: this.runCallback.bind(this) });
+      this.fightDelay = new Delay({ millis: [ 600 ], callback: this.runCallback.bind(this) });
       game.audio.playSound('run');
       this.textBubble.addToConversation({text: game.hero.name + ' started to run away.'}, true);
    }

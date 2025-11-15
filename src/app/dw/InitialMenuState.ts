@@ -50,7 +50,7 @@ export class InitialMenuState extends BaseState {
         const choices: string[] = [
             'ADVENTURE LOG 1: Test',
         ];
-        return new ChoiceBubble(this.game, x,  y, w, h, choices, undefined, true);
+        return new ChoiceBubble(this.game, x, y, w, h, choices, undefined, true);
     }
 
     override enter(game: DwGame) {
@@ -79,8 +79,7 @@ export class InitialMenuState extends BaseState {
                         this.substate = 'saveSelect';
                         this.menuBubble.setActive(false);
                         this.saveSelectBubble = this.createSaveSelectBubble();
-                    }
-                    else { // Nothing else is implemented
+                    } else { // Nothing else is implemented
                         this.game.audio.playSound('missed1');
                     }
                 }
@@ -93,8 +92,7 @@ export class InitialMenuState extends BaseState {
                     if (-1 === selection) {
                         this.substate = 'mainMenu';
                         this.menuBubble.setActive(true);
-                    }
-                    else {
+                    } else {
                         // For now there's only one selectable game
                         this.game.audio.playSound('menu');
                         this.game.startNewGame();

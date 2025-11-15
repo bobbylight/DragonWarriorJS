@@ -55,8 +55,8 @@ export default class BattleTransitionState extends BaseState {
         const xts: number = battleBG.width / 5;
         const yts: number = battleBG.height / 5;
 
-        const x: number[] = [cx - 2 * xts - xts / 2, cx - xts - xts / 2, cx - xts / 2, cx + xts / 2, cx + xts + xts / 2];
-        const y: number[] = [cy - 2 * yts - yts / 2, cy - yts - yts / 2, cy - yts / 2, cy + yts / 2, cy + yts + xts / 2];
+        const x: number[] = [ cx - 2 * xts - xts / 2, cx - xts - xts / 2, cx - xts / 2, cx + xts / 2, cx + xts + xts / 2 ];
+        const y: number[] = [ cy - 2 * yts - yts / 2, cy - yts - yts / 2, cy - yts / 2, cy + yts / 2, cy + yts + xts / 2 ];
 
         switch (this.state) {
 

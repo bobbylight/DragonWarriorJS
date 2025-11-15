@@ -5,7 +5,7 @@ import { Delay } from 'gtp';
 import Conversation from './Conversation';
 import ConversationSegment, {
     ConversationSegmentArgs,
-    ConversationSegmentArgsChoice
+    ConversationSegmentArgsChoice,
 } from './ConversationSegment';
 import ChoiceBubble from './ChoiceBubble';
 import Sellable from './Sellable';
@@ -170,8 +170,7 @@ export default class TextBubble extends Bubble {
         }
         if (segment.afterSound) {
             this.afterSound = segment.afterSound;
-        }
-        else if (segment.choices) {
+        } else if (segment.choices) {
             this.afterSound = 'confirmation';
         }
     }
@@ -261,8 +260,7 @@ export default class TextBubble extends Bubble {
                         this.curLine++;
                     }
                     this.curOffs = -1;
-                }
-                else if (this.conversation.getVoice() &&
+                } else if (this.conversation.getVoice() &&
                         this.curOffs % 2 === 0 && this.lines[this.curLine][this.curOffs] !== ' ') {
                     this.game.audio.playSound('talk');
                 }

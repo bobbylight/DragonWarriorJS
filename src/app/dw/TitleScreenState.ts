@@ -17,7 +17,7 @@ export class TitleScreenState extends BaseState {
     override enter(game: DwGame) {
         super.enter(game);
         game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
-        this.delay = new Delay({millis: [600, 400]});
+        this.delay = new Delay({millis: [ 600, 400 ]});
         this.blink = true;
         game.audio.playMusic('MUSIC_TITLE_SCREEN');
     }
