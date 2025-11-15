@@ -1,12 +1,12 @@
-import RoamingEntity, {RoamingEntityArgs} from './RoamingEntity';
 import { SpriteSheet, TiledLayer, TiledObject, Utils } from 'gtp';
-import Hero from './Hero';
-import Direction from './Direction';
-import Shield from './Shield';
-import Weapon from './Weapon';
-import Armor from './Armor';
-import Enemy from "./Enemy";
-import DwGame from "./DwGame";
+import { RoamingEntity,RoamingEntityArgs} from './RoamingEntity';
+import { Hero } from './Hero';
+import { Direction } from './Direction';
+import { Shield } from './Shield';
+import { Weapon } from './Weapon';
+import { Armor } from './Armor';
+import { Enemy } from "./Enemy";
+import { DwGame } from "./DwGame";
 
 export interface PartyMemberArgs extends RoamingEntityArgs {
     hp?: number;
@@ -15,7 +15,7 @@ export interface PartyMemberArgs extends RoamingEntityArgs {
     maxMp?: number;
 }
 
-export default class PartyMember extends RoamingEntity {
+export class PartyMember extends RoamingEntity {
 
     hp: number;
     maxHp: number;

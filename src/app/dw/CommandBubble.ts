@@ -1,9 +1,9 @@
-import DwGame from './DwGame';
-import RoamingState from './RoamingState';
-import Bubble from './Bubble';
 import { InputManager } from 'gtp';
+import { DwGame } from './DwGame';
+import { RoamingState } from './RoamingState';
+import { Bubble } from './Bubble';
 
-export default class CommandBubble extends Bubble {
+export class CommandBubble extends Bubble {
 
     private readonly choices: string[];
     private readonly yInc;

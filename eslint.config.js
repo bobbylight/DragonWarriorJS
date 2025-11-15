@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
-// import importPlugin from 'eslint-plugin-import';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
     js.configs.recommended,
@@ -29,7 +29,7 @@ export default [
 
         plugins: {
             '@stylistic': stylistic,
-            // 'import': importPlugin,
+            'import': importPlugin,
         },
 
         files: [
@@ -66,10 +66,10 @@ export default [
             "@typescript-eslint/no-unused-vars": 0,
             "@typescript-eslint/prefer-readonly": "error",
             "@typescript-eslint/restrict-template-expressions": ["error", { "allowNumber": true }],
-            // "import/no-default-export": "error",
-            // "import/no-duplicates": "error",
-            // "import/no-relative-packages": "error",
-            // "import/order": "error",
+            "import/no-default-export": "error",
+            "import/no-duplicates": "error",
+            "import/no-relative-packages": "error",
+            "import/order": "error",
             //indent: ["error", 4, {"SwitchCase": 1}],
             "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
             "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",

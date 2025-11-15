@@ -1,31 +1,31 @@
-import { BaseState } from './BaseState';
 import {Delay, InputManager, Keys} from 'gtp';
-import DwGame from './DwGame';
-import CommandBubble from './CommandBubble';
-import StatBubble from './StatBubble';
-import TextBubble from './TextBubble';
-import Conversation from './Conversation';
-import StatusBubble from './StatusBubble';
-import ItemBubble from './ItemBubble';
-import Item from './Item';
-import Npc from './Npc';
-import Hero from './Hero';
-import MapLogic from './mapLogic/MapLogic';
-import Cheats from './Cheats';
-import Direction from './Direction';
-import ChoiceBubble from './ChoiceBubble';
-import Door from './Door';
-import DwMap from './DwMap';
+import {TiledLayerData} from "gtp/lib/tiled/TiledLayerData";
+import { BaseState } from './BaseState';
+import { DwGame } from './DwGame';
+import { CommandBubble } from './CommandBubble';
+import { StatBubble } from './StatBubble';
+import { TextBubble } from './TextBubble';
+import { Conversation } from './Conversation';
+import { StatusBubble } from './StatusBubble';
+import { ItemBubble } from './ItemBubble';
+import { Item } from './Item';
+import { Npc } from './Npc';
+import { Hero } from './Hero';
+import { MapLogic } from './mapLogic/MapLogic';
+import { Cheats } from './Cheats';
+import { Direction } from './Direction';
+import { ChoiceBubble } from './ChoiceBubble';
+import { Door } from './Door';
+import { DwMap } from './DwMap';
 import { Chest } from './Chest';
 import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
-import getChestConversation from './ChestConversations';
-import {TiledLayerData} from "gtp/lib/tiled/TiledLayerData";
+import { getChestConversation } from './ChestConversations';
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
-export default class RoamingState extends BaseState {
+export class RoamingState extends BaseState {
 
    private readonly commandBubble: CommandBubble;
    private readonly statBubble: StatBubble;

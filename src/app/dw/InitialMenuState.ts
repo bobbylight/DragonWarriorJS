@@ -1,6 +1,6 @@
 import { BaseState } from './BaseState';
-import DwGame from './DwGame';
-import ChoiceBubble from './ChoiceBubble';
+import { DwGame } from './DwGame';
+import { ChoiceBubble } from './ChoiceBubble';
 
 type Substate = 'mainMenu' | 'saveSelect';
 

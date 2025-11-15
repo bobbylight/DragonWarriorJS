@@ -1,12 +1,12 @@
-import PartyMember from './PartyMember';
 import { TiledObject } from 'gtp';
-import Direction from './Direction';
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
+import { PartyMember } from './PartyMember';
+import { Direction } from './Direction';
 
 /**
  * The hero is the main party member.
  */
-export default class Hero extends PartyMember {
+export class Hero extends PartyMember {
 
     static stepInc = 0;
 

@@ -1,16 +1,16 @@
-import { BaseState } from './BaseState';
-import DwGame from './DwGame';
-import RoamingState from './RoamingState';
 import { Delay, Image, Utils } from 'gtp';
-import DeadState from './DeadState';
-import StatBubble from './StatBubble';
-import Enemy from './Enemy';
-import BattleCommandBubble from './BattleCommandBubble';
-import TextBubble from './TextBubble';
-import Conversation from './Conversation';
+import { BaseState } from './BaseState';
+import { DwGame } from './DwGame';
+import { RoamingState } from './RoamingState';
+import { DeadState } from './DeadState';
+import { StatBubble } from './StatBubble';
+import { Enemy } from './Enemy';
+import { BattleCommandBubble } from './BattleCommandBubble';
+import { TextBubble } from './TextBubble';
+import { Conversation } from './Conversation';
 import { EnemyAiResult } from './EnemyAI';
 
-export default class BattleState extends BaseState {
+export class BattleState extends BaseState {
 
    private readonly enemyName: string;
    private commandExecuting: boolean;

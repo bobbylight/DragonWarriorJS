@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export default class Direction {
+export class Direction {
 
     static readonly NORTH: number = 0;
     static readonly EAST: number = 1;

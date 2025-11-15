@@ -1,6 +1,6 @@
-import Hero from './Hero';
-import Enemy from './Enemy';
 import { Utils } from 'gtp';
+import { Hero } from './Hero';
+import { Enemy } from './Enemy';
 
 type AiMap = Record<string, EnemyAiFunc>;
 
@@ -24,12 +24,10 @@ export interface EnemyAiResult {
 
 export type EnemyAiFunc = (hero: Hero, enemy: Enemy) => EnemyAiResult;
 
-const getEnemyAi = (id: string): EnemyAiFunc => {
+export const getEnemyAi = (id: string): EnemyAiFunc => {
   if (aiMap[id]) {
      return aiMap[id];
   }
   console.error('Unknown EnemyAI: ' + id + '. Falling back on attackOnly');
   return aiMap.attackOnly;
 };
-
-export default getEnemyAi;

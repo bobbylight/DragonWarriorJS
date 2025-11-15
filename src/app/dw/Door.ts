@@ -1,4 +1,4 @@
-export default class Door {
+export class Door {
 
     name: string;
     replacementTileIndex: number;

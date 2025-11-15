@@ -1,6 +1,6 @@
-import MapLogic, { NpcText } from './MapLogic';
-import DwGame from '../DwGame';
-import Npc from '../Npc';
+import { DwGame } from '../DwGame';
+import { Npc } from '../Npc';
+import { MapLogic, NpcText } from './MapLogic';
 
 export type NpcTextGenerator = (map: DwGame) => NpcText;
 
@@ -9,7 +9,7 @@ export type NpcTextGeneratorMap = Record<string, NpcTextGenerator>;
 /**
  * A base class for map logics.
  */
-export default class AbstractMapLogic implements MapLogic {
+export class AbstractMapLogic implements MapLogic {
 
     private readonly conversationMap: NpcTextGeneratorMap;
 

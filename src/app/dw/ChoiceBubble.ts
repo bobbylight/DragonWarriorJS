@@ -1,6 +1,6 @@
-import Bubble from './Bubble';
 import { InputManager } from 'gtp';
-import DwGame from "./DwGame";
+import { Bubble } from './Bubble';
+import { DwGame } from "./DwGame";
 
 type ChoiceBubbleStringMap = Record<string, string>;
 export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
@@ -8,7 +8,7 @@ export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
 /**
  * A bubble that lets the user choose between several choices.
  */
-export default class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
+export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
     private readonly choices: ChoiceBubbleChoice[];
     private readonly choiceDisplayField?: string;

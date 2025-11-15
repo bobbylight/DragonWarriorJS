@@ -1,6 +1,6 @@
 import { Utils } from 'gtp';
-import DwGame from './DwGame';
-import Conversation from './Conversation';
+import { DwGame } from './DwGame';
+import { Conversation } from './Conversation';
 
 /**
  * Some conversations provide the user with a list of choices. These choices are
@@ -37,7 +37,7 @@ export interface ConversationSegmentArgs {
     text?: string;
 }
 
-export default class ConversationSegment implements ConversationSegmentArgs {
+export class ConversationSegment implements ConversationSegmentArgs {
 
    private readonly game: DwGame;
    parentConversation: Conversation;

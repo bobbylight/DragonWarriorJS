@@ -1,11 +1,11 @@
-import Item, { getItemByName } from './Item';
+import { Item, getItemByName } from './Item';
 
 export interface ItemCountPair {
     item: Item;
     count: number;
 }
 
-export default class Inventory {
+export class Inventory {
 
     private readonly items: Map<Item, number>;
 

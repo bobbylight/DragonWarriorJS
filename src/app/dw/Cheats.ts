@@ -1,9 +1,9 @@
-import Direction from './Direction';
-import DwGame from './DwGame';
-import ChoiceBubble from './ChoiceBubble';
+import { Direction } from './Direction';
+import { DwGame } from './DwGame';
+import { ChoiceBubble } from './ChoiceBubble';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export default class Cheats {
+export class Cheats {
 
     static createWarpBubble(game: DwGame): ChoiceBubble<string> {
 

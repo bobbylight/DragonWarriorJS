@@ -1,10 +1,11 @@
-import Conversation from './Conversation';
-import DwGame from './DwGame';
+import { Conversation } from './Conversation';
+import { DwGame } from './DwGame';
 import { NpcText } from './mapLogic/MapLogic';
 import { ConversationSegmentArgs } from './ConversationSegment';
-import Item from './Item';
+import { Item } from './Item';
 
-export default (game: DwGame, conversation: Conversation, segmentArgs: ConversationSegmentArgs): NpcText => {
+export const merchantConversationTemplate =
+    (game: DwGame, conversation: Conversation, segmentArgs: ConversationSegmentArgs): NpcText => {
 
    if (!segmentArgs.choices) {
       throw new Error('No choices specified in conversation: ' + JSON.stringify(segmentArgs));

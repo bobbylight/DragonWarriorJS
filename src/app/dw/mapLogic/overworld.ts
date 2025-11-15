@@ -1,5 +1,5 @@
-import DwGame from '../DwGame';
-import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
+import { DwGame } from '../DwGame';
+import { AbstractMapLogic, NpcTextGeneratorMap } from './AbstractMapLogic';
 import { NpcText } from './MapLogic';
 
 const talks: NpcTextGeneratorMap = {
@@ -16,7 +16,7 @@ const talks: NpcTextGeneratorMap = {
 /**
  * Logic for the overworld.
  */
-export default class Overworld extends AbstractMapLogic {
+export class Overworld extends AbstractMapLogic {
 
    constructor() {
       super(talks);

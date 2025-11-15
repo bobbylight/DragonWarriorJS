@@ -1,4 +1,4 @@
-import Sellable from './Sellable';
+import { Sellable } from './Sellable';
 
 export interface ArmorData {
     name: string;
@@ -7,7 +7,7 @@ export interface ArmorData {
     defense?: number;
 }
 
-export default class Armor implements Sellable {
+export class Armor implements Sellable {
 
     name: string;
     displayName: string;

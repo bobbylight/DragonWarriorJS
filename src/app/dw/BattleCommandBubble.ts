@@ -1,9 +1,9 @@
-import Bubble from './Bubble';
-import BattleState from './BattleState';
 import { InputManager } from 'gtp';
-import DwGame from "./DwGame";
+import { Bubble } from './Bubble';
+import { BattleState } from './BattleState';
+import { DwGame } from "./DwGame";
 
-export default class BattleCommandBubble extends Bubble {
+export class BattleCommandBubble extends Bubble {
 
     selection: number;
 

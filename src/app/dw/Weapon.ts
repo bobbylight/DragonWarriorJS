@@ -1,4 +1,4 @@
-import Sellable from './Sellable';
+import { Sellable } from './Sellable';
 
 export interface WeaponData {
     name: string;
@@ -7,7 +7,7 @@ export interface WeaponData {
     power?: number;
 }
 
-export default class Weapon implements Sellable {
+export class Weapon implements Sellable {
 
     name: string;
     displayName: string;

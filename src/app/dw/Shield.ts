@@ -1,4 +1,4 @@
-import Sellable from './Sellable';
+import { Sellable } from './Sellable';
 
 export interface ShieldData {
     name: string;
@@ -7,7 +7,7 @@ export interface ShieldData {
     defense?: number;
 }
 
-export default class Shield implements Sellable {
+export class Shield implements Sellable {
 
     name: string;
     displayName: string;

@@ -1,9 +1,9 @@
-import Bubble from './Bubble';
-import DwGame from './DwGame';
-import Party from './Party';
-import Hero from './Hero';
+import { Bubble } from './Bubble';
+import { DwGame } from './DwGame';
+import { Party } from './Party';
+import { Hero } from './Hero';
 
-export default class StatBubble extends Bubble {
+export class StatBubble extends Bubble {
 
    selection: number;
 

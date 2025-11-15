@@ -1,12 +1,12 @@
 import { TiledMap } from 'gtp';
-import Npc from './Npc';
-import Door from './Door';
-import { Chest } from './Chest';
-import { LocationString } from './LocationString';
 import { TiledMapData } from 'gtp/lib/tiled/TiledMapData';
 import { TiledMapArgs } from 'gtp/lib/tiled/TiledMapArgs';
+import { Npc } from './Npc';
+import { Door } from './Door';
+import { Chest } from './Chest';
+import { LocationString } from './LocationString';
 
-export default class DwMap extends TiledMap {
+export class DwMap extends TiledMap {
 
     npcs: Npc[];
     talkAcrosses: Record<string, boolean>;

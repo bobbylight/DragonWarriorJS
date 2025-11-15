@@ -1,4 +1,4 @@
-type Sounds =
+export type Sounds =
     'MUSIC_TITLE_SCREEN' |
     'MUSIC_TANTEGEL' |
     'MUSIC_TANTEGEL_LOWER' |
@@ -21,5 +21,4 @@ const SOUND_MAP = new Map<Sounds, string>([
 export const getSound = (sound: Sounds): string | undefined => {
     return SOUND_MAP.get(sound);
 }
-export default Sounds;
 

@@ -1,7 +1,7 @@
-import Direction from './Direction';
-import DwGame from './DwGame';
-import Hero from './Hero';
 import { TiledLayer } from 'gtp';
+import { Direction } from './Direction';
+import { DwGame } from './DwGame';
+import { Hero } from './Hero';
 
 export interface RoamingEntityArgs {
     name: string;
@@ -11,7 +11,7 @@ export interface RoamingEntityArgs {
     range?: number[];
 }
 
-export default class RoamingEntity {
+export class RoamingEntity {
 
     protected game: DwGame;
     name: string;

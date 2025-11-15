@@ -1,6 +1,6 @@
-import DwGame from './DwGame';
-import RoamingState from './RoamingState';
-import Sellable from './Sellable';
+import { DwGame } from './DwGame';
+import { RoamingState } from './RoamingState';
+import { Sellable } from './Sellable';
 
 type UseItemFunction = (game: DwGame) => boolean;
 
@@ -9,7 +9,7 @@ interface ItemArgs {
     use: UseItemFunction;
 }
 
-export default class Item implements Sellable {
+export class Item implements Sellable {
 
     name: string;
     displayName: string;

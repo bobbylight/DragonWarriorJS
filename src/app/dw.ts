@@ -1,7 +1,7 @@
 /*
  * Game bootstrap code.  This can be in an inline <script> tag as well.
  */
-import DwGame from './dw/DwGame';
+import { DwGame } from './dw/DwGame';
 import { LoadingState } from './dw/LoadingState';
 
 const SCALE = 2;

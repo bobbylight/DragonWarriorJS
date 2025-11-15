@@ -1,9 +1,9 @@
-import DwGame from '../DwGame';
-import AbstractMapLogic, { NpcTextGeneratorMap } from './AbstractMapLogic';
-import { NpcText } from './MapLogic';
-import Conversation from '../Conversation';
 import { FadeOutInState } from 'gtp';
+import { DwGame } from '../DwGame';
+import { Conversation } from '../Conversation';
 import { TitleScreenState } from '../TitleScreenState';
+import { AbstractMapLogic, NpcTextGeneratorMap } from './AbstractMapLogic';
+import { NpcText } from './MapLogic';
 
 const talks: NpcTextGeneratorMap = {
 
@@ -168,7 +168,7 @@ const talks: NpcTextGeneratorMap = {
 /**
  * Logic for Tantegel Castle.
  */
-export default class TantegelCastle extends AbstractMapLogic {
+export class TantegelCastle extends AbstractMapLogic {
 
     constructor() {
         super(talks);

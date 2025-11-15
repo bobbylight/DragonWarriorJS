@@ -1,12 +1,12 @@
 /**
  * The group of one or more members in the player's party.
  */
-import DwGame from './DwGame';
-import PartyMember from './PartyMember';
-import Inventory from './Inventory';
-import Item, { KEY, TORCH } from './Item';
+import { DwGame } from './DwGame';
+import { PartyMember } from './PartyMember';
+import { Inventory } from './Inventory';
+import { Item, KEY, TORCH } from './Item';
 
-export default class Party {
+export class Party {
 
     static readonly INVENTORY_MAX_SIZE: number = 20;
 
