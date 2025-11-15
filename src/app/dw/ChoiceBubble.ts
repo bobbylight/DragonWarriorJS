@@ -16,10 +16,10 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     private readonly cancellable: boolean;
 
     constructor(game: DwGame, x: number, y: number, w: number, h: number,
-                choices: ChoiceBubbleChoice[] = [],
-                choiceDisplayField?: string,
-                cancellable = false,
-                title: string | undefined = undefined) {
+        choices: ChoiceBubbleChoice[] = [],
+        choiceDisplayField?: string,
+        cancellable = false,
+        title: string | undefined = undefined) {
         super(game, title, x, y, w, h);
         this.choices = choices;
         this.choiceDisplayField = choiceDisplayField;

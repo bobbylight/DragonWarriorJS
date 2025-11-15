@@ -79,8 +79,8 @@ export class Bubble {
         const lineList: string[] = text.split('\n');
 
         lineList.forEach(line => {
- this.breakApartLine(line, w, result)
-});
+            this.breakApartLine(line, w, result)
+        });
         return result;
     }
 
@@ -310,8 +310,8 @@ export class Bubble {
                     millis: [ 500, 300 ],
                     loop: true,
                     callback: () => {
- this.paintArrow = !this.paintArrow;
-},
+                        this.paintArrow = !this.paintArrow;
+                    },
                 });
             } else {
                 this.paintArrow = true;

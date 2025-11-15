@@ -5,7 +5,7 @@ import { AbstractMapLogic } from './AbstractMapLogic';
  */
 export class ErdricksCave2 extends AbstractMapLogic {
 
-   constructor() {
-      super({});
-   }
+    constructor() {
+        super({});
+    }
 }

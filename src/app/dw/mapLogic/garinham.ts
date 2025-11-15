@@ -18,7 +18,7 @@ const talks: NpcTextGeneratorMap = {
  */
 export class Garinham extends AbstractMapLogic {
 
-   constructor() {
-      super(talks);
-   }
+    constructor() {
+        super(talks);
+    }
 }

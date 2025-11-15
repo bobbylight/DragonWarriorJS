@@ -173,14 +173,14 @@ export class DwGame extends Game {
         const dx: number = hero.xOffs + this.cameraDx;
         const dy: number = hero.yOffs + this.cameraDy;
 
-//         if (this._drawMapCount === 10) {
-//            this.timer.start('drawMap');
-//         }
+        //         if (this._drawMapCount === 10) {
+        //            this.timer.start('drawMap');
+        //         }
         this.map.draw(ctx, centerRow, centerCol, dx, dy);
-//         if (this._drawMapCount === 10) {
-//            this.timer.endAndLog('drawMap');
-//            this._drawMapCount = 0;
-//         }
+        //         if (this._drawMapCount === 10) {
+        //            this.timer.endAndLog('drawMap');
+        //            this._drawMapCount = 0;
+        //         }
 
     }
 
@@ -252,8 +252,8 @@ export class DwGame extends Game {
 
     private resetMap(map: DwMap) {
         map.npcs.forEach(npc => {
- npc.reset()
-});
+            npc.reset()
+        });
     }
 
     setMap(assetName: string) {
@@ -363,12 +363,12 @@ export class DwGame extends Game {
         // Don't need to set collision as it is already set in the map.
         // Should we require that?
 
-//         // Hide layers we aren't interested in seeing.
-//         map.getLayer('collisionLayer').setVisible(collisionLayerVisible);
-//         Layer layer = map.getLayer('enemyTerritoryLayer');
-//         if (layer!=null) {
-//            layer.setVisible(enemyTerritoryLayerVisible);
-//         }
+        //         // Hide layers we aren't interested in seeing.
+        //         map.getLayer('collisionLayer').setVisible(collisionLayerVisible);
+        //         Layer layer = map.getLayer('enemyTerritoryLayer');
+        //         if (layer!=null) {
+        //            layer.setVisible(enemyTerritoryLayerVisible);
+        //         }
 
     }
 
@@ -474,8 +474,8 @@ export class DwGame extends Game {
     startNewGame() {
         this.loadGame();
         const transitionLogic: () => void = () => {
-//            this.setMap('overworld.json');
-//            this.hero.setMapLocation(52, 45);
+            //            this.setMap('overworld.json');
+            //            this.hero.setMapLocation(52, 45);
             this.setMap('brecconary.json');
             this.hero.setMapLocation(7, 6);
         };

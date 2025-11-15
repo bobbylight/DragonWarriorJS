@@ -39,77 +39,77 @@ export interface ConversationSegmentArgs {
 
 export class ConversationSegment implements ConversationSegmentArgs {
 
-   private readonly game: DwGame;
-   parentConversation: Conversation;
+    private readonly game: DwGame;
+    parentConversation: Conversation;
 
-   action?: () => void;
-   afterSound?: string;/*SoundEffect*/
-   choices?: ConversationSegmentArgsChoice[];
-   clear?: boolean;
-   id?: string;
-   introText?: string;
-   music?: string;
-   next?: string;
-   overnight?: boolean;
-   shopping?: ShoppingInfo;
-   sound?: string;/*SoundEffect*/
-   readonly text?: string;
+    action?: () => void;
+    afterSound?: string;/*SoundEffect*/
+    choices?: ConversationSegmentArgsChoice[];
+    clear?: boolean;
+    id?: string;
+    introText?: string;
+    music?: string;
+    next?: string;
+    overnight?: boolean;
+    shopping?: ShoppingInfo;
+    sound?: string;/*SoundEffect*/
+    readonly text?: string;
 
-   constructor(parentConversation: Conversation, game: DwGame, args: ConversationSegmentArgs) {
+    constructor(parentConversation: Conversation, game: DwGame, args: ConversationSegmentArgs) {
 
-      this.parentConversation = parentConversation;
-      this.game = game;
-      Utils.mixin(args, this);
-   }
+        this.parentConversation = parentConversation;
+        this.game = game;
+        Utils.mixin(args, this);
+    }
 
-   private getParameterizedText(): string | undefined {
+    private getParameterizedText(): string | undefined {
 
-      let text: string | undefined = this.text;
-      if (!text) {
-          return text;
-      }
+        let text: string | undefined = this.text;
+        if (!text) {
+            return text;
+        }
 
-      // TODO: This could be much, much better
-      let lbrace: number = text.indexOf('\\w{');
-      while (lbrace > -1) {
-         const rbrace: number = text.indexOf('}', lbrace + 3);
-         if (rbrace > -1) {
-            const expression: string = text.substring(lbrace + 3, rbrace);
-            let expRemaining: string;
-            let itemName: string;
-            switch (expression) {
-               case 'hero.name':
-                  text = text.substring(0, lbrace) + this.game.hero.name + text.substring(rbrace + 1);
-                  lbrace = text.indexOf('\\w{', lbrace + this.game.hero.name.length);
-                  break;
-                case 'hero.expRemaining':
-                    expRemaining = this.game.hero.exp.toString(); // TODO: Correct value
-                    text = text.substring(0, lbrace) + expRemaining + text.substring(rbrace + 1);
-                    lbrace = text.indexOf('\\w{', lbrace + expRemaining.length);
-                    break;
-               case 'item.name':
-                  itemName = this.parentConversation.item.displayName;
-                  text = text.substring(0, lbrace) + itemName + text.substring(rbrace + 1);
-                  lbrace = text.indexOf('\\w{', lbrace + itemName.length);
-                  break;
-               case 'item.baseCost':
-                  text = `${text.substring(0, lbrace)}${this.parentConversation.item.baseCost}${text.substring(rbrace + 1)}`;
-                  lbrace = text.indexOf('\\w{', lbrace + this.parentConversation.item.baseCost.toString().length);
-                  break;
-               default:
-                  console.error('Unknown token in NPC text: ' + expression);
-                  lbrace = -1;
-                  break;
+        // TODO: This could be much, much better
+        let lbrace: number = text.indexOf('\\w{');
+        while (lbrace > -1) {
+            const rbrace: number = text.indexOf('}', lbrace + 3);
+            if (rbrace > -1) {
+                const expression: string = text.substring(lbrace + 3, rbrace);
+                let expRemaining: string;
+                let itemName: string;
+                switch (expression) {
+                    case 'hero.name':
+                        text = text.substring(0, lbrace) + this.game.hero.name + text.substring(rbrace + 1);
+                        lbrace = text.indexOf('\\w{', lbrace + this.game.hero.name.length);
+                        break;
+                    case 'hero.expRemaining':
+                        expRemaining = this.game.hero.exp.toString(); // TODO: Correct value
+                        text = text.substring(0, lbrace) + expRemaining + text.substring(rbrace + 1);
+                        lbrace = text.indexOf('\\w{', lbrace + expRemaining.length);
+                        break;
+                    case 'item.name':
+                        itemName = this.parentConversation.item.displayName;
+                        text = text.substring(0, lbrace) + itemName + text.substring(rbrace + 1);
+                        lbrace = text.indexOf('\\w{', lbrace + itemName.length);
+                        break;
+                    case 'item.baseCost':
+                        text = `${text.substring(0, lbrace)}${this.parentConversation.item.baseCost}${text.substring(rbrace + 1)}`;
+                        lbrace = text.indexOf('\\w{', lbrace + this.parentConversation.item.baseCost.toString().length);
+                        break;
+                    default:
+                        console.error('Unknown token in NPC text: ' + expression);
+                        lbrace = -1;
+                        break;
+                }
             }
-         }
-      }
+        }
 
-      return text;
-   }
+        return text;
+    }
 
-   currentText(): string | undefined {
-      return this.getParameterizedText();
-   }
+    currentText(): string | undefined {
+        return this.getParameterizedText();
+    }
 }
 
 export interface ShoppingInfo {
