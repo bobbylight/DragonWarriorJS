@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class Direction {
 
     static readonly NORTH: number = 0;
@@ -5,7 +6,7 @@ export default class Direction {
     static readonly SOUTH: number = 2;
     static readonly WEST: number = 3;
 
-    static fromString(str: string = 'SOUTH'): number {
+    static fromString(str = 'SOUTH'): number {
 
         switch (str.toUpperCase()) {
             case 'NORTH':

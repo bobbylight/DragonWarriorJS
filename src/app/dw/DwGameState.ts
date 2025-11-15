@@ -3,9 +3,7 @@ export interface MapState {
     unlockedDoors: string[];
 }
 
-export interface MapStateMap {
-    [ mapName: string ]: MapState;
-}
+export type MapStateMap = Record<string, MapState>;
 
 export default interface DwGameState {
 

@@ -18,7 +18,7 @@ export default class StatusBubble extends Bubble {
         this.selection = 0;
     }
 
-    private _calculateX2Offs(val: number | string) {
+    private calculateX2Offs(val: number | string) {
         if (typeof val === 'number') {
             val = val.toString();
         }
@@ -37,47 +37,47 @@ export default class StatusBubble extends Bubble {
         const hero: Hero = this.game.hero;
 
         this.game.drawString('NAME:', x, y0);
-        let xOffs: number = this._calculateX2Offs(hero.name);
+        let xOffs: number = this.calculateX2Offs(hero.name);
         this.game.drawString(hero.name, x2 - xOffs, y0);
         y0 += Y_INC;
 
         this.game.drawString('STRENGTH:', x, y0);
-        xOffs = this._calculateX2Offs(hero._strength);
-        this.game.drawString(hero._strength, x2 - xOffs, y0);
+        xOffs = this.calculateX2Offs(hero.strength);
+        this.game.drawString(hero.strength, x2 - xOffs, y0);
         y0 += Y_INC;
 
         this.game.drawString('AGILITY:', x, y0);
-        xOffs = this._calculateX2Offs(hero.agility);
+        xOffs = this.calculateX2Offs(hero.agility);
         this.game.drawString(hero.agility, x2 - xOffs, y0);
         y0 += Y_INC;
 
         const attackPower: number = hero.getStrength();
         this.game.drawString('ATTACK POWER:', x, y0);
-        xOffs = this._calculateX2Offs(attackPower);
+        xOffs = this.calculateX2Offs(attackPower);
         this.game.drawString(attackPower, x2 - xOffs, y0);
         y0 += Y_INC;
 
         const defensePower: number = hero.getDefense();
         this.game.drawString('DEFENSE POWER:', x, y0);
-        xOffs = this._calculateX2Offs(defensePower);
+        xOffs = this.calculateX2Offs(defensePower);
         this.game.drawString(defensePower, x2 - xOffs, y0);
         y0 += Y_INC;
 
         const weaponName: string = hero.weapon ? hero.weapon.displayName : '';
         this.game.drawString('WEAPON:', x, y0);
-        xOffs = this._calculateX2Offs(weaponName);
+        xOffs = this.calculateX2Offs(weaponName);
         this.game.drawString(weaponName, x2 - xOffs, y0);
         y0 += Y_INC;
 
         const armorName: string = hero.armor ? hero.armor.displayName : '';
         this.game.drawString('ARMOR:', x, y0);
-        xOffs = this._calculateX2Offs(armorName);
+        xOffs = this.calculateX2Offs(armorName);
         this.game.drawString(armorName, x2 - xOffs, y0);
         y0 += Y_INC;
 
         const shieldName: string = hero.shield ? hero.shield.displayName : '';
         this.game.drawString('SHIELD:', x, y0);
-        xOffs = this._calculateX2Offs(shieldName);
+        xOffs = this.calculateX2Offs(shieldName);
         this.game.drawString(shieldName, x2 - xOffs, y0);
         y0 += Y_INC;
 

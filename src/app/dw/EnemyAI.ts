@@ -2,9 +2,7 @@ import Hero from './Hero';
 import Enemy from './Enemy';
 import { Utils } from 'gtp';
 
-interface AiMap {
-   [ name: string ]: EnemyAiFunc;
-}
+type AiMap = Record<string, EnemyAiFunc>;
 
 const aiMap: AiMap = {};
 aiMap.attackOnly = (hero: Hero, enemy: Enemy) => {
@@ -24,17 +22,14 @@ export interface EnemyAiResult {
    spellName?: string;
 }
 
-export interface EnemyAiFunc {
-   (hero: Hero, enemy: Enemy): EnemyAiResult;
-}
+export type EnemyAiFunc = (hero: Hero, enemy: Enemy) => EnemyAiResult;
 
-export default class EnemyAI {
+const getEnemyAi = (id: string): EnemyAiFunc => {
+  if (aiMap[id]) {
+     return aiMap[id];
+  }
+  console.error('Unknown EnemyAI: ' + id + '. Falling back on attackOnly');
+  return aiMap.attackOnly;
+};
 
-   static get(id: string): EnemyAiFunc {
-      if (aiMap[id]) {
-         return aiMap[id];
-      }
-      console.error('Unknown EnemyAI: ' + id + '. Falling back on attackOnly');
-      return aiMap.attackOnly;
-   }
-}
+export default getEnemyAi;

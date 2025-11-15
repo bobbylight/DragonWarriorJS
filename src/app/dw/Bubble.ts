@@ -53,7 +53,7 @@ export default class Bubble {
 
         this.game = (window as any).game;
         this.title = title;
-        const scale: number = 1; //game.scale;
+        const scale = 1; //game.scale;
         this.x = x * scale;
         this.y = y * scale;
         this.w = w * scale;
@@ -65,15 +65,15 @@ export default class Bubble {
         this.setActive(true);
     }
 
-    protected _breakApart(text: string, w: number): BreakApartResult {
+    protected breakApart(text: string, w: number): BreakApartResult {
 
         const result: BreakApartResult = {lines: [], delays: []};
 
         // Newlines are automatic line breaks
-        text = Bubble._removeSpecialEscapes(text, result.delays);
+        text = Bubble.removeSpecialEscapes(text, result.delays);
         const lineList: string[] = text.split('\n');
 
-        lineList.forEach(line => this.breakApartLine(line, w, result));
+        lineList.forEach(line => { this.breakApartLine(line, w, result) });
         return result;
     }
 
@@ -85,7 +85,7 @@ export default class Bubble {
      * @param delays The array to put delays into.
      * @return The text, with any escapes removed.
      */
-    static _removeSpecialEscapes(text: string, delays: any[]) {
+    static removeSpecialEscapes(text: string, delays: any[]) {
 
         // Delay formats:
         //    \d      - default ms
@@ -93,22 +93,22 @@ export default class Bubble {
 
         let delay: number;
         let index: number;
-        let lastOffs: number = 0;
+        let lastOffs = 0;
         while ((index = text.indexOf('\\d', lastOffs)) > -1) {
 
             if ((index + 2) < text.length && text.charAt(index + 2) === '{') {
                 const end: number = text.indexOf('}', index + 3);
                 if (end > -1) {
                     delay = parseInt(text.substring(index + 3, end), 10);
-                    console.log('Adding a delay of ' + delay + ' ms');
+                    console.log(`Adding a delay of ${delay} ms`);
                     delays.push({offs: index, millis: delay});
                     text = text.substring(0, index) + text.substring(end + 1);
                 } else {
-                    console.warn('Suspicious, apparent unclosed delay at offset ' + index);
+                    console.warn(`Suspicious, apparent unclosed delay at offset ${index}`);
                 }
             } else {
                 delay = 500;
-                console.log('Adding the default delay of ' + delay + ' ms');
+                console.log(`Adding the default delay of ${delay} ms`);
                 delays.push({offs: index, millis: delay});
                 text = text.substring(0, index) + text.substring(index + 2);
             }
@@ -152,7 +152,7 @@ export default class Bubble {
         }
     }
 
-    private _getDefaultTextColor(): string {
+    private getDefaultTextColor(): string {
         return this.game.hero.isDead() ? 'rgb(255, 0, 0)' : 'rgb(255, 255, 255)';
     }
 
@@ -178,10 +178,10 @@ export default class Bubble {
     }
 
     init() {
-        this._initAnimation();
+        this.initAnimation();
     }
 
-    private _initAnimation() {
+    private initAnimation() {
         this.paintH = 0;
         this.animator = new Delay({
             millis: 20, loop: true,
@@ -196,7 +196,7 @@ export default class Bubble {
         });
     }
 
-    private _isAnimating(): boolean {
+    private isAnimating(): boolean {
         return !!this.animator;
     }
 
@@ -218,7 +218,7 @@ export default class Bubble {
             this.paintTitle(ctx);
         }
 
-        if (!this._isAnimating()) {
+        if (!this.isAnimating()) {
             this.paintContent(ctx, this.x + this.getXMargin(), this.y + this.getYMargin());
         }
 
@@ -286,7 +286,7 @@ export default class Bubble {
         const x: number = this.x + Math.floor((this.w - stringW) / 2);
         ctx.fillRect(x, this.y, stringW, fontHeight);
 
-        ctx.fillStyle = this._getDefaultTextColor();
+        ctx.fillStyle = this.getDefaultTextColor();
         this.game.drawString(this.title!, x + 2 * scale, this.y);
     }
 

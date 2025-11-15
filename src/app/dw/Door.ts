@@ -17,10 +17,6 @@ export default class Door {
     }
 
     toString(): string {
-        return '[Door: ' +
-            'name=' + this.name +
-            ', row=' + this.row +
-            ', col=' + this.col +
-            ']';
+        return `[Door: name=${this.name}, row=${this.row}, col=${this.col}]`;
     }
 }

@@ -1,29 +1,29 @@
-import { _BaseState } from './_BaseState';
+import { BaseState } from './BaseState';
 import Weapon from './Weapon';
 import Armor from './Armor';
 import Shield from './Shield';
-import { BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils } from 'gtp';
+import {BaseStateArgs, BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils} from 'gtp';
 import DwGame from './DwGame';
 import { GameStudioAdvertState } from './GameStudioAdvertState';
 import { EquipmentMap } from './dw';
 
-export class LoadingState extends _BaseState {
+export class LoadingState extends BaseState {
 
     assetsLoaded: boolean;
-    private _textX: number;
-    private _textY: number;
+    private textX: number;
+    private textY: number;
 
-    constructor(args?: any) {
+    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
         super(args);
         this.assetsLoaded = false;
     }
 
-    private static _createArmorArray(armors: EquipmentMap<Armor>): Armor[] {
+    private static createArmorArray(armors: EquipmentMap<Armor>): Armor[] {
 
         const armorArray: Armor[] = [];
 
         for (const armorName in armors) {
-            if (armors.hasOwnProperty(armorName)) {
+            if (Object.prototype.hasOwnProperty.call(armors, armorName)) {
                 armorArray.push(armors[ armorName ]);
             }
         }
@@ -35,12 +35,12 @@ export class LoadingState extends _BaseState {
         return armorArray;
     }
 
-    private static _createArmorMap(armors: any): EquipmentMap<Armor> {
+    private static createArmorMap(armors: any): EquipmentMap<Armor> {
 
         const map: EquipmentMap<Armor> = {};
 
         for (const armorName in armors) {
-            if (armors.hasOwnProperty(armorName)) {
+            if (Object.prototype.hasOwnProperty.call(armors, armorName)) {
                 map[ armorName ] = new Armor(armorName, armors[ armorName ]);
             }
         }
@@ -48,12 +48,12 @@ export class LoadingState extends _BaseState {
         return map;
     }
 
-    private static _createShieldArray(shields: EquipmentMap<Shield>): Shield[] {
+    private static createShieldArray(shields: EquipmentMap<Shield>): Shield[] {
 
         const shieldArray: Shield[] = [];
 
         for (const shieldName in shields) {
-            if (shields.hasOwnProperty(shieldName)) {
+            if (Object.prototype.hasOwnProperty.call(shields, shieldName)) {
                 shieldArray.push(shields[ shieldName ]);
             }
         }
@@ -65,24 +65,24 @@ export class LoadingState extends _BaseState {
         return shieldArray;
     }
 
-    private static _createShieldMap(shields: any): EquipmentMap<Shield> {
+    private static createShieldMap(shields: any): EquipmentMap<Shield> {
 
         const map: EquipmentMap<Shield> = {};
 
         for (const shieldName in shields) {
-            if (shields.hasOwnProperty(shieldName)) {
+            if (Object.prototype.hasOwnProperty.call(shields, shieldName)) {
                 map[ shieldName ] = new Shield(shieldName, shields[ shieldName ]);
             }
         }
         return map;
     }
 
-    private static _createWeaponsArray(weapons: EquipmentMap<Weapon>): Weapon[] {
+    private static createWeaponsArray(weapons: EquipmentMap<Weapon>): Weapon[] {
 
         const weaponArray: Weapon[] = [];
 
         for (const weaponName in weapons) {
-            if (weapons.hasOwnProperty(weaponName)) {
+            if (Object.prototype.hasOwnProperty.call(weapons, weaponName)) {
                 weaponArray.push(weapons[ weaponName ]);
             }
         }
@@ -94,12 +94,12 @@ export class LoadingState extends _BaseState {
         return weaponArray;
     }
 
-    private static _createWeaponsMap(weapons: any): EquipmentMap<Weapon> {
+    private static createWeaponsMap(weapons: any): EquipmentMap<Weapon> {
 
         const map: EquipmentMap<Weapon> = {};
 
         for (const weaponName in weapons) {
-            if (weapons.hasOwnProperty(weaponName)) {
+            if (Object.prototype.hasOwnProperty.call(weapons, weaponName)) {
                 map[ weaponName ] = new Weapon(weaponName, weapons[ weaponName ]);
             }
         }
@@ -168,21 +168,21 @@ export class LoadingState extends _BaseState {
                 // delete game.assets.get('monsters');
                 const images: ImageMap = atlas.parse(game.scale);
                 for (const id in images) {
-                    if (images.hasOwnProperty(id)) {
+                    if (Object.prototype.hasOwnProperty.call(images, id)) {
                         game.assets.set(id, images[ id ]);
                     }
                 }
 
                 const equipment: any = game.assets.get('equipment');
-                const weaponsMap: EquipmentMap<Weapon> = LoadingState._createWeaponsMap(equipment.weapons);
+                const weaponsMap: EquipmentMap<Weapon> = LoadingState.createWeaponsMap(equipment.weapons);
                 game.assets.set('weapons', weaponsMap);
-                game.assets.set('weaponsArray', LoadingState._createWeaponsArray(weaponsMap));
-                const armorMap: EquipmentMap<Armor> = LoadingState._createArmorMap(equipment.armor);
+                game.assets.set('weaponsArray', LoadingState.createWeaponsArray(weaponsMap));
+                const armorMap: EquipmentMap<Armor> = LoadingState.createArmorMap(equipment.armor);
                 game.assets.set('armor', armorMap);
-                game.assets.set('armorArray', LoadingState._createArmorArray(armorMap));
-                const shieldMap: EquipmentMap<Shield> = LoadingState._createShieldMap(equipment.shields);
+                game.assets.set('armorArray', LoadingState.createArmorArray(armorMap));
+                const shieldMap: EquipmentMap<Shield> = LoadingState.createShieldMap(equipment.shields);
                 game.assets.set('shields', shieldMap);
-                game.assets.set('shieldArray', LoadingState._createShieldArray(shieldMap));
+                game.assets.set('shieldArray', LoadingState.createShieldArray(shieldMap));
 
                 const font: Image = game.assets.get('font');
                 game.assets.set('font', new BitmapFont(font, 8, 10, 8, 6, game.scale));
@@ -212,18 +212,18 @@ export class LoadingState extends _BaseState {
         const game: Game = this.game;
         game.clearScreen('rgb(0,0,255)');
 
-        const str: string = 'Loading...';
+        const str = 'Loading...';
         ctx.font = 'bold 30px Sans Serif';
 
-        if (!this._textX) {
+        if (!this.textX) {
             const textMetrics: TextMetrics = ctx.measureText(str);
-            this._textX = (game.getWidth() - textMetrics.width) / 2;
-            const fontDescentGuess: number = 4;
-            this._textY = (game.getHeight() - fontDescentGuess) / 2;
+            this.textX = (game.getWidth() - textMetrics.width) / 2;
+            const fontDescentGuess = 4;
+            this.textY = (game.getHeight() - fontDescentGuess) / 2;
         }
 
         ctx.fillStyle = 'rgb(0, 0, 0)';
-        ctx.fillText(str, this._textX, this._textY);
+        ctx.fillText(str, this.textX, this.textY);
 
     }
 }

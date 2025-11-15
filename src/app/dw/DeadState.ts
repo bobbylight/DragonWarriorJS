@@ -1,17 +1,17 @@
-import { _BaseState } from './_BaseState';
+import { BaseState } from './BaseState';
 import { FadeOutInState } from 'gtp';
 import DwGame from './DwGame';
 import { TitleScreenState } from './TitleScreenState';
 import BattleState from './BattleState';
 
-export default class DeadState extends _BaseState {
+export default class DeadState extends BaseState {
 
-   private readonly _battleState: BattleState;
+   private readonly battleState: BattleState;
    private allowUserInput?: boolean;
 
    constructor(game: DwGame, battleState: BattleState) {
       super(game);
-      this._battleState = battleState;
+      this.battleState = battleState;
        this.game.audio.playMusic(null);
        this.game.audio.playSound('dead', false, () => {
            this.allowUserInput = true;
@@ -19,7 +19,7 @@ export default class DeadState extends _BaseState {
    }
 
     override render(ctx: CanvasRenderingContext2D) {
-      this._battleState.render(ctx);
+      this.battleState.render(ctx);
    }
 
     override update(delta: number) {

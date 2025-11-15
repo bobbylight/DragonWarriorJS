@@ -5,6 +5,15 @@ import Direction from './Direction';
 import Shield from './Shield';
 import Weapon from './Weapon';
 import Armor from './Armor';
+import Enemy from "./Enemy";
+
+export interface PartyMemberArgs {
+    name: string;
+    hp?: number;
+    maxHp?: number;
+    mp?: number;
+    maxMp?: number;
+}
 
 export default class PartyMember extends RoamingEntity {
 
@@ -14,7 +23,7 @@ export default class PartyMember extends RoamingEntity {
     maxMp: number;
     level: number;
     exp: number;
-    _strength: number;
+    strength: number;
     spriteSheet: SpriteSheet;
     agility: number;
     weapon?: Weapon;
@@ -22,7 +31,7 @@ export default class PartyMember extends RoamingEntity {
     shield?: Shield;
     readonly spells: any[];
 
-    constructor(args: any) {
+    constructor(args: PartyMemberArgs) {
 
         super(args);
 
@@ -30,14 +39,14 @@ export default class PartyMember extends RoamingEntity {
         this.level = 1;
         this.exp = 12345;
 
-        this._strength = 4;
+        this.strength = 4;
         //this.defense = 10;
         this.agility = 4;
 
-        this.hp = args.hp || 1234;
-        this.maxHp = args.hp || 0;
-        this.mp = args.mp || 0;
-        this.maxMp = args.mp || 0;
+        this.hp = args.hp ?? args.maxHp ?? 1234;
+        this.maxHp = this.hp;
+        this.mp = args.mp ?? args.maxMp ?? 0;
+        this.maxMp = this.mp;
 
         this.spells = [];
 
@@ -47,14 +56,15 @@ export default class PartyMember extends RoamingEntity {
 
     }
 
-    computePhysicalAttackDamage(enemy: any) {
+    computePhysicalAttackDamage(enemy: Enemy) {
 
         const strength: number = this.getStrength();
         let min: number;
         let max: number;
-        if (!enemy.cannotBeExcellentMoved && PartyMember.getPerformExcellentMove()) {
+
+        if (/*!enemy.cannotBeExcellentMoved &&*/ PartyMember.getPerformExcellentMove()) {
             min = Math.floor(strength / 2);
-            max = this._strength;
+            max = this.strength;
         } else {
             const temp: number = strength - enemy.agility / 2;
             min = Math.floor(temp / 4);
@@ -84,7 +94,7 @@ export default class PartyMember extends RoamingEntity {
     }
 
     getStrength(): number {
-        return this._strength + (this.weapon ? this.weapon.power : 0);
+        return this.strength + (this.weapon ? this.weapon.power : 0);
     }
 
     /**
@@ -97,12 +107,12 @@ export default class PartyMember extends RoamingEntity {
 
     update(delta: number) {
 
-        this._stepTick += delta;
-        if (this._stepTick >= 600) {
-            this._stepTick -= 600;
-            Hero.STEP_INC = 0;
-        } else if (this._stepTick >= 300) {
-            Hero.STEP_INC = 1;
+        this.stepTick += delta;
+        if (this.stepTick >= 600) {
+            this.stepTick -= 600;
+            Hero.stepInc = 0;
+        } else if (this.stepTick >= 300) {
+            Hero.stepInc = 1;
         }
 
         this.handleIsMovingInUpdate();
@@ -118,8 +128,8 @@ export default class PartyMember extends RoamingEntity {
             this.spriteSheet = this.game.assets.get('hero');
         }
 
-        const ssRow: number = 0;
-        let ssCol: number = 0;
+        const ssRow = 0;
+        let ssCol = 0;
         switch (this.direction) {
             case Direction.NORTH:
                 ssCol = 4;
@@ -134,7 +144,7 @@ export default class PartyMember extends RoamingEntity {
                 ssCol = 2;
                 break;
         }
-        ssCol += Hero.STEP_INC;
+        ssCol += Hero.stepInc;
 
         const x: number = (this.game.canvas.width - tileSize) / 2;
         const y: number = (this.game.canvas.height - tileSize) / 2;
@@ -146,7 +156,7 @@ export default class PartyMember extends RoamingEntity {
     override handlePostMove() {
         // If we didn't e.g. move to another map, see if we should fight a monster
         if (!this.possiblyHandleIntersectedObject()) {
-            this._possiblyStartRandomEncounter();
+            this.possiblyStartRandomEncounter();
         }
     }
 
@@ -192,7 +202,7 @@ export default class PartyMember extends RoamingEntity {
         return false;
     }
 
-    private _possiblyStartRandomEncounter() {
+    private possiblyStartRandomEncounter() {
         if (this.game.randomInt(20) === 0) {
             this.game.startRandomEncounter();
         }

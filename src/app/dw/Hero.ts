@@ -8,11 +8,7 @@ import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
  */
 export default class Hero extends PartyMember {
 
-    static STEP_INC: number = 0;
-
-    constructor(args: any) {
-        super(args);
-    }
+    static stepInc = 0;
 
     /**
      * Overridden to check for warps and other interesting things we can

@@ -1,3 +1,6 @@
+import {EnemyData} from "./Enemy";
+import {Utils} from "gtp";
+
 export default class BattleEntity {
 
    hp: number;
@@ -5,11 +8,15 @@ export default class BattleEntity {
    mp: number;
    maxMp: number;
 
-   constructor(args: any = {}) {
-      this.hp = args.hp || 0;
-      this.maxHp = args.hp || 0;
-      this.mp = args.mp || 0;
-      this.maxMp = args.mp || 0;
+   constructor(args: EnemyData) {
+       if (typeof args.hp === 'number') {
+           this.hp = args.hp;
+       }
+       else {
+           this.hp = Utils.randomInt(args.hp[0], args.hp[1] + 1);
+       }
+       this.maxHp = this.hp;
+       this.mp = this.maxMp = 0; // args.mp;
    }
 
    isDead(): boolean {

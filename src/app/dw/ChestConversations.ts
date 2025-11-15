@@ -14,10 +14,12 @@ export default (state: RoamingState, chest: Chest | undefined): Conversation => 
         return conversation;
     }
 
+    let gold: number;
+
     switch (chest.contentType) {
 
         case 'gold':
-            const gold: number = typeof chest.contents === 'number' ? chest.contents : chest.contents();
+            gold = typeof chest.contents === 'number' ? chest.contents : chest.contents();
             conversation.addSegment({
                 sound: 'openChest',
                 text: `Of GOLD thou hast gained ${gold}.`,
@@ -40,7 +42,8 @@ export default (state: RoamingState, chest: Chest | undefined): Conversation => 
             break;
 
         default:
-            console.error(`Bad map data: unsupported chest contentType at ${chest.location}: ${chest.contentType}`);
+            // TODO: See if we can validate at map load time and print better errors, e.g. unsupported value
+            console.error(`Bad map data: unsupported chest contentType at ${chest.location}!`);
             conversation.addSegment('There is nothing to do here, \\w{hero.name}.');
             break;
     }

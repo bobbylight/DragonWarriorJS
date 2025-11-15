@@ -1,16 +1,15 @@
 import Bubble from './Bubble';
 import BattleState from './BattleState';
 import { InputManager } from 'gtp';
+import DwGame from "./DwGame";
 
 export default class BattleCommandBubble extends Bubble {
 
     selection: number;
 
-    constructor(args: any) {
+    constructor(game: DwGame) {
 
-        console.log('hi');
-
-        const tileSize: number = (window as any).game.getTileSize();
+        const tileSize: number = game.getTileSize();
 
         super('COMMAND', 8 * tileSize, tileSize, tileSize * 8, tileSize * 3);
 
