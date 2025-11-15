@@ -10,19 +10,19 @@ export default class Party {
 
     static readonly INVENTORY_MAX_SIZE: number = 20;
 
-    private readonly _members: PartyMember[];
-    private readonly _inventory: Inventory;
+    private readonly members: PartyMember[];
+    private readonly inventory: Inventory;
     gold: number;
 
     constructor(game: DwGame) {
-        this._members = [];
-        this._inventory = new Inventory();
+        this.members = [];
+        this.inventory = new Inventory();
         this.gold = 0;
 
         // Dummy data
         this.gold = 768;
-        this._inventory.push(KEY);
-        this._inventory.push(TORCH);
+        this.inventory.push(KEY);
+        this.inventory.push(TORCH);
     }
 
     /**
@@ -38,7 +38,7 @@ export default class Party {
      */
     addInventoryItem(item: Item) {
         if (!this.isInventoryFull()) {
-            this._inventory.push(item);
+            this.inventory.push(item);
             return true;
         }
         return false;
@@ -51,7 +51,7 @@ export default class Party {
      * @see #getMember(name)
      */
     addMember(member: PartyMember) {
-        this._members.push(member);
+        this.members.push(member);
     }
 
     /**
@@ -61,7 +61,7 @@ export default class Party {
      * @return The party member in the lead.
      */
     getLeader(): PartyMember {
-        return this._members[0];
+        return this.members[0];
     }
 
     /**
@@ -72,7 +72,7 @@ export default class Party {
      * @see #addInventoryItem(Item)
      */
     getInventory(): Inventory {
-        return this._inventory;
+        return this.inventory;
     }
 
     /**
@@ -83,7 +83,7 @@ export default class Party {
      *         is no party member by that name.
      */
     getMember(name: string): PartyMember | undefined {
-        return this._members.find(member => name === member.name);
+        return this.members.find(member => name === member.name);
     }
 
     /**
@@ -93,7 +93,7 @@ export default class Party {
      * @see #getMember(name)
      */
     getMembers(): PartyMember[] {
-        return this._members;
+        return this.members;
     }
 
     /**
@@ -103,14 +103,14 @@ export default class Party {
      * @see #getInventory()
      */
     isInventoryFull(): boolean {
-        return this._inventory.getItemTypeCount() >= Party.INVENTORY_MAX_SIZE;
+        return this.inventory.getItemTypeCount() >= Party.INVENTORY_MAX_SIZE;
     }
 
     /**
      * Replenishes the HP and MP of all party members.
      */
     replenishHealthAndMagic() {
-        this._members.forEach((partyMember: PartyMember) => {
+        this.members.forEach((partyMember: PartyMember) => {
             partyMember.replenishHealthAndMagic();
         });
     }

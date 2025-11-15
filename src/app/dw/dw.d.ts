@@ -1,3 +1,1 @@
-export interface EquipmentMap<T> {
-    [ name: string ]: T;
-}
+export type EquipmentMap<T> = Record<string, T>;

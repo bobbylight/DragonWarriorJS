@@ -1,4 +1,4 @@
-import { _BaseState } from './_BaseState';
+import { BaseState } from './BaseState';
 import DwGame from './DwGame';
 import ChoiceBubble from './ChoiceBubble';
 
@@ -7,15 +7,11 @@ type Substate = 'mainMenu' | 'saveSelect';
 /**
  * The initial menu shown to the user, after pressing Enter on the title screen.
  */
-export class InitialMenuState extends _BaseState {
+export class InitialMenuState extends BaseState {
 
     private menuBubble: ChoiceBubble<string>;
     private saveSelectBubble: ChoiceBubble<string> | undefined;
     private substate: Substate;
-
-    constructor(args?: any) {
-        super(args);
-    }
 
     private createMenuBubble(): ChoiceBubble<string> {
 

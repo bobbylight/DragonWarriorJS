@@ -1,22 +1,25 @@
 {
   "name": "dw-js",
   "version": "0.3.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "clean": "rimraf build",
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "serve": "vite preview",
-    "lint": "eslint --ext .ts src/",
+    "lint": "eslint src/",
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "8.38.0",
-    "@typescript-eslint/parser": "8.38.0",
-    "eslint": "8.57.1",
-    "rimraf": "6.0.1",
-    "typescript": "5.8.3",
-    "vite": "7.0.5"
+    "@typescript-eslint/eslint-plugin": "8.46.4",
+    "@typescript-eslint/parser": "8.46.4",
+    "eslint": "9.39.1",
+    "rimraf": "6.1.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.4",
+    "vite": "7.2.2"
   },
   "dependencies": {
     "gtp": "3.0.1"

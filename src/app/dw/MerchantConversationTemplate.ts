@@ -7,13 +7,13 @@ import Item from './Item';
 export default (game: DwGame, conversation: Conversation, segmentArgs: ConversationSegmentArgs): NpcText => {
 
    if (!segmentArgs.choices) {
-      throw 'No choices specified in conversation: ' + JSON.stringify(segmentArgs);
+      throw new Error('No choices specified in conversation: ' + JSON.stringify(segmentArgs));
    }
 
    return [
       {
          clear: false,
-         text: segmentArgs.introText || 'Welcome! Would you like to see our wares?',
+         text: segmentArgs.introText ?? 'Welcome! Would you like to see our wares?',
          choices: [
             { text: 'Yes', next: Conversation.CHOICES_SEGMENT },
             { text: 'No', next: Conversation.BID_FAREWELL_SEGMENT }

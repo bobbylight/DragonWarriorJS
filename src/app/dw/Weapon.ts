@@ -9,16 +9,12 @@ export default class Weapon implements Sellable {
 
     constructor(name: string, args: any) {
         this.name = name;
-        this.displayName = args.displayName || this.name;
-        this.baseCost = args.baseCost || 0;
-        this.power = args.power || 1;
+        this.displayName = args.displayName ?? this.name;
+        this.baseCost = args.baseCost ?? 0;
+        this.power = args.power ?? 1;
     }
 
     toString() {
-        return '[Weapon: ' +
-            'name=' + this.name +
-            ', baseCost=' + this.baseCost +
-            ', power=' + this.power +
-            ']';
+        return `[Weapon: name=${this.name}, baseCost=${this.baseCost}, power=${this.power}]`;
     }
 }

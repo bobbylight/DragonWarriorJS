@@ -2,9 +2,7 @@ import DwGame from './DwGame';
 import RoamingState from './RoamingState';
 import Sellable from './Sellable';
 
-interface UseItemFunction {
-    (game: DwGame): boolean;
-}
+type UseItemFunction = (game: DwGame) => boolean;
 
 interface ItemArgs {
     baseCost: number;

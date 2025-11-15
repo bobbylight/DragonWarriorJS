@@ -8,7 +8,7 @@ type Sounds =
     'MUSIC_DUNGEON_FLOOR_1'
 ;
 
-const SoundMap = new Map<Sounds, string>([
+const SOUND_MAP = new Map<Sounds, string>([
     [ 'MUSIC_TITLE_SCREEN', 'titleMusic' ],
     [ 'MUSIC_TANTEGEL', 'tantegelMusic' ],
     [ 'MUSIC_TANTEGEL_LOWER', 'tantegelLowerMusic' ],
@@ -19,7 +19,7 @@ const SoundMap = new Map<Sounds, string>([
 ]);
 
 export const getSound = (sound: Sounds): string | undefined => {
-    return SoundMap.get(sound);
+    return SOUND_MAP.get(sound);
 }
 export default Sounds;
 

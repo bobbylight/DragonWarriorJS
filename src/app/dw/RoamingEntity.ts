@@ -12,8 +12,8 @@ export default class RoamingEntity {
     mapCol: number;
     xOffs: number;
     yOffs: number;
-    protected _stepTick: number;
-    private _moveInc: number;
+    protected stepTick: number;
+    private moveInc: number;
     protected range: number[];
 
     constructor(args?: any) {
@@ -23,13 +23,13 @@ export default class RoamingEntity {
         this.mapRow = this.mapRow || 0;
         this.xOffs = this.xOffs || 0;
         this.yOffs = this.yOffs || 0;
-        this._stepTick = 0;
+        this.stepTick = 0;
         // TODO: Make this time-dependent!
-        this._moveInc = this.game.scale * (this.game.targetFps === 30 ? 2 : 1);
+        this.moveInc = this.game.scale * (this.game.targetFps === 30 ? 2 : 1);
     }
 
     getMoveIncrement() {
-        return this._moveInc;
+        return this.moveInc;
     }
 
     handleIsMovingInUpdate() {
@@ -74,7 +74,7 @@ export default class RoamingEntity {
      * If this entity is only allowed to walk around in a certain range, this
      * method returns true iff the specified location is outside that range.
      */
-    private _isOutOfRange(row: number, col: number) {
+    private isOutOfRange(row: number, col: number) {
         if (this.range) {
             return col < this.range[0] || col > this.range[2] ||
                 row < this.range[1] || row > this.range[3];
@@ -100,7 +100,7 @@ export default class RoamingEntity {
      */
     setMoveIncrement(moveInc: number) {
         moveInc = Math.max(0, moveInc);
-        this._moveInc = moveInc;
+        this.moveInc = moveInc;
     }
 
     /**
@@ -110,9 +110,9 @@ export default class RoamingEntity {
      * @param col The column to attempt to move to.
      * @return Whether the move was successful.
      */
-    private _tryToMove(row: number, col: number) {
+    private tryToMove(row: number, col: number) {
 
-        if (this._isOutOfRange(row, col)) {
+        if (this.isOutOfRange(row, col)) {
             return false;
         }
 
@@ -135,12 +135,12 @@ export default class RoamingEntity {
     }
 
     tryToMoveLeft() {
-        let success: boolean = false;
+        let success= false;
         let col: number = this.mapCol - 1;
         if (col < 0) {
             col += this.game.map.width;
         }
-        if (this._tryToMove(this.mapRow, col)) {
+        if (this.tryToMove(this.mapRow, col)) {
             this.xOffs = this.game.getTileSize();
             success = true;
         }
@@ -149,9 +149,9 @@ export default class RoamingEntity {
     }
 
     tryToMoveRight() {
-        let success: boolean = false;
+        let success= false;
         const col: number = Math.floor((this.mapCol + 1) % this.game.map.width);
-        if (this._tryToMove(this.mapRow, col)) {
+        if (this.tryToMove(this.mapRow, col)) {
             this.xOffs = -this.game.getTileSize();
             success = true;
         }
@@ -160,12 +160,12 @@ export default class RoamingEntity {
     }
 
     tryToMoveUp() {
-        let success: boolean = false;
+        let success= false;
         let row: number = this.mapRow - 1;
         if (row < 0) {
             row += this.game.map.height;
         }
-        if (this._tryToMove(row, this.mapCol)) {
+        if (this.tryToMove(row, this.mapCol)) {
             this.yOffs += this.game.getTileSize();
             success = true;
         }
@@ -174,9 +174,9 @@ export default class RoamingEntity {
     }
 
     tryToMoveDown() {
-        let success: boolean = false;
+        let success= false;
         const row: number = Math.floor((this.mapRow + 1) % this.game.map.height);
-        if (this._tryToMove(row, this.mapCol)) {
+        if (this.tryToMove(row, this.mapCol)) {
             this.yOffs -= this.game.getTileSize();
             success = true;
         }

@@ -2,13 +2,9 @@ import MapLogic, { NpcText } from './MapLogic';
 import DwGame from '../DwGame';
 import Npc from '../Npc';
 
-export interface NpcTextGenerator {
-    (map: DwGame): NpcText;
-}
+export type NpcTextGenerator = (map: DwGame) => NpcText;
 
-export interface NpcTextGeneratorMap {
-    [name: string]: NpcTextGenerator;
-}
+export type NpcTextGeneratorMap = Record<string, NpcTextGenerator>;
 
 /**
  * A base class for map logics.

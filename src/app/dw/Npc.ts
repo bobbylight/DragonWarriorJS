@@ -4,28 +4,30 @@ import { Delay, SpriteSheet, Utils } from 'gtp';
 import Hero from './Hero';
 import NpcType from './NpcType';
 
+type DirFunctionType = () => void;
+
 export default class Npc extends RoamingEntity {
 
     type: NpcType;
     wanders: boolean;
     npcIndex: number;
-    private readonly _origMapRow: number;
-    private readonly _origMapCol: number;
-    private readonly _origDir: number;
-    private readonly _stepDelay: Delay;
+    private readonly origMapRow: number;
+    private readonly origMapCol: number;
+    private readonly origDir: number;
+    private readonly stepDelay: Delay;
 
-    private readonly dirFuncs: Function[];
+    private readonly dirFuncs: DirFunctionType[];
 
     constructor(args: any) {
         super(args);
         Utils.mixin(args, this);
 
-        this._origMapRow = this.mapRow;
-        this._origMapCol = this.mapCol;
-        this._origDir = this.direction;
+        this.origMapRow = this.mapRow;
+        this.origMapCol = this.mapCol;
+        this.origDir = this.direction;
 
         if (this.wanders) {
-            this._stepDelay = new Delay({millis: 3000, minDelta: -500, maxDelta: 500});
+            this.stepDelay = new Delay({millis: 3000, minDelta: -500, maxDelta: 500});
         }
 
         this.dirFuncs = [ this.tryToMoveUp.bind(this), this.tryToMoveDown.bind(this),
@@ -36,7 +38,7 @@ export default class Npc extends RoamingEntity {
     }
 
     // TODO: Change NPC image to remove the need for this
-    private _computeColumn() {
+    private computeColumn() {
         switch (this.direction) {
             case Direction.NORTH:
                 return 4;
@@ -52,9 +54,9 @@ export default class Npc extends RoamingEntity {
 
     update(delta: number) {
 
-        if (this._stepDelay && this._stepDelay.update(delta)) {
-            this._step();
-            this._stepDelay.reset();
+        if (this.stepDelay?.update(delta)) {
+            this.step();
+            this.stepDelay.reset();
         } else {
             this.handleIsMovingInUpdate();
         }
@@ -64,22 +66,22 @@ export default class Npc extends RoamingEntity {
 
         const ss: SpriteSheet = this.game.assets.get('npcs');
         const ssRow: number = this.type as number;
-        let ssCol: number = this._computeColumn();
+        let ssCol: number = this.computeColumn();
         let x: number = this.mapCol * this.game.getTileSize();
         x -= this.game.getMapXOffs();
         x += this.xOffs;
         let y: number = this.mapRow * this.game.getTileSize();
         y -= this.game.getMapYOffs();
         y += this.yOffs;
-        ssCol += Hero.STEP_INC;
+        ssCol += Hero.stepInc;
         ss.drawSprite(ctx, x, y, ssRow, ssCol);
     }
 
     reset() {
-        this.setMapLocation(this._origMapRow, this._origMapCol);
-        this.direction = this._origDir;
-        if (this._stepDelay) {
-            this._stepDelay.reset();
+        this.setMapLocation(this.origMapRow, this.origMapCol);
+        this.direction = this.origDir;
+        if (this.stepDelay) {
+            this.stepDelay.reset();
         }
     }
 
@@ -87,8 +89,8 @@ export default class Npc extends RoamingEntity {
         this.npcIndex = index;
     }
 
-    private _step() {
-        let triedToMove: boolean = false;
+    private step() {
+        let triedToMove = false;
         while (!triedToMove) {
             const newDir: number = Utils.randomInt(0, 4);
             this.dirFuncs[ newDir ].call(this);

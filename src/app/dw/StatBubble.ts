@@ -22,7 +22,7 @@ export default class StatBubble extends Bubble {
       this.selection = 0;
    }
 
-   private _calculateX2Offs(val: number) {
+   private calculateX2Offs(val: number) {
       return this.game.stringWidth(val.toString(10));
 //         var digits = 1;
 //         while (val > 10) {
@@ -55,28 +55,28 @@ export default class StatBubble extends Bubble {
       const hero: Hero = this.game.hero;
 
       this.game.drawString('LV', x, y0);
-      let xOffs: number = this._calculateX2Offs(hero.level);
-      this.game.drawString('' + hero.level, x2 - xOffs, y0);
+      let xOffs: number = this.calculateX2Offs(hero.level);
+      this.game.drawString(hero.level, x2 - xOffs, y0);
       y0 += Y_INC;
 
       this.game.drawString('HP', x, y0);
-      xOffs = this._calculateX2Offs(hero.hp);
-      this.game.drawString('' + hero.hp, x2 - xOffs, y0);
+      xOffs = this.calculateX2Offs(hero.hp);
+      this.game.drawString(hero.hp, x2 - xOffs, y0);
       y0 += Y_INC;
 
       this.game.drawString('MP', x, y0);
-      xOffs = this._calculateX2Offs(hero.mp);
-      this.game.drawString('' + hero.mp, x2 - xOffs, y0);
+      xOffs = this.calculateX2Offs(hero.mp);
+      this.game.drawString(hero.mp, x2 - xOffs, y0);
       y0 += Y_INC;
 
       this.game.drawString('G', x, y0);
-      xOffs = this._calculateX2Offs(party.gold);
-      this.game.drawString('' + party.gold, x2 - xOffs, y0);
+      xOffs = this.calculateX2Offs(party.gold);
+      this.game.drawString(party.gold, x2 - xOffs, y0);
       y0 += Y_INC;
 
       this.game.drawString('E', x, y0);
-      xOffs = this._calculateX2Offs(hero.exp);
-      this.game.drawString('' + hero.exp, x2 - xOffs, y0);
+      xOffs = this.calculateX2Offs(hero.exp);
+      this.game.drawString(hero.exp, x2 - xOffs, y0);
       y0 += Y_INC;
 
    }

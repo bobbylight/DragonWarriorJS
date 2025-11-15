@@ -1,15 +1,15 @@
-import { _BaseState } from './_BaseState';
-import { Delay, Image, InputManager } from 'gtp';
+import { BaseState } from './BaseState';
+import {BaseStateArgs, Delay, Image, InputManager} from 'gtp';
 import DwGame from './DwGame';
 import { InitialMenuState } from './InitialMenuState';
 
-export class TitleScreenState extends _BaseState {
+export class TitleScreenState extends BaseState {
 
     assetsLoaded: boolean;
-    private _delay: Delay;
-    private _blink: boolean;
+    private delay: Delay;
+    private blink: boolean;
 
-    constructor(args?: any) {
+    constructor(args?: DwGame | BaseStateArgs<DwGame>) {
         super(args);
         this.assetsLoaded = false;
     }
@@ -17,8 +17,8 @@ export class TitleScreenState extends _BaseState {
     override enter(game: DwGame) {
         super.enter(game);
         game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
-        this._delay = new Delay({millis: [600, 400]});
-        this._blink = true;
+        this.delay = new Delay({millis: [600, 400]});
+        this.blink = true;
         game.audio.playMusic('MUSIC_TITLE_SCREEN');
     }
 
@@ -35,9 +35,9 @@ export class TitleScreenState extends _BaseState {
 
         this.handleDefaultKeys();
 
-        if (this._delay.update(delta)) {
-            this._delay.reset();
-            this._blink = !this._blink;
+        if (this.delay.update(delta)) {
+            this.delay.reset();
+            this.blink = !this.blink;
         }
 
         const im: InputManager = this.game.inputManager;
@@ -55,11 +55,11 @@ export class TitleScreenState extends _BaseState {
 
         const img: Image = game.assets.get('title');
         let x: number = (w - img.width) / 2;
-        let y: number = 30;
+        let y = 30;
         img.draw(ctx, x, y);
 
         if (!game.audio.isInitialized()) {
-            let text: string = 'Sound is disabled as your';
+            let text = 'Sound is disabled as your';
             x = (w - game.stringWidth(text)) / 2;
             y = 390;
             game.drawString(text, x, y);
@@ -73,8 +73,8 @@ export class TitleScreenState extends _BaseState {
             game.drawString(text, x, y);
         }
 
-        if (this._blink) {
-            const prompt: string = 'Press Enter';
+        if (this.blink) {
+            const prompt = 'Press Enter';
             x = (w - game.stringWidth(prompt)) / 2;
             y = 240;
             game.drawString(prompt, x, y);

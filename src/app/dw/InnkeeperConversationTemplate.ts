@@ -11,7 +11,7 @@ import { ConversationSegmentArgs } from './ConversationSegment';
 export default (game: DwGame, segmentArgs: ConversationSegmentArgs): NpcText => {
 
    if (!segmentArgs.cost) {
-      throw `No cost for the inn specified in conversation: ${JSON.stringify(segmentArgs)}`;
+      throw new Error(`No cost for the inn specified in conversation: ${JSON.stringify(segmentArgs)}`);
    }
 
    return [

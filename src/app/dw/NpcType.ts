@@ -1,4 +1,5 @@
 // TODO: Convert this to a union type or some simpler struct
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class NpcType {
     static readonly SOLDIER_GRAY: number = 0;
     static readonly SOLDIER_RED: number = 1;

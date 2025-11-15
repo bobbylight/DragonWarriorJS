@@ -19,7 +19,6 @@ import Direction from './Direction';
 import NpcType, { getNpcType } from './NpcType';
 import Door from './Door';
 import Party from './Party';
-import Sounds from './Sounds';
 import MapChangeState from './MapChangeState';
 import RoamingState from './RoamingState';
 import DwMap from './DwMap';
@@ -35,14 +34,13 @@ import TantegelCastle from './mapLogic/tantegelCastle';
 import MapLogic from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
-import { GameArgs } from 'gtp/lib/gtp/Game';
 import DwGameState, { createDefaultGameState } from './DwGameState';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
+import {BaseState} from "./BaseState";
+import {EnemyData} from "./Enemy";
 
-export interface TiledMapMap {
-    [ name: string ]: DwMap;
-}
+export type TiledMapMap = Record<string, DwMap>;
 
 export default class DwGame extends Game {
 
@@ -52,20 +50,16 @@ export default class DwGame extends Game {
     party: Party;
     npcs: Npc[];
     gameState: DwGameState;
-    private _bumpSoundDelay: number;
-    private _mapLogics: Map<string, MapLogic>;
-    private _randomEncounters: boolean;
-    private _torch: boolean;
+    private bumpSoundDelay: number;
+    private mapLogics: Map<string, MapLogic>;
+    private randomEncounters: boolean;
+    private torch: boolean;
     inside: boolean;
     newRow: number;
     newCol: number;
     npcsPaused: boolean;
-    private _cameraDx: number;
-    private _cameraDy: number;
-
-    constructor(args?: GameArgs) {
-        super(args);
-    }
+    private cameraDx: number;
+    private cameraDy: number;
 
     override start() {
         super.start();
@@ -77,26 +71,26 @@ export default class DwGame extends Game {
         this.createPartyAndHero();
         this.gameState = createDefaultGameState();
         this.npcs = [];
-        this._bumpSoundDelay = 0;
+        this.bumpSoundDelay = 0;
         this.setCameraOffset(0, 0);
         this.inside = false;
-        this._randomEncounters = true;
-        this._torch = false;
+        this.randomEncounters = true;
+        this.torch = false;
 
-        this._mapLogics = new Map<string, MapLogic>();
-        this._mapLogics.set('Brecconary', new Brecconary());
-        this._mapLogics.set('erdricksCave1', new ErdricksCave1());
-        this._mapLogics.set('erdricksCave2', new ErdricksCave2());
-        this._mapLogics.set('Garinham', new Garinham());
-        this._mapLogics.set('Overworld', new Overworld());
-        this._mapLogics.set('TantegelCastle', new TantegelCastle());
+        this.mapLogics = new Map<string, MapLogic>();
+        this.mapLogics.set('Brecconary', new Brecconary());
+        this.mapLogics.set('erdricksCave1', new ErdricksCave1());
+        this.mapLogics.set('erdricksCave2', new ErdricksCave2());
+        this.mapLogics.set('Garinham', new Garinham());
+        this.mapLogics.set('Overworld', new Overworld());
+        this.mapLogics.set('TantegelCastle', new TantegelCastle());
     }
 
     actionKeyPressed() {
         return this.inputManager.isKeyDown(Keys.KEY_Z, true);
     }
 
-    anyKeyDown(clear: boolean = true) {
+    anyKeyDown(clear = true) {
         const im: InputManager = this.inputManager;
         return im.isKeyDown(Keys.KEY_Z, clear) || im.isKeyDown(Keys.KEY_X, clear) ||
             im.enter(clear);
@@ -117,7 +111,7 @@ export default class DwGame extends Game {
     }
 
     cycleArmor() {
-        if (this.hero && this.hero.armor) {
+        if (this.hero?.armor) {
             const curArmor: string = this.hero.armor.name;
             const armorArray: Armor[] = this.assets.get('armorArray');
             let i: number;
@@ -133,7 +127,7 @@ export default class DwGame extends Game {
     }
 
     cycleShield() {
-        if (this.hero && this.hero.shield) {
+        if (this.hero?.shield) {
             const curShield: string = this.hero.shield.name;
             const shieldArray: Shield[] = this.assets.get('shieldArray');
             let i: number;
@@ -149,7 +143,7 @@ export default class DwGame extends Game {
     }
 
     cycleWeapon() {
-        if (this.hero && this.hero.weapon) {
+        if (this.hero?.weapon) {
             const curWeapon: string = this.hero.weapon.name;
             const weaponArray: Weapon[] = this.assets.get('weaponsArray');
             let i: number;
@@ -176,8 +170,8 @@ export default class DwGame extends Game {
         const hero: Hero = this.hero;
         const centerCol: number = hero.mapCol;
         const centerRow: number = hero.mapRow;
-        const dx: number = hero.xOffs + this._cameraDx;
-        const dy: number = hero.yOffs + this._cameraDy;
+        const dx: number = hero.xOffs + this.cameraDx;
+        const dy: number = hero.yOffs + this.cameraDy;
 
 //         if (this._drawMapCount === 10) {
 //            this.timer.start('drawMap');
@@ -196,15 +190,16 @@ export default class DwGame extends Game {
         font.drawString(textStr, x, y);
     }
 
-    getEnemy(name: string): any {
-        return this.assets.get<any>('enemies')[ name ];
+    getEnemy(name: string): EnemyData {
+        const enemyDatas: Record<string, EnemyData> = this.assets.get('enemies');
+        return enemyDatas[name];
     }
 
     getMapLogic(): MapLogic | undefined {
         let logicFile: string = this.map.getProperty('logicFile');
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
-        return this._mapLogics.get(logicFile);
+        return this.mapLogics.get(logicFile);
     }
 
     getMapXOffs(): number {
@@ -244,31 +239,32 @@ export default class DwGame extends Game {
         this.newRow = newRow;
         this.newCol = newCol;
         this.audio.playSound('stairs');
-        const updatePlayer: Function = () => {
+        const updatePlayer: () => void = () => {
             this.hero.setMapLocation(-1, -1); // Free the location he was in the map
             this.setMap(mapName + '.json');
             this.hero.setMapLocation(newRow, newCol);
             this.hero.direction = dir ?? Direction.SOUTH;
             this.inputManager.clearKeyStates(); // Prevent keydown from being read in the next screen
         };
-        this.setState(new /*FadeOutInState*/MapChangeState(this.state as any, this.state as any, updatePlayer));
+        this.setState(new /*FadeOutInState*/MapChangeState(this.state as BaseState, this.state as BaseState,
+            updatePlayer));
     }
 
-    private _resetMap(map: DwMap) {
-        map.npcs.forEach(npc => npc.reset());
+    private resetMap(map: DwMap) {
+        map.npcs.forEach(npc => { npc.reset() });
     }
 
     setMap(assetName: string) {
         const prevMap: DwMap = this.map;
         console.log('Setting map to: ' + assetName);
         this.map = this.maps[ assetName ];
-        this._resetMap(this.map);
+        this.resetMap(this.map);
         if (prevMap && prevMap.getProperty('requiresTorch', false) !== this.map.getProperty('requiresTorch', false)) {
             // You blow your torch out leaving a dungeon, but it stays lit
             // when going into another map in the same dungeon that is also dark
             this.setUsingTorch(false);
         }
-        const newMusic: string | undefined = this.map.getProperty('music') as Sounds;
+        const newMusic: string | undefined = this.map.getProperty('music');
         if (newMusic !== this.audio.getCurrentMusic()) {
             this.audio.fadeOutMusic(newMusic);
         }
@@ -293,13 +289,13 @@ export default class DwGame extends Game {
             assets: this.assets,
         });
         map.setScale(this.scale);
-        this._adjustGameMap(map);
+        this.adjustGameMap(map);
 
         this.maps[ asset ] = map;
         return map;
     }
 
-    private _adjustGameMap(map: DwMap) {
+    private adjustGameMap(map: DwMap) {
 
         let i: number;
         let npc: Npc;
@@ -325,6 +321,7 @@ export default class DwGame extends Game {
             const npcLayer: TiledLayer = temp;
 
             for (i = 0; i < npcLayer.objects!.length; i++) {
+                let chest: Chest;
                 const obj: TiledObject = npcLayer.objects![i];
                 switch (obj.type) {
                     case 'npc':
@@ -341,7 +338,7 @@ export default class DwGame extends Game {
                         newTalkAcrosses[ this.parseTalkAcrossKey(obj) ] = true;
                         break;
                     case 'chest':
-                        const chest: Chest = this.parseChestContents(obj);
+                        chest = this.parseChestContents(obj);
                         map.chests.set(chest.location, chest);
                         break;
                     default:
@@ -415,7 +412,7 @@ export default class DwGame extends Game {
         const name: string = obj.name;
         let type: NpcType | null = null;
         if (obj.propertiesByName.has('type')) {
-            type = getNpcType(getProperty(obj, 'type') as string);
+            type = getNpcType(getProperty(obj, 'type'));
         }
         const tileSize: number = this.getTileSize();
         const row: number = obj.y / tileSize;
@@ -452,25 +449,29 @@ export default class DwGame extends Game {
         return toLocationString(row, col);
     }
 
-    private _loadGame() {
+    private loadGame() {
         const hero: Hero = this.hero;
         hero.hp = hero.maxHp = 15;
         hero.mp = hero.maxMp = 15;
-        hero._strength = 4;
+        hero.strength = 4;
         hero.agility = 4;
-        hero.weapon = (this.assets.get('weapons') as EquipmentMap<Weapon>).club;
-        hero.armor = (this.assets.get('armor') as EquipmentMap<Armor>).clothes;
-        hero.shield = (this.assets.get('shields') as EquipmentMap<Shield>).smallShield;
+
+        const weaponMap: EquipmentMap<Weapon> = this.assets.get('weapons');
+        hero.weapon = weaponMap.club;
+        const armorMap: EquipmentMap<Armor> = this.assets.get('armor');
+        hero.armor = armorMap.clothes;
+        const shieldMap: EquipmentMap<Shield> = this.assets.get('shields');
+        hero.shield = shieldMap.smallShield;
     }
 
     setCameraOffset(dx: number, dy: number) {
-        this._cameraDx = dx;
-        this._cameraDy = dy;
+        this.cameraDx = dx;
+        this.cameraDy = dy;
     }
 
     startNewGame() {
-        this._loadGame();
-        const transitionLogic: Function = () => {
+        this.loadGame();
+        const transitionLogic: () => void = () => {
 //            this.setMap('overworld.json');
 //            this.hero.setMapLocation(52, 45);
             this.setMap('brecconary.json');
@@ -502,7 +503,7 @@ export default class DwGame extends Game {
                 col--;
                 break;
         }
-        console.log('Checking for door at: ' + row + ', ' + col);
+        console.log(`Checking for door at: ${row}, ${col}`);
         return this.map.doors.find(door => door.isAt(row, col));
     }
 
@@ -536,15 +537,17 @@ export default class DwGame extends Game {
     }
 
     getUsingTorch(): boolean {
-        return this._torch;
+        return this.torch;
     }
 
     getWeapon(weapon: string): Weapon {
-        return this.assets.get<any>('weapons')[ weapon ];
+        const weaponMap: EquipmentMap<Weapon> = this.assets.get('weapons');
+        return weaponMap[ weapon ];
     }
 
     getArmor(armor: string): Armor {
-        return this.assets.get<any>('armors')[ armor ];
+        const armorMap: EquipmentMap<Armor> = this.assets.get('armor');
+        return armorMap[ armor ];
     }
 
     getCheatsEnabled(): boolean {
@@ -552,7 +555,8 @@ export default class DwGame extends Game {
     }
 
     getShield(shield: string): Shield {
-        return this.assets.get<any>('shields')[ shield ];
+        const shieldMap: EquipmentMap<Shield> = this.assets.get('shields');
+        return shieldMap[ shield ];
     }
 
     getTileSize(): number {
@@ -564,9 +568,9 @@ export default class DwGame extends Game {
     }
 
     bump() {
-        if (this.playTime > this._bumpSoundDelay) {
+        if (this.playTime > this.bumpSoundDelay) {
             this.audio.playSound('bump');
-            this._bumpSoundDelay = this.playTime + 300;
+            this.bumpSoundDelay = this.playTime + 300;
         }
     }
 
@@ -588,8 +592,8 @@ export default class DwGame extends Game {
         if (typeof maxMp !== 'undefined') {
             this.hero.maxMp = maxMp;
         }
-        this.setStatusMessage('Hero stats now: ' + this.hero.hp + '/' + this.hero.maxHp +
-            ', ' + this.hero.mp + '/' + this.hero.maxMp);
+        this.setStatusMessage(
+            `Hero stats now: ${this.hero.hp}/${this.hero.maxHp}, ${this.hero.mp}/${this.hero.maxMp}`);
     }
 
     setNpcsPaused(paused: boolean) {
@@ -597,8 +601,8 @@ export default class DwGame extends Game {
     }
 
     setUsingTorch(usingTorch: boolean): boolean {
-        this._torch = usingTorch;
-        this.setStatusMessage('Using torch: ' + usingTorch);
+        this.torch = usingTorch;
+        this.setStatusMessage(`Using torch: ${usingTorch}`);
         return true;
     }
 
@@ -613,19 +617,20 @@ export default class DwGame extends Game {
     }
 
     startRandomEncounter(): boolean {
-        if (this._randomEncounters) {
+        if (this.randomEncounters) {
             const enemyTerritoryLayer: TiledLayer | undefined = this.map.layersByName.get('enemyTerritoryLayer');
             if (enemyTerritoryLayer) {
                 let territory: number = enemyTerritoryLayer.getData(this.hero.mapRow, this.hero.mapCol);
                 if (territory > 0) {
                     // Enemy territory index is offset by the Tiled tileset's firstgid
                     // TODO: Remove call to private method
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                     territory = territory - (this.map as any).getTilesetForGid(territory).firstgid;
                     if (territory >= 0) {
                         const territories: any = this.assets.get('enemyTerritories');
                         const possibleEnemies: any[] = territories[territory];
                         const enemyName: string = possibleEnemies[Utils.randomInt(0, possibleEnemies.length)];
-                        this.setState(new BattleTransitionState(this.state as any, new BattleState(enemyName)));
+                        this.setState(new BattleTransitionState(this.state as BaseState, new BattleState(enemyName)));
                         return true;
                     }
                 }
@@ -641,9 +646,9 @@ export default class DwGame extends Game {
     }
 
     toggleRandomEncounters() {
-        this._randomEncounters = !this._randomEncounters;
+        this.randomEncounters = !this.randomEncounters;
         this.setStatusMessage('Random encounters ' +
-            (this._randomEncounters ? 'enabled' : 'disabled'));
+            (this.randomEncounters ? 'enabled' : 'disabled'));
     }
 
     toggleShowCollisionLayer() {

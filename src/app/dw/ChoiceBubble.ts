@@ -1,9 +1,7 @@
 import Bubble from './Bubble';
 import { InputManager } from 'gtp';
 
-interface ChoiceBubbleStringMap {
-    [ key: string ]: string;
-}
+type ChoiceBubbleStringMap = Record<string, string>;
 export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
 
 /**
@@ -19,7 +17,7 @@ export default class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     constructor(x: number, y: number, w: number, h: number,
                 choices: ChoiceBubbleChoice[] = [],
                 choiceDisplayField?: string,
-                cancellable: boolean = false,
+                cancellable = false,
                 title: string | undefined = undefined) {
         super(title, x, y, w, h);
         this.choices = choices;

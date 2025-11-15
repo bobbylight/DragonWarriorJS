@@ -4,7 +4,7 @@ import DwGame from './DwGame';
 /**
  * Functionality common amongst all states in this game.
  */
-export class _BaseState extends State<DwGame> {
+export class BaseState extends State<DwGame> {
 
     constructor(args?: DwGame | BaseStateArgs<DwGame>) {
 
@@ -22,7 +22,10 @@ export class _BaseState extends State<DwGame> {
 
     createScreenshot() {
         const canvas: HTMLCanvasElement = ImageUtils.createCanvas(this.game.getWidth(), this.game.getHeight());
-        const ctx: CanvasRenderingContext2D = canvas.getContext('2d')!;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+            throw new Error('Failed to get 2D rendering context from canvas.');
+        }
         this.render(ctx);
         return canvas;
     }
@@ -32,13 +35,13 @@ export class _BaseState extends State<DwGame> {
         // Increase canvas size
         if (im.isKeyDown(Keys.KEY_P, true)) {
             if (!canvas.style.width) {
-                canvas.style.width = canvas.width + 'px';
+                canvas.style.width = `${canvas.width}px`;
             }
             if (!canvas.style.height) {
-                canvas.style.height = canvas.height + 'px';
+                canvas.style.height = `${canvas.height}px`;
             }
-            canvas.style.width = (parseInt(canvas.style.width.substring(0, canvas.style.width.length - 2), 10) + 1) + 'px';
-            canvas.style.height = (parseInt(canvas.style.height.substring(0, canvas.style.height.length - 2), 10) + 1) + 'px';
+            canvas.style.width = `${parseInt(canvas.style.width.substring(0, canvas.style.width.length - 2), 10) + 1}px`;
+            canvas.style.height = `${parseInt(canvas.style.height.substring(0, canvas.style.height.length - 2), 10) + 1}px`;
             game.setStatusMessage(`Canvas size now: (${canvas.style.width}, ${canvas.style.height})`);
 
             return true;
@@ -47,13 +50,13 @@ export class _BaseState extends State<DwGame> {
         // Decrease canvas size
         if (im.isKeyDown(Keys.KEY_L, true)) {
             if (!canvas.style.width) {
-                canvas.style.width = canvas.width + 'px';
+                canvas.style.width = `${canvas.width}px`;
             }
             if (!canvas.style.height) {
-                canvas.style.height = canvas.height + 'px';
+                canvas.style.height = `${canvas.height}px`;
             }
-            canvas.style.width = (parseInt(canvas.style.width.substring(0, canvas.style.width.length - 2), 10) - 1) + 'px';
-            canvas.style.height = (parseInt(canvas.style.height.substring(0, canvas.style.height.length - 2), 10) - 1) + 'px';
+            canvas.style.width = `${parseInt(canvas.style.width.substring(0, canvas.style.width.length - 2), 10) - 1}px`;
+            canvas.style.height = `${parseInt(canvas.style.height.substring(0, canvas.style.height.length - 2), 10) - 1}px`;
             game.setStatusMessage(`Canvas size now: (${canvas.style.width}, ${canvas.style.height})`);
             return true;
         }
@@ -75,7 +78,7 @@ export class _BaseState extends State<DwGame> {
         const canvas: HTMLCanvasElement = this.game.canvas;
         const game: DwGame = this.game;
 
-        if (_BaseState.handleCanvasResizingKeys(im, canvas, game)) {
+        if (BaseState.handleCanvasResizingKeys(im, canvas, game)) {
             return;
         }
 

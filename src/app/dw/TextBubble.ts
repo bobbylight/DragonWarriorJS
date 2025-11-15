@@ -12,20 +12,20 @@ import Sellable from './Sellable';
 
 export default class TextBubble extends Bubble {
 
-    private _conversation: Conversation;
-    private _text: string;
-    private _curLine: number;
-    private _lines: string[];
-    private _delays: any[];
-    private _curOffs: number;
-    private _curCharMillis: number;
-    private _textDone: boolean;
-    private _choiceBubble?: ChoiceBubble<ConversationSegmentArgsChoice> | null;
-    private _shoppingBubble?: ShoppingBubble | null;
-    private _delay?: Delay;
-    private _doneCallbacks: any[];
-    private _afterSound: any;
-    private _overnight?: boolean;
+    private conversation: Conversation;
+    private text: string;
+    private curLine: number;
+    private lines: string[];
+    private delays: any[];
+    private curOffs: number;
+    private curCharMillis: number;
+    private textDone: boolean;
+    private choiceBubble?: ChoiceBubble<ConversationSegmentArgsChoice> | null;
+    private shoppingBubble?: ShoppingBubble | null;
+    private delay?: Delay;
+    private doneCallbacks: any[];
+    private afterSound: string | undefined;
+    private overnight?: boolean;
 
     static readonly CHAR_RENDER_MILLIS: number = 0;
     static readonly MAX_LINE_COUNT: number = 6;
@@ -38,16 +38,16 @@ export default class TextBubble extends Bubble {
         const height: number = game.getTileSize() * 5;
         const y: number = game.getHeight() - tileSize - height;
         super(undefined, x, y, width, height);
-        this._doneCallbacks = [];
+        this.doneCallbacks = [];
     }
 
-    addToConversation(text: string | ConversationSegmentArgs, autoAdvance: boolean = false): void {
-        this._conversation.addSegment(text);
+    addToConversation(text: string | ConversationSegmentArgs, autoAdvance = false): void {
+        this.conversation.addSegment(text);
 
-        if (autoAdvance && this._textDone) {
-            this._updateConversation();
+        if (autoAdvance && this.textDone) {
+            this.updateConversation();
         } else {
-            console.log('oh no - ' + autoAdvance + ', ' + this._textDone);
+            console.log(`oh no - ${autoAdvance}, ${this.textDone}`);
         }
     }
 
@@ -58,21 +58,21 @@ export default class TextBubble extends Bubble {
             return;
         }
 
-        this._text = this._text + '\n' + curText;
-        this._curLine = this._lines.length;
+        this.text = this.text + '\n' + curText;
+        this.curLine = this.lines.length;
         const w: number = this.w - 2 * Bubble.MARGIN;
-        const breakApartResult: BreakApartResult = this._breakApart(curText, w);
-        this._lines = this._lines.concat(breakApartResult.lines);
-        this._delays = breakApartResult.delays;
-        this._curOffs = -1;
-        this._curCharMillis = 0;
-        this._textDone = false;
+        const breakApartResult: BreakApartResult = this.breakApart(curText, w);
+        this.lines = this.lines.concat(breakApartResult.lines);
+        this.delays = breakApartResult.delays;
+        this.curOffs = -1;
+        this.curCharMillis = 0;
+        this.textDone = false;
         console.log('>>> textDone set to false');
         if (segment.choices) {
-            this._choiceBubble = this.createChoiceBubble(segment.choices);
+            this.choiceBubble = this.createChoiceBubble(segment.choices);
             this.setActive(false);
         } else if (segment.shopping) {
-            this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
+            this.shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
             this.setActive(false);
         }
     }
@@ -110,46 +110,46 @@ export default class TextBubble extends Bubble {
         let result: boolean;
         let nextState: string | undefined;
 
-        if (this._textDone) {
-            if (this._shoppingBubble) {
-                result = this._shoppingBubble.handleInput();
+        if (this.textDone) {
+            if (this.shoppingBubble) {
+                result = this.shoppingBubble.handleInput();
                 if (result) {
-                    const item: Sellable | undefined = this._shoppingBubble.getSelectedItem();
-                    delete this._shoppingBubble;
+                    const item: Sellable | undefined = this.shoppingBubble.getSelectedItem();
+                    delete this.shoppingBubble;
                     this.setActive(true);
                     if (item) {
-                        this._conversation.setItem(item);
+                        this.conversation.setItem(item);
                         nextState = item.baseCost > this.game.party.gold ?
                             Conversation.NOT_ENOUGH_SEGMENT : Conversation.CONFIRM_SEGMENT;
-                        return !this._updateConversation(nextState);
+                        return !this.updateConversation(nextState);
                     } else {
-                        return !this._updateConversation(Conversation.SOMETHING_ELSE_SEGMENT);
+                        return !this.updateConversation(Conversation.SOMETHING_ELSE_SEGMENT);
                     }
                 }
                 return false;
-            } else if (this._choiceBubble) {
-                result = this._choiceBubble.handleInput();
+            } else if (this.choiceBubble) {
+                result = this.choiceBubble.handleInput();
                 if (result) {
-                    const choice: ConversationSegmentArgsChoice = this._choiceBubble.getSelectedItem()!;
+                    const choice: ConversationSegmentArgsChoice = this.choiceBubble.getSelectedItem()!;
                     nextState = TextBubble.getNextState(choice);
                     //this._conversation.setDialogueState(nextState);
-                    delete this._choiceBubble;
+                    delete this.choiceBubble;
                     this.setActive(true);
-                    return !this._updateConversation(nextState);
+                    return !this.updateConversation(nextState);
                 }
                 return false;
             }
         }
 
         if (this.game.anyKeyDown()) {
-            if (!this._textDone) {
-                this._textDone = true;
-                if (this._lines.length > TextBubble.MAX_LINE_COUNT) {
-                    this._lines.splice(0, this._lines.length - TextBubble.MAX_LINE_COUNT);
+            if (!this.textDone) {
+                this.textDone = true;
+                if (this.lines.length > TextBubble.MAX_LINE_COUNT) {
+                    this.lines.splice(0, this.lines.length - TextBubble.MAX_LINE_COUNT);
                 }
-                this._curLine = this._lines.length - 1;
+                this.curLine = this.lines.length - 1;
             } else {
-                return !this._updateConversation();
+                return !this.updateConversation();
             }
         }
         return false;
@@ -167,10 +167,10 @@ export default class TextBubble extends Bubble {
             this.game.audio.playMusic(segment.music);
         }
         if (segment.afterSound) {
-            this._afterSound = segment.afterSound;
+            this.afterSound = segment.afterSound;
         }
         else if (segment.choices) {
-            this._afterSound = 'confirmation';
+            this.afterSound = 'confirmation';
         }
     }
 
@@ -179,104 +179,103 @@ export default class TextBubble extends Bubble {
      * internally.  This is a sign of bad design.
      */
     nudgeConversation(): void {
-        this._updateConversation();
+        this.updateConversation();
     }
 
     /**
      * Returns true if the current conversation has completed.
      */
     isDone(): boolean {
-        return this._textDone && !this._choiceBubble &&
-            !this._shoppingBubble &&
-            (!this._conversation || !this._conversation.hasNext());
+        return this.textDone && !this.choiceBubble &&
+            !this.shoppingBubble && !this.conversation?.hasNext();
     }
 
     currentTextDone(): boolean {
-        return this._textDone;
+        return this.textDone;
     }
 
     isOvernight(): boolean {
-        return !!this._overnight;
+        return !!this.overnight;
     }
 
     clearOvernight(): void {
-        delete this._overnight;
+        delete this.overnight;
     }
 
-    onDone(callback: Function): void {
+    onDone(callback: () => void): void {
         if (this.isDone()) {
             callback();
         } else {
-            this._doneCallbacks.push(callback);
+            this.doneCallbacks.push(callback);
         }
     }
 
     override updateImpl(delta: number): void {
 
-        if (this._delay) {
-            if (this._delay.update(delta)) {
-                delete this._delay;
+        if (this.delay) {
+            if (this.delay.update(delta)) {
+                delete this.delay;
             } else {
                 return;
             }
         }
 
         // Ensure the blinking "down" arrow is always on a line
-        if (this._textDone &&
-                this._curOffs === -1 && this._curLine === TextBubble.MAX_LINE_COUNT - 1 &&
-                this._conversation.hasNext()) {
-            this._lines.shift();
-            this._curLine--;
+        if (this.textDone &&
+                this.curOffs === -1 && this.curLine === TextBubble.MAX_LINE_COUNT - 1 &&
+                this.conversation.hasNext()) {
+            this.lines.shift();
+            this.curLine--;
         }
 
-        if (!this._textDone) {
-            this._curCharMillis += delta;
-            if (this._curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
-                this._curCharMillis -= TextBubble.CHAR_RENDER_MILLIS;
-                if (this._curOffs === -1 && this._curLine === TextBubble.MAX_LINE_COUNT) {
-                    this._lines.shift();
-                    this._curLine--;
+        if (!this.textDone) {
+            this.curCharMillis += delta;
+            if (this.curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
+                this.curCharMillis -= TextBubble.CHAR_RENDER_MILLIS;
+                if (this.curOffs === -1 && this.curLine === TextBubble.MAX_LINE_COUNT) {
+                    this.lines.shift();
+                    this.curLine--;
                 }
                 // TODO: This could be more performant...
-                if (this._delays && this._delays.length > 0) {
-                    const elem: any = this._delays[0];
-                    if (elem.offs === this._curOffs + 1) {
-                        this._delays.shift();
-                        this._delay = new Delay({millis: elem.millis});
+                if (this.delays && this.delays.length > 0) {
+                    const elem: any = this.delays[0];
+                    if (elem.offs === this.curOffs + 1) {
+                        this.delays.shift();
+                        this.delay = new Delay({millis: elem.millis});
                         return;
                     }
                 }
-                this._curOffs++;
-                if (this._curOffs === this._lines[this._curLine].length) {
-                    if (this._curLine === this._lines.length - 1) {
+                this.curOffs++;
+                if (this.curOffs === this.lines[this.curLine].length) {
+                    if (this.curLine === this.lines.length - 1) {
                         console.log('Setting textDone to true');
-                        this._textDone = true;
-                        if (this._afterSound) {
-                            this.game.audio.playSound(this._afterSound);
-                            delete this._afterSound;
+                        this.textDone = true;
+                        if (this.afterSound) {
+                            this.game.audio.playSound(this.afterSound);
+                            delete this.afterSound;
                         }
                     } else {
                         console.log('Going to next line');
-                        this._curLine++;
+                        this.curLine++;
                     }
-                    this._curOffs = -1;
+                    this.curOffs = -1;
                 }
-                else if (this._conversation.getVoice() &&
-                        this._curOffs % 2 === 0 && this._lines[this._curLine][this._curOffs] !== ' ') {
+                else if (this.conversation.getVoice() &&
+                        this.curOffs % 2 === 0 && this.lines[this.curLine][this.curOffs] !== ' ') {
                     this.game.audio.playSound('talk');
                 }
             }
-        } else if (this._shoppingBubble) {
-            this._shoppingBubble.update(delta);
-        } else if (this._choiceBubble) {
-            this._choiceBubble.update(delta);
+        } else if (this.shoppingBubble) {
+            this.shoppingBubble.update(delta);
+        } else if (this.choiceBubble) {
+            this.choiceBubble.update(delta);
         }
 
-        if (this._doneCallbacks.length > 0 && this.isDone()) {
-            this._doneCallbacks.forEach((callback: Function) => {
+        if (this.doneCallbacks.length > 0 && this.isDone()) {
+            this.doneCallbacks.forEach((callback: () => void) => {
                 callback();
             });
-            this._doneCallbacks = [];
+            this.doneCallbacks = [];
         }
 
     }
@@ -284,17 +283,17 @@ export default class TextBubble extends Bubble {
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number): void {
 
         ctx.fillStyle = 'rgb(255,255,255)';
-        if (this._lines) {
-            for (let i: number = 0; i <= this._curLine; i++) {
-                let text: string = this._lines[i];
-                if (!this._textDone && i === this._curLine) {
-                    const end: number = Math.max(0, this._curOffs);
+        if (this.lines) {
+            for (let i = 0; i <= this.curLine; i++) {
+                let text: string = this.lines[i];
+                if (!this.textDone && i === this.curLine) {
+                    const end: number = Math.max(0, this.curOffs);
                     text = text.substring(0, end);
                 }
                 this.game.drawString(text, x, y);
                 y += 10 * this.game.scale;
             }
-            if (this._textDone && this._conversation.hasNext()) {
+            if (this.textDone && this.conversation.hasNext()) {
                 // TODO: Remove magic constants
                 const x: number = this.x + (this.w - this.game.stringWidth('\\')) / 2;
                 this.drawDownArrow(x, y);
@@ -315,11 +314,11 @@ export default class TextBubble extends Bubble {
             }
         }
 
-        if (this._textDone) {
-            if (this._shoppingBubble) {
-                this._shoppingBubble.paint(ctx);
-            } else if (this._choiceBubble) {
-                this._choiceBubble.paint(ctx);
+        if (this.textDone) {
+            if (this.shoppingBubble) {
+                this.shoppingBubble.paint(ctx);
+            } else if (this.choiceBubble) {
+                this.choiceBubble.paint(ctx);
             }
         }
 
@@ -330,55 +329,55 @@ export default class TextBubble extends Bubble {
      *
      * @param segment The text to render.
      */
-    private _setText(segment: ConversationSegment): void {
-        this._text = segment.currentText() || '';
-        if (this._text) {
+    private setText(segment: ConversationSegment): void {
+        this.text = segment.currentText() ?? '';
+        if (this.text) {
             const w: number = this.w - 2 * Bubble.MARGIN;
-            const breakApartResult: BreakApartResult = this._breakApart(this._text, w);
-            this._lines = breakApartResult.lines;
-            this._delays = breakApartResult.delays;
-            this._curLine = 0;
-            this._curOffs = -1;
-            this._curCharMillis = 0;
-            this._textDone = false;
+            const breakApartResult: BreakApartResult = this.breakApart(this.text, w);
+            this.lines = breakApartResult.lines;
+            this.delays = breakApartResult.delays;
+            this.curLine = 0;
+            this.curOffs = -1;
+            this.curCharMillis = 0;
+            this.textDone = false;
             console.log('>>> textDone set to false');
         }
         if (segment.choices) {
-            this._choiceBubble = this.createChoiceBubble(segment.choices);
+            this.choiceBubble = this.createChoiceBubble(segment.choices);
             this.setActive(false);
         } else if (segment.shopping) {
-            this._shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
+            this.shoppingBubble = new ShoppingBubble(this.game, segment.shopping);
             this.setActive(false);
         }
     }
 
     setConversation(conversation: Conversation): void {
-        delete this._shoppingBubble;
-        delete this._choiceBubble;
-        this._conversation = conversation;
-        const segment: ConversationSegment = this._conversation.start();
-        this._setText(segment);
+        delete this.shoppingBubble;
+        delete this.choiceBubble;
+        this.conversation = conversation;
+        const segment: ConversationSegment = this.conversation.start();
+        this.setText(segment);
         this.handleSegmentAudio(segment);
     }
 
-    private _updateConversation(forcedNextState?: string): boolean {
+    private updateConversation(forcedNextState?: string): boolean {
 
-        if (forcedNextState || this._conversation.hasNext()) {
-            if (this._conversation.current()!.overnight && this._textDone) {
-                this._overnight = true;
+        if (forcedNextState || this.conversation.hasNext()) {
+            if (this.conversation.current()!.overnight && this.textDone) {
+                this.overnight = true;
             }
             let segment: ConversationSegment;
             if (forcedNextState) {
-                this._conversation.setDialogueState(forcedNextState);
-                segment = this._conversation.current(true)!;
+                this.conversation.setDialogueState(forcedNextState);
+                segment = this.conversation.current(true)!;
             } else {
-                segment = this._conversation.next(true)!;
+                segment = this.conversation.next(true)!;
             }
 //            if (segment.overnight) {
 //               this._overnight = true;
 //            } else
             if (segment.clear) {
-                this._setText(segment);
+                this.setText(segment);
             } else {
                 this.append(segment);
             }

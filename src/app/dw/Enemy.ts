@@ -1,9 +1,23 @@
 import BattleEntity from './BattleEntity';
 import { Image, Utils } from 'gtp';
 import RoamingEntity from './RoamingEntity';
-import EnemyAI, { EnemyAiFunc } from './EnemyAI';
+import getEnemyAi, { EnemyAiFunc } from './EnemyAI';
 import Hero from './Hero';
 import DwGame from './DwGame';
+
+export interface EnemyData {
+    name: string;
+    image: string;
+    damagedImage: string;
+    str: number;
+    agility: number;
+    hp: number | number[];
+    resist: Record<string, number>;
+    dodge: number;
+    xp: number;
+    gp: number | number[];
+    ai: string; // TODO: improve
+}
 
 export default class Enemy extends BattleEntity {
 
@@ -18,22 +32,30 @@ export default class Enemy extends BattleEntity {
     gp: number;
     ai: EnemyAiFunc;
 
-    constructor(args: any) {
+    constructor(args: EnemyData) {
 
         super(args);
+        this.name = args.name;
+        this.image = args.image;
+        this.damagedImage = args.damagedImage;
+        this.str = args.str;
+        this.agility = args.agility;
+        //this.resist = args.resist;
+        this.dodge = args.dodge;
+        this.xp = args.xp;
+        this.ai = getEnemyAi(args.ai);
 
-        Utils.mixin(args, this);
         Utils.mixin(RoamingEntity.prototype, this);
 
         this.game = (window as any).game;
-        this.ai = EnemyAI.get(args.ai);
 
         // Convert arrays into a single value.
         // These values can be an array of form [min, max], both inclusive
-        if (args.hp.length) {
-            this.hp = Utils.randomInt(args.hp[0], args.hp[1] + 1);
+        // TODO: Merge with BattleEntity and make ths a utility method since it's used there too
+        if (typeof args.gp === 'number') {
+            this.gp = args.gp;
         }
-        if (args.gp.length) {
+        else {
             this.gp = Utils.randomInt(args.gp[0], args.gp[1] + 1);
         }
     }

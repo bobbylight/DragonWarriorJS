@@ -1,5 +1,5 @@
-import { _BaseState } from './_BaseState';
-import { Delay, InputManager, Keys } from 'gtp';
+import { BaseState } from './BaseState';
+import {BaseStateArgs, Delay, InputManager, Keys} from 'gtp';
 import DwGame from './DwGame';
 import CommandBubble from './CommandBubble';
 import StatBubble from './StatBubble';
@@ -19,53 +19,52 @@ import DwMap from './DwMap';
 import { Chest } from './Chest';
 import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
 import getChestConversation from './ChestConversations';
+import {TiledLayerData} from "gtp/lib/tiled/TiledLayerData";
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION';
 
-interface UpdateFunction {
-    (delta: number): void;
-}
+type UpdateFunction = (delta: number) => void;
 
-export default class RoamingState extends _BaseState {
+export default class RoamingState extends BaseState {
 
-   private readonly _commandBubble: CommandBubble;
-   private readonly _statBubble: StatBubble;
-   private _statusBubble?: StatusBubble;
-   private _itemBubble?: ItemBubble;
+   private readonly commandBubble: CommandBubble;
+   private readonly statBubble: StatBubble;
+   private statusBubble?: StatusBubble;
+   private itemBubble?: ItemBubble;
    private warpBubble?: ChoiceBubble<string>;
-   private readonly _stationaryTimer: Delay;
-   private _overnightDelay?: Delay;
-   private readonly _updateMethods: Map<RoamingSubState, UpdateFunction>;
-   private readonly _textBubble: TextBubble;
-   private _showTextBubble: boolean;
-   private _substate: RoamingSubState;
-   private _showStats: boolean;
+   private readonly stationaryTimer: Delay;
+   private overnightDelay?: Delay;
+   private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
+   private readonly textBubble: TextBubble;
+   private showTextBubble: boolean;
+   private substate: RoamingSubState;
+   private showStats: boolean;
 
-   private static readonly _OVERNIGHT_DARK_TIME: number = 2500;
+   private static readonly OVERNIGHT_DARK_TIME: number = 2500;
 
-   private static readonly _OVERNIGHT_FADE_TIME: number = 500;
+   private static readonly OVERNIGHT_FADE_TIME: number = 500;
 
-   private static _totalTime: number = 0;
+   private static totalTime = 0;
 
-   constructor(args?: any) {
+   constructor(args?: DwGame | BaseStateArgs<DwGame>) {
 
       super(args);
 
-      this._commandBubble = new CommandBubble();
-      this._statBubble = new StatBubble(this.game);
-      this._stationaryTimer = new Delay({millis: 1000});
+      this.commandBubble = new CommandBubble();
+      this.statBubble = new StatBubble(this.game);
+      this.stationaryTimer = new Delay({millis: 1000});
 
       this.setSubstate('ROAMING');
 
-      this._updateMethods = new Map<RoamingSubState, UpdateFunction>();
-      this._updateMethods.set('ROAMING', this.updateRoaming);
-      this._updateMethods.set('MENU',  this.updateMenu);
-      this._updateMethods.set('TALKING',  this.updateTalking);
-      this._updateMethods.set('OVERNIGHT',  this.updateOvernight);
-      this._updateMethods.set('WARP_SELECTION',  this.updateWarpSelection);
+      this.updateMethods = new Map<RoamingSubState, UpdateFunction>();
+      this.updateMethods.set('ROAMING', this.updateRoaming.bind(this));
+      this.updateMethods.set('MENU',  this.updateMenu.bind(this));
+      this.updateMethods.set('TALKING',  this.updateTalking.bind(this));
+      this.updateMethods.set('OVERNIGHT',  this.updateOvernight.bind(this));
+      this.updateMethods.set('WARP_SELECTION',  this.updateWarpSelection.bind(this));
 
-      this._textBubble = new TextBubble(this.game);
-      this._showTextBubble = false;
+      this.textBubble = new TextBubble(this.game);
+      this.showTextBubble = false;
    }
 
    search() {
@@ -91,8 +90,8 @@ export default class RoamingState extends _BaseState {
        const location: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
        const chest: Chest | undefined = this.game.map.chests.get(location);
 
-       this._showTextBubble = true;
-       this._textBubble.setConversation(getChestConversation(this, chest));
+       this.showTextBubble = true;
+       this.textBubble.setConversation(getChestConversation(this, chest));
        this.setSubstate('TALKING');
    }
 
@@ -119,56 +118,56 @@ export default class RoamingState extends _BaseState {
 
       game.hero.update(delta);
 
-      RoamingState._totalTime += delta;
-      if (RoamingState._totalTime >= 1000) {
-         RoamingState._totalTime = 0;
+      RoamingState.totalTime += delta;
+      if (RoamingState.totalTime >= 1000) {
+         RoamingState.totalTime = 0;
       }
 
-      this._updateMethods.get(this._substate)!.call(this, delta);
+      this.updateMethods.get(this.substate)!.call(this, delta);
    }
 
    private updateMenu(delta: number) {
 
-      if (this._statBubble) {
-         this._statBubble.update(delta);
+      if (this.statBubble) {
+         this.statBubble.update(delta);
       }
 
-      if (this._statusBubble) {
-         this._statusBubble.update(delta);
+      if (this.statusBubble) {
+         this.statusBubble.update(delta);
          if (this.game.anyKeyDown()) {
-            delete this._statusBubble;
+            delete this.statusBubble;
             return;
          }
       }
 
       let done: boolean;
-      if (this._itemBubble) {
-         this._itemBubble.update(delta);
-         done = this._itemBubble.handleInput();
+      if (this.itemBubble) {
+         this.itemBubble.update(delta);
+         done = this.itemBubble.handleInput();
          if (done) {
-            const selectedItem: Item | null = this._itemBubble.getSelectedItem()!;
+            const selectedItem: Item | undefined = this.itemBubble.getSelectedItem();
             const success: boolean = !selectedItem || selectedItem.use(this.game); // Either canceled the dialog or selected item
             if (success) {
-               this._itemBubble.removeSelectedItem();
+               this.itemBubble.removeSelectedItem();
                this.setSubstate('ROAMING');
             }
-            delete this._itemBubble;
+            delete this.itemBubble;
          }
          return;
       }
 
-      this._commandBubble.update(delta);
-      done = this._commandBubble.handleInput();
+      this.commandBubble.update(delta);
+      done = this.commandBubble.handleInput();
       if (done) {
-         this._commandBubble.handleCommandChosen(this);
+         this.commandBubble.handleCommandChosen(this);
          return;
       }
    }
 
    private updateRoaming(delta: number) {
 
-      if (this._showStats) {
-         this._statBubble.update(delta);
+      if (this.showStats) {
+         this.statBubble.update(delta);
       }
 
       const hero: Hero = this.game.hero;
@@ -176,10 +175,10 @@ export default class RoamingState extends _BaseState {
 
       if (this.game.actionKeyPressed()) {
          this.game.setNpcsPaused(true);
-         this._commandBubble.reset();
+         this.commandBubble.reset();
          this.game.audio.playSound('menu');
          this.setSubstate('MENU');
-         this._showStats = true;
+         this.showStats = true;
          return;
       }
 
@@ -188,29 +187,29 @@ export default class RoamingState extends _BaseState {
 
          if (im.up()) {
             hero.tryToMoveUp();
-            this._stationaryTimer.reset();
-            this._statBubble.init();
+            this.stationaryTimer.reset();
+            this.statBubble.init();
             //this.yOffs = Math.max(this.yOffs-inc, 0);
          } else if (im.down()) {
             hero.tryToMoveDown();
-            this._stationaryTimer.reset();
-            this._statBubble.init();
+            this.stationaryTimer.reset();
+            this.statBubble.init();
             //this.yOffs = Math.min(this.yOffs+inc, maxY);
          } else if (im.left()) {
             hero.tryToMoveLeft();
-            this._stationaryTimer.reset();
-            this._statBubble.init();
+            this.stationaryTimer.reset();
+            this.statBubble.init();
             //this.xOffs = Math.max(this.xOffs-inc, 0);
          } else if (im.right()) {
             hero.tryToMoveRight();
-            this._stationaryTimer.reset();
-            this._statBubble.init();
+            this.stationaryTimer.reset();
+            this.statBubble.init();
             //this.xOffs = Math.min(this.xOffs+inc, maxX);
          }
 
       }
 
-      this._showStats = this._stationaryTimer.update(delta);
+      this.showStats = this.stationaryTimer.update(delta);
 
       if (im.isKeyDown(Keys.KEY_SHIFT)) {
          if (im.isKeyDown(Keys.KEY_C, true)) {
@@ -229,12 +228,12 @@ export default class RoamingState extends _BaseState {
 
    private updateTalking(delta: number) {
 
-      const done: boolean = this._textBubble.handleInput();
-      if (/*this._textBubble.currentTextDone() && */this._textBubble.isOvernight()) {
+      const done: boolean = this.textBubble.handleInput();
+      if (/*this._textBubble.currentTextDone() && */this.textBubble.isOvernight()) {
          this.setSubstate('OVERNIGHT');
-         this._textBubble.clearOvernight();
-      } else if (this._showTextBubble) {
-         this._textBubble.update(delta);
+         this.textBubble.clearOvernight();
+      } else if (this.showTextBubble) {
+         this.textBubble.update(delta);
       }
 
       if (done) {
@@ -245,12 +244,12 @@ export default class RoamingState extends _BaseState {
 
    private updateOvernight(delta: number) {
 
-      if (this._overnightDelay) {
-         this._overnightDelay.update(delta);
+      if (this.overnightDelay) {
+         this.overnightDelay.update(delta);
       } else {
          this.game.audio.playMusic('overnight', false);
-         this._overnightDelay = new Delay({
-            millis: [RoamingState._OVERNIGHT_DARK_TIME],
+         this.overnightDelay = new Delay({
+            millis: [RoamingState.OVERNIGHT_DARK_TIME],
             callback: this.overnightOver.bind(this)
          });
       }
@@ -259,9 +258,7 @@ export default class RoamingState extends _BaseState {
    private updateWarpSelection(delta: number) {
 
        // Do check here to appease tsc of warpBubble being defined
-       if (!this.warpBubble) {
-           this.warpBubble = Cheats.createWarpBubble(this.game);
-       }
+       this.warpBubble ??= Cheats.createWarpBubble(this.game);
 
        this.warpBubble.update(delta);
        if (this.warpBubble.handleInput()) {
@@ -280,7 +277,7 @@ export default class RoamingState extends _BaseState {
 
    private overnightOver() {
       this.game.audio.playMusic('MUSIC_TOWN');
-      delete this._overnightDelay;
+      delete this.overnightDelay;
       this.setSubstate('TALKING');
 //         this._textBubble.nudgeConversation(); // User doesn't have to press a key
    }
@@ -306,7 +303,7 @@ export default class RoamingState extends _BaseState {
              map.doors.splice(index, 1);
              map.getLayer('collisionLayer').setData(door.row, door.col, 0);
          } else { // Should never happen
-             console.error('Door not found in map.doors! - ' + door);
+             console.error(`Door not found in map.doors! - ${door.toString()}`);
          }
          this.setSubstate('ROAMING');
          return true;
@@ -353,7 +350,7 @@ export default class RoamingState extends _BaseState {
           x -= this.game.getMapXOffs();
           let y: number = row * this.game.getTileSize();
           y -= this.game.getMapYOffs();
-          this.game.map.drawTile(ctx, x, y, 5, {} as any);
+          this.game.map.drawTile(ctx, x, y, 5, {} as TiledLayerData);
       });
 
       this.game.hero.render(ctx);
@@ -366,38 +363,38 @@ export default class RoamingState extends _BaseState {
          ctx.restore();
       }
 
-      if (this._substate === 'MENU' || this._substate === 'WARP_SELECTION') {
-         this._commandBubble.paint(ctx);
+      if (this.substate === 'MENU' || this.substate === 'WARP_SELECTION') {
+         this.commandBubble.paint(ctx);
       }
 
-      if (this._showTextBubble) {
-         this._textBubble.paint(ctx);
+      if (this.showTextBubble) {
+         this.textBubble.paint(ctx);
       }
 
-      if (this._substate !== 'ROAMING' || this._showStats) {
-         this._statBubble.paint(ctx);
+      if (this.substate !== 'ROAMING' || this.showStats) {
+         this.statBubble.paint(ctx);
       }
-      if (this._statusBubble) {
-         this._statusBubble.paint(ctx);
+      if (this.statusBubble) {
+         this.statusBubble.paint(ctx);
       }
-      if (this._itemBubble) {
-         this._itemBubble.paint(ctx);
+      if (this.itemBubble) {
+         this.itemBubble.paint(ctx);
       }
       if (this.warpBubble) {
          this.warpBubble.paint(ctx);
       }
 
-      if (this._overnightDelay) {
+      if (this.overnightDelay) {
          ctx.save();
-         const overnightRemaining: number = this._overnightDelay.getRemaining();
+         const overnightRemaining: number = this.overnightDelay.getRemaining();
          let alpha: number;
-         const fadeInTime: number = RoamingState._OVERNIGHT_FADE_TIME;
-         if (overnightRemaining > (RoamingState._OVERNIGHT_DARK_TIME - fadeInTime)) {
-            alpha = (RoamingState._OVERNIGHT_DARK_TIME - overnightRemaining) / fadeInTime;
-            ctx.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+         const fadeInTime: number = RoamingState.OVERNIGHT_FADE_TIME;
+         if (overnightRemaining > (RoamingState.OVERNIGHT_DARK_TIME - fadeInTime)) {
+            alpha = (RoamingState.OVERNIGHT_DARK_TIME - overnightRemaining) / fadeInTime;
+            ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
          } else if (overnightRemaining < fadeInTime) {
             alpha = overnightRemaining / fadeInTime;
-            ctx.fillStyle = 'rgba(0, 0, 0, ' + alpha + ')';
+            ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
          } else {
             ctx.fillStyle = 'rgba(0, 0, 0, 1)';
          }
@@ -407,18 +404,18 @@ export default class RoamingState extends _BaseState {
    }
 
    private setSubstate(substate: RoamingSubState) {
-      const prevSubstate: RoamingSubState = this._substate;
-      this._substate = substate;
+      const prevSubstate: RoamingSubState = this.substate;
+      this.substate = substate;
       if (substate === 'MENU') {
-         this._commandBubble.init();
+         this.commandBubble.init();
       } else if (substate === 'TALKING' &&
           prevSubstate !== 'OVERNIGHT') {
-         this._textBubble.init();
+         this.textBubble.init();
       }
    }
 
    showInventory() {
-      this._itemBubble = new ItemBubble();
+      this.itemBubble = new ItemBubble();
    }
 
    private showNoSpellsMessage() {
@@ -434,9 +431,11 @@ export default class RoamingState extends _BaseState {
    showOneLineConversation(voice: boolean, ...text: string[]) {
 
        const conversation: Conversation = new Conversation(voice);
-       text.forEach(line => conversation.addSegment(line));
-       this._showTextBubble = true;
-       this._textBubble.setConversation(conversation);
+       text.forEach(line => {
+           conversation.addSegment(line)
+       });
+       this.showTextBubble = true;
+       this.textBubble.setConversation(conversation);
        this.setSubstate('TALKING');
    }
 
@@ -453,7 +452,7 @@ export default class RoamingState extends _BaseState {
    }
 
    showStatus() {
-      this._statusBubble = new StatusBubble(this.game);
+      this.statusBubble = new StatusBubble(this.game);
    }
 
    showWarpBubble() {
@@ -462,7 +461,7 @@ export default class RoamingState extends _BaseState {
 
    startRoaming() {
       this.game.setNpcsPaused(false);
-      this._showTextBubble = false;
+      this.showTextBubble = false;
       this.setSubstate('ROAMING');
    }
 
@@ -486,8 +485,8 @@ export default class RoamingState extends _BaseState {
       } else {
          conversation.addSegment('There is no one there.');
       }
-      this._showTextBubble = true;
-      this._textBubble.setConversation(conversation);
+      this.showTextBubble = true;
+      this.textBubble.setConversation(conversation);
       this.setSubstate('TALKING');
    }
 

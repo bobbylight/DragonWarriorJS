@@ -22,7 +22,7 @@ export default class Inventory {
     }
 
     push(item: Item) {
-        const count = this.items.get(item) || 0;
+        const count = this.items.get(item) ?? 0;
         this.items.set(item, count + 1);
     }
 
@@ -33,7 +33,7 @@ export default class Inventory {
             return false;
         }
 
-        const count = this.items.get(item) || 0;
+        const count = this.items.get(item) ?? 0;
         if (count > 0) {
             if (count === 1) {
                 this.items.delete(item);
@@ -55,8 +55,6 @@ export default class Inventory {
     }
 
     toString(): string {
-        return '[Inventory: ' +
-            'size=' + this.items.size +
-            ']';
+        return `[Inventory: size=${this.items.size}]`;
     }
 }

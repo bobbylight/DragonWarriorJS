@@ -6,8 +6,8 @@ import { ItemCountPair } from './Inventory';
 
 export default class ItemBubble extends Bubble {
 
-    private readonly _choices: ItemCountPair[];
-    private _curChoice: number;
+    private readonly choices: ItemCountPair[];
+    private curChoice: number;
 
     constructor() {
 
@@ -21,12 +21,12 @@ export default class ItemBubble extends Bubble {
         const y: number = 3 * tileSize;
         super(undefined, x, y, w, h);
 
-        this._choices = game.party.getInventory().getItems();
-        this._curChoice = 0;
+        this.choices = game.party.getInventory().getItems();
+        this.curChoice = 0;
     }
 
     getSelectedItem(): Item | undefined {
-        return this._curChoice > -1 ? this._choices[this._curChoice].item : undefined;
+        return this.curChoice > -1 ? this.choices[this.curChoice].item : undefined;
     }
 
     handleInput() {
@@ -34,15 +34,15 @@ export default class ItemBubble extends Bubble {
         const im: InputManager = this.game.inputManager;
 
         if (this.game.cancelKeyPressed()) {
-            this._curChoice = -1;
+            this.curChoice = -1;
             return true;
         } else if (this.game.actionKeyPressed()) {
             return true;
         } else if (im.up(true)) {
-            this._curChoice = Math.max(0, this._curChoice - 1);
+            this.curChoice = Math.max(0, this.curChoice - 1);
             this.resetArrowTimer();
         } else if (im.down(true)) {
-            this._curChoice = Math.min(this._curChoice + 1, this._choices.length - 1);
+            this.curChoice = Math.min(this.curChoice + 1, this.choices.length - 1);
             this.resetArrowTimer();
         }
 
@@ -52,8 +52,8 @@ export default class ItemBubble extends Bubble {
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         ctx.fillStyle = 'rgb(255,255,255)';
-        this._choices.forEach((choice, index) => {
-            if (this._curChoice === index) {
+        this.choices.forEach((choice, index) => {
+            if (this.curChoice === index) {
                 this.drawArrow(this.x + Bubble.MARGIN, y);
             }
             this.game.drawString(choice.item.displayName, x, y);
@@ -62,8 +62,8 @@ export default class ItemBubble extends Bubble {
     }
 
     removeSelectedItem() {
-        if (this._curChoice > -1) {
-            this._choices.splice(this._curChoice, 1);
+        if (this.curChoice > -1) {
+            this.choices.splice(this.curChoice, 1);
         }
     }
 }
