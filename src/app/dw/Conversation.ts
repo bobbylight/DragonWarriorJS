@@ -9,8 +9,8 @@ export class Conversation {
 
     private readonly voice: boolean;
     private readonly segments: ConversationSegment[];
-    private segmentIndex: number;
-    item: Sellable;
+    private segmentIndex = 0
+    item?: Sellable;
 
     static readonly DONE: string = '_done';
     static readonly CHOICES_SEGMENT: string = 'choicesSegment';

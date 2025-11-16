@@ -50,7 +50,7 @@ export class Bubble {
      * Whether the arrow in this bubble, if any, should be painted.
      * Toggled by <code>arrowDelay</code>.
      */
-    private paintArrow: boolean;
+    private paintArrow = false;
 
     static readonly MARGIN: number = 10; // 5 * SCALE; TODO
 

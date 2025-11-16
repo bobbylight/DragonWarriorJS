@@ -24,7 +24,6 @@ export class PartyMember extends RoamingEntity {
     level: number;
     exp: number;
     strength: number;
-    spriteSheet: SpriteSheet;
     agility: number;
     weapon?: Weapon;
     armor?: Armor;
@@ -121,11 +120,6 @@ export class PartyMember extends RoamingEntity {
 
         const tileSize: number = this.game.getTileSize();
 
-        // TODO: Move SpriteSheets to AssetManager or somewhere else
-        if (!this.spriteSheet) {
-            this.spriteSheet = this.game.assets.get('hero');
-        }
-
         const ssRow = 0;
         let ssCol = 0;
         switch (this.direction) {
@@ -146,8 +140,8 @@ export class PartyMember extends RoamingEntity {
 
         const x: number = (this.game.canvas.width - tileSize) / 2;
         const y: number = (this.game.canvas.height - tileSize) / 2;
-        this.spriteSheet.drawSprite(ctx, x, y, ssRow, ssCol);
-        //   ctx.drawImage(img, imgX,imgY,tileSize,tileSize, x,y,tileSize,tileSize);
+        const spriteSheet: SpriteSheet = this.game.assets.get('hero');
+        spriteSheet.drawSprite(ctx, x, y, ssRow, ssCol);
 
     }
 
@@ -186,7 +180,7 @@ export class PartyMember extends RoamingEntity {
     possiblyHandleIntersectedObject(): boolean {
 
         // See if we're supposed to warp to another map
-        const warpLayer: TiledLayer = this.game.map.getLayer('warpLayer');
+        const warpLayer: TiledLayer = this.game.getMap().getLayer('warpLayer');
         const tileSize: number = this.game.getTileSize();
         const x: number = this.mapCol * tileSize;
         const y: number = this.mapRow * tileSize;

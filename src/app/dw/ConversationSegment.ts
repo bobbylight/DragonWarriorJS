@@ -77,6 +77,7 @@ export class ConversationSegment implements ConversationSegmentArgs {
                 const expression: string = text.substring(lbrace + 3, rbrace);
                 let expRemaining: string;
                 let itemName: string;
+                let itemCost: string;
                 switch (expression) {
                     case 'hero.name':
                         text = text.substring(0, lbrace) + this.game.hero.name + text.substring(rbrace + 1);
@@ -88,13 +89,14 @@ export class ConversationSegment implements ConversationSegmentArgs {
                         lbrace = text.indexOf('\\w{', lbrace + expRemaining.length);
                         break;
                     case 'item.name':
-                        itemName = this.parentConversation.item.displayName;
+                        itemName = this.parentConversation.item?.displayName ?? '(error)';
                         text = text.substring(0, lbrace) + itemName + text.substring(rbrace + 1);
                         lbrace = text.indexOf('\\w{', lbrace + itemName.length);
                         break;
                     case 'item.baseCost':
-                        text = `${text.substring(0, lbrace)}${this.parentConversation.item.baseCost}${text.substring(rbrace + 1)}`;
-                        lbrace = text.indexOf('\\w{', lbrace + this.parentConversation.item.baseCost.toString().length);
+                        itemCost = this.parentConversation.item?.baseCost.toString() ?? '(error)';
+                        text = `${text.substring(0, lbrace)}${itemCost}${text.substring(rbrace + 1)}`;
+                        lbrace = text.indexOf('\\w{', lbrace + itemCost.length);
                         break;
                     default:
                         console.error('Unknown token in NPC text: ' + expression);

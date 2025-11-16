@@ -13,25 +13,29 @@ import { EnemyAiResult } from './EnemyAI';
 export class BattleState extends BaseState {
 
     private readonly enemyName: string;
-    private commandExecuting: boolean;
+    private readonly enemy: Enemy;
+    private commandExecuting = false;
     private fightDelay?: Delay;
-    private textBubble: TextBubble;
-    private commandBubble: BattleCommandBubble;
-    private statBubble: StatBubble;
+    private readonly textBubble: TextBubble;
+    private readonly commandBubble: BattleCommandBubble;
+    private readonly statBubble: StatBubble;
     private enemyFlashDelay?: Delay;
-    private enemy: Enemy;
-    private flashMillis: number;
-    private enemiesDead: boolean;
+    private flashMillis = 0;
+    private enemiesDead = false;
     private enemyAttackDelay?: Delay;
-    private shake: boolean;
+    private shake = false;
     private enemyAttackShakeDelay?: Delay;
-    private shakeXOffs: number;
-    private shakeMillisCount: number;
-    private dead: boolean;
+    private shakeXOffs = 0;
+    private shakeMillisCount = 0;
+    private dead = false;
 
     constructor(game: DwGame, enemyName: string) {
         super(game);
         this.enemyName = enemyName;
+        this.enemy = new Enemy(game, game.getEnemy(this.enemyName)).prepare();
+        this.textBubble = new TextBubble(game);
+        this.statBubble = new StatBubble(game);
+        this.commandBubble = new BattleCommandBubble(game);
     }
 
     private backToRoaming() {
@@ -145,15 +149,11 @@ Thy gold increases by ${this.enemy.gp}.`;
 
     override enter(game: DwGame) {
 
-        super.enter(game); // Not defined in super, but in parent of super (?)
-        this.commandBubble = new BattleCommandBubble(game);
+        super.enter(game);
         this.commandExecuting = false;
-        this.textBubble = new TextBubble(game);
         const conversation: Conversation = new Conversation(game);
-        this.enemy = new Enemy(game, game.getEnemy(this.enemyName)).prepare();
         conversation.addSegment({text: 'A ' + this.enemy.name + ' draws near!  Command?'});
         this.textBubble.setConversation(conversation);
-        this.statBubble = new StatBubble(game);
     }
 
     item() {
@@ -268,9 +268,6 @@ Thy gold increases by ${this.enemy.gp}.`;
             this.enemyAttackDelay.update(delta);
         } else if (this.enemyAttackShakeDelay) {
             this.enemyAttackShakeDelay.update(delta);
-            if (!this.shakeMillisCount) {
-                this.shakeMillisCount = 0;
-            }
             this.shakeMillisCount += delta;
             this.shakeXOffs = (this.shakeMillisCount % 100) > 50 ? 4 : -4;
             console.log(delta);
