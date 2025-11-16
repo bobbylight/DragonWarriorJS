@@ -38,8 +38,12 @@ export const merchantConversationTemplate =
             {
                 id: Conversation.PURCHASE_SEGMENT,
                 action: () => {
-                    game.party.addInventoryItem(conversation.item as Item);
-                    game.party.gold -= conversation.item.baseCost;
+                    if (conversation.item) {
+                        game.party.addInventoryItem(conversation.item as Item);
+                        game.party.gold -= conversation.item.baseCost;
+                    } else {
+                        throw new Error('No item specified in conversation!');
+                    }
                 },
                 text: 'I thank thee!',
                 next: Conversation.SOMETHING_ELSE_SEGMENT,

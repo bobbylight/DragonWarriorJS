@@ -10,6 +10,7 @@ import {
     TiledObject,
     Utils,
 } from 'gtp';
+import {GameArgs} from "gtp/lib/gtp/Game";
 import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
 import { Hero } from './Hero';
 import { Shield } from './Shield';
@@ -34,7 +35,7 @@ import {Overworld} from './mapLogic/overworld';
 import {TantegelCastle} from './mapLogic/tantegelCastle';
 import { MapLogic } from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
-import { DwGameState, createDefaultGameState } from './DwGameState';
+import { createDefaultGameState } from './DwGameState';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
 import {BaseState} from "./BaseState";
@@ -44,32 +45,33 @@ export type TiledMapMap = Record<string, DwMap>;
 
 export class DwGame extends Game {
 
-    map: DwMap;
-    maps: TiledMapMap;
+    private map?: DwMap;
+    readonly maps: TiledMapMap = {};
     hero: Hero;
     party: Party;
-    npcs: Npc[];
-    gameState: DwGameState;
-    private bumpSoundDelay: number;
-    private mapLogics: Map<string, MapLogic>;
-    private randomEncounters: boolean;
-    private torch: boolean;
-    inside: boolean;
-    newRow: number;
-    newCol: number;
-    npcsPaused: boolean;
-    private cameraDx: number;
-    private cameraDy: number;
+    npcs: Npc[] = [];
+    private readonly gameState = createDefaultGameState();
+    private bumpSoundDelay = 0;
+    private readonly mapLogics = new Map<string, MapLogic>();
+    private randomEncounters = true;
+    private torch = false;
+    inside = false;
+    npcsPaused = false;
+    private cameraDx = 0;
+    private cameraDy = 0;
+
+    constructor(args: GameArgs) {
+        super(args);
+
+        // Create and initialize party
+        this.hero = new Hero(this, { name: 'Erdrick' });
+        this.party = new Party(this);
+        this.party.addMember(this.hero);
+    }
 
     override start() {
         super.start();
-        this.init();
-    }
 
-    private init() {
-
-        this.createPartyAndHero();
-        this.gameState = createDefaultGameState();
         this.npcs = [];
         this.bumpSoundDelay = 0;
         this.setCameraOffset(0, 0);
@@ -77,7 +79,6 @@ export class DwGame extends Game {
         this.randomEncounters = true;
         this.torch = false;
 
-        this.mapLogics = new Map<string, MapLogic>();
         this.mapLogics.set('Brecconary', new Brecconary());
         this.mapLogics.set('erdricksCave1', new ErdricksCave1());
         this.mapLogics.set('erdricksCave2', new ErdricksCave2());
@@ -98,12 +99,6 @@ export class DwGame extends Game {
 
     cancelKeyPressed() {
         return this.inputManager.isKeyDown(Keys.KEY_X, true);
-    }
-
-    private createPartyAndHero() {
-        this.hero = new Hero(this, { name: 'Erdrick' });
-        this.party = new Party(this);
-        this.party.addMember(this.hero);
     }
 
     override update() {
@@ -176,7 +171,7 @@ export class DwGame extends Game {
         //         if (this._drawMapCount === 10) {
         //            this.timer.start('drawMap');
         //         }
-        this.map.draw(ctx, centerRow, centerCol, dx, dy);
+        this.getMap().draw(ctx, centerRow, centerCol, dx, dy);
         //         if (this._drawMapCount === 10) {
         //            this.timer.endAndLog('drawMap');
         //            this._drawMapCount = 0;
@@ -195,8 +190,15 @@ export class DwGame extends Game {
         return enemyDatas[name];
     }
 
+    getMap(): DwMap {
+        if (!this.map) { // This is a logic error
+            throw new Error('No map loaded!');
+        }
+        return this.map;
+    }
+
     getMapLogic(): MapLogic | undefined {
-        let logicFile: string = this.map.getProperty('logicFile');
+        let logicFile: string = this.getMap().getProperty('logicFile');
         logicFile = logicFile.charAt(0).toUpperCase() + logicFile.substring(1);
         console.log(logicFile);
         return this.mapLogics.get(logicFile);
@@ -228,7 +230,7 @@ export class DwGame extends Game {
      * Returns whether the tile at a given location has a "roof" layer tile.
      */
     hasRoofTile(row: number, col: number): boolean {
-        const roofLayer: TiledLayer | undefined = this.map.getLayerIfExists('tileLayer2');
+        const roofLayer: TiledLayer | undefined = this.getMap().getLayerIfExists('tileLayer2');
         return roofLayer ? roofLayer.getData(row, col) > 0 : false;
     }
 
@@ -236,8 +238,6 @@ export class DwGame extends Game {
      * Starts loading a new map.  Fades out of the old one and into the new one.
      */
     loadMap(mapName: string, newRow: number, newCol: number, dir?: number) {
-        this.newRow = newRow;
-        this.newCol = newCol;
         this.audio.playSound('stairs');
         const updatePlayer: () => void = () => {
             this.hero.setMapLocation(-1, -1); // Free the location he was in the map
@@ -257,11 +257,12 @@ export class DwGame extends Game {
     }
 
     setMap(assetName: string) {
-        const prevMap: DwMap = this.map;
+        const prevMap: DwMap | undefined = this.map;
         console.log('Setting map to: ' + assetName);
         this.map = this.maps[ assetName ];
         this.resetMap(this.map);
-        if (prevMap && prevMap.getProperty('requiresTorch', false) !== this.map.getProperty('requiresTorch', false)) {
+        if (prevMap && prevMap.getProperty('requiresTorch', false) !==
+            this.getMap().getProperty('requiresTorch', false)) {
             // You blow your torch out leaving a dungeon, but it stays lit
             // when going into another map in the same dungeon that is also dark
             this.setUsingTorch(false);
@@ -279,10 +280,6 @@ export class DwGame extends Game {
             return imagePath.replace('../', 'res/');
         };
 
-        if (!this.maps) {
-            this.maps = {};
-        }
-
         const mapName: string = asset.substring(0, asset.indexOf('.')); // Remove trailing '.json'
         const map: DwMap = new DwMap(mapName, data, {
             imagePathModifier: imagePathModifier,
@@ -299,45 +296,35 @@ export class DwGame extends Game {
 
     private adjustGameMap(map: DwMap) {
 
-        let i: number;
-        let npc: Npc;
-        let door: Door;
-
         // Hide layers that shouldn't be shown (why aren't they marked as hidden
         // in Tiled?)
-        for (i = 0; i < map.getLayerCount(); i++) {
+        for (let i = 0; i < map.getLayerCount(); i++) {
             const layer: TiledLayer = map.getLayerByIndex(i);
             if (layer.name !== 'tileLayer') {
                 layer.visible = false;
             }
         }
 
-        // We special-case the NPC layer
-        const newNpcs: Npc[] = [];
-        const newDoors: Door[] = [];
-        const newTalkAcrosses: Record<LocationString, boolean> = {};
-        map.chests = new Map<LocationString, Chest>();
+        map.npcs.length = 0;
+        map.doors.length = 0;
+        map.talkAcrosses.clear();
+        map.chests.clear();
         const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
         if (temp?.isObjectGroup()) {
 
             const npcLayer: TiledLayer = temp;
 
-            for (i = 0; i < npcLayer.objects!.length; i++) {
+            for (const obj of npcLayer.objects!) {
                 let chest: Chest;
-                const obj: TiledObject = npcLayer.objects![i];
                 switch (obj.type) {
                     case 'npc':
-                        npc = this.parseNpc(obj);
-                        npc.setNpcIndex(newNpcs.length + 1);
-                        newNpcs.push(npc);
+                        map.npcs.push(this.parseNpc(obj));
                         break;
                     case 'door':
-                        door = this.parseDoor(obj);
-                        //door.setDoorIndex(newDoors.length + 1);
-                        newDoors.push(door);
+                        map.doors.push(this.parseDoor(obj));
                         break;
                     case 'talkAcross':
-                        newTalkAcrosses[ this.parseTalkAcrossKey(obj) ] = true;
+                        map.talkAcrosses.set(this.parseTalkAcrossKey(obj), true);
                         break;
                     case 'chest':
                         chest = this.parseChestContents(obj);
@@ -353,13 +340,10 @@ export class DwGame extends Game {
 
         }
 
-        map.npcs = newNpcs;
         map.npcs.forEach((npc: Npc) => {
             map.getLayer('collisionLayer').setData(npc.mapRow, npc.mapCol, 1);
         });
-        map.talkAcrosses = newTalkAcrosses;
 
-        map.doors = newDoors;
         // Don't need to set collision as it is already set in the map.
         // Should we require that?
 
@@ -484,8 +468,8 @@ export class DwGame extends Game {
 
     setInsideOutside(inside: boolean) {
         this.inside = inside;
-        this.map.getLayer('tileLayer').visible = !this.inside;
-        this.map.getLayer('tileLayer2').visible = this.inside;
+        this.getMap().getLayer('tileLayer').visible = !this.inside;
+        this.getMap().getLayer('tileLayer2').visible = this.inside;
     }
 
     getDoorHeroIsFacing(): Door | undefined {
@@ -506,7 +490,7 @@ export class DwGame extends Game {
                 break;
         }
         console.log(`Checking for door at: ${row}, ${col}`);
-        return this.map.doors.find(door => door.isAt(row, col));
+        return this.getMap().doors.find(door => door.isAt(row, col));
     }
 
     getNpcHeroIsFacing(): Npc | undefined {
@@ -531,11 +515,11 @@ export class DwGame extends Game {
             }
         } while (this.getShouldTalkAcross(row, col));
 
-        return this.map.npcs.find(npc => npc.isAt(row, col));
+        return this.getMap().npcs.find(npc => npc.isAt(row, col));
     }
 
     private getShouldTalkAcross(row: number, col: number): boolean {
-        return this.map.talkAcrosses[ toLocationString(row, col) ];
+        return !!this.getMap().talkAcrosses.get(toLocationString(row, col));
     }
 
     getUsingTorch(): boolean {
@@ -566,7 +550,7 @@ export class DwGame extends Game {
     }
 
     getCollisionLayer(): TiledLayer {
-        return this.map.getLayer('collisionLayer');
+        return this.getMap().getLayer('collisionLayer');
     }
 
     bump() {
@@ -577,8 +561,8 @@ export class DwGame extends Game {
     }
 
     removeChest(chest: Chest) {
-        this.gameState.mapStates[this.map.name].openedChests.push(chest.id);
-        this.map.removeChest(chest);
+        this.gameState.mapStates[this.getMap().name].openedChests.push(chest.id);
+        this.getMap().removeChest(chest);
     }
 
     setHeroStats(hp: number | null, maxHp: number | null, mp?: number, maxMp?: number) {
@@ -620,7 +604,7 @@ export class DwGame extends Game {
 
     startRandomEncounter(): boolean {
         if (this.randomEncounters) {
-            const enemyTerritoryLayer: TiledLayer | undefined = this.map.layersByName.get('enemyTerritoryLayer');
+            const enemyTerritoryLayer: TiledLayer | undefined = this.getMap().layersByName.get('enemyTerritoryLayer');
             if (enemyTerritoryLayer) {
                 let territory: number = enemyTerritoryLayer.getData(this.hero.mapRow, this.hero.mapCol);
                 if (territory > 0) {
@@ -663,7 +647,7 @@ export class DwGame extends Game {
     }
 
     toggleShowTerritoryLayer() {
-        const layer: TiledLayer = this.map.getLayer('enemyTerritoryLayer');
+        const layer: TiledLayer = this.getMap().getLayer('enemyTerritoryLayer');
         layer.visible = !layer.visible;
         this.setStatusMessage(layer.visible ?
             'Territory layer showing' : 'Territory layer hidden');

@@ -54,8 +54,6 @@ export class RoamingState extends BaseState {
         this.statBubble = new StatBubble(this.game);
         this.stationaryTimer = new Delay({millis: 1000});
 
-        this.setSubstate('ROAMING');
-
         this.updateMethods = new Map<RoamingSubState, UpdateFunction>();
         this.updateMethods.set('ROAMING', this.updateRoaming.bind(this));
         this.updateMethods.set('MENU', this.updateMenu.bind(this));
@@ -65,6 +63,8 @@ export class RoamingState extends BaseState {
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
+        this.substate = 'ROAMING'; // Can't call setState to appease tsc
+        this.showStats = false;
     }
 
     search() {
@@ -72,7 +72,7 @@ export class RoamingState extends BaseState {
         const messages: string[] = [ '\\w{hero.name} searched the ground all about.' ];
 
         const heroPos: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
-        const chest: boolean = this.game.map.chests.has(heroPos);
+        const chest: boolean = this.game.getMap().chests.has(heroPos);
 
         // In this game, you must "TAKE" treasure, not "SEARCH" for it.
         if (chest) {
@@ -87,7 +87,7 @@ export class RoamingState extends BaseState {
     take() {
 
         const location: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
-        const chest: Chest | undefined = this.game.map.chests.get(location);
+        const chest: Chest | undefined = this.game.getMap().chests.get(location);
 
         this.showTextBubble = true;
         this.textBubble.setConversation(getChestConversation(this, chest));
@@ -218,7 +218,7 @@ export class RoamingState extends BaseState {
             }
         }
 
-        this.game.map.npcs.forEach((npc: Npc) => {
+        this.game.getMap().npcs.forEach((npc: Npc) => {
             npc.update(delta);
         });
 
@@ -293,7 +293,7 @@ export class RoamingState extends BaseState {
             }
 
             this.game.audio.playSound('door');
-            const map: DwMap = this.game.map;
+            const map: DwMap = this.game.getMap();
             map.getLayer('tileLayer').setData(door.row, door.col, door.replacementTileIndex);
             const index: number = map.doors.indexOf(door);
             if (index > -1) {
@@ -322,7 +322,7 @@ export class RoamingState extends BaseState {
 
     override render(ctx: CanvasRenderingContext2D) {
 
-        if (this.game.map.propertiesByName.get('requiresTorch')) {
+        if (this.game.getMap().propertiesByName.get('requiresTorch')) {
             this.game.clearScreen('#000000');
             ctx.save();
             const clipRadius: number = this.game.getUsingTorch() ? this.game.getTileSize() * 3 / 2 :
@@ -339,7 +339,7 @@ export class RoamingState extends BaseState {
         this.game.drawMap(ctx);
 
         // TODO: Be more efficient here
-        this.game.map.chests.forEach((chest: Chest) => {
+        this.game.getMap().chests.forEach((chest: Chest) => {
 
             const { row, col } = toRowAndColumn(chest.location);
 
@@ -347,16 +347,16 @@ export class RoamingState extends BaseState {
             x -= this.game.getMapXOffs();
             let y: number = row * this.game.getTileSize();
             y -= this.game.getMapYOffs();
-            this.game.map.drawTile(ctx, x, y, 5, {} as TiledLayerData);
+            this.game.getMap().drawTile(ctx, x, y, 5, {} as TiledLayerData);
         });
 
         this.game.hero.render(ctx);
 
-        this.game.map.npcs.forEach((npc: Npc) => {
+        this.game.getMap().npcs.forEach((npc: Npc) => {
             this.possiblyRenderNpc(npc, ctx);
         });
 
-        if (this.game.map.propertiesByName.get('requiresTorch')) {
+        if (this.game.getMap().propertiesByName.get('requiresTorch')) {
             ctx.restore();
         }
 

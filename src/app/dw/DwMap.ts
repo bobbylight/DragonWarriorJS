@@ -8,13 +8,17 @@ import { LocationString } from './LocationString';
 
 export class DwMap extends TiledMap {
 
-    npcs: Npc[];
-    talkAcrosses: Record<string, boolean>;
-    doors: Door[];
-    chests: Map<LocationString, Chest>;
+    readonly npcs: Npc[];
+    readonly talkAcrosses: Map<LocationString, boolean>;
+    readonly doors: Door[];
+    readonly chests: Map<LocationString, Chest>;
 
     constructor(public name: string, data: TiledMapData, args: TiledMapArgs) {
         super(data, args);
+        this.npcs = [];
+        this.talkAcrosses = new Map();
+        this.doors = [];
+        this.chests = new Map();
     }
 
     removeChest(chest: Chest) {

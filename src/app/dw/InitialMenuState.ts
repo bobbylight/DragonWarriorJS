@@ -5,13 +5,19 @@ import { ChoiceBubble } from './ChoiceBubble';
 type Substate = 'mainMenu' | 'saveSelect';
 
 /**
- * The initial menu shown to the user, after pressing Enter on the title screen.
+ * The initial menu shown to the user after pressing Enter on the title screen.
  */
 export class InitialMenuState extends BaseState {
 
-    private menuBubble: ChoiceBubble<string>;
+    private readonly menuBubble: ChoiceBubble<string>;
     private saveSelectBubble: ChoiceBubble<string> | undefined;
     private substate: Substate;
+
+    constructor(game: DwGame) {
+        super(game);
+        this.menuBubble = this.createMenuBubble();
+        this.substate = 'mainMenu';
+    }
 
     private createMenuBubble(): ChoiceBubble<string> {
 
@@ -55,7 +61,6 @@ export class InitialMenuState extends BaseState {
 
     override enter(game: DwGame) {
         super.enter(game);
-        this.menuBubble = this.createMenuBubble();
         this.substate = 'mainMenu';
         game.audio.playMusic('MUSIC_TOWN');
     }

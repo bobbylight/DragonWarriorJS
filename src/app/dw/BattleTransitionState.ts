@@ -9,8 +9,8 @@ export class BattleTransitionState extends BaseState {
 
     private readonly enteringState: State<DwGame>;
     private readonly enteringStateScreenshot: HTMLCanvasElement;
-    state: number;
-    tick: number;
+    state = 0;
+    tick = 0;
 
     private static readonly TICK_COUNT: number = 25;
 

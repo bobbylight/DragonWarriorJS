@@ -5,13 +5,12 @@ import { InitialMenuState } from './InitialMenuState';
 
 export class TitleScreenState extends BaseState {
 
-    assetsLoaded: boolean;
-    private delay: Delay;
+    private delay?: Delay;
     private blink: boolean;
 
     constructor(game: DwGame) {
         super(game);
-        this.assetsLoaded = false;
+        this.blink = true;
     }
 
     override enter(game: DwGame) {
@@ -35,7 +34,7 @@ export class TitleScreenState extends BaseState {
 
         this.handleDefaultKeys();
 
-        if (this.delay.update(delta)) {
+        if (this.delay?.update(delta)) {
             this.delay.reset();
             this.blink = !this.blink;
         }

@@ -16,11 +16,10 @@ export class Npc extends RoamingEntity {
 
     type: NpcType;
     wanders: boolean;
-    npcIndex: number;
     private readonly origMapRow: number;
     private readonly origMapCol: number;
     private readonly origDir: number;
-    private readonly stepDelay: Delay;
+    private readonly stepDelay?: Delay;
 
     private readonly dirFuncs: DirFunctionType[];
 
@@ -87,13 +86,7 @@ export class Npc extends RoamingEntity {
     reset() {
         this.setMapLocation(this.origMapRow, this.origMapCol);
         this.direction = this.origDir;
-        if (this.stepDelay) {
-            this.stepDelay.reset();
-        }
-    }
-
-    setNpcIndex(index: number) {
-        this.npcIndex = index;
+        this.stepDelay?.reset();
     }
 
     private step() {

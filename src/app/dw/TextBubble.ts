@@ -40,6 +40,15 @@ export class TextBubble extends Bubble {
         const height: number = game.getTileSize() * 5;
         const y: number = game.getHeight() - tileSize - height;
         super(game, undefined, x, y, width, height);
+
+        this.conversation = new Conversation(game);
+        this.text = '';
+        this.curLine = 0;
+        this.lines = [];
+        this.delays = [];
+        this.curOffs = -1;
+        this.curCharMillis = 0;
+        this.textDone = true;
         this.doneCallbacks = [];
     }
 

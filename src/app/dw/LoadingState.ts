@@ -16,8 +16,8 @@ export interface EquipmentData {
 export class LoadingState extends BaseState {
 
     assetsLoaded: boolean;
-    private textX: number;
-    private textY: number;
+    private textX?: number;
+    private textY?: number;
 
     constructor(game: DwGame) {
         super(game);
@@ -221,7 +221,7 @@ export class LoadingState extends BaseState {
         const str = 'Loading...';
         ctx.font = 'bold 30px Sans Serif';
 
-        if (!this.textX) {
+        if (!this.textX || !this.textY) { // appease tsc
             const textMetrics: TextMetrics = ctx.measureText(str);
             this.textX = (game.getWidth() - textMetrics.width) / 2;
             const fontDescentGuess = 4;
