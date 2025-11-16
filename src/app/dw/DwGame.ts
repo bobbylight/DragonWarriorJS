@@ -40,6 +40,7 @@ import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
 import {BaseState} from "./BaseState";
 import {EnemyData} from "./Enemy";
+import {RoamingEntityRange} from "./RoamingEntity";
 
 export type TiledMapMap = Record<string, DwMap>;
 
@@ -417,13 +418,19 @@ export class DwGame extends Game {
         });
     }
 
-    private parseRange(rangeStr?: string): number[] | undefined {
-        let range: number[] | undefined;
+    private parseRange(rangeStr?: string): RoamingEntityRange | undefined {
+        let range: RoamingEntityRange | undefined;
         if (rangeStr) {
             const temp: string[] = rangeStr.split(/,\s*/);
-            range = temp.map((value: string) => {
-                return parseInt(value, 10);
-            });
+            if (temp.length !== 4) {
+                throw new Error(`Invalid range string: ${rangeStr}`);
+            }
+            range = {
+                minCol: parseInt(temp[0], 10),
+                minRow: parseInt(temp[1], 10),
+                maxCol: parseInt(temp[2], 10),
+                maxRow: parseInt(temp[3], 10),
+            };
         }
         return range;
     }
