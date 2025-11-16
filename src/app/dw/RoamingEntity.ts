@@ -3,12 +3,19 @@ import { Direction } from './Direction';
 import { DwGame } from './DwGame';
 import { Hero } from './Hero';
 
+export interface RoamingEntityRange {
+    minRow: number;
+    maxRow: number;
+    minCol: number;
+    maxCol: number;
+}
+
 export interface RoamingEntityArgs {
     name: string;
     direction?: number;
     mapRow?: number;
     mapCol?: number;
-    range?: number[];
+    range?: RoamingEntityRange;
 }
 
 export class RoamingEntity {
@@ -20,7 +27,7 @@ export class RoamingEntity {
     mapCol: number;
     xOffs: number;
     yOffs: number;
-    private readonly range?: number[];
+    private readonly range?: RoamingEntityRange;
     protected stepTick: number;
     private moveInc: number;
 
@@ -86,8 +93,8 @@ export class RoamingEntity {
      */
     private isOutOfRange(row: number, col: number) {
         if (this.range) {
-            return col < this.range[0] || col > this.range[2] ||
-                row < this.range[1] || row > this.range[3];
+            return col < this.range.minCol || col > this.range.maxCol ||
+                row < this.range.minRow || row > this.range.maxRow;
         }
         return false;
     }
