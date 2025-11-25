@@ -2,6 +2,8 @@ import {
     BitmapFont,
     FadeOutInState,
     Game,
+    GameArgs,
+    getProperty,
     InputManager,
     Keys,
     TiledImagePathModifier,
@@ -10,8 +12,6 @@ import {
     TiledObject,
     Utils,
 } from 'gtp';
-import {GameArgs} from "gtp/lib/gtp/Game";
-import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
 import { Hero } from './Hero';
 import { Shield } from './Shield';
 import { Npc } from './Npc';
@@ -315,7 +315,7 @@ export class DwGame extends Game {
 
             const npcLayer: TiledLayer = temp;
 
-            for (const obj of npcLayer.objects!) {
+            for (const obj of npcLayer.objects) {
                 let chest: Chest;
                 switch (obj.type) {
                     case 'npc':

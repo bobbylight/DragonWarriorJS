@@ -1,5 +1,4 @@
-import {Delay, InputManager, Keys} from 'gtp';
-import {TiledLayerData} from "gtp/lib/tiled/TiledLayerData";
+import {Delay, InputManager, Keys, TiledLayerData} from 'gtp';
 import { BaseState } from './BaseState';
 import { DwGame } from './DwGame';
 import { CommandBubble } from './CommandBubble';

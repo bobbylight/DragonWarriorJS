@@ -1,5 +1,4 @@
-import { TiledObject } from 'gtp';
-import { getProperty } from 'gtp/lib/tiled/TiledPropertiesContainer';
+import { getProperty, TiledObject } from 'gtp';
 import { PartyMember } from './PartyMember';
 import { Direction } from './Direction';
 

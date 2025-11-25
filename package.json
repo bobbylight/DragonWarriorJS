@@ -22,9 +22,9 @@
     "rimraf": "6.1.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.4",
-    "vite": "7.2.2"
+    "vite": "7.2.4"
   },
   "dependencies": {
-    "gtp": "3.0.1"
+    "gtp": "4.1.0"
   }
 }
