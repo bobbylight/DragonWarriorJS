@@ -1,6 +1,4 @@
-import { TiledMap } from 'gtp';
-import { TiledMapData } from 'gtp/lib/tiled/TiledMapData';
-import { TiledMapArgs } from 'gtp/lib/tiled/TiledMapArgs';
+import { TiledMap, TiledMapArgs, TiledMapData } from 'gtp';
 import { Npc } from './Npc';
 import { Door } from './Door';
 import { Chest } from './Chest';

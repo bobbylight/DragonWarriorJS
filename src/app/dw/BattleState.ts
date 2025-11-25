@@ -116,7 +116,7 @@ Thy gold increases by ${this.enemy.gp}.`;
         }
     }
 
-    private enemyAttackCallback(result: EnemyAiResult) {
+    private enemyAttackCallback() {
         delete this.enemyAttackDelay;
         this.shake = true;
         this.game.audio.playSound('receiveDamage');
@@ -127,7 +127,7 @@ Thy gold increases by ${this.enemy.gp}.`;
 
     }
 
-    private enemyAttackShakeCallback(result: EnemyAiResult) {
+    private enemyAttackShakeCallback() {
 
         delete this.enemyAttackShakeDelay;
         this.shake = false;

@@ -19,12 +19,26 @@
 
     "target": "es6",
     "module": "es2020",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
 
-    "sourceMap": true
+    "sourceMap": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
   },
 
   "exclude": [
+    "node_modules",
     "**/*.tsx"
   ]
 }
