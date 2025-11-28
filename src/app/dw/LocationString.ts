@@ -2,7 +2,7 @@ export type LocationString = `${number},${number}`;
 
 export const toLocationString = (row: number, col: number): LocationString => {
     return `${row},${col}`;
-}
+};
 
 export const toRowAndColumn = (location: LocationString): { row: number, col: number } => {
     const values: string[] = location.split(',');

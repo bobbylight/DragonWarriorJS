@@ -252,8 +252,8 @@ export class DwGame extends Game {
     }
 
     private resetMap(map: DwMap) {
-        map.npcs.forEach(npc => {
-            npc.reset()
+        map.npcs.forEach((npc) => {
+            npc.reset();
         });
     }
 
@@ -497,7 +497,7 @@ export class DwGame extends Game {
                 break;
         }
         console.log(`Checking for door at: ${row}, ${col}`);
-        return this.getMap().doors.find(door => door.isAt(row, col));
+        return this.getMap().doors.find((door) => door.isAt(row, col));
     }
 
     getNpcHeroIsFacing(): Npc | undefined {
@@ -522,7 +522,7 @@ export class DwGame extends Game {
             }
         } while (this.getShouldTalkAcross(row, col));
 
-        return this.getMap().npcs.find(npc => npc.isAt(row, col));
+        return this.getMap().npcs.find((npc) => npc.isAt(row, col));
     }
 
     private getShouldTalkAcross(row: number, col: number): boolean {
@@ -606,7 +606,7 @@ export class DwGame extends Game {
 
     stringWidth(str?: string): number {
         const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
-        return str ? (str.length * font.cellW) : 0;
+        return str ? str.length * font.cellW : 0;
     }
 
     startRandomEncounter(): boolean {
