@@ -58,5 +58,5 @@ export const TORCH: Item = new Item('Torch', {
 const ITEMS: Item[] = [ HERB, KEY, TORCH ];
 
 export const getItemByName = (name: string): Item | undefined => {
-    return ITEMS.find(item => name === item.name);
+    return ITEMS.find((item) => name === item.name);
 };

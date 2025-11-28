@@ -9,7 +9,7 @@ export class Conversation {
 
     private readonly voice: boolean;
     private readonly segments: ConversationSegment[];
-    private segmentIndex = 0
+    private segmentIndex = 0;
     item?: Sellable;
 
     static readonly DONE: string = '_done';
@@ -100,7 +100,7 @@ export class Conversation {
     }
 
     private findIndexById(id: string): number {
-        const index: number = this.segments.findIndex(segment => id === segment.id);
+        const index: number = this.segments.findIndex((segment) => id === segment.id);
         return index !== -1 ? index : this.segments.length;
     }
 

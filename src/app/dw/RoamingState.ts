@@ -314,7 +314,7 @@ export class RoamingState extends BaseState {
         const row: number = npc.mapRow;
         const col: number = npc.mapCol;
         const underRoof: boolean = this.game.hasRoofTile(row, col);
-        if ((underRoof && this.game.inside) || (!underRoof && !this.game.inside)) {
+        if (underRoof && this.game.inside || !underRoof && !this.game.inside) {
             npc.render(ctx);
         }
     }
@@ -385,7 +385,7 @@ export class RoamingState extends BaseState {
             const overnightRemaining: number = this.overnightDelay.getRemaining();
             let alpha: number;
             const fadeInTime: number = RoamingState.OVERNIGHT_FADE_TIME;
-            if (overnightRemaining > (RoamingState.OVERNIGHT_DARK_TIME - fadeInTime)) {
+            if (overnightRemaining > RoamingState.OVERNIGHT_DARK_TIME - fadeInTime) {
                 alpha = (RoamingState.OVERNIGHT_DARK_TIME - overnightRemaining) / fadeInTime;
                 ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
             } else if (overnightRemaining < fadeInTime) {
@@ -427,8 +427,8 @@ export class RoamingState extends BaseState {
     showOneLineConversation(voice: boolean, ...text: string[]) {
 
         const conversation: Conversation = new Conversation(this.game, voice);
-        text.forEach(line => {
-            conversation.addSegment(line)
+        text.forEach((line) => {
+            conversation.addSegment(line);
         });
         this.showTextBubble = true;
         this.textBubble.setConversation(conversation);

@@ -34,7 +34,7 @@ export class InitialMenuState extends BaseState {
             'BEGIN A NEW QUEST',
             'COPY A QUEST',
             'ERASE A QUEST',
-        ]
+        ];
 
         return new ChoiceBubble(this.game, x, y, w, h, choices);
     }

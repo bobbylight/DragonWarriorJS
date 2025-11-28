@@ -29,4 +29,4 @@ export const getNpcType = (type: string): NpcType => {
         default:
             return NpcType.MERCHANT_GREEN;
     }
-}
+};

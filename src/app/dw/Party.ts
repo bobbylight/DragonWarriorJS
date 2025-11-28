@@ -83,7 +83,7 @@ export class Party {
      *         is no party member by that name.
      */
     getMember(name: string): PartyMember | undefined {
-        return this.members.find(member => name === member.name);
+        return this.members.find((member) => name === member.name);
     }
 
     /**

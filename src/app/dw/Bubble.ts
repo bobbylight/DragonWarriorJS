@@ -78,8 +78,8 @@ export class Bubble {
         text = Bubble.removeSpecialEscapes(text, result.delays);
         const lineList: string[] = text.split('\n');
 
-        lineList.forEach(line => {
-            this.breakApartLine(line, w, result)
+        lineList.forEach((line) => {
+            this.breakApartLine(line, w, result);
         });
         return result;
     }
@@ -103,7 +103,7 @@ export class Bubble {
         let lastOffs = 0;
         while ((index = text.indexOf('\\d', lastOffs)) > -1) {
 
-            if ((index + 2) < text.length && text.charAt(index + 2) === '{') {
+            if (index + 2 < text.length && text.charAt(index + 2) === '{') {
                 const end: number = text.indexOf('}', index + 3);
                 if (end > -1) {
                     delay = parseInt(text.substring(index + 3, end), 10);
@@ -180,7 +180,7 @@ export class Bubble {
         const scale: number = this.game.scale;
 
         // Top inset + border thickness + 5 pixels of spacing
-        return (1 + 2) * scale + (5 * scale);
+        return (1 + 2) * scale + 5 * scale;
         //return this.title ? this.game.getTileSize() : (8 * this.game.scale);
     }
 
@@ -242,7 +242,7 @@ export class Bubble {
         const lineSize: number = 2 * scale;
 
         // top
-        let x: number = this.x + insets + (lineSize / 2);
+        let x: number = this.x + insets + lineSize / 2;
         let y: number = this.y + insets;
         ctx.fillRect(x, y, this.w - 2 * lineSize, lineSize);
 

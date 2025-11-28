@@ -104,7 +104,7 @@ Thy gold increases by ${this.enemy.gp}.`;
                 });
             });
         } else { // 'magic'
-            const text = `The ${this.enemy.name} chants the spell of ${result.spellName}.`
+            const text = `The ${this.enemy.name} chants the spell of ${result.spellName}.`;
             // TODO: Should conversations auto-wait for afterSounds to complete?
             this.textBubble.addToConversation({ text, afterSound: 'castSpell' }, true);
             this.textBubble.onDone(() => {
@@ -269,7 +269,7 @@ Thy gold increases by ${this.enemy.gp}.`;
         } else if (this.enemyAttackShakeDelay) {
             this.enemyAttackShakeDelay.update(delta);
             this.shakeMillisCount += delta;
-            this.shakeXOffs = (this.shakeMillisCount % 100) > 50 ? 4 : -4;
+            this.shakeXOffs = this.shakeMillisCount % 100 > 50 ? 4 : -4;
             console.log(delta);
         }
 

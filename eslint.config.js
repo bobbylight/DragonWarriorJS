@@ -37,11 +37,19 @@ export default [
         rules: {
             "no-unused-vars": 0,
             "@stylistic/array-bracket-spacing": ["error", "always"],
-            "@stylistic/brace-style": ["error" ],
+            "@stylistic/arrow-parens": ["error", "always"],
+            "@stylistic/arrow-spacing": "error",
+            "@stylistic/brace-style": ["error"],
             "@stylistic/comma-dangle": ["error", "always-multiline"],
+            "@stylistic/eol-last": "error",
+            "@stylistic/function-call-spacing": ["error", "never"],
+            "@stylistic/keyword-spacing": "error",
+            "@stylistic/no-extra-parens": "error",
+            "@stylistic/no-extra-semi": "error",
             "@stylistic/no-multi-spaces": "error",
             "@stylistic/no-tabs": "error",
             "@stylistic/no-trailing-spaces": "error",
+            "@stylistic/semi": ["error", "always"],
             "@typescript-eslint/adjacent-overload-signatures": 0,
             "@typescript-eslint/explicit-module-boundary-types": 0, // We don't want to specify ": void" everywhere
             "@typescript-eslint/naming-convention": [
