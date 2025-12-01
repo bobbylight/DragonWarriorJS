@@ -150,7 +150,7 @@ export class RoamingEntity {
     }
 
     tryToMoveLeft() {
-        let success= false;
+        let success = false;
         let col: number = this.mapCol - 1;
         if (col < 0) {
             col += this.game.getMap().width;
@@ -164,7 +164,7 @@ export class RoamingEntity {
     }
 
     tryToMoveRight() {
-        let success= false;
+        let success = false;
         const col: number = Math.floor((this.mapCol + 1) % this.game.getMap().width);
         if (this.tryToMove(this.mapRow, col)) {
             this.xOffs = -this.game.getTileSize();
@@ -175,7 +175,7 @@ export class RoamingEntity {
     }
 
     tryToMoveUp() {
-        let success= false;
+        let success = false;
         let row: number = this.mapRow - 1;
         if (row < 0) {
             row += this.game.getMap().height;
@@ -189,7 +189,7 @@ export class RoamingEntity {
     }
 
     tryToMoveDown() {
-        let success= false;
+        let success = false;
         const row: number = Math.floor((this.mapRow + 1) % this.game.getMap().height);
         if (this.tryToMove(row, this.mapCol)) {
             this.yOffs -= this.game.getTileSize();
