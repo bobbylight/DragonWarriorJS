@@ -1,5 +1,5 @@
-import {Utils} from "gtp";
-import {EnemyData} from "./Enemy";
+import { Utils } from "gtp";
+import { EnemyData } from "./Enemy";
 
 export class BattleEntity {
 

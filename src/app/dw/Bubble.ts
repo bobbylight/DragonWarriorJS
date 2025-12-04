@@ -72,7 +72,7 @@ export class Bubble {
 
     protected breakApart(text: string, w: number): BreakApartResult {
 
-        const result: BreakApartResult = {lines: [], delays: []};
+        const result: BreakApartResult = { lines: [], delays: [] };
 
         // Newlines are automatic line breaks
         text = Bubble.removeSpecialEscapes(text, result.delays);
@@ -108,7 +108,7 @@ export class Bubble {
                 if (end > -1) {
                     delay = parseInt(text.substring(index + 3, end), 10);
                     console.log(`Adding a delay of ${delay} ms`);
-                    delays.push({offs: index, millis: delay});
+                    delays.push({ offs: index, millis: delay });
                     text = text.substring(0, index) + text.substring(end + 1);
                 } else {
                     console.warn(`Suspicious, apparent unclosed delay at offset ${index}`);
@@ -116,7 +116,7 @@ export class Bubble {
             } else {
                 delay = 500;
                 console.log(`Adding the default delay of ${delay} ms`);
-                delays.push({offs: index, millis: delay});
+                delays.push({ offs: index, millis: delay });
                 text = text.substring(0, index) + text.substring(index + 2);
             }
 

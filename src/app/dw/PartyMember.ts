@@ -1,5 +1,5 @@
 import { SpriteSheet, TiledLayer, TiledObject, Utils } from 'gtp';
-import { RoamingEntity,RoamingEntityArgs} from './RoamingEntity';
+import { RoamingEntity,RoamingEntityArgs } from './RoamingEntity';
 import { Hero } from './Hero';
 import { Direction } from './Direction';
 import { Shield } from './Shield';

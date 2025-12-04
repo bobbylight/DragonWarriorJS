@@ -1,4 +1,4 @@
-import {Delay, FadeOutInState} from 'gtp';
+import { Delay, FadeOutInState } from 'gtp';
 import { BaseState } from './BaseState';
 import { DwGame } from './DwGame';
 import { TitleScreenState } from './TitleScreenState';

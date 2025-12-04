@@ -1,4 +1,4 @@
-import {Delay, InputManager, Keys, TiledLayerData} from 'gtp';
+import { Delay, InputManager, Keys, TiledLayerData } from 'gtp';
 import { BaseState } from './BaseState';
 import { DwGame } from './DwGame';
 import { CommandBubble } from './CommandBubble';
@@ -51,7 +51,7 @@ export class RoamingState extends BaseState {
 
         this.commandBubble = new CommandBubble(game);
         this.statBubble = new StatBubble(this.game);
-        this.stationaryTimer = new Delay({millis: 1000});
+        this.stationaryTimer = new Delay({ millis: 1000 });
 
         this.updateMethods = new Map<RoamingSubState, UpdateFunction>();
         this.updateMethods.set('ROAMING', this.updateRoaming.bind(this));
