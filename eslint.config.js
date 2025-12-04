@@ -50,6 +50,7 @@ export default [
             "@stylistic/no-tabs": "error",
             "@stylistic/no-trailing-spaces": "error",
             //"@stylistic/padded-blocks": ["error", "never"],
+            "@stylistic/object-curly-spacing": ["error", "always"],
             "@stylistic/semi": ["error", "always"],
             "@stylistic/space-infix-ops": "error",
             "@typescript-eslint/adjacent-overload-signatures": 0,

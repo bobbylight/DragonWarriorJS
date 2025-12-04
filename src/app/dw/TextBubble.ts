@@ -1,5 +1,5 @@
 import { Delay } from 'gtp';
-import { Bubble,BreakApartDelay, BreakApartResult} from './Bubble';
+import { Bubble,BreakApartDelay, BreakApartResult } from './Bubble';
 import { DwGame } from './DwGame';
 import { ShoppingBubble } from './ShoppingBubble';
 import { Conversation } from './Conversation';
@@ -251,7 +251,7 @@ export class TextBubble extends Bubble {
                     const elem = this.delays[0];
                     if (elem.offs === this.curOffs + 1) {
                         this.delays.shift();
-                        this.delay = new Delay({millis: elem.millis});
+                        this.delay = new Delay({ millis: elem.millis });
                         return;
                     }
                 }

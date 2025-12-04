@@ -27,20 +27,20 @@ import { DwMap } from './DwMap';
 import { BattleState } from './BattleState';
 import { BattleTransitionState } from './BattleTransitionState';
 
-import {Brecconary} from './mapLogic/brecconary';
-import {ErdricksCave1} from './mapLogic/erdricksCave1';
-import {ErdricksCave2} from './mapLogic/erdricksCave2';
-import {Garinham} from './mapLogic/garinham';
-import {Overworld} from './mapLogic/overworld';
-import {TantegelCastle} from './mapLogic/tantegelCastle';
+import { Brecconary } from './mapLogic/brecconary';
+import { ErdricksCave1 } from './mapLogic/erdricksCave1';
+import { ErdricksCave2 } from './mapLogic/erdricksCave2';
+import { Garinham } from './mapLogic/garinham';
+import { Overworld } from './mapLogic/overworld';
+import { TantegelCastle } from './mapLogic/tantegelCastle';
 import { MapLogic } from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
 import { createDefaultGameState } from './DwGameState';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
-import {BaseState} from "./BaseState";
-import {EnemyData} from "./Enemy";
-import {RoamingEntityRange} from "./RoamingEntity";
+import { BaseState } from "./BaseState";
+import { EnemyData } from "./Enemy";
+import { RoamingEntityRange } from "./RoamingEntity";
 
 export type TiledMapMap = Record<string, DwMap>;
 

@@ -1,9 +1,9 @@
 import { Delay, SpriteSheet, Utils } from 'gtp';
-import {RoamingEntity, RoamingEntityArgs} from './RoamingEntity';
+import { RoamingEntity, RoamingEntityArgs } from './RoamingEntity';
 import { Direction } from './Direction';
 import { Hero } from './Hero';
 import { NpcType } from './NpcType';
-import {DwGame} from "./DwGame";
+import { DwGame } from "./DwGame";
 
 type DirFunctionType = () => void;
 
@@ -33,7 +33,7 @@ export class Npc extends RoamingEntity {
         this.origDir = this.direction;
 
         if (this.wanders) {
-            this.stepDelay = new Delay({millis: 3000, minDelta: -500, maxDelta: 500});
+            this.stepDelay = new Delay({ millis: 3000, minDelta: -500, maxDelta: 500 });
         }
 
         this.dirFuncs = [ this.tryToMoveUp.bind(this), this.tryToMoveDown.bind(this),

@@ -1,8 +1,8 @@
-import {BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils} from 'gtp';
+import { BitmapFont, FadeOutInState, Game, Image, ImageAtlas, ImageAtlasInfo, ImageMap, Utils } from 'gtp';
 import { BaseState } from './BaseState';
-import { Weapon,WeaponData} from './Weapon';
-import { Armor,ArmorData} from './Armor';
-import { Shield,ShieldData} from './Shield';
+import { Weapon,WeaponData } from './Weapon';
+import { Armor,ArmorData } from './Armor';
+import { Shield,ShieldData } from './Shield';
 import { DwGame } from './DwGame';
 import { GameStudioAdvertState } from './GameStudioAdvertState';
 import { EquipmentMap } from './dw';

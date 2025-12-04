@@ -46,7 +46,7 @@ export class BattleState extends BaseState {
     fight() {
         this.commandExecuting = true;
         this.fightDelay = new Delay({ millis: [ 300 ], callback: this.fightCallback.bind(this) });
-        this.textBubble.addToConversation({text: 'You attack!', sound: 'attack'}, true);
+        this.textBubble.addToConversation({ text: 'You attack!', sound: 'attack' }, true);
     }
 
     private fightCallback() {
@@ -64,7 +64,7 @@ export class BattleState extends BaseState {
         const dead: boolean = this.enemy.takeDamage(damage);
 
         const text = `Direct hit! Thy enemy's hit points have been reduced by ${damage}.`;
-        this.textBubble.addToConversation({text: text}, true);
+        this.textBubble.addToConversation({ text: text }, true);
 
         if (dead) {
             this.defeatedEnemy();
@@ -86,7 +86,7 @@ Thy gold increases by ${this.enemy.gp}.`;
 
         // TODO: Check for level up
 
-        this.textBubble.addToConversation({text: text, music: 'victory'});
+        this.textBubble.addToConversation({ text: text, music: 'victory' });
         this.commandExecuting = false;
     }
 
@@ -152,12 +152,12 @@ Thy gold increases by ${this.enemy.gp}.`;
         super.enter(game);
         this.commandExecuting = false;
         const conversation: Conversation = new Conversation(game);
-        conversation.addSegment({text: 'A ' + this.enemy.name + ' draws near!  Command?'});
+        conversation.addSegment({ text: 'A ' + this.enemy.name + ' draws near!  Command?' });
         this.textBubble.setConversation(conversation);
     }
 
     item() {
-        this.textBubble.addToConversation({text: 'Not implemented, command?'});
+        this.textBubble.addToConversation({ text: 'Not implemented, command?' });
     }
 
     override render(ctx: CanvasRenderingContext2D) {
@@ -219,7 +219,7 @@ Thy gold increases by ${this.enemy.gp}.`;
         this.commandExecuting = true;
         this.fightDelay = new Delay({ millis: [ 600 ], callback: this.runCallback.bind(this) });
         game.audio.playSound('run');
-        this.textBubble.addToConversation({text: game.hero.name + ' started to run away.'}, true);
+        this.textBubble.addToConversation({ text: game.hero.name + ' started to run away.' }, true);
     }
 
     private runCallback() {
@@ -233,7 +233,7 @@ Thy gold increases by ${this.enemy.gp}.`;
             this.commandExecuting = false;
             this.commandBubble.reset();
             this.commandBubble.init();
-            this.textBubble.addToConversation({text: 'Couldn\'t run!'});
+            this.textBubble.addToConversation({ text: 'Couldn\'t run!' });
         }
     }
 
