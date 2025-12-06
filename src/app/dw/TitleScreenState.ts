@@ -13,16 +13,16 @@ export class TitleScreenState extends BaseState {
         this.blink = true;
     }
 
-    override enter(game: DwGame) {
-        super.enter(game);
-        game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
+    override enter() {
+        super.enter();
+        this.game.canvas.addEventListener('touchstart', this.handleStart.bind(this), false);
         this.delay = new Delay({ millis: [ 600, 400 ] });
         this.blink = true;
-        game.audio.playMusic('MUSIC_TITLE_SCREEN');
+        this.game.audio.playMusic('MUSIC_TITLE_SCREEN');
     }
 
-    override leaving(game: DwGame) {
-        game.canvas.removeEventListener('touchstart', this.handleStart.bind(this), false);
+    override leaving() {
+        this.game.canvas.removeEventListener('touchstart', this.handleStart.bind(this), false);
     }
 
     handleStart() {

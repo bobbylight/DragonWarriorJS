@@ -147,11 +147,11 @@ Thy gold increases by ${this.enemy.gp}.`;
         this.commandExecuting = false;
     }
 
-    override enter(game: DwGame) {
+    override enter() {
 
-        super.enter(game);
+        super.enter();
         this.commandExecuting = false;
-        const conversation: Conversation = new Conversation(game);
+        const conversation: Conversation = new Conversation(this.game);
         conversation.addSegment({ text: 'A ' + this.enemy.name + ' draws near!  Command?' });
         this.textBubble.setConversation(conversation);
     }
