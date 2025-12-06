@@ -183,7 +183,7 @@ export class DwGame extends Game {
     drawString(text: string | number, x: number, y: number) {
         const textStr: string = typeof text === 'number' ? text.toString() : text;
         const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
-        font.drawString(textStr, x, y);
+        font.drawString(this.getRenderingContext(), textStr, x, y);
     }
 
     getEnemy(name: string): EnemyData {

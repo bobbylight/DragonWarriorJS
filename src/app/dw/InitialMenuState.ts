@@ -59,13 +59,10 @@ export class InitialMenuState extends BaseState {
         return new ChoiceBubble(this.game, x, y, w, h, choices, undefined, true);
     }
 
-    override enter(game: DwGame) {
-        super.enter(game);
+    override enter() {
+        super.enter();
         this.substate = 'mainMenu';
-        game.audio.playMusic('MUSIC_TOWN');
-    }
-
-    override leaving(game: DwGame) {
+        this.game.audio.playMusic('MUSIC_TOWN');
     }
 
     override update(delta: number) {

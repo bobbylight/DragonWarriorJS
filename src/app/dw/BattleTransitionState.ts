@@ -20,8 +20,8 @@ export class BattleTransitionState extends BaseState {
         this.enteringStateScreenshot = enteringState.createScreenshot();
     }
 
-    override enter(game: DwGame) {
-        super.enter(game);
+    override enter() {
+        super.enter();
 
         // TODO: Dynamically load scripts?
         //         var mapLogic = game.map.getProperty('logicFile');
@@ -31,7 +31,7 @@ export class BattleTransitionState extends BaseState {
 
         this.state = 0;
         this.tick = 0;
-        game.audio.playMusic('MUSIC_BATTLE');
+        this.game.audio.playMusic('MUSIC_BATTLE');
 
     }
 
