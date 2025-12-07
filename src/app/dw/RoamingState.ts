@@ -498,7 +498,7 @@ export class RoamingState extends BaseState {
                 Cheats.warpTo(this.game, 'tantegelCastle', 15, 7, 'Tantegel Castle', Direction.WEST);
                 break;
             case 'Tantegel (throne room)':
-                Cheats.warpTo(this.game, 'tantegelCastle', 51, 11, 'the King at Tantegel Castle', Direction.WEST);
+                Cheats.warpTo(this.game, 'tantegelCastleUpstairs', 11, 10, 'the King at Tantegel Castle', Direction.WEST);
                 break;
             case 'Garinham':
                 Cheats.warpTo(this.game, 'garinham', 14, 1, 'Garinham');
