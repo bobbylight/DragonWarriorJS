@@ -147,11 +147,11 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
-            "scale": 3,
+            "scale": 2.0356,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 86.5,
-                "y": 310.8333333333333
+                "x": 254.22479858518372,
+                "y": 147.37669483199056
             }
         },
         "tantegelCastle.tmx": {
@@ -160,6 +160,14 @@
             "viewCenter": {
                 "x": 481,
                 "y": 544
+            }
+        },
+        "tantegelCastleUpstairs.json": {
+            "scale": 1.3118,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 197.05747827412716,
+                "y": 193.62707729836868
             }
         },
         "tileset_tiles.json": {
@@ -180,8 +188,8 @@
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
-        "overworld.json",
         "tantegelCastle.json",
+        "overworld.json",
         "erdricksCave2.json",
         "collision_tiles.json",
         "tileset_tiles.json",

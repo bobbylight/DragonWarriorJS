@@ -137,6 +137,7 @@ export class LoadingState extends BaseState {
             void game.assets.addJson('equipment', 'res/equipment.json');
             void game.assets.addJson('brecconary.json', 'res/maps/brecconary.json');
             void game.assets.addJson('tantegelCastle.json', 'res/maps/tantegelCastle.json');
+            void game.assets.addJson('tantegelCastleUpstairs.json', 'res/maps/tantegelCastleUpstairs.json');
             void game.assets.addJson('erdricksCave1.json', 'res/maps/erdricksCave1.json');
             void game.assets.addJson('erdricksCave2.json', 'res/maps/erdricksCave2.json');
             void game.assets.addJson('garinham.json', 'res/maps/garinham.json');
@@ -196,6 +197,7 @@ export class LoadingState extends BaseState {
                 game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
                 game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
                 game.assets.addTmxMap(game.initLoadedMap('tantegelCastle.json'));
+                game.assets.addTmxMap(game.initLoadedMap('tantegelCastleUpstairs.json'));
                 game.assets.addTmxMap(game.initLoadedMap('erdricksCave1.json'));
                 game.assets.addTmxMap(game.initLoadedMap('erdricksCave2.json'));
                 game.assets.addTmxMap(game.initLoadedMap('garinham.json'));
