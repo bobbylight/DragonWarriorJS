@@ -11,8 +11,7 @@ import { Item } from './Item';
 import { Npc } from './Npc';
 import { Hero } from './Hero';
 import { MapLogic } from './mapLogic/MapLogic';
-import { Cheats } from './Cheats';
-import { Direction } from './Direction';
+import { CheatOption, Cheats, WarpLocation } from './Cheats';
 import { ChoiceBubble } from './ChoiceBubble';
 import { Door } from './Door';
 import { DwMap } from './DwMap';
@@ -20,7 +19,7 @@ import { Chest } from './Chest';
 import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
 import { getChestConversation } from './ChestConversations';
 
-type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION';
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
@@ -30,7 +29,8 @@ export class RoamingState extends BaseState {
     private readonly statBubble: StatBubble;
     private statusBubble?: StatusBubble;
     private itemBubble?: ItemBubble;
-    private warpBubble?: ChoiceBubble<string>;
+    private warpBubble?: ChoiceBubble<WarpLocation>;
+    private cheatBubble?: ChoiceBubble<CheatOption>;
     private readonly stationaryTimer: Delay;
     private overnightDelay?: Delay;
     private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
@@ -59,6 +59,7 @@ export class RoamingState extends BaseState {
         this.updateMethods.set('TALKING', this.updateTalking.bind(this));
         this.updateMethods.set('OVERNIGHT', this.updateOvernight.bind(this));
         this.updateMethods.set('WARP_SELECTION', this.updateWarpSelection.bind(this));
+        this.updateMethods.set('CHEAT_SELECTION', this.updateCheatSelection.bind(this));
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
@@ -121,6 +122,58 @@ export class RoamingState extends BaseState {
         }
 
       this.updateMethods.get(this.substate)!.call(this, delta);
+    }
+
+    private updateCheatSelection(delta: number) {
+
+        // Do check here to appease tsc of cheatBubble being defined
+        this.cheatBubble ??= Cheats.createCheatBubble(this.game);
+
+        this.cheatBubble.update(delta);
+        if (this.cheatBubble.handleInput()) {
+            const cheat: CheatOption | undefined = this.cheatBubble.getSelectedItem();
+            this.cheatBubble = undefined;
+            if (cheat) {
+                switch (cheat) {
+                    case '9999 Gold':
+                        this.game.party.addGold(9999);
+                        this.game.audio.playSound('openChest');
+                        this.setSubstate('ROAMING');
+                        break;
+                    case 'Level Up':
+                        this.game.audio.playSound('bump');
+                        break;
+                    case 'Weapon Change':
+                        this.game.cycleWeapon();
+                        this.setSubstate('ROAMING');
+                        break;
+                    case 'Armor Change':
+                        this.game.cycleArmor();
+                        this.setSubstate('ROAMING');
+                        break;
+                    case 'Shield Change':
+                        this.game.cycleShield();
+                        this.setSubstate('ROAMING');
+                        break;
+                    case 'Max HP/MP':
+                        this.game.setHeroStats(255, 255, 255, 255);
+                        this.game.audio.playSound('castSpell');
+                        this.setSubstate('ROAMING');
+                        break;
+                    case 'Min HP/MP':
+                        this.game.setHeroStats(1, 1, 1, 1);
+                        this.game.audio.playSound('castSpell');
+                        this.setSubstate('ROAMING');
+                        break;
+                    default:
+                        this.game.audio.playSound('bump');
+                        break;
+                }
+            } else {
+                this.setSubstate('MENU');
+            }
+            this.warpBubble = undefined;
+        }
     }
 
     private updateMenu(delta: number) {
@@ -259,7 +312,7 @@ export class RoamingState extends BaseState {
 
         this.warpBubble.update(delta);
         if (this.warpBubble.handleInput()) {
-            const warpTo: string | undefined = this.warpBubble.getSelectedItem();
+            const warpTo: WarpLocation | undefined = this.warpBubble.getSelectedItem();
             this.warpBubble = undefined;
             if (warpTo) {
                 this.warpTo(warpTo); // TODO: Make me cleaner
@@ -359,7 +412,7 @@ export class RoamingState extends BaseState {
             ctx.restore();
         }
 
-        if (this.substate === 'MENU' || this.substate === 'WARP_SELECTION') {
+        if (this.substate === 'MENU' || this.substate === 'WARP_SELECTION' || this.substate === 'CHEAT_SELECTION') {
             this.commandBubble.paint(ctx);
         }
 
@@ -378,6 +431,9 @@ export class RoamingState extends BaseState {
         }
         if (this.warpBubble) {
             this.warpBubble.paint(ctx);
+        }
+        if (this.cheatBubble) {
+            this.cheatBubble.paint(ctx);
         }
 
         if (this.overnightDelay) {
@@ -408,6 +464,10 @@ export class RoamingState extends BaseState {
           prevSubstate !== 'OVERNIGHT') {
             this.textBubble.init();
         }
+    }
+
+    showCheatBubble() {
+        this.setSubstate('CHEAT_SELECTION');
     }
 
     showInventory() {
@@ -486,28 +546,8 @@ export class RoamingState extends BaseState {
         this.setSubstate('TALKING');
     }
 
-    warpTo(location: string) {
-
+    warpTo(location: WarpLocation) {
         this.setSubstate('ROAMING');
-
-        switch (location) {
-            case 'Brecconary':
-                Cheats.warpTo(this.game, 'brecconary', 15, 2, 'Brecconary', Direction.EAST);
-                break;
-            case 'Tantegel (1st floor)':
-                Cheats.warpTo(this.game, 'tantegelCastle', 15, 7, 'Tantegel Castle', Direction.WEST);
-                break;
-            case 'Tantegel (throne room)':
-                Cheats.warpTo(this.game, 'tantegelCastleUpstairs', 11, 10, 'the King at Tantegel Castle', Direction.WEST);
-                break;
-            case 'Garinham':
-                Cheats.warpTo(this.game, 'garinham', 14, 1, 'Garinham');
-                break;
-            case 'Erdrick\'s Cave':
-                Cheats.warpTo(this.game, 'erdricksCave1', 1, 1, 'Erdrick\'s Cave');
-                break;
-            case 'Far Reaches':
-                Cheats.warpTo(this.game, 'overworld', 46, 85, 'Overworld');
-        }
+        Cheats.warp(this.game, location);
     }
 }

@@ -44,7 +44,7 @@ export class CommandBubble extends Bubble {
 
         if (game.getCheatsEnabled()) {
             choices.splice(choices.length / 2, 0, 'WARP*');
-            choices.push('EQUIP*');
+            choices.push('CHEAT*');
         }
 
         return choices;
@@ -100,7 +100,8 @@ export class CommandBubble extends Bubble {
                 screen.take();
                 break;
 
-            case 'EQUIP*':
+            case 'CHEAT*':
+                screen.showCheatBubble();
                 break;
 
         }

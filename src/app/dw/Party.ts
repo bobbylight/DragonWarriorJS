@@ -29,7 +29,7 @@ export class Party {
      * Modifies the player's gold amount, and plays the appropriate sound effect.
      */
     addGold(amt: number) {
-        this.gold = Math.max(0, this.gold + amt);
+        this.gold = Math.min(Math.max(0, this.gold + amt), 9999);
         //game.audio.playSound('gold');
     }
 
