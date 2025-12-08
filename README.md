@@ -5,18 +5,21 @@
 Like it says on the tin.  This reproduction will try to be as authentic as
 possible, warts and all.
 
-What's (mostly) done:
+I'm trying to use the GitHub issue tracker to track bugs and what I'm working on next.
+But in general, what's done is:
 
 * Map loading, motion, moving in and out of towns
 * Collision detection
 * Conversations with NPCs
-* Sound (uses WebAudio, so Firefox and Chrome only for now)
+* Buying goods from a shop
+* Opening doors if you have a key
+* Battles (attack only)
+* Sound
 
 What's currently being worked on (half-baked):
 
 * Staying overnight at an inn
-* Buying goods from a shop
-* Battling an enemy
+* Magic outside of battle
 
 # To test this out
 
@@ -27,23 +30,24 @@ npm run dev
 ```
 
 # Editing the Map Data
-In theory, once the engine is done, this game is mostly data-driven.
-Most of the data is in map files.
+The game is mostly data-driven. The maps are stored in [Tiled](https://www.mapeditor.org/)
+JSON files (currently generated in Tiled 1.8.4, but I hope to update soon). These files
+all live in `public/res/maps`. Besides the tiles for the map, these JSON files also define
+objects such as NPCs, treasure chests, stairs, and warps (to other maps). They also all
+have a `logicFile` property that references a file in `src/app/dw/mapLogic`. This file
+contains the actual logic for the map (currently limited to just NPC conversations, but in
+the future could contain events, etc.).
 
-[Tiled](https://www.mapeditor.org/) is used to create the maps for this game.
-The actual data files live in `src/tiled`.  There is one `.tmx` file per map
-in the game, including the overworld.  Please be sure to use the latest
-version of `Tiled` when editing these files, as the XML schema of the `.tmx`
-file format changes over time.  The game is currently being built using 1.8.4.
+You can run `npm run doc` to generate documentation for the classes in the game, but it
+might be easier just to reverse engineer things, e.g. starting with the `logicFile` files.
 
-All maps follow the same conventions and structure. All data should be typed,
-but typing is improving over time and isn't doc'd except in code. Layers include:
+All Tiled maps define the same layers:
 
 * `tileLayer` - The actual map graphics.  Constitutes most of what you see.
 * `tileLayer2` (optional) - A second layer of tiles.  Used for the inside
   of buildings with roofs in towns.  Where there are roofed buildings,
   `tileLayer` will render the roof tile, and `tileLayer2` will render the
-  inside of the building.  This layer is omitted when it is not needed.
+  inside of the building.  This layer is omitted when it isn't needed.
 * `collisionLayer` - Dictates which tiles are solid and which aren't.
   This layer is currently used for both `tileLayer` and `tileLayer2`.
   Solid tiles can be rendered with the `collision` tileset by entering
@@ -56,21 +60,22 @@ but typing is improving over time and isn't doc'd except in code. Layers include
   * `col` - The column at which to place the hero
   * `dir` (optional) - The direction the hero should face.  Should be one
     of `north`, `east`, `south`, or `west`
-* `npcLayer` - A layer containing objects of `type` `npc`, `talkAcross`
+* `npcLayer` - A layer containing objects of `type`s `npc`, `talkAcross`
   and `door`.
   * `npc` objects should have the following custom properties:
     * `type` - One of the values in [NpcType.ts](src/app/dw/NpcType.ts).
     Case is ignored.  The `name` property of each `npc` is used as a lookup
-    for the NPC's conversation (see below).
+    for the NPCs conversation (see below).
     * `wanders` - Either `true` or `false`, depending on whether you want the
     NPC to move
-    * `dir` (optional) - The direction the hero should initially face.  Should
+    * `dir` (optional) - The direction the NPC should initially face.  Should
     be one of `north`, `east`, `south`, or `west`.  Note you don't usually
-    need to set this unless `wanders` is `false`.
+    need to set this unless `wanders` is `false` and you want them to face a
+    direction other than `south`.
   * `talkAcross` is an object type in `npcLayer` used to mark solid tiles the
     hero should be able to talk over, such as tables to chat with a merchant.
     Objects of type `talkAcross` currently have no custom properties.
-  * The `door` object type denotes a door that can be opened, e.g. with a key.
+  * The `door` object type denotes a door that can be opened with a key.
     They have the following custom properties:
     * `replacementTileIndex` - The tile that should replace the door tile once
       the door has been opened.
@@ -79,11 +84,10 @@ but typing is improving over time and isn't doc'd except in code. Layers include
   randomly fight when stepping in it.  If this layer does not exist, no
   random battles occur in the map (e.g. in towns).
 
-The Tiled project lives in `src/res/maps`. All data is stored in `.json` files
-instead of `.tmx` for simplicity.
+The Tiled project lives in `public/res/maps`.
 
 # Editing NPC Conversations
-NPC's as defined in `npcLayer` above have their conversations defined in "map
+NPCs as defined in `npcLayer` above have their conversations defined in "map
 logic" files that live in
 [src/app/dw/mapLogic](src/app/dw/mapLogic).
 There is one map logic file per map.  They all follow the same pattern.  Essentially, an object maps
@@ -93,7 +97,7 @@ each `npc`'s `name` property to a generator function that returns the
 `game` instance so that it can dynamically return different values depending on how far along the
 player is.
 
-The `NpcText` itself can be simple or complex, depending on how complex the NPC's conversation
+The `NpcText` itself can be simple or complex, depending on how complex the NPCs conversation
 with the hero should be. Essentially, it can be:
 
 * A string, in which case the NPC says just that. This is the simple case
