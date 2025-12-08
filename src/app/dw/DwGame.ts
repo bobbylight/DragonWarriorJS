@@ -182,13 +182,16 @@ export class DwGame extends Game {
 
     drawString(text: string | number, x: number, y: number) {
         const textStr: string = typeof text === 'number' ? text.toString() : text;
-        const font: BitmapFont = this.assets.get('font'); // Need as 2 lines to appease linter
-        font.drawString(this.getRenderingContext(), textStr, x, y);
+        this.getFont().drawString(this.getRenderingContext(), textStr, x, y);
     }
 
     getEnemy(name: string): EnemyData {
         const enemyDatas: Record<string, EnemyData> = this.assets.get('enemies');
         return enemyDatas[name];
+    }
+
+    private getFont(): BitmapFont {
+        return this.assets.get('font');
     }
 
     getMap(): DwMap {
@@ -570,6 +573,20 @@ export class DwGame extends Game {
     removeChest(chest: Chest) {
         this.gameState.mapStates[this.getMap().name].openedChests.push(chest.id);
         this.getMap().removeChest(chest);
+    }
+
+    override renderStatusMessageImpl(ctx: CanvasRenderingContext2D, message: string, color: string) {
+        const x = 6;
+        const y = this.canvas.height - 24;
+
+        // Slightly larger rectangle for the background, just to look a little nicer
+        const font = this.getFont();
+        const w = font.stringWidth(message) + 4;
+        const h = font.cellH + 4;
+        ctx.fillStyle = 'black';
+        ctx.fillRect(x - 2, y - 2, w, h);
+
+        this.drawString(message, x, y);
     }
 
     setHeroStats(hp: number | null, maxHp: number | null, mp?: number, maxMp?: number) {
