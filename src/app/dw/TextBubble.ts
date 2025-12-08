@@ -96,7 +96,12 @@ export class TextBubble extends Bubble {
         const width: number = tileSize * 5;
         const height: number = tileSize * (choices.length + 1);
 
-        return new ChoiceBubble(this.game, x, y, width, height, choices, 'text');
+        return new ChoiceBubble(this.game, x, y, width, height, choices, (choice) => {
+            if (typeof choice === 'string') {
+                return choice;
+            }
+            return choice.text;
+        });
     }
 
     /**
