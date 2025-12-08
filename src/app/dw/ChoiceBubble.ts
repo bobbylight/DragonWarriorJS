@@ -2,27 +2,24 @@ import { InputManager } from 'gtp';
 import { Bubble } from './Bubble';
 import { DwGame } from "./DwGame";
 
-type ChoiceBubbleStringMap = Record<string, string>;
-export type ChoiceBubbleChoice = string | ChoiceBubbleStringMap;
-
 /**
  * A bubble that lets the user choose between several choices.
  */
 export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
     private readonly choices: ChoiceBubbleChoice[];
-    private readonly choiceDisplayField?: string;
+    private readonly choiceStringifier: (choice: ChoiceBubbleChoice) => string;
     private curChoice: number;
     private readonly cancellable: boolean;
 
     constructor(game: DwGame, x: number, y: number, w: number, h: number,
         choices: ChoiceBubbleChoice[] = [],
-        choiceDisplayField?: string,
+        choiceStringifier?: (choice: ChoiceBubbleChoice) => string,
         cancellable = false,
         title: string | undefined = undefined) {
         super(game, title, x, y, w, h);
         this.choices = choices;
-        this.choiceDisplayField = choiceDisplayField;
+        this.choiceStringifier = choiceStringifier ?? ((choice: ChoiceBubbleChoice) => choice as unknown as string);
         this.cancellable = cancellable;
         this.curChoice = 0;
     }
@@ -79,19 +76,12 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
             if (this.curChoice === index) {
                 this.drawArrow(this.x + Bubble.MARGIN, y);
             }
-            this.game.drawString(this.stringify(choice), x, y);
+            this.game.drawString(this.choiceStringifier(choice), x, y);
             y += 18 * this.game.scale;
         });
     }
 
     reset() {
         this.curChoice = 0;
-    }
-
-    private stringify(choice: ChoiceBubbleChoice): string {
-        if (this.choiceDisplayField) {
-            return (choice as ChoiceBubbleStringMap)[this.choiceDisplayField];
-        }
-        return choice as unknown as string;
     }
 }
