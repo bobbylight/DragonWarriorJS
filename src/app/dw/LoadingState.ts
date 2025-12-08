@@ -125,7 +125,7 @@ export class LoadingState extends BaseState {
             game.assets.addSpriteSheet('hero', 'res/hero.png', 16, 16, 1, 1, true);
             game.assets.addSpriteSheet('npcs', 'res/npcs.png', 16, 16, 1, 1, true);
             game.assets.addImage('battleBG', 'res/battle_backgrounds.png');
-            game.assets.addImage('font', 'res/font_8x10.png');
+            game.assets.addImage('font', 'res/font_8x9.png');
             void game.assets.addJson('enemies', 'res/enemies.json');
             void game.assets.addJson('enemyTerritories', 'res/enemyTerritories.json');
             game.assets.addCanvas('enemiesImage', 'res/monsters.png');
@@ -192,7 +192,7 @@ export class LoadingState extends BaseState {
                 game.assets.set('shieldArray', LoadingState.createShieldArray(shieldMap));
 
                 const font: Image = game.assets.get('font');
-                game.assets.set('font', new BitmapFont(font, 8, 10, 8, 6, game.scale));
+                game.assets.set('font', new BitmapFont(font, 8, 9, 1, 1, game.scale));
 
                 game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
                 game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
