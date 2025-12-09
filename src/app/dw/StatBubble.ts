@@ -48,7 +48,7 @@ export class StatBubble extends Bubble {
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         const SCALE: number = this.game.scale;
-        const x2: number = this.x + this.w - Bubble.MARGIN;
+        const x2: number = this.x + this.w - this.getXMargin();
         let y0: number = y;
         const Y_INC: number = this.game.stringHeight() + 7 * SCALE;
         const party: Party = this.game.party;

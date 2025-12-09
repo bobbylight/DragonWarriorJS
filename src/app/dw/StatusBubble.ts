@@ -25,13 +25,23 @@ export class StatusBubble extends Bubble {
         return this.game.stringWidth(val);
     }
 
+    /**
+     * This bubble is a little more space-constrained so its
+     * x-margin is smaller.
+     */
+    override getXMargin(): number {
+        const scale: number = this.game.scale;
+        // Inset + border width + inner spacing
+        return (1 + 2 + 2) * scale;
+    }
+
     handleInput() {
     }
 
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         const SCALE: number = this.game.scale;
-        const x2: number = this.x + this.w - Bubble.MARGIN;
+        const x2: number = this.x + this.w - this.getXMargin();
         let y0: number = y;
         const Y_INC: number = this.game.stringHeight() + 7 * SCALE;
         const hero: Hero = this.game.hero;
