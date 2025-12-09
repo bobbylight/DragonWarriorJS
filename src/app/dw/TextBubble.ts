@@ -71,7 +71,7 @@ export class TextBubble extends Bubble {
 
         this.text = this.text + '\n' + curText;
         this.curLine = this.lines.length;
-        const w: number = this.w - 2 * Bubble.MARGIN;
+        const w: number = this.w - 2 * this.getXMargin();
         const breakApartResult: BreakApartResult = this.breakApart(curText, w);
         this.lines = this.lines.concat(breakApartResult.lines);
         this.delays = breakApartResult.delays;
@@ -346,7 +346,7 @@ export class TextBubble extends Bubble {
     private setText(segment: ConversationSegment): void {
         this.text = segment.currentText() ?? '';
         if (this.text) {
-            const w: number = this.w - 2 * Bubble.MARGIN;
+            const w: number = this.w - 2 * this.getXMargin();
             const breakApartResult: BreakApartResult = this.breakApart(this.text, w);
             this.lines = breakApartResult.lines;
             this.delays = breakApartResult.delays;

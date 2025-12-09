@@ -74,7 +74,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
         ctx.fillStyle = 'rgb(255,255,255)';
         this.choices.forEach((choice, index) => {
             if (this.curChoice === index) {
-                this.drawArrow(this.x + Bubble.MARGIN, y);
+                this.drawArrow(this.x + Bubble.ARROW_MARGIN, y);
             }
             this.game.drawString(this.choiceStringifier(choice), x, y);
             y += 18 * this.game.scale;

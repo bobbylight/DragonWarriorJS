@@ -52,7 +52,7 @@ export class Bubble {
      */
     private paintArrow = false;
 
-    static readonly MARGIN: number = 10; // 5 * SCALE; TODO
+    static readonly ARROW_MARGIN: number = 14; // 6 * SCALE; TODO
 
     constructor(game: DwGame, title: string | undefined, x: number, y: number, w: number, h: number) {
 
