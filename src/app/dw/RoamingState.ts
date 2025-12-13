@@ -18,6 +18,7 @@ import { DwMap } from './DwMap';
 import { Chest } from './Chest';
 import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
 import { getChestConversation } from './ChestConversations';
+import { getHiddenItemConversation } from '@/app/dw/HiddenItemConversations';
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION';
 
@@ -68,20 +69,9 @@ export class RoamingState extends BaseState {
     }
 
     search() {
-
-        const messages: string[] = [ '\\w{hero.name} searched the ground all about.' ];
-
-        const heroPos: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
-        const chest: boolean = this.game.getMap().chests.has(heroPos);
-
-        // In this game, you must "TAKE" treasure, not "SEARCH" for it.
-        if (chest) {
-            messages.push('There is a treasure box.');
-        } else {
-            messages.push('But there found nothing.');
-        }
-
-        this.showOneLineConversation(false, ...messages);
+        this.showTextBubble = true;
+        this.textBubble.setConversation(getHiddenItemConversation(this));
+        this.setSubstate('TALKING');
     }
 
     take() {
