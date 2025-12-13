@@ -31,7 +31,7 @@ npm run dev
 
 # Editing the Map Data
 The game is mostly data-driven. The maps are stored in [Tiled](https://www.mapeditor.org/)
-JSON files (currently generated in Tiled 1.8.4, but I hope to update soon). These files
+JSON files (currently generated in Tiled 1.11.1). These files
 all live in `public/res/maps`. Besides the tiles for the map, these JSON files also define
 objects such as NPCs, treasure chests, stairs, and warps (to other maps). They also all
 have a `logicFile` property that references a file in `src/app/dw/mapLogic`. This file
