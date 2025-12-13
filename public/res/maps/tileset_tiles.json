@@ -6,9 +6,9 @@
  "name":"tiles",
  "spacing":1,
  "tilecount":360,
- "tiledversion":"1.7.1",
+ "tiledversion":"1.11.2",
  "tileheight":16,
  "tilewidth":16,
  "type":"tileset",
- "version":"1.6"
+ "version":"1.11"
 }

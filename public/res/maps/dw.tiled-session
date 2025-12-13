@@ -1,5 +1,5 @@
 {
-    "activeFile": "",
+    "activeFile": "tantegelCastle.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
         "."
@@ -21,8 +21,8 @@
             "scale": 1,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 201.5,
-                "y": 233.5
+                "x": 165.5,
+                "y": 279
             }
         },
         "brecconary.tmx": {
@@ -38,14 +38,15 @@
             "scaleInEditor": 1
         },
         "enemy_territory_tiles.json": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "erdricksCave1.json": {
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 161.5,
-                "y": 158.5
+                "y": 159
             }
         },
         "erdricksCave1.json#collision": {
@@ -73,7 +74,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 160.5,
-                "y": 158.5
+                "y": 159
             }
         },
         "erdricksCave2.json#collision": {
@@ -101,7 +102,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 233.5,
-                "y": 224.5
+                "y": 225
             }
         },
         "garinham.json#collision": {
@@ -129,7 +130,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 350.5,
-                "y": 705.5
+                "y": 706
             }
         },
         "overworld.json#territories": {
@@ -147,11 +148,11 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
-            "scale": 2.0356,
+            "scale": 1.3635,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 479.2198860286893,
-                "y": 543.8200039300452
+                "x": 72.24055738907222,
+                "y": 263.2929959662633
             }
         },
         "tantegelCastle.tmx": {
@@ -185,20 +186,29 @@
     "map.tileWidth": 16,
     "map.width": 60,
     "openFiles": [
+        "tantegelCastleUpstairs.json",
+        "tantegelCastle.json",
+        "brecconary.json",
+        "garinham.json",
+        "collision_tiles.json",
+        "enemy_territory_tiles.json",
+        "erdricksCave1.json",
+        "erdricksCave2.json"
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
+        "tantegelCastleUpstairs.json",
+        "erdricksCave2.json",
+        "erdricksCave1.json",
+        "enemy_territory_tiles.json",
+        "collision_tiles.json",
+        "garinham.json",
+        "brecconary.json",
         "tantegelCastle.json",
         "overworld.json",
-        "erdricksCave2.json",
-        "collision_tiles.json",
         "tileset_tiles.json",
-        "erdricksCave1.json",
-        "brecconary.json",
-        "garinham.json",
         "erdricksCave1.tmx",
-        "brecconary.tmx",
-        "brecconary.js"
+        "brecconary.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFormat": "json",

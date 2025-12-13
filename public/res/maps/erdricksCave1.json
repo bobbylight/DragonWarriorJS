@@ -149,19 +149,19 @@
          "value":"true"
         }],
  "renderorder":"right-down",
- "tiledversion":"1.8.4",
+ "tiledversion":"1.11.2",
  "tileheight":16,
  "tilesets":[
-   {
-     "firstgid":1,
-     "source":"tileset_tiles.json"
-   },
-   {
-     "firstgid":361,
-     "source":"collision_tiles.json"
-   }],
+        {
+         "firstgid":1,
+         "source":"tileset_tiles.json"
+        }, 
+        {
+         "firstgid":361,
+         "source":"collision_tiles.json"
+        }],
  "tilewidth":16,
  "type":"map",
- "version":"1.8",
+ "version":"1.11",
  "width":20
 }
