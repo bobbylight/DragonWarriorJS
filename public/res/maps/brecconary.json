@@ -151,6 +151,34 @@
         }, 
         {
          "draworder":"topdown",
+         "id":6,
+         "name":"hiddenItemLayer",
+         "objects":[
+                {
+                 "height":16,
+                 "id":17,
+                 "name":"testHiddenItem",
+                 "properties":[
+                        {
+                         "name":"item",
+                         "type":"string",
+                         "value":"herb"
+                        }],
+                 "rotation":0,
+                 "type":"item",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":304
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":4,
          "name":"warpLayer",
          "objects":[
@@ -525,8 +553,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":17,
+ "nextlayerid":9,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "properties":[
         {
