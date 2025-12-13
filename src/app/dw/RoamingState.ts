@@ -16,8 +16,9 @@ import { ChoiceBubble } from './ChoiceBubble';
 import { Door } from './Door';
 import { DwMap } from './DwMap';
 import { Chest } from './Chest';
-import { toLocationString, LocationString, toRowAndColumn } from './LocationString';
+import { toRowAndColumn } from './LocationString';
 import { getChestConversation } from './ChestConversations';
+import { getSearchConversation } from './SearchConversations';
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION';
 
@@ -68,29 +69,14 @@ export class RoamingState extends BaseState {
     }
 
     search() {
-
-        const messages: string[] = [ '\\w{hero.name} searched the ground all about.' ];
-
-        const heroPos: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
-        const chest: boolean = this.game.getMap().chests.has(heroPos);
-
-        // In this game, you must "TAKE" treasure, not "SEARCH" for it.
-        if (chest) {
-            messages.push('There is a treasure box.');
-        } else {
-            messages.push('But there found nothing.');
-        }
-
-        this.showOneLineConversation(false, ...messages);
+        this.showTextBubble = true;
+        this.textBubble.setConversation(getSearchConversation(this));
+        this.setSubstate('TALKING');
     }
 
     take() {
-
-        const location: LocationString = toLocationString(this.game.hero.mapRow, this.game.hero.mapCol);
-        const chest: Chest | undefined = this.game.getMap().chests.get(location);
-
         this.showTextBubble = true;
-        this.textBubble.setConversation(getChestConversation(this, chest));
+        this.textBubble.setConversation(getChestConversation(this));
         this.setSubstate('TALKING');
     }
 

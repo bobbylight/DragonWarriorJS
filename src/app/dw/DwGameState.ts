@@ -1,4 +1,5 @@
 export interface MapState {
+    obtainedHiddenItems: string[];
     openedChests: string[];
     unlockedDoors: string[];
 }
@@ -12,8 +13,9 @@ export interface DwGameState {
     mapStates: MapStateMap;
 }
 
-const createEmtpyMapState = (): MapState => {
+const createEmptyMapState = (): MapState => {
     return {
+        obtainedHiddenItems: [],
         openedChests: [],
         unlockedDoors: [],
     };
@@ -22,7 +24,10 @@ const createEmtpyMapState = (): MapState => {
 export const createDefaultGameState = (): DwGameState => {
     return {
         mapStates: {
-            tantegelCastle: createEmtpyMapState(),
+            brecconary: createEmptyMapState(),
+            garinham: createEmptyMapState(),
+            overworld: createEmptyMapState(),
+            tantegelCastle: createEmptyMapState(),
         },
     };
 };

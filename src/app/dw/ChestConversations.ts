@@ -1,13 +1,18 @@
 import { Chest } from './Chest';
 import { RoamingState } from './RoamingState';
 import { Conversation } from './Conversation';
+import { LocationString, toLocationString } from '@/app/dw/LocationString';
 
 /**
  * Returns the text to display when the player opens a treasure chest.
  */
-export const getChestConversation = (state: RoamingState, chest: Chest | undefined): Conversation => {
+export const getChestConversation = (state: RoamingState): Conversation => {
 
-    const conversation: Conversation = new Conversation(state.game, false);
+    const game = state.game;
+    const location: LocationString = toLocationString(game.hero.mapRow, game.hero.mapCol);
+    const chest: Chest | undefined = game.getMap().chests.get(location);
+
+    const conversation: Conversation = new Conversation(game, false);
 
     if (!chest) {
         conversation.addSegment('There is nothing to do here, \\w{hero.name}.');
@@ -24,8 +29,8 @@ export const getChestConversation = (state: RoamingState, chest: Chest | undefin
                 sound: 'openChest',
                 text: `Of GOLD thou hast gained ${gold}.`,
                 action: () => {
-                    state.game.removeChest(chest);
-                    state.game.party.gold += gold;
+                    game.removeChest(chest);
+                    game.party.gold += gold;
                 },
             });
             break;
@@ -35,7 +40,7 @@ export const getChestConversation = (state: RoamingState, chest: Chest | undefin
                 sound: 'openChest',
                 text: 'Fortune smiles upon thee, \\w{hero.name}.',
                 action: () => {
-                    state.game.removeChest(chest);
+                    game.removeChest(chest);
                 },
             });
             conversation.addSegment('Thou hast found the Magic Key');

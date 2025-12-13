@@ -18,11 +18,15 @@
             }
         },
         "brecconary.json": {
+            "expandedObjectLayers": [
+                5,
+                6
+            ],
             "scale": 1,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 165.5,
-                "y": 279
+                "x": 206.5,
+                "y": 285
             }
         },
         "brecconary.tmx": {
@@ -148,6 +152,9 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 1.3635,
             "selectedLayer": 3,
             "viewCenter": {

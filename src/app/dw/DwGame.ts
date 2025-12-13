@@ -41,6 +41,8 @@ import { toLocationString, LocationString } from './LocationString';
 import { BaseState } from "./BaseState";
 import { EnemyData } from "./Enemy";
 import { RoamingEntityRange } from "./RoamingEntity";
+import { HERB, Item } from "@/app/dw/Item";
+import { HiddenItem, HiddenItemType } from "@/app/dw/HiddenItem";
 
 export type TiledMapMap = Record<string, DwMap>;
 
@@ -300,8 +302,8 @@ export class DwGame extends Game {
 
     private adjustGameMap(map: DwMap) {
 
-        // Hide layers that shouldn't be shown (why aren't they marked as hidden
-        // in Tiled?)
+        // Hide layers that shouldn't be shown. These could be marked as hidden in Tiled, but
+        // it's useful to see their data while in the editor.
         for (let i = 0; i < map.getLayerCount(); i++) {
             const layer: TiledLayer = map.getLayerByIndex(i);
             if (layer.name !== 'tileLayer') {
@@ -313,10 +315,8 @@ export class DwGame extends Game {
         map.doors.length = 0;
         map.talkAcrosses.clear();
         map.chests.clear();
-        const temp: TiledLayer | undefined = map.layersByName.get('npcLayer');
-        if (temp?.isObjectGroup()) {
-
-            const npcLayer: TiledLayer = temp;
+        const npcLayer: TiledLayer | undefined = map.layersByName.get('npcLayer');
+        if (npcLayer?.isObjectGroup()) {
 
             for (const obj of npcLayer.objects) {
                 let chest: Chest;
@@ -335,7 +335,7 @@ export class DwGame extends Game {
                         map.chests.set(chest.location, chest);
                         break;
                     default:
-                        console.error(`Unhandled object type in tiled map: ${obj.type}`);
+                        console.error(`Unhandled npcLayer object type in tiled map: ${obj.type}`);
                         break;
                 }
             }
@@ -347,6 +347,21 @@ export class DwGame extends Game {
         map.npcs.forEach((npc: Npc) => {
             map.getLayer('collisionLayer').setData(npc.mapRow, npc.mapCol, 1);
         });
+
+        const hiddenItemLayer: TiledLayer | undefined = map.layersByName.get('hiddenItemLayer');
+        if (hiddenItemLayer?.isObjectGroup()) {
+            for (const obj of hiddenItemLayer.objects) {
+                let hiddenItem: HiddenItem;
+                switch (obj.type) {
+                    case 'item':
+                        hiddenItem = this.parseHiddenItem(obj);
+                        map.hiddenItems.set(hiddenItem.location, hiddenItem);
+                        break;
+                    default:
+                        console.error(`Unhandled hiddenItem object type in tiled map: ${obj.type}`);
+                }
+            }
+        }
 
         // Don't need to set collision as it is already set in the map.
         // Should we require that?
@@ -396,6 +411,34 @@ export class DwGame extends Game {
         const row: number = obj.y / tileSize;
         const col: number = obj.x / tileSize;
         return new Door(name, row, col, replacementTileIndex);
+    }
+
+    private parseHiddenItem(hiddenItem: TiledObject): HiddenItem {
+        const id: string = hiddenItem.name;
+        let value: Item;
+
+        const itemType: string = getProperty(hiddenItem, 'item');
+        switch (itemType) {
+            case 'herb':
+                value = HERB;
+                break;
+            default:
+                console.error(`Invalid itemType for hiddenItem ${hiddenItem.name}: ${itemType}`);
+                value = HERB;
+                break;
+        }
+
+        const tileSize: number = this.getTileSize();
+        const row: number = hiddenItem.y / tileSize;
+        const col: number = hiddenItem.x / tileSize;
+
+        return {
+            id,
+            // Must be a string before this to handle typos/bugs in the map file not specifying a valid type
+            contentType: itemType as HiddenItemType,
+            contents: value,
+            location: toLocationString(row, col),
+        };
     }
 
     private parseNpc(obj: TiledObject): Npc {
@@ -573,6 +616,11 @@ export class DwGame extends Game {
     removeChest(chest: Chest) {
         this.gameState.mapStates[this.getMap().name].openedChests.push(chest.id);
         this.getMap().removeChest(chest);
+    }
+
+    removeHiddenItem(hiddenItem: HiddenItem) {
+        this.gameState.mapStates[this.getMap().name].obtainedHiddenItems.push(hiddenItem.id);
+        this.getMap().removeHiddenItem(hiddenItem);
     }
 
     override renderStatusMessageImpl(ctx: CanvasRenderingContext2D, message: string, color: string) {
