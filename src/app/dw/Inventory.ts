@@ -1,29 +1,22 @@
 import { Item, getItemByName } from './Item';
-
-export interface ItemCountPair {
-    item: Item;
-    count: number;
-}
+import { Party } from '@/app/dw/Party';
 
 export class Inventory {
 
-    private readonly items: Map<Item, number>;
+    private readonly items: Item[];
 
     constructor() {
-        this.items = new Map<Item, number>();
+        this.items = [];
     }
 
-    getItems(): ItemCountPair[] {
-        const items: ItemCountPair[] = [];
-        this.items.forEach((value: number, key: Item) => {
-            items.push({ item: key, count: value });
-        });
-        return items;
+    getItems(): Item[] {
+        return this.items.slice();
     }
 
     push(item: Item) {
-        const count = this.items.get(item) ?? 0;
-        this.items.set(item, count + 1);
+        if (this.items.length < Party.INVENTORY_MAX_SIZE) {
+            this.items.push(item);
+        }
     }
 
     remove(itemName: string): boolean {
@@ -33,13 +26,9 @@ export class Inventory {
             return false;
         }
 
-        const count = this.items.get(item) ?? 0;
-        if (count > 0) {
-            if (count === 1) {
-                this.items.delete(item);
-            } else {
-                this.items.set(item, count - 1);
-            }
+        const index = this.items.indexOf(item);
+        if (index > -1) {
+            this.items.splice(index, 1);
             return true;
         }
         return false;
@@ -50,10 +39,10 @@ export class Inventory {
      * this inventory (NOT the total number of items!).
      */
     getItemTypeCount(): number {
-        return this.items.size;
+        return this.items.length;
     }
 
     toString(): string {
-        return `[Inventory: size=${this.items.size}]`;
+        return `[Inventory: size=${this.items.length}]`;
     }
 }

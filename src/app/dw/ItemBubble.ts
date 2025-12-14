@@ -1,8 +1,8 @@
 import { DwGame } from './DwGame';
-import { ItemCountPair } from './Inventory';
 import { ChoiceBubble } from "@/app/dw/ChoiceBubble";
+import { Item } from '@/app/dw/Item';
 
-export class ItemBubble extends ChoiceBubble<ItemCountPair> {
+export class ItemBubble extends ChoiceBubble<Item> {
 
     constructor(game: DwGame) {
 
@@ -14,6 +14,6 @@ export class ItemBubble extends ChoiceBubble<ItemCountPair> {
         const y: number = 3 * tileSize;
 
         const choices = game.party.getInventory().getItems();
-        super(game, x, y, w, h, choices, (choice) => choice.item.name);
+        super(game, x, y, w, h, choices, (choice) => choice.name);
     }
 }
