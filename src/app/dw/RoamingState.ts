@@ -181,8 +181,19 @@ export class RoamingState extends BaseState {
             this.itemBubble.update(delta);
             done = this.itemBubble.handleInput();
             if (done) {
-                const selectedItem: Item | undefined = this.itemBubble.getSelectedItem()?.item;
-                const success: boolean = !selectedItem || selectedItem.use(this.game); // Either canceled the dialog or selected item
+                let success = false;
+                const selectedItem: Item | undefined = this.itemBubble.getSelectedItem();
+
+                if (selectedItem) {
+                    success = selectedItem.use(this.game);
+                    if (success) {
+                        this.game.getParty().getInventory().remove(selectedItem.name);
+                    }
+                } else {
+                    // Either canceled the dialog or selected item
+                    success = true;
+                }
+
                 if (success) {
                     this.setSubstate('ROAMING');
                 }

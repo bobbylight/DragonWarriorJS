@@ -23,6 +23,8 @@ export class Party {
         this.gold = 768;
         this.inventory.push(KEY);
         this.inventory.push(TORCH);
+        this.inventory.push(KEY);
+        this.inventory.push(TORCH);
     }
 
     /**
