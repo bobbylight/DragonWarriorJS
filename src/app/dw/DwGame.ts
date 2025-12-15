@@ -38,11 +38,11 @@ import { EquipmentMap } from './dw';
 import { createDefaultGameState } from './DwGameState';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
-import { BaseState } from "./BaseState";
-import { EnemyData } from "./Enemy";
-import { RoamingEntityRange } from "./RoamingEntity";
-import { HERB, Item } from "@/app/dw/Item";
-import { HiddenItem, HiddenItemType } from "@/app/dw/HiddenItem";
+import { BaseState } from './BaseState';
+import { EnemyData } from './Enemy';
+import { RoamingEntityRange } from './RoamingEntity';
+import { HERB, Item } from '@/app/dw/Item';
+import { HiddenItem, HiddenItemType } from '@/app/dw/HiddenItem';
 
 export type TiledMapMap = Record<string, DwMap>;
 

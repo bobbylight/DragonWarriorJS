@@ -5,8 +5,8 @@ import { Direction } from './Direction';
 import { Shield } from './Shield';
 import { Weapon } from './Weapon';
 import { Armor } from './Armor';
-import { Enemy } from "./Enemy";
-import { DwGame } from "./DwGame";
+import { Enemy } from './Enemy';
+import { DwGame } from './DwGame';
 
 export interface PartyMemberArgs extends RoamingEntityArgs {
     hp?: number;

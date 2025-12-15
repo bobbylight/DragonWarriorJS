@@ -1,5 +1,5 @@
 import { LocationString } from './LocationString';
-import { Item } from "./Item";
+import { Item } from './Item';
 
 export type HiddenItemType = 'herb';
 

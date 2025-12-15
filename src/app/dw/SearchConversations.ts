@@ -1,7 +1,7 @@
 import { RoamingState } from './RoamingState';
 import { Conversation } from './Conversation';
-import { LocationString, toLocationString } from "@/app/dw/LocationString";
-import { HERB } from "@/app/dw/Item";
+import { LocationString, toLocationString } from '@/app/dw/LocationString';
+import { HERB } from '@/app/dw/Item';
 
 /**
  * Returns the text to display when the player opens a treasure chest.
