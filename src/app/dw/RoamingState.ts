@@ -190,8 +190,8 @@ export class RoamingState extends BaseState {
                         this.game.getParty().getInventory().remove(selectedItem.name);
                     }
                 } else {
-                    // Either canceled the dialog or selected item
-                    success = true;
+                    // Either canceled the dialog or selected item is unimplemented
+                    success = false;
                 }
 
                 if (success) {

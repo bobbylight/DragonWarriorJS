@@ -4,7 +4,7 @@
 import { DwGame } from './DwGame';
 import { PartyMember } from './PartyMember';
 import { Inventory } from './Inventory';
-import { Item, KEY, TORCH } from './Item';
+import { HERB, Item, KEY, TORCH } from './Item';
 
 export class Party {
 
@@ -25,6 +25,8 @@ export class Party {
         this.inventory.push(TORCH);
         this.inventory.push(KEY);
         this.inventory.push(TORCH);
+        this.inventory.push(HERB);
+        this.inventory.push(HERB);
     }
 
     /**
@@ -105,7 +107,7 @@ export class Party {
      * @see #getInventory()
      */
     isInventoryFull(): boolean {
-        return this.inventory.getItemTypeCount() >= Party.INVENTORY_MAX_SIZE;
+        return this.inventory.getSize() >= Party.INVENTORY_MAX_SIZE;
     }
 
     /**
