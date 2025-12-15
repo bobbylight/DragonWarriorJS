@@ -1,5 +1,5 @@
 import { DwGame } from './DwGame';
-import { ChoiceBubble } from "@/app/dw/ChoiceBubble";
+import { ChoiceBubble } from '@/app/dw/ChoiceBubble';
 import { Item } from '@/app/dw/Item';
 
 export class ItemBubble extends ChoiceBubble<Item> {

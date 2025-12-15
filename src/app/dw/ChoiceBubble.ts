@@ -1,6 +1,6 @@
 import { InputManager } from 'gtp';
 import { Bubble } from './Bubble';
-import { DwGame } from "./DwGame";
+import { DwGame } from './DwGame';
 
 /**
  * A bubble that lets the user choose between several choices.

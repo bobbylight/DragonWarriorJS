@@ -3,7 +3,7 @@ import { RoamingEntity, RoamingEntityArgs } from './RoamingEntity';
 import { Direction } from './Direction';
 import { Hero } from './Hero';
 import { NpcType } from './NpcType';
-import { DwGame } from "./DwGame";
+import { DwGame } from './DwGame';
 
 type DirFunctionType = () => void;
 

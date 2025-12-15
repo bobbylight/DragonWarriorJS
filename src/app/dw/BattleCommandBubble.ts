@@ -1,7 +1,7 @@
 import { InputManager } from 'gtp';
 import { Bubble } from './Bubble';
 import { BattleState } from './BattleState';
-import { DwGame } from "./DwGame";
+import { DwGame } from './DwGame';
 
 export class BattleCommandBubble extends Bubble {
 
