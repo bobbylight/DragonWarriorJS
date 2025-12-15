@@ -185,7 +185,7 @@ export class RoamingState extends BaseState {
                 const selectedItem: Item | undefined = this.itemBubble.getSelectedItem();
 
                 if (selectedItem) {
-                    success = selectedItem.use(this.game);
+                    success = selectedItem.use(this);
                     if (success) {
                         this.game.getParty().getInventory().remove(selectedItem.name);
                     }
@@ -195,7 +195,11 @@ export class RoamingState extends BaseState {
                 }
 
                 if (success) {
-                    this.setSubstate('ROAMING');
+                    // Only bump back to roaming state if the item didn't change it first.
+                    // TODO: Find a better way to do this
+                    if (this.substate === 'MENU') {
+                        this.setSubstate('ROAMING');
+                    }
                 }
                 delete this.itemBubble;
             }
@@ -328,7 +332,6 @@ export class RoamingState extends BaseState {
     }
 
     openDoor(): boolean {
-
 
         const door: Door | undefined = this.game.getDoorHeroIsFacing();
 
