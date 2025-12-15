@@ -13,6 +13,13 @@ export class Inventory {
         return this.items.slice();
     }
 
+    /**
+     * Returns the number of items in the inventory.
+     */
+    getSize(): number {
+        return this.items.length;
+    }
+
     push(item: Item) {
         if (this.items.length < Party.INVENTORY_MAX_SIZE) {
             this.items.push(item);
@@ -32,14 +39,6 @@ export class Inventory {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Returns the number of different types of items in
-     * this inventory (NOT the total number of items!).
-     */
-    getItemTypeCount(): number {
-        return this.items.length;
     }
 
     toString(): string {
