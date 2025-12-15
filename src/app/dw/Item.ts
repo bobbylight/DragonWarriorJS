@@ -1,8 +1,8 @@
-import { DwGame } from './DwGame';
+import { Utils } from 'gtp';
 import { RoamingState } from './RoamingState';
 import { Sellable } from './Sellable';
 
-type UseItemFunction = (game: DwGame) => boolean;
+type UseItemFunction = (state: RoamingState) => boolean;
 
 interface ItemArgs {
     baseCost: number;
@@ -23,8 +23,8 @@ export class Item implements Sellable {
         this.useFunc = args.use;
     }
 
-    use(game: DwGame): boolean {
-        return this.useFunc(game);
+    use(state: RoamingState): boolean {
+        return this.useFunc(state);
     }
 
     toString() {
@@ -36,22 +36,29 @@ export class Item implements Sellable {
 
 export const HERB: Item = new Item('Herb', {
     baseCost: 24,
-    use: (game: DwGame) => {
-        return game.hero.incHp(24);
+    use: (state: RoamingState) => {
+        const hpRecovered = Utils.randomInt(23, 31);
+        state.showOneLineConversation(true, '\\w{hero.name} used the Herb.');
+        state.game.hero.incHp(hpRecovered);
+        return true;
     },
 });
 
 export const KEY: Item = new Item('Magic Key', {
     baseCost: 53, // TODO: and 83 depending on where you buy!
-    use: (game: DwGame) => {
-        return (game.state as RoamingState).openDoor();
+    use: (state: RoamingState) => {
+        return state.openDoor();
     },
 });
 
 export const TORCH: Item = new Item('Torch', {
     baseCost: 8,
-    use: (game: DwGame) => {
-        return game.setUsingTorch(true);
+    use: (state: RoamingState) => {
+        if (state.game.getMap().getProperty('requiresTorch', false)) {
+            return state.game.setUsingTorch(true);
+        }
+        state.showOneLineConversation(true, 'A torch can be used only in dark places.');
+        return false;
     },
 });
 
