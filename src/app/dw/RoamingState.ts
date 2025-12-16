@@ -158,7 +158,7 @@ export class RoamingState extends BaseState {
             } else {
                 this.setSubstate('MENU');
             }
-            this.warpBubble = undefined;
+            delete this.cheatBubble;
         }
     }
 
@@ -411,7 +411,7 @@ export class RoamingState extends BaseState {
             ctx.restore();
         }
 
-        if (this.substate === 'MENU' || this.substate === 'WARP_SELECTION' || this.substate === 'CHEAT_SELECTION') {
+        if (this.substate !== 'ROAMING') {
             this.commandBubble.paint(ctx);
         }
 
@@ -457,10 +457,9 @@ export class RoamingState extends BaseState {
     private setSubstate(substate: RoamingSubState) {
         const prevSubstate: RoamingSubState = this.substate;
         this.substate = substate;
-        if (substate === 'MENU') {
+        if (substate === 'MENU' && prevSubstate === 'ROAMING') {
             this.commandBubble.init();
-        } else if (substate === 'TALKING' &&
-          prevSubstate !== 'OVERNIGHT') {
+        } else if (substate === 'TALKING' && prevSubstate !== 'OVERNIGHT') {
             this.textBubble.init();
         }
     }
