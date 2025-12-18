@@ -1,6 +1,7 @@
 .idea/
 *.iml
 build/
+coverage/
 node_modules
 .tmp
 dist
