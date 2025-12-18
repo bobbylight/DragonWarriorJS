@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import {resolve} from 'path';
 
 export default defineConfig({
@@ -15,4 +15,12 @@ export default defineConfig({
         },
     },
     plugins: [],
-})
+    test: {
+        environment: 'jsdom',
+        globals: true,
+        coverage: {
+            reporter: ['text', 'json', 'lcov'],
+            reportOnFailure: true,
+        },
+    },
+});
