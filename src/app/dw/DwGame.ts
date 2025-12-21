@@ -63,7 +63,7 @@ export class DwGame extends Game {
     private cameraDx = 0;
     private cameraDy = 0;
 
-    constructor(args: GameArgs) {
+    constructor(args?: GameArgs) {
         super(args);
 
         // Create and initialize party

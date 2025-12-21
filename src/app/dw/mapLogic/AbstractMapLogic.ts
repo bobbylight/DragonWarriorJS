@@ -2,7 +2,7 @@ import { DwGame } from '../DwGame';
 import { Npc } from '../Npc';
 import { MapLogic, NpcText } from './MapLogic';
 
-export type NpcTextGenerator = (map: DwGame) => NpcText;
+export type NpcTextGenerator = (game: DwGame) => NpcText;
 
 export type NpcTextGeneratorMap = Record<string, NpcTextGenerator>;
 

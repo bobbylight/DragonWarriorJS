@@ -96,7 +96,8 @@ Thy gold increases by ${this.enemy.gp}.`;
 
         if (result.type === 'physical') {
             const text = `The ${this.enemy.name} attacks!`;
-            this.textBubble.addToConversation({ text, afterSound: 'prepareToAttack' }, true);
+            this.textBubble.addToConversation({ text,
+                afterSound: 'prepareToAttack' }, true);
             this.textBubble.onDone(() => {
                 this.enemyAttackDelay = new Delay({
                     millis: 350,
