@@ -19,6 +19,8 @@ import { Chest } from './Chest';
 import { toRowAndColumn } from './LocationString';
 import { getChestConversation } from './ChestConversations';
 import { getSearchConversation } from './SearchConversations';
+import { SpellBubble } from '@/app/dw/SpellBubble';
+import { Spell } from '@/app/dw/Spell';
 
 type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION';
 
@@ -30,6 +32,7 @@ export class RoamingState extends BaseState {
     private readonly statBubble: StatBubble;
     private statusBubble?: StatusBubble;
     private itemBubble?: ItemBubble;
+    private spellBubble?: SpellBubble;
     private warpBubble?: ChoiceBubble<WarpLocation>;
     private cheatBubble?: ChoiceBubble<CheatOption>;
     private readonly stationaryTimer: Delay;
@@ -177,7 +180,41 @@ export class RoamingState extends BaseState {
         }
 
         let done: boolean;
-        if (this.itemBubble) {
+        if (this.spellBubble) {
+            this.spellBubble.update(delta);
+            done = this.spellBubble.handleInput();
+            if (done) {
+                const selectedSpell: Spell | undefined = this.spellBubble.getSelectedItem();
+
+                if (selectedSpell) {
+                    const conversation = new Conversation(this.game, false);
+
+                    if (selectedSpell.cost <= this.game.hero.mp) {
+                        conversation.setSegments([
+                            {
+                                text: `\\w{hero.name} chanted the spell of ${selectedSpell.name}.`,
+                                afterSound: 'castSpell',
+                                afterAutoAdvanceDelay: 900,
+                                afterAction: () => {
+                                    // Stats are updated after the sound effect
+                                    this.game.hero.mp -= selectedSpell.cost;
+                                    const result = selectedSpell.cast(this.game.hero, undefined);
+                                    return result.conversationSegments;
+                                },
+                            },
+                        ]);
+                        this.textBubble.setConversation(conversation);
+                    } else {
+                        conversation.addSegment('Thy MP is too low.');
+                    }
+
+                    this.showConversation(conversation);
+                }
+
+                delete this.spellBubble;
+            }
+            return;
+        } else if (this.itemBubble) {
             this.itemBubble.update(delta);
             done = this.itemBubble.handleInput();
             if (done) {
@@ -425,6 +462,9 @@ export class RoamingState extends BaseState {
         if (this.statusBubble) {
             this.statusBubble.paint(ctx);
         }
+        if (this.spellBubble) {
+            this.spellBubble.paint(ctx);
+        }
         if (this.itemBubble) {
             this.itemBubble.paint(ctx);
         }
@@ -483,11 +523,14 @@ export class RoamingState extends BaseState {
      * @param text The text to display.
      */
     showOneLineConversation(voice: boolean, ...text: string[]) {
-
         const conversation: Conversation = new Conversation(this.game, voice);
         text.forEach((line) => {
             conversation.addSegment(line);
         });
+        this.showConversation(conversation);
+    }
+
+    showConversation(conversation: Conversation) {
         this.showTextBubble = true;
         this.textBubble.setConversation(conversation);
         this.setSubstate('TALKING');
@@ -502,7 +545,7 @@ export class RoamingState extends BaseState {
             return;
         }
 
-        // TODO: Show spells bubble
+        this.spellBubble = new SpellBubble(this.game);
     }
 
     showStatus() {
