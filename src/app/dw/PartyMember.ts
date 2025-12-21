@@ -7,6 +7,7 @@ import { Weapon } from './Weapon';
 import { Armor } from './Armor';
 import { Enemy } from './Enemy';
 import { DwGame } from './DwGame';
+import { healSpell, hurtSpell, Spell } from '@/app/dw/Spell';
 
 export interface PartyMemberArgs extends RoamingEntityArgs {
     hp?: number;
@@ -28,7 +29,7 @@ export class PartyMember extends RoamingEntity {
     weapon?: Weapon;
     armor?: Armor;
     shield?: Shield;
-    readonly spells: string[]; // TODO
+    readonly spells: Spell[];
 
     constructor(game: DwGame, args: PartyMemberArgs) {
 
@@ -45,7 +46,7 @@ export class PartyMember extends RoamingEntity {
         this.mp = args.mp ?? args.maxMp ?? 0;
         this.maxMp = this.mp;
 
-        this.spells = [];
+        this.spells = [ healSpell, hurtSpell ];
 
         //BattleEntity.call(this, args); // TODO: Better way to do a mixin?
         //Utils.mixin(RoamingEntityMixin.prototype, this);

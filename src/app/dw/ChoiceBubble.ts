@@ -57,6 +57,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
             this.curChoice = 0;
             this.resetArrowTimer();
         } else if (this.game.actionKeyPressed()) {
+            this.game.audio.playSound('menu');
             return true;
         } else if (im.up(true)) {
             this.curChoice = Math.max(0, this.curChoice - 1);

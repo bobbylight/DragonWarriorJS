@@ -15,6 +15,7 @@ type DoneCallback = () => void;
 export class TextBubble extends Bubble {
 
     private conversation: Conversation;
+    private conversationDone: boolean;
     private text: string;
     private curLine: number;
     private lines: string[];
@@ -26,6 +27,8 @@ export class TextBubble extends Bubble {
     private shoppingBubble?: ShoppingBubble | null;
     private delay?: Delay;
     private doneCallbacks: DoneCallback[];
+    private afterAutoAdvanceDelay: number;
+    private inAutoAdvanceDelay: boolean;
     private afterSound: string | undefined;
     private overnight?: boolean;
 
@@ -42,6 +45,7 @@ export class TextBubble extends Bubble {
         super(game, undefined, x, y, width, height);
 
         this.conversation = new Conversation(game);
+        this.conversationDone = false;
         this.text = '';
         this.curLine = 0;
         this.lines = [];
@@ -50,6 +54,8 @@ export class TextBubble extends Bubble {
         this.curCharMillis = 0;
         this.textDone = true;
         this.doneCallbacks = [];
+        this.afterAutoAdvanceDelay = 0;
+        this.inAutoAdvanceDelay = false;
     }
 
     addToConversation(text: string | ConversationSegmentArgs, autoAdvance = false): void {
@@ -148,7 +154,6 @@ export class TextBubble extends Bubble {
                 if (result) {
                     const choice: ConversationSegmentArgsChoice = this.choiceBubble.getSelectedItem()!;
                     nextState = TextBubble.getNextState(choice);
-                    //this._conversation.setDialogueState(nextState);
                     delete this.choiceBubble;
                     this.setActive(true);
                     return !this.updateConversation(nextState);
@@ -157,7 +162,10 @@ export class TextBubble extends Bubble {
             }
         }
 
-        if (this.game.anyKeyDown()) {
+        // A little cheap, but we currently don't support pressing a key to auto-advance text when an
+        // auto-advance delay is pending or running. This could be implemented in the future but might be a little
+        // complex.
+        if (this.game.anyKeyDown() && !this.hasPendingOrRunningAutoAdvanceDelay()) {
             if (!this.textDone) {
                 this.textDone = true;
                 if (this.lines.length > TextBubble.MAX_LINE_COUNT) {
@@ -172,21 +180,40 @@ export class TextBubble extends Bubble {
     }
 
     /**
-     * Immediately plays, or remembers to play, audio bits for a conversation
-     * segment as appropriate.
+     * Initializes local state based on the upcoming conversation segment.
      */
-    handleSegmentAudio(segment: ConversationSegment): void {
+    handleSegmentExtraProperties(segment: ConversationSegment): void {
+        // Sound or music to play immediately
         if (segment.sound) {
             this.game.audio.playSound(segment.sound);
         }
         if (segment.music) {
             this.game.audio.playMusic(segment.music);
         }
+
+        // A sound to play when this segment's text finishes rendering
         if (segment.afterSound) {
             this.afterSound = segment.afterSound;
         } else if (segment.choices) {
             this.afterSound = 'confirmation';
         }
+
+        this.afterAutoAdvanceDelay = segment.afterAutoAdvanceDelay ?? 0;
+        this.inAutoAdvanceDelay = false;
+    }
+
+    /**
+     * Returns true if there is a pending or running auto-advance delay. Used to disallow the player from
+     * auto-advancing text when a delay is imminent. In practice this should be allowed, skipping just to the
+     * delay, but we'll add that in a future ticket.
+     */
+    private hasPendingOrRunningAutoAdvanceDelay(): boolean {
+        return this.afterAutoAdvanceDelay > 0 || this.inAutoAdvanceDelay;
+    }
+
+    override init() {
+        super.init();
+        this.conversationDone = false;
     }
 
     /**
@@ -263,17 +290,31 @@ export class TextBubble extends Bubble {
                 this.curOffs++;
                 if (this.curOffs === this.lines[this.curLine].length) {
                     if (this.curLine === this.lines.length - 1) {
-                        console.log('Setting textDone to true');
-                        this.textDone = true;
                         if (this.afterSound) {
                             this.game.audio.playSound(this.afterSound);
                             delete this.afterSound;
                         }
+                        if (this.afterAutoAdvanceDelay > 0) {
+                            this.inAutoAdvanceDelay = true;
+                            this.delay = new Delay({
+                                millis: this.afterAutoAdvanceDelay,
+                                callback: () => {
+                                    console.log('Setting textDone to true');
+                                    this.textDone = true;
+                                    this.inAutoAdvanceDelay = false;
+                                    this.updateConversation();
+                                },
+                            });
+                            this.afterAutoAdvanceDelay = 0;
+                        } else {
+                            console.log('Setting textDone to true');
+                            this.textDone = true;
+                        }
                     } else {
                         console.log('Going to next line');
                         this.curLine++;
+                        this.curOffs = -1;
                     }
-                    this.curOffs = -1;
                 } else if (this.conversation.getVoice() &&
                         this.curOffs % 2 === 0 && this.lines[this.curLine][this.curOffs] !== ' ') {
                     this.game.audio.playSound('talk');
@@ -371,33 +412,49 @@ export class TextBubble extends Bubble {
         this.conversation = conversation;
         const segment: ConversationSegment = this.conversation.start();
         this.setText(segment);
-        this.handleSegmentAudio(segment);
+        this.handleSegmentExtraProperties(segment);
     }
 
     private updateConversation(forcedNextState?: string): boolean {
 
-        if (forcedNextState || this.conversation.hasNext()) {
-            if (this.conversation.current()!.overnight && this.textDone) {
+        if (this.conversationDone) {
+            return false;
+        }
+
+        const prevSegment = this.conversation.current();
+        if (prevSegment) {
+            if (prevSegment.overnight && this.textDone) {
                 this.overnight = true;
             }
+            const segmentsToAdd = prevSegment.afterAction?.();
+            if (prevSegment.afterAction && !segmentsToAdd && !this.conversation.hasNext()) {
+                this.conversation.next();
+                this.conversationDone = true;
+                return false;
+            }
+            segmentsToAdd?.forEach((segment) => {
+                this.conversation.addSegment(segment);
+                this.textDone = false;
+            });
+        }
+
+        if (forcedNextState || this.conversation.hasNext()) {
             let segment: ConversationSegment;
             if (forcedNextState) {
-                this.conversation.setDialogueState(forcedNextState);
-                segment = this.conversation.current(true)!;
+                segment = this.conversation.setDialogueState(forcedNextState)!;
             } else {
-                segment = this.conversation.next(true)!;
+                segment = this.conversation.next()!;
             }
-            //            if (segment.overnight) {
-            //               this._overnight = true;
-            //            } else
+            segment.action?.();
             if (segment.clear) {
                 this.setText(segment);
             } else {
                 this.append(segment);
             }
-            this.handleSegmentAudio(segment);
+            this.handleSegmentExtraProperties(segment);
             return true;
         }
+        this.conversationDone = true;
         return false;
     }
 }

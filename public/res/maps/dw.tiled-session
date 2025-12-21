@@ -19,14 +19,14 @@
         },
         "brecconary.json": {
             "expandedObjectLayers": [
-                5,
-                6
+                6,
+                5
             ],
             "scale": 6.9708,
-            "selectedLayer": -1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 31.20158374935445,
-                "y": 294.80117059734897
+                "x": 311.94410971481034,
+                "y": 303.9823262753199
             }
         },
         "brecconary.tmx": {
@@ -49,8 +49,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 161.5,
-                "y": 159
+                "x": 159.5,
+                "y": 160
             }
         },
         "erdricksCave1.json#collision": {
@@ -77,8 +77,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 160.5,
-                "y": 159
+                "x": 159.5,
+                "y": 160
             }
         },
         "erdricksCave2.json#collision": {
@@ -105,8 +105,8 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 233.5,
-                "y": 225
+                "x": 231.5,
+                "y": 224
             }
         },
         "garinham.json#collision": {
@@ -158,8 +158,8 @@
             "scale": 1.3635,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 72.24055738907222,
-                "y": 263.2929959662633
+                "x": 336.2669600293363,
+                "y": 319.76530986431976
             }
         },
         "tantegelCastle.tmx": {
@@ -174,8 +174,8 @@
             "scale": 1.3118,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 197.05747827412716,
-                "y": 193.62707729836868
+                "x": 191.72129897850283,
+                "y": 171.52004878792502
             }
         },
         "tileset_tiles.json": {
