@@ -95,8 +95,8 @@ export class Bubble {
     static removeSpecialEscapes(text: string, delays: BreakApartDelay[]) {
 
         // Delay formats:
-        //    \d      - default ms
-        //    \d- 300 ms
+        //    \d{750} - 750ms
+        //    \d      - default (500ms)
 
         let delay: number;
         let index: number;

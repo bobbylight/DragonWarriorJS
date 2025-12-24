@@ -5,6 +5,17 @@ import { NpcText } from './mapLogic/MapLogic';
 import { DwGame } from './DwGame';
 import { Sellable } from './Sellable';
 
+/**
+ * Conversations track everything an NPC says to the hero, along with events to trigger along the way -
+ * sounds to play, actions to perform, etc. Conversations are usually loaded from the <code>mapLogic</code> folder.
+ * A common pattern is:
+ *
+ * <code>
+ * const conversation = new Conversation(game, true);
+ * conversation.setSegments(mapLogic.npcText(npc, game));
+ * // or, conversation.addSegment(singleSegment);
+ * </code>
+ */
 export class Conversation {
 
     private readonly voice: boolean;
@@ -59,8 +70,7 @@ export class Conversation {
     /**
      * Adds one or more segments to this conversation.
      *
-     * @param segmentArgs Either a single segment argument map, or
-     *        an array of them.
+     * @param segmentArgs The new conversation information.
      */
     setSegments(segmentArgs: NpcText) {
 
@@ -122,23 +132,17 @@ export class Conversation {
         return this.getNextIndex() < this.segments.length;
     }
 
-    current(performAction = false): ConversationSegment | null {
+    current(): ConversationSegment | null {
         const segment: ConversationSegment | null = this.segmentIndex >= this.segments.length ? null :
             this.segments[this.segmentIndex];
-        if (performAction && segment?.action) {
-            segment.action();
-        }
         return segment;
     }
 
-    next(performAction: boolean): ConversationSegment | null {
+    next(): ConversationSegment | null {
         const nextIndex: number = this.getNextIndex();
         if (nextIndex < this.segments.length) {
             this.segmentIndex = nextIndex;
             const segment: ConversationSegment | null = this.segments[this.segmentIndex];
-            if (performAction && segment?.action) {
-                segment.action();
-            }
             return segment;
         }
         return null;
@@ -152,7 +156,7 @@ export class Conversation {
         return null;
     }
 
-    setDialogueState(state: string): number {
+    setDialogueState(state: string): ConversationSegment | null {
         if (!state) {
             // Assume we want the conversation to end
             this.segmentIndex = this.segments.length;
@@ -161,11 +165,11 @@ export class Conversation {
         if (index < this.segments.length) {
             this.segmentIndex = index;
             console.log(`Set dialogue state to "${state}" (${index})`);
-            return this.segmentIndex;
+            return this.segments[this.segmentIndex];
         }
         console.error('Unknown next dialogue state: "' + state + '"');
         this.segmentIndex = this.segments.length;
-        return this.segmentIndex;
+        return null;
     }
 
     /**

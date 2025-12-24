@@ -38,7 +38,7 @@ export const HERB: Item = new Item('Herb', {
     baseCost: 24,
     use: (state: RoamingState) => {
         const hpRecovered = Utils.randomInt(23, 31);
-        state.showOneLineConversation(true, '\\w{hero.name} used the Herb.');
+        state.showOneLineConversation(false, '\\w{hero.name} used the Herb.');
         state.game.hero.incHp(hpRecovered);
         return true;
     },
@@ -57,7 +57,7 @@ export const TORCH: Item = new Item('Torch', {
         if (state.game.getMap().getProperty('requiresTorch', false)) {
             return state.game.setUsingTorch(true);
         }
-        state.showOneLineConversation(true, 'A torch can be used only in dark places.');
+        state.showOneLineConversation(false, 'A torch can be used only in dark places.');
         return false;
     },
 });
