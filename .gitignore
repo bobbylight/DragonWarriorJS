@@ -6,4 +6,4 @@ node_modules
 .tmp
 dist
 Thumbs.db
-
+.claude/settings.local.json
