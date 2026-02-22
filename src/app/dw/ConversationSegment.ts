@@ -16,7 +16,31 @@ export interface ConversationSegmentArgsChoiceWithNextStep {
     next: string | (() => string);
 }
 
-// TODO: This might be better defined as a discriminated union due to conversationType?
+/**
+ * Template descriptor for merchant NPC conversations.
+ */
+export interface MerchantConversationArgs {
+    conversationType: 'merchant';
+    /** Item IDs to sell (e.g. 'bambooPole', 'club'). */
+    choices: string[];
+    /**
+     * The merchant's greeting to the hero when they first arrive at the shop. If undefined,
+     * a default is used.
+     */
+    introText?: string;
+}
+
+/**
+ * Template descriptor for innkeeper NPC conversations.
+ */
+export interface InnkeeperConversationArgs {
+    conversationType: 'innkeeper';
+    cost: number;
+}
+
+/** Union of all NPC conversation template types. */
+export type ConversationTemplate = MerchantConversationArgs | InnkeeperConversationArgs;
+
 /**
  * For NPC chats more complex than static strings, this interface represents the data that defines all
  * possibilities. The best way to familiarize yourself with the structure is to look at the map data
@@ -29,7 +53,8 @@ export interface ConversationSegmentArgs {
     action?: () => void;
 
     /**
-     * If defined, this callback is executed when the segment ends.
+     * If defined, this callback is executed when the segment ends. It can optionally return additional segments
+     * to append to the current conversation.
      */
     afterAction?: () => ConversationSegmentArgs[] | undefined;
 
@@ -47,8 +72,7 @@ export interface ConversationSegmentArgs {
 
     /**
      * A list of choices the hero can make in this segment. The choice list is displayed after the "text" is
-     * displayed. This is used both when conversationType == "merchant" and in conversations when the hero can
-     * make a choice (e.g. Yes/No => "But thou must!").
+     * displayed. This is used in conversations when the hero can make a choice (e.g. Yes/No => "But thou must!").
      */
     choices?: ConversationSegmentArgsChoice[];
 
@@ -58,29 +82,10 @@ export interface ConversationSegmentArgs {
     clear?: boolean;
 
     /**
-     * If defined, this is a special "templated' conversation for a specific NPC type/situation.
-     * In this case, only specific fields in this object are used. See the implementation for details.
-     * "merchant" requires "choices" and optionally takes "introText".
-     * "innkeeper" requires "cost".
-     */
-    conversationType?: 'merchant' | 'innkeeper';
-
-    /**
-     * Currently only used if conversationType == 'innkeeper'.
-     */
-    cost?: number;
-
-    /**
      * The ID of this segment. Only needs to be defined if it needs to be referenced elsewhere, such as by another
      * segment's "next" field.
      */
     id?: string;
-
-    /**
-     * Currently only used if conversationType == 'merchant'. This is their greeting to the hero when they
-     * first arrive at the shop. If undefined, a default is used.
-     */
-    introText?: string;
 
     /**
      * If defined, this music is played immediately when this segment starts.
@@ -134,7 +139,6 @@ export class ConversationSegment implements ConversationSegmentArgs {
     choices?: ConversationSegmentArgsChoice[];
     clear?: boolean;
     id?: string;
-    introText?: string;
     music?: string;
     next?: string;
     overnight?: boolean;

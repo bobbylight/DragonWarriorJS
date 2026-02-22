@@ -74,22 +74,19 @@ export class Conversation {
      */
     setSegments(segmentArgs: NpcText) {
 
-        // One of our special templated conversation types. Note our if-check here
-        // is a little more verbose than necessary just to appease tsc.
+        // One of our special templated conversation types. type narrowed via discriminated union. The default case
+        // is only to catch if we add a new conversation template but forget to update this section.
         if (typeof segmentArgs !== 'string' && 'conversationType' in segmentArgs) {
-            switch (segmentArgs.conversationType) {
+            const conversationType = segmentArgs.conversationType;
+            switch (conversationType) {
                 case 'merchant':
-                    // Add the standard segments for a merchant.
-                    // TODO: Allow user-defined segments to override these.
                     this.setSegments(merchantConversationTemplate(this.game, this, segmentArgs));
                     break;
                 case 'innkeeper':
-                    // Add the standard segments for an innkeeper.
-                    // TODO: Allow user-defined segments to override these.
                     this.setSegments(innkeeperConversationTemplate(this.game, segmentArgs));
                     break;
                 default:
-                    throw new Error(`Unknown conversation type: ${segmentArgs.conversationType}`);
+                    throw new Error(`Unknown conversation type: ${conversationType as string}`);
             }
         } else if (Array.isArray(segmentArgs)) {
             segmentArgs.forEach((args: string | ConversationSegmentArgs) => {
