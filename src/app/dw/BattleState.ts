@@ -162,6 +162,14 @@ Thy gold increases by ${this.enemy.gp}.`;
         this.textBubble.setConversation(conversation);
     }
 
+    getEnemy(): Enemy {
+        return this.enemy;
+    }
+
+    getTextBubble(): TextBubble {
+        return this.textBubble;
+    }
+
     item() {
         this.textBubble.addToConversation({ text: 'Not implemented, command?' });
     }
@@ -236,10 +244,11 @@ Thy gold increases by ${this.enemy.gp}.`;
             this.commandExecuting = false;
             this.backToRoaming();
         } else {
-            this.commandExecuting = false;
             this.commandBubble.reset();
-            this.commandBubble.init();
             this.textBubble.addToConversation({ text: 'Couldn\'t run!' });
+            this.textBubble.onDone(() => {
+                this.enemyAttack();
+            });
         }
     }
 
