@@ -35,14 +35,20 @@ import { Overworld } from './mapLogic/overworld';
 import { TantegelCastle } from './mapLogic/tantegelCastle';
 import { MapLogic } from './mapLogic/MapLogic';
 import { EquipmentMap } from './dw';
-import { createDefaultGameState } from './DwGameState';
+import {
+    AdventureLog,
+    createNewAdventureLog,
+    loadAdventureLog,
+    saveAdventureLog,
+} from './AdventureLog';
 import { Chest, ChestContentType } from './Chest';
 import { toLocationString, LocationString } from './LocationString';
 import { BaseState } from './BaseState';
 import { EnemyData } from './Enemy';
 import { RoamingEntityRange } from './RoamingEntity';
-import { HERB, Item } from '@/app/dw/Item';
+import { HERB, Item, getItemByName } from '@/app/dw/Item';
 import { HiddenItem, HiddenItemType } from '@/app/dw/HiddenItem';
+
 
 export type TiledMapMap = Record<string, DwMap>;
 
@@ -53,7 +59,7 @@ export class DwGame extends Game {
     hero: Hero;
     party: Party;
     npcs: Npc[] = [];
-    private readonly gameState = createDefaultGameState();
+    private adventureLog = createNewAdventureLog();
     private bumpSoundDelay = 0;
     private readonly mapLogics = new Map<string, MapLogic>();
     private randomEncounters = true;
@@ -104,8 +110,9 @@ export class DwGame extends Game {
         return this.inputManager.isKeyDown(Keys.KEY_X, true);
     }
 
-    override update() {
-        super.update();
+    continueGame(id: string) {
+        this.loadAdventureLog(id);
+        this.transitionToGame();
     }
 
     cycleArmor() {
@@ -187,6 +194,10 @@ export class DwGame extends Game {
         this.getFont().drawString(this.getRenderingContext(), textStr, x, y);
     }
 
+    getAdventureLog(): AdventureLog {
+        return this.adventureLog;
+    }
+
     getEnemy(name: string): EnemyData {
         const enemyDatas: Record<string, EnemyData> = this.assets.get('enemies');
         return enemyDatas[name];
@@ -238,6 +249,38 @@ export class DwGame extends Game {
     hasRoofTile(row: number, col: number): boolean {
         const roofLayer: TiledLayer | undefined = this.getMap().getLayerIfExists('tileLayer2');
         return roofLayer ? roofLayer.getData(row, col) > 0 : false;
+    }
+
+    private initHeroFromAdventureLog() {
+        const hero: Hero = this.hero;
+        const log = this.adventureLog.hero;
+        hero.hp = log.hp;
+        hero.maxHp = log.maxHp;
+        hero.mp = log.mp;
+        hero.maxMp = log.maxMp;
+        hero.level = log.level;
+        hero.exp = log.exp;
+        hero.strength = log.strength;
+        hero.agility = log.agility;
+
+        const weaponMap: EquipmentMap<Weapon> = this.assets.get('weapons');
+        hero.weapon = weaponMap[log.sword];
+        const armorMap: EquipmentMap<Armor> = this.assets.get('armor');
+        hero.armor = armorMap[log.armor];
+        const shieldMap: EquipmentMap<Shield> = this.assets.get('shields');
+        hero.shield = shieldMap[log.shield];
+    }
+
+    private initPartyFromAdventureLog() {
+        const party = this.party;
+        party.gold = this.adventureLog.party.gold;
+        party.getInventory().clear();
+        for (const itemName of this.adventureLog.party.inventory) {
+            const item = getItemByName(itemName);
+            if (item) {
+                party.addInventoryItem(item);
+            }
+        }
     }
 
     /**
@@ -298,6 +341,40 @@ export class DwGame extends Game {
 
         this.maps[ asset ] = map;
         return map;
+    }
+
+    loadAdventureLog(id?: string) {
+        this.adventureLog = loadAdventureLog(id);
+        this.initHeroFromAdventureLog();
+        this.initPartyFromAdventureLog();
+    }
+
+    saveAdventureLog() {
+        const log = this.adventureLog;
+        const hero = this.hero;
+
+        log.hero.hp = hero.hp;
+        log.hero.maxHp = hero.maxHp;
+        log.hero.mp = hero.mp;
+        log.hero.maxMp = hero.maxMp;
+        log.hero.level = hero.level;
+        log.hero.exp = hero.exp;
+        log.hero.strength = hero.strength;
+        log.hero.agility = hero.agility;
+        log.hero.sword = hero.weapon?.name ?? log.hero.sword;
+        log.hero.armor = hero.armor?.name ?? log.hero.armor;
+        log.hero.shield = hero.shield?.name ?? log.hero.shield;
+        if (this.map) {
+            log.hero.map = this.map.name;
+            log.hero.row = hero.mapRow;
+            log.hero.col = hero.mapCol;
+            log.hero.direction = hero.direction;
+        }
+
+        log.party.gold = this.party.gold;
+        log.party.inventory = this.party.getInventory().getItems().map((item) => item.name);
+
+        saveAdventureLog(log);
     }
 
     private adjustGameMap(map: DwMap) {
@@ -488,33 +565,22 @@ export class DwGame extends Game {
         return toLocationString(row, col);
     }
 
-    private loadGame() {
-        const hero: Hero = this.hero;
-        hero.hp = hero.maxHp = 15;
-        hero.mp = hero.maxMp = 15;
-        hero.strength = 4;
-        hero.agility = 4;
-
-        const weaponMap: EquipmentMap<Weapon> = this.assets.get('weapons');
-        hero.weapon = weaponMap.club;
-        const armorMap: EquipmentMap<Armor> = this.assets.get('armor');
-        hero.armor = armorMap.clothes;
-        const shieldMap: EquipmentMap<Shield> = this.assets.get('shields');
-        hero.shield = shieldMap.smallShield;
-    }
-
     setCameraOffset(dx: number, dy: number) {
         this.cameraDx = dx;
         this.cameraDy = dy;
     }
 
     startNewGame() {
-        this.loadGame();
+        this.loadAdventureLog();
+        this.transitionToGame();
+    }
+
+    private transitionToGame() {
+        const log = this.adventureLog;
         const transitionLogic: () => void = () => {
-            //            this.setMap('overworld.json');
-            //            this.hero.setMapLocation(52, 45);
-            this.setMap('brecconary.json');
-            this.hero.setMapLocation(7, 6);
+            this.setMap(log.hero.map + '.json');
+            this.hero.setMapLocation(log.hero.row, log.hero.col);
+            this.hero.direction = log.hero.direction;
         };
         this.setState(new FadeOutInState(this.state, new RoamingState(this), transitionLogic));
     }
@@ -614,12 +680,12 @@ export class DwGame extends Game {
     }
 
     removeChest(chest: Chest) {
-        this.gameState.mapStates[this.getMap().name].openedChests.push(chest.id);
+        this.adventureLog.mapStates[this.getMap().name].openedChests.push(chest.id);
         this.getMap().removeChest(chest);
     }
 
     removeHiddenItem(hiddenItem: HiddenItem) {
-        this.gameState.mapStates[this.getMap().name].obtainedHiddenItems.push(hiddenItem.id);
+        this.adventureLog.mapStates[this.getMap().name].obtainedHiddenItems.push(hiddenItem.id);
         this.getMap().removeHiddenItem(hiddenItem);
     }
 
@@ -725,4 +791,7 @@ export class DwGame extends Game {
             'Territory layer showing' : 'Territory layer hidden');
     }
 
+    override update() {
+        super.update();
+    }
 }

@@ -92,6 +92,7 @@ export default [
             "vitest/consistent-test-filename": ["error", { "pattern": ".*\\.spec\\.ts$"}],
             "vitest/consistent-test-it": ["error", { "fn": "it", "withinDescribe": "it" }],
             "vitest/consistent-vitest-vi": "error",
+            "vitest/expect-expect": ["error", { "assertFunctionNames": ["expect", "expectAdventureLogisForNewGame"] }],
             "vitest/hoisted-apis-on-top": "error",
             "vitest/no-alias-methods": "error",
             "vitest/no-commented-out-tests": "error",

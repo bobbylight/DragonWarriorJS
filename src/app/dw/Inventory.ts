@@ -20,6 +20,10 @@ export class Inventory {
         return this.items.length;
     }
 
+    clear() {
+        this.items.length = 0;
+    }
+
     push(item: Item) {
         if (this.items.length < Party.INVENTORY_MAX_SIZE) {
             this.items.push(item);
