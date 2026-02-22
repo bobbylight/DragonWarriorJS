@@ -1,6 +1,7 @@
 import { DwGame } from './DwGame';
 import { NpcText } from './mapLogic/MapLogic';
-import { ConversationSegmentArgs } from './ConversationSegment';
+import { InnkeeperConversationArgs } from './ConversationSegment';
+import { Conversation } from '@/app/dw/Conversation';
 
 /**
  * Returns an NPC conversation with a merchant.
@@ -8,11 +9,8 @@ import { ConversationSegmentArgs } from './ConversationSegment';
  * @param game
  * @param segmentArgs
  */
-export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: ConversationSegmentArgs): NpcText => {
+export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: InnkeeperConversationArgs): NpcText => {
 
-    if (!segmentArgs.cost) {
-        throw new Error(`No cost for the inn specified in conversation: ${JSON.stringify(segmentArgs)}`);
-    }
     const cost = segmentArgs.cost;
 
     return [
@@ -33,7 +31,7 @@ export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: Convers
         {
             id: 'cantAffordIt',
             text: 'Thou hast not enough money.',
-            next: '_done',
+            next: Conversation.DONE,
         },
         {
             id: 'stay',
@@ -47,7 +45,7 @@ export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: Convers
                 game.party.gold -= cost;
             },
         },
-        { text: 'I shall see thee again.', next: '_done' },
+        { text: 'I shall see thee again.', next: Conversation.DONE },
         {
             id: 'leave',
             text: 'Okay.\nGood-bye, traveler.',

@@ -1,15 +1,11 @@
 import { Conversation } from './Conversation';
 import { DwGame } from './DwGame';
 import { NpcText } from './mapLogic/MapLogic';
-import { ConversationSegmentArgs } from './ConversationSegment';
+import { MerchantConversationArgs } from './ConversationSegment';
 import { Item } from './Item';
 
 export const merchantConversationTemplate =
-    (game: DwGame, conversation: Conversation, segmentArgs: ConversationSegmentArgs): NpcText => {
-
-        if (!segmentArgs.choices) {
-            throw new Error('No choices specified in conversation: ' + JSON.stringify(segmentArgs));
-        }
+    (game: DwGame, conversation: Conversation, segmentArgs: MerchantConversationArgs): NpcText => {
 
         return [
             {
@@ -24,7 +20,7 @@ export const merchantConversationTemplate =
                 id: Conversation.CHOICES_SEGMENT, // This ID is special and required
                 text: 'What dost thou wish to buy?',
                 shopping: {
-                    choices: segmentArgs.choices as string[], // TODO: Verify this is just string[]
+                    choices: segmentArgs.choices,
                 },
             },
             {

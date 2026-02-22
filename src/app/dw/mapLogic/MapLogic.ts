@@ -1,6 +1,6 @@
 import { Npc } from '../Npc';
 import { DwGame } from '../DwGame';
-import { ConversationSegmentArgs } from '../ConversationSegment';
+import { ConversationSegmentArgs, ConversationTemplate } from '../ConversationSegment';
 
 /**
  * Logic for an RPG map.  Handles things such as what an NPC should say.
@@ -30,4 +30,4 @@ export interface MapLogic {
  * conversation, with logic and different results depending on things such
  * as user choices.
  */
-export type NpcText = string | ConversationSegmentArgs | (string | ConversationSegmentArgs)[];
+export type NpcText = string | ConversationSegmentArgs | ConversationTemplate | (string | ConversationSegmentArgs)[];
