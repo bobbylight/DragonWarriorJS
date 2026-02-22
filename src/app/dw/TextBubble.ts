@@ -26,7 +26,7 @@ export class TextBubble extends Bubble {
     private choiceBubble?: ChoiceBubble<ConversationSegmentArgsChoice> | null;
     private shoppingBubble?: ShoppingBubble | null;
     private delay?: Delay;
-    private doneCallbacks: DoneCallback[];
+    private readonly doneCallbacks: DoneCallback[];
     private afterAutoAdvanceDelay: number;
     private inAutoAdvanceDelay: boolean;
     private afterSound: string | undefined;
@@ -327,10 +327,13 @@ export class TextBubble extends Bubble {
         }
 
         if (this.doneCallbacks.length > 0 && this.isDone()) {
-            this.doneCallbacks.forEach((callback: () => void) => {
-                callback();
-            });
-            this.doneCallbacks = [];
+            // Only run the callbacks that existed at the time the check was made.
+            // Done callbacks may add new done callbacks to run later.
+            const count = this.doneCallbacks.length;
+            for (let i = 0; i < count; i++) {
+                this.doneCallbacks[i]();
+            }
+            this.doneCallbacks.splice(0, count);
         }
 
     }
