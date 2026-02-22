@@ -4,7 +4,7 @@
 import { DwGame } from './DwGame';
 import { PartyMember } from './PartyMember';
 import { Inventory } from './Inventory';
-import { HERB, Item, KEY, TORCH } from './Item';
+import { Item } from './Item';
 
 export class Party {
 
@@ -18,15 +18,6 @@ export class Party {
         this.members = [];
         this.inventory = new Inventory();
         this.gold = 0;
-
-        // Dummy data
-        this.gold = 768;
-        this.inventory.push(KEY);
-        this.inventory.push(TORCH);
-        this.inventory.push(KEY);
-        this.inventory.push(TORCH);
-        this.inventory.push(HERB);
-        this.inventory.push(HERB);
     }
 
     /**
