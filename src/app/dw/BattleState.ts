@@ -94,26 +94,31 @@ Thy gold increases by ${this.enemy.gp}.`;
 
         const result: EnemyAiResult = this.enemy.ai(this.game.hero, this.enemy);
 
-        if (result.type === 'physical') {
-            const text = `The ${this.enemy.name} attacks!`;
-            this.textBubble.addToConversation({ text,
-                afterSound: 'prepareToAttack' }, true);
-            this.textBubble.onDone(() => {
-                this.enemyAttackDelay = new Delay({
-                    millis: 350,
-                    callback: this.enemyAttackCallback.bind(this),
+        switch (result.type) {
+            case 'physical': {
+                const text = `The ${this.enemy.name} attacks!`;
+                this.textBubble.addToConversation({ text,
+                    afterSound: 'prepareToAttack' }, true);
+                this.textBubble.onDone(() => {
+                    this.enemyAttackDelay = new Delay({
+                        millis: 350,
+                        callback: this.enemyAttackCallback.bind(this),
+                    });
                 });
-            });
-        } else { // 'magic'
-            const text = `The ${this.enemy.name} chants the spell of ${result.spellName}.`;
-            // TODO: Should conversations auto-wait for afterSounds to complete?
-            this.textBubble.addToConversation({ text, afterSound: 'castSpell' }, true);
-            this.textBubble.onDone(() => {
-                this.enemyAttackDelay = new Delay({
-                    millis: 900,
-                    callback: this.enemyAttackCallback.bind(this),
+                break;
+            }
+            case 'magic': {
+                const text = `The ${this.enemy.name} chants the spell of ${result.spellName}.`;
+                // TODO: Should conversations auto-wait for afterSounds to complete?
+                this.textBubble.addToConversation({ text, afterSound: 'castSpell' }, true);
+                this.textBubble.onDone(() => {
+                    this.enemyAttackDelay = new Delay({
+                        millis: 900,
+                        callback: this.enemyAttackCallback.bind(this),
+                    });
                 });
-            });
+                break;
+            }
         }
     }
 
