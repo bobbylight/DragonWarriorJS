@@ -16,7 +16,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
         choices: ChoiceBubbleChoice[] = [],
         choiceStringifier?: (choice: ChoiceBubbleChoice) => string,
         cancellable = false,
-        title: string | undefined = undefined) {
+        title?: string) {
         super(game, title, x, y, w, h);
         this.choices = choices;
         this.choiceStringifier = choiceStringifier ?? ((choice: ChoiceBubbleChoice) => choice as unknown as string);
