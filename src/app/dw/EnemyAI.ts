@@ -16,11 +16,9 @@ aiMap.halfHurtHalfAttack = (hero: Hero, enemy: Enemy) => {
     return { type: 'physical', damage: enemy.computePhysicalAttackDamage(hero) };
 };
 
-export interface EnemyAiResult {
-   type: string;
-   damage: number;
-   spellName?: string;
-}
+export type EnemyAiResult =
+    | { type: 'physical'; damage: number }
+    | { type: 'magic'; spellName: string; damage: number };
 
 export type EnemyAiFunc = (hero: Hero, enemy: Enemy) => EnemyAiResult;
 

@@ -37,8 +37,7 @@ Create a branch (if needed), commit staged/unstaged changes, push, and open/upda
 
 6. **Create or update PR**:
    - Check if a PR already exists for this branch with `gh pr view`
-   - If no PR exists: use `gh pr create` with the title, body, and labels below
-     - When creating a new PR, create it as a draft
+   - If no PR exists: use `gh pr create --draft` with the title, body, and labels below
    - If a PR exists: use `gh pr edit` to update the title, body, and labels
    - Title: concise, matching the commit style
    - Body: formatted using this repo's PR template (`.github/PULL_REQUEST_TEMPLATE.md`),
