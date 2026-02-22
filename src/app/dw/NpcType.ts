@@ -1,32 +1,40 @@
-// TODO: Convert this to a union type or some simpler struct
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-export class NpcType {
-    static readonly SOLDIER_GRAY: number = 0;
-    static readonly SOLDIER_RED: number = 1;
-    static readonly MAN_BLUE: number = 2;
-    static readonly WOMAN_BLUE: number = 3;
-    static readonly MERCHANT_GREEN: number = 4;
-    static readonly OLD_MAN_GRAY: number = 5;
-    static readonly KING: number = 6;
-}
+/**
+ * The types of NPCs defined in the game's Tiled map files.
+ */
+export type NpcType =
+    | 'SOLDIER_GRAY'
+    | 'SOLDIER_RED'
+    | 'MAN_BLUE'
+    | 'WOMAN_BLUE'
+    | 'MERCHANT_GREEN'
+    | 'OLD_MAN_GRAY'
+    | 'KING';
 
+/**
+ * A mapping of NPC type to the row in the sprite sheet containing their graphics.
+ */
+const npcSpriteRows: Record<NpcType, number> = {
+    SOLDIER_GRAY: 0,
+    SOLDIER_RED: 1,
+    MAN_BLUE: 2,
+    WOMAN_BLUE: 3,
+    MERCHANT_GREEN: 4,
+    OLD_MAN_GRAY: 5,
+    KING: 6,
+};
+
+/**
+ * Returns the row in the NPC sprite sheet containing an NPC type's graphics.
+ */
+export const getNpcSpriteRow = (type: NpcType): number => npcSpriteRows[type];
+
+const npcTypeSet = new Set<string>(Object.keys(npcSpriteRows));
+
+/**
+ * Returns the NPC type for a specified string. If this value is unknown, a default
+ * value is returned.
+ */
 export const getNpcType = (type: string): NpcType => {
-    switch (type.toUpperCase()) {
-        case 'SOLDIER_GRAY':
-            return 0;
-        case 'SOLDIER_RED':
-            return 1;
-        case 'MAN_BLUE':
-            return 2;
-        case 'WOMAN_BLUE':
-            return 3;
-        case 'MERCHANT_GREEN':
-            return 4;
-        case 'OLD_MAN_GRAY':
-            return 5;
-        case 'KING':
-            return 6;
-        default:
-            return NpcType.MERCHANT_GREEN;
-    }
+    const upper = type.toUpperCase();
+    return npcTypeSet.has(upper) ? upper as NpcType : 'MERCHANT_GREEN';
 };

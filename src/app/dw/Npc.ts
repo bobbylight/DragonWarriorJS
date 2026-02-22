@@ -2,7 +2,7 @@ import { Delay, SpriteSheet, Utils } from 'gtp';
 import { RoamingEntity, RoamingEntityArgs } from './RoamingEntity';
 import { Direction } from './Direction';
 import { Hero } from './Hero';
-import { NpcType } from './NpcType';
+import { NpcType, getNpcSpriteRow } from './NpcType';
 import { DwGame } from './DwGame';
 
 type DirFunctionType = () => void;
@@ -25,7 +25,7 @@ export class Npc extends RoamingEntity {
 
     constructor(game: DwGame, args: NpcArgs) {
         super(game, args);
-        this.type = args.type ?? NpcType.MERCHANT_GREEN;
+        this.type = args.type ?? 'MERCHANT_GREEN';
         this.wanders = args.wanders;
 
         this.origMapRow = this.mapRow;
@@ -71,7 +71,7 @@ export class Npc extends RoamingEntity {
     render(ctx: CanvasRenderingContext2D) {
 
         const ss: SpriteSheet = this.game.assets.get('npcs');
-        const ssRow: number = this.type as number;
+        const ssRow: number = getNpcSpriteRow(this.type);
         let ssCol: number = this.computeColumn();
         let x: number = this.mapCol * this.game.getTileSize();
         x -= this.game.getMapXOffs();
