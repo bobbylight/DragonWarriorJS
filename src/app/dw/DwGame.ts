@@ -203,6 +203,11 @@ export class DwGame extends Game {
         return enemyDatas[name];
     }
 
+    getEnemyDatas(): EnemyData[] {
+        const enemyDatas: Record<string, EnemyData> = this.assets.get('enemies');
+        return Object.values(enemyDatas);
+    }
+
     private getFont(): BitmapFont {
         return this.assets.get('font');
     }
@@ -740,6 +745,12 @@ export class DwGame extends Game {
         return str ? str.length * font.cellW : 0;
     }
 
+    startEncounter(enemyName: string) {
+        this.setState(new BattleTransitionState(this,
+            this.state as BaseState, new BattleState(this, enemyName),
+        ));
+    }
+
     startRandomEncounter(): boolean {
         if (this.randomEncounters) {
             const enemyTerritoryLayer: TiledLayer | undefined = this.getMap().layersByName.get('enemyTerritoryLayer');
@@ -754,9 +765,7 @@ export class DwGame extends Game {
                         const territories: string[][] = this.assets.get('enemyTerritories');
                         const possibleEnemies: string[] = territories[territory];
                         const enemyName: string = possibleEnemies[Utils.randomInt(0, possibleEnemies.length)];
-                        this.setState(new BattleTransitionState(this,
-                            this.state as BaseState, new BattleState(this, enemyName),
-                        ));
+                        this.startEncounter(enemyName);
                         return true;
                     }
                 }

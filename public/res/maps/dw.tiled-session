@@ -130,11 +130,11 @@
             "scaleInDock": 1
         },
         "overworld.json": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "scale": 0.3255,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 350.5,
-                "y": 706
+                "x": 818.7403993855607,
+                "y": 897.0814132104455
             }
         },
         "overworld.json#territories": {
@@ -152,14 +152,11 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
-            "expandedObjectLayers": [
-                4
-            ],
             "scale": 1.3635,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 336.2669600293363,
-                "y": 319.76530986431976
+                "x": 170.51705170517053,
+                "y": 308.76420975430875
             }
         },
         "tantegelCastle.tmx": {
@@ -204,6 +201,7 @@
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
+        "overworld.json",
         "tantegelCastleUpstairs.json",
         "erdricksCave2.json",
         "erdricksCave1.json",
@@ -212,7 +210,6 @@
         "garinham.json",
         "brecconary.json",
         "tantegelCastle.json",
-        "overworld.json",
         "tileset_tiles.json",
         "erdricksCave1.tmx",
         "brecconary.tmx"

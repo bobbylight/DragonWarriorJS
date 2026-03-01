@@ -7,10 +7,45 @@ import {
     loadAdventureLog,
     saveAdventureLog,
 } from '@/app/dw/AdventureLog';
+import { EnemyData } from '@/app/dw/Enemy';
+import { BattleState } from '@/app/dw/BattleState';
+import { BattleTransitionState } from '@/app/dw/BattleTransitionState';
+
+const mockFont = { cellW: 8, cellH: 9 };
 
 const mockWeapons = { club: { name: 'club' }, bambooStick: { name: 'bambooStick' } };
 const mockArmor = { clothes: { name: 'clothes' }, leather: { name: 'leather' } };
 const mockShields = { smallShield: { name: 'smallShield' }, largeShield: { name: 'largeShield' } };
+
+const slimeData: EnemyData = {
+    name: 'Slime',
+    image: 'Slime',
+    damagedImage: 'Slime_damaged',
+    str: 5,
+    agility: 3,
+    hp: 3,
+    resist: {},
+    dodge: 1,
+    xp: 1,
+    gp: 1,
+    ai: 'attackOnly',
+};
+
+const drakeeData: EnemyData = {
+    name: 'Drakee',
+    image: 'Drakee',
+    damagedImage: 'Drakee_damaged',
+    str: 9,
+    agility: 6,
+    hp: [ 5, 6 ],
+    resist: {},
+    dodge: 1,
+    xp: 2,
+    gp: 2,
+    ai: 'attackOnly',
+};
+
+const mockEnemies: Record<string, EnemyData> = { Slime: slimeData, Drakee: drakeeData };
 
 describe('DwGame', () => {
     let game: DwGame;
@@ -113,6 +148,39 @@ describe('DwGame', () => {
                 expect(game.hero.hp).toBe(15);
                 expect(game.hero.level).toBe(1);
             });
+        });
+    });
+
+    describe('getEnemyDatas()', () => {
+
+        beforeEach(() => {
+            game.assets.set('enemies', mockEnemies);
+        });
+
+        it('returns all enemies as an array', () => {
+            expect(game.getEnemyDatas()).toHaveLength(2);
+        });
+
+        it('contains the expected enemy data objects', () => {
+            const datas = game.getEnemyDatas();
+            expect(datas).toContainEqual(slimeData);
+            expect(datas).toContainEqual(drakeeData);
+        });
+    });
+
+    describe('startEncounter()', () => {
+
+        beforeEach(() => {
+            game.assets.set('font', mockFont);
+            game.assets.set('enemies', mockEnemies);
+            vi.spyOn(game.audio, 'playMusic').mockImplementation(() => {});
+            vi.spyOn(BattleState.prototype, 'createScreenshot').mockReturnValue(document.createElement('canvas'));
+        });
+
+        it('transitions the game to a BattleTransitionState', () => {
+            const setStateSpy = vi.spyOn(game, 'setState').mockImplementation(() => {});
+            game.startEncounter('Slime');
+            expect(setStateSpy).toHaveBeenCalledExactlyOnceWith(expect.any(BattleTransitionState));
         });
     });
 

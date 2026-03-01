@@ -3,7 +3,9 @@ import { Bubble } from './Bubble';
 import { DwGame } from './DwGame';
 
 /**
- * A bubble that lets the user choose between several choices.
+ * A bubble that lets the user choose between several choices. Can optionally be titled
+ * and be 2 columns if there are a lot of choices. Note you must provide its bounds and size
+ * to accommodate your number of columns (this isn't currently figured out automatically).
  */
 export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
@@ -11,16 +13,19 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     private readonly choiceStringifier: (choice: ChoiceBubbleChoice) => string;
     private curChoice: number;
     private readonly cancellable: boolean;
+    private readonly columns: number;
 
     constructor(game: DwGame, x: number, y: number, w: number, h: number,
         choices: ChoiceBubbleChoice[] = [],
         choiceStringifier?: (choice: ChoiceBubbleChoice) => string,
         cancellable = false,
-        title?: string) {
+        title?: string,
+        columns = 1) {
         super(game, title, x, y, w, h);
         this.choices = choices;
         this.choiceStringifier = choiceStringifier ?? ((choice: ChoiceBubbleChoice) => choice as unknown as string);
         this.cancellable = cancellable;
+        this.columns = columns;
         this.curChoice = 0;
     }
 
@@ -60,10 +65,34 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
             this.game.audio.playSound('menu');
             return true;
         } else if (im.up(true)) {
-            this.curChoice = Math.max(0, this.curChoice - 1);
+            if (this.columns === 2) {
+                const leftCount = Math.ceil(this.choices.length / 2);
+                const colMin = this.curChoice >= leftCount ? leftCount : 0;
+                this.curChoice = Math.max(colMin, this.curChoice - 1);
+            } else {
+                this.curChoice = Math.max(0, this.curChoice - 1);
+            }
             this.resetArrowTimer();
         } else if (im.down(true)) {
-            this.curChoice = Math.min(this.curChoice + 1, this.choices.length - 1);
+            if (this.columns === 2) {
+                const leftCount = Math.ceil(this.choices.length / 2);
+                const colMax = this.curChoice >= leftCount ? this.choices.length - 1 : leftCount - 1;
+                this.curChoice = Math.min(this.curChoice + 1, colMax);
+            } else {
+                this.curChoice = Math.min(this.curChoice + 1, this.choices.length - 1);
+            }
+            this.resetArrowTimer();
+        } else if (this.columns === 2 && im.left(true)) {
+            const leftCount = Math.ceil(this.choices.length / 2);
+            if (this.curChoice >= leftCount) {
+                this.curChoice -= leftCount;
+            }
+            this.resetArrowTimer();
+        } else if (this.columns === 2 && im.right(true)) {
+            const leftCount = Math.ceil(this.choices.length / 2);
+            if (this.curChoice < leftCount) {
+                this.curChoice = Math.min(this.curChoice + leftCount, this.choices.length - 1);
+            }
             this.resetArrowTimer();
         }
 
@@ -73,13 +102,37 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         ctx.fillStyle = 'rgb(255,255,255)';
-        this.choices.forEach((choice, index) => {
-            if (this.curChoice === index) {
-                this.drawArrow(this.x + Bubble.ARROW_MARGIN, y);
-            }
-            this.game.drawString(this.choiceStringifier(choice), x, y);
-            y += 18 * this.game.scale;
-        });
+        const yInc = 18 * this.game.scale;
+
+        if (this.columns === 2) {
+            const leftCount = Math.ceil(this.choices.length / 2);
+            const colGap = 2 * this.game.getTileSize();
+            const contentWidth = this.w - 2 * this.getXMargin();
+            const colWidth = (contentWidth - colGap) / 2;
+
+            this.choices.forEach((choice, index) => {
+                const inRight = index >= leftCount;
+                const row = inRight ? index - leftCount : index;
+                const textX = inRight ? x + colWidth + colGap : x;
+                const textY = y + row * yInc;
+
+                if (this.curChoice === index) {
+                    const arrowX = inRight
+                        ? this.x + Bubble.ARROW_MARGIN + colWidth + colGap
+                        : this.x + Bubble.ARROW_MARGIN;
+                    this.drawArrow(arrowX, textY);
+                }
+                this.game.drawString(this.choiceStringifier(choice), textX, textY);
+            });
+        } else {
+            this.choices.forEach((choice, index) => {
+                if (this.curChoice === index) {
+                    this.drawArrow(this.x + Bubble.ARROW_MARGIN, y);
+                }
+                this.game.drawString(this.choiceStringifier(choice), x, y);
+                y += yInc;
+            });
+        }
     }
 
     reset() {

@@ -12,6 +12,7 @@ import { Npc } from './Npc';
 import { Hero } from './Hero';
 import { MapLogic } from './mapLogic/MapLogic';
 import { CheatOption, Cheats, WarpLocation } from './Cheats';
+import { EnemyData } from './Enemy';
 import { ChoiceBubble } from './ChoiceBubble';
 import { Door } from './Door';
 import { DwMap } from './DwMap';
@@ -22,7 +23,7 @@ import { getSearchConversation } from './SearchConversations';
 import { SpellBubble } from '@/app/dw/SpellBubble';
 import { Spell } from '@/app/dw/Spell';
 
-type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION';
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
@@ -35,6 +36,7 @@ export class RoamingState extends BaseState {
     private spellBubble?: SpellBubble;
     private warpBubble?: ChoiceBubble<WarpLocation>;
     private cheatBubble?: ChoiceBubble<CheatOption>;
+    private battleBubble?: ChoiceBubble<EnemyData>;
     private readonly stationaryTimer: Delay;
     private overnightDelay?: Delay;
     private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
@@ -64,6 +66,7 @@ export class RoamingState extends BaseState {
         this.updateMethods.set('OVERNIGHT', this.updateOvernight.bind(this));
         this.updateMethods.set('WARP_SELECTION', this.updateWarpSelection.bind(this));
         this.updateMethods.set('CHEAT_SELECTION', this.updateCheatSelection.bind(this));
+        this.updateMethods.set('BATTLE_SELECTION', this.updateBattleSelection.bind(this));
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
@@ -153,6 +156,9 @@ export class RoamingState extends BaseState {
                         this.game.setHeroStats(1, 1, 1, 1);
                         this.game.audio.playSound('castSpell');
                         this.setSubstate('ROAMING');
+                        break;
+                    case 'Battle...':
+                        this.setSubstate('BATTLE_SELECTION');
                         break;
                     default:
                         this.game.audio.playSound('bump');
@@ -361,6 +367,24 @@ export class RoamingState extends BaseState {
         }
     }
 
+    private updateBattleSelection(delta: number) {
+
+        // Do check here to appease tsc of battleBubble being defined
+        this.battleBubble ??= Cheats.createBattleBubble(this.game);
+
+        this.battleBubble.update(delta);
+        if (this.battleBubble.handleInput()) {
+            const enemy = this.battleBubble.getSelectedItem();
+            this.battleBubble = undefined;
+            if (enemy) {
+                this.game.startEncounter(enemy.name);
+                this.setSubstate('ROAMING');
+            } else {
+                this.setSubstate('MENU');
+            }
+        }
+    }
+
     private overnightOver() {
         this.game.audio.playMusic('MUSIC_TOWN');
         delete this.overnightDelay;
@@ -473,6 +497,9 @@ export class RoamingState extends BaseState {
         }
         if (this.cheatBubble) {
             this.cheatBubble.paint(ctx);
+        }
+        if (this.battleBubble) {
+            this.battleBubble.paint(ctx);
         }
 
         if (this.overnightDelay) {

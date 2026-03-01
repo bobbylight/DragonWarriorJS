@@ -1,6 +1,7 @@
 import { Direction } from './Direction';
 import { DwGame } from './DwGame';
 import { ChoiceBubble } from './ChoiceBubble';
+import { EnemyData } from './Enemy';
 
 export type CheatOption =
     '9999 Gold' |
@@ -9,7 +10,8 @@ export type CheatOption =
     'Armor Change' |
     'Shield Change' |
     'Max HP/MP' |
-    'Min HP/MP';
+    'Min HP/MP' |
+    'Battle...';
 
 export type WarpLocation =
     'Brecconary' |
@@ -26,7 +28,7 @@ export class Cheats {
 
         const tileSize: number = game.getTileSize();
         const w: number = game.getWidth() - 4 * tileSize;
-        const h: number = 9 * tileSize;
+        const h: number = 10 * tileSize;
         const x: number = (game.getWidth() - w) / 2;
         const y: number = (game.getHeight() - h) / 2;
 
@@ -38,9 +40,24 @@ export class Cheats {
             'Shield Change',
             'Max HP/MP',
             'Min HP/MP',
+            'Battle...',
         ];
 
         return new ChoiceBubble(game, x, y, w, h, choices, undefined, true);
+    }
+
+    static createBattleBubble(game: DwGame): ChoiceBubble<EnemyData> {
+
+        const tileSize: number = game.getTileSize();
+        const w: number = game.getWidth() - 2 * tileSize;
+        const choices: EnemyData[] = game.getEnemyDatas();
+        const rowCount: number = Math.ceil(choices.length / 2);
+        const h: number = (rowCount + 3) * tileSize; // +2 for padding, +1 for title
+        const x: number = (game.getWidth() - w) / 2;
+        const y: number = (game.getHeight() - h) / 2;
+
+        return new ChoiceBubble(game, x, y, w, h, choices,
+            (data) => data.shortName ?? data.name, true, 'BATTLE', 2);
     }
 
     static createWarpBubble(game: DwGame): ChoiceBubble<WarpLocation> {

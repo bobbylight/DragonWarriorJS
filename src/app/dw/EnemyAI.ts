@@ -15,6 +15,23 @@ aiMap.halfHurtHalfAttack = (hero: Hero, enemy: Enemy) => {
     }
     return { type: 'physical', damage: enemy.computePhysicalAttackDamage(hero) };
 };
+aiMap['75Hurt25Attack'] = (hero: Hero, enemy: Enemy) => {
+    const useHurt: boolean = Utils.randomInt(0, 4) < 3;
+    if (useHurt) {
+        return { type: 'magic', spellName: 'HURT', damage: enemy.computeHurtSpellDamage(hero) };
+    }
+    return { type: 'physical', damage: enemy.computePhysicalAttackDamage(hero) };
+};
+aiMap.drakeemaAi = (hero: Hero, enemy: Enemy) => {
+    if (enemy.hp < enemy.maxHp) {
+        return { type: 'magic', spellName: 'HEAL', damage: 0 };
+    }
+    const useHurt: boolean = Utils.randomInt(0, 2) === 0;
+    if (useHurt) {
+        return { type: 'magic', spellName: 'HURT', damage: enemy.computeHurtSpellDamage(hero) };
+    }
+    return { type: 'physical', damage: enemy.computePhysicalAttackDamage(hero) };
+};
 
 export type EnemyAiResult =
     | { type: 'physical'; damage: number }
