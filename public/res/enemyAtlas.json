@@ -12,6 +12,20 @@
     { "id": "Magician_damaged", "dim": "120,107,36,35"},
     { "id": "Magidrakee", "dim": "116,0,24,33"},
     { "id": "Scorpion", "dim": "6,146,41,32"},
-    { "id": "Scorpion_damaged", "dim": "135,145,41,32"}
+    { "id": "Scorpion_damaged", "dim": "135,145,41,32"},
+    { "id": "Druin", "dim": "149,42,36,29"},
+    { "id": "Druin_damaged", "dim": "223,42,36,29"},
+    { "id": "Poltergeist", "dim": "28,38,24,43"},
+    { "id": "Droll", "dim": "203,0,32,36"},
+    { "id": "Droll_damaged", "dim": "270,0,32,36"},
+    { "id": "Drakeema", "dim": "142,0,24,36"},
+    { "id": "Skeleton", "dim": "6,180,32,47"},
+    { "id": "Skeleton_damaged", "dim": "145,180,32,47"},
+    { "id": "Warlock", "dim": "43,104,36,37"},
+    { "id": "Warlock_damaged", "dim": "158,104,36,37"},
+    { "id": "MetalScorpion", "dim": "48,144,41,32"},
+    { "id": "MetalScorpion_damaged", "dim": "177,144,41,32"},
+    { "id": "Wolf", "dim": "5,230,44,42"},
+    { "id": "Wolf_damaged", "dim": "143,230,44,42"}
   ]
 }

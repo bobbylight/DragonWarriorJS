@@ -67,7 +67,7 @@ export default [
                 { selector: "default", format: ["camelCase", "snake_case"] },
                 { selector: "enumMember", format: ["UPPER_CASE"] },
                 { selector: "import", format: ["camelCase", "PascalCase"] },
-                { selector: "objectLiteralProperty", format: ["camelCase", "UPPER_CASE"], leadingUnderscore: "forbid" },
+                { selector: "objectLiteralProperty", format: ["camelCase", "PascalCase", "UPPER_CASE"], leadingUnderscore: "forbid" },
                 { selector: "typeParameter", format: ["PascalCase"] },
                 { selector: "variable", modifiers: ["const"], format: ["camelCase", "UPPER_CASE"] },
             ],

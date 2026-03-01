@@ -7,6 +7,7 @@ import { DwGame } from './DwGame';
 
 export interface EnemyData {
     name: string;
+    shortName?: string;
     image: string;
     damagedImage: string;
     str: number;
@@ -23,6 +24,7 @@ export class Enemy extends BattleEntity {
 
     game: DwGame;
     name: string;
+    shortName?: string;
     image: string;
     damagedImage: string;
     str: number;
@@ -36,6 +38,7 @@ export class Enemy extends BattleEntity {
 
         super(args);
         this.name = args.name;
+        this.shortName = args.shortName ?? args.name;
         this.image = args.image;
         this.damagedImage = args.damagedImage;
         this.str = args.str;
