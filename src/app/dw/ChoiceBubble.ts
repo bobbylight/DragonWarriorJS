@@ -14,6 +14,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     private curChoice: number;
     private readonly cancellable: boolean;
     private readonly columns: number;
+    protected yInc: number;
 
     constructor(game: DwGame, x: number, y: number, w: number, h: number,
         choices: ChoiceBubbleChoice[] = [],
@@ -27,6 +28,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
         this.cancellable = cancellable;
         this.columns = columns;
         this.curChoice = 0;
+        this.yInc = 18 * this.game.scale;
     }
 
     /**
@@ -102,7 +104,6 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
     override paintContent(ctx: CanvasRenderingContext2D, x: number, y: number) {
 
         ctx.fillStyle = 'rgb(255,255,255)';
-        const yInc = 18 * this.game.scale;
 
         if (this.columns === 2) {
             const leftCount = Math.ceil(this.choices.length / 2);
@@ -114,7 +115,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
                 const inRight = index >= leftCount;
                 const row = inRight ? index - leftCount : index;
                 const textX = inRight ? x + colWidth + colGap : x;
-                const textY = y + row * yInc;
+                const textY = y + row * this.yInc;
 
                 if (this.curChoice === index) {
                     const arrowX = inRight
@@ -130,7 +131,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
                     this.drawArrow(this.x + Bubble.ARROW_MARGIN, y);
                 }
                 this.game.drawString(this.choiceStringifier(choice), x, y);
-                y += yInc;
+                y += this.yInc;
             });
         }
     }

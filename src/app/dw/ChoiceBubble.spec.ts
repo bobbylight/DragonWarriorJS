@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
+import { InputManager } from 'gtp';
 import { DwGame } from '@/app/dw/DwGame';
 import { ChoiceBubble } from '@/app/dw/ChoiceBubble';
 
@@ -33,8 +34,8 @@ describe('ChoiceBubble', () => {
     describe('handleInput() - single column', () => {
 
         let bubble: ChoiceBubble<string>;
-        let upSpy: MockInstance;
-        let downSpy: MockInstance;
+        let upSpy: MockInstance<InputManager['up']>;
+        let downSpy: MockInstance<InputManager['down']>;
 
         beforeEach(() => {
             bubble = new ChoiceBubble(game, 0, 0, 100, 100, choices);
@@ -149,10 +150,10 @@ describe('ChoiceBubble', () => {
     describe('handleInput() - 2-column layout', () => {
 
         let bubble: ChoiceBubble<string>;
-        let upSpy: MockInstance;
-        let downSpy: MockInstance;
-        let leftSpy: MockInstance;
-        let rightSpy: MockInstance;
+        let upSpy: MockInstance<InputManager['up']>;
+        let downSpy: MockInstance<InputManager['down']>;
+        let leftSpy: MockInstance<InputManager['left']>;
+        let rightSpy: MockInstance<InputManager['right']>;
 
         beforeEach(() => {
             bubble = new ChoiceBubble(game, 0, 0, 200, 100, choices, undefined, false, undefined, 2);
