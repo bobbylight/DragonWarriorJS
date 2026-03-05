@@ -19,7 +19,7 @@ export type WarpLocation =
     'Tantegel (throne room)' |
     'Garinham' |
     'Erdrick\'s Cave' |
-    'Far Reaches';
+    'Kol';
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Cheats {
@@ -74,7 +74,7 @@ export class Cheats {
             'Tantegel (throne room)',
             'Garinham',
             'Erdrick\'s Cave',
-            'Far Reaches',
+            'Kol',
         ];
 
         return new ChoiceBubble(game, x, y, w, h, choices, undefined, true);
@@ -97,8 +97,8 @@ export class Cheats {
             case 'Erdrick\'s Cave':
                 Cheats.warpTo(game, 'erdricksCave1', 1, 1, 'Erdrick\'s Cave');
                 break;
-            case 'Far Reaches':
-                Cheats.warpTo(game, 'overworld', 46, 85, 'Overworld');
+            case 'Kol':
+                Cheats.warpTo(game, 'kol', 24, 20, 'Kol', Direction.NORTH);
                 break;
         }
     }

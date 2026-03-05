@@ -16,7 +16,7 @@ export const innkeeperConversationTemplate = (game: DwGame, segmentArgs: Innkeep
     return [
         {
             clear: false,
-            text: `Welcome to the traveler's inn. Room and board ${cost} GOLD per night. Dost thou want a room?`,
+            text: `Welcome to the traveler's inn. Room and board is ${cost} GOLD per night. Dost thou want a room?`,
             choices: [
                 {
                     text: 'Yes',

@@ -48,6 +48,7 @@ import { EnemyData } from './Enemy';
 import { RoamingEntityRange } from './RoamingEntity';
 import { HERB, Item, getItemByName } from '@/app/dw/Item';
 import { HiddenItem, HiddenItemType } from '@/app/dw/HiddenItem';
+import { Kol } from '@/app/dw/mapLogic/kol';
 
 
 export type TiledMapMap = Record<string, DwMap>;
@@ -92,6 +93,7 @@ export class DwGame extends Game {
         this.mapLogics.set('erdricksCave1', new ErdricksCave1());
         this.mapLogics.set('erdricksCave2', new ErdricksCave2());
         this.mapLogics.set('Garinham', new Garinham());
+        this.mapLogics.set('Kol', new Kol());
         this.mapLogics.set('Overworld', new Overworld());
         this.mapLogics.set('TantegelCastle', new TantegelCastle());
     }

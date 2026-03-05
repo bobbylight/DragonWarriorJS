@@ -49,13 +49,24 @@ npm run tsc                # Runs typecheck
 * Each map has a corresponding "map logic" file that lives in `src/app/dw/mapLogic`. These
   logic files define the NPC text on the map as well as any other special events.
 
+## Writing Tests
+
+* After updating spec files, run `npm run lint:fix` on them to verify that the linter is happy, and also run
+  `npm run tsc` to verify the typecheck still passes. If there are any issues not auto-fixable, address them yourself
+  by updating the tests. Do NOT adjust any lint rules. If any lint rule seems overly problematic, stop and ask me about
+  it.
+* Note in particular we have the '@typescript-eslint/unbound-method' lint rule enabled, which
+  protects against (among other things) calling an instance method on a mocked object in an
+  `expect()` check. So rather than writing code like `expect(myMock.myMethod).toHaveBeenCalled()`,
+  you should instead store the mocked method in a variable and write `expect(myMockedMethod).toHaveBeenCalled()`.
+
 ## Submitting PRs
 
-- Use conventional commit syntax (feat:, fix:, chore:, docs:, refactor:, test:, etc.)
-- Ensure tests pass before committing and fix anything if necessary. If any tests
+* Use conventional commit syntax (feat:, fix:, chore:, docs:, refactor:, test:, etc.)
+* Ensure tests pass before committing and fix anything if necessary. If any tests
   needed fixing, let me review the changes before proceeding with the commit.`
-- Commit messages don't need to mention tests being added. Only mention tests when a
+* Commit messages don't need to mention tests being added. Only mention tests when a
   large amount of tests were added for previously uncovered code, or there was a
   major refactoring of test code.
-- Always amend the current commit if the current PR is still in draft.
+* Always amend the current commit if the current PR is still in draft.
 
