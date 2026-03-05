@@ -1,4 +1,8 @@
 {
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
     "activeFile": "tantegelCastle.json",
     "automapping.whileDrawing": false,
     "expandedProjectPaths": [
@@ -22,11 +26,11 @@
                 6,
                 5
             ],
-            "scale": 6.9708,
-            "selectedLayer": 0,
+            "scale": 1.7798,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 311.94410971481034,
-                "y": 303.9823262753199
+                "x": 276.7164849983144,
+                "y": 140.46522081132713
             }
         },
         "brecconary.tmx": {
@@ -75,10 +79,10 @@
         },
         "erdricksCave2.json": {
             "scale": 1,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 159.5,
-                "y": 160
+                "x": 244.5,
+                "y": 227
             }
         },
         "erdricksCave2.json#collision": {
@@ -102,11 +106,14 @@
             "scaleInDock": 1
         },
         "garinham.json": {
-            "scale": 1,
-            "selectedLayer": 0,
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.4498,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 231.5,
-                "y": 224
+                "x": 235.54973099737896,
+                "y": 206.9250931162919
             }
         },
         "garinham.json#collision": {
@@ -129,12 +136,27 @@
         "garinham.tmx#tiles": {
             "scaleInDock": 1
         },
-        "overworld.json": {
-            "scale": 0.3255,
-            "selectedLayer": 4,
+        "kol.json": {
+            "expandedObjectLayers": [
+                3,
+                4
+            ],
+            "scale": 2.466,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 818.7403993855607,
-                "y": 897.0814132104455
+                "x": 201.74371451743713,
+                "y": 233.5766423357664
+            }
+        },
+        "overworld.json": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.7855,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1768.9722766732007,
+                "y": 249.22990758891066
             }
         },
         "overworld.json#territories": {
@@ -152,11 +174,14 @@
             "scaleInDock": 1
         },
         "tantegelCastle.json": {
-            "scale": 1.3635,
+            "expandedObjectLayers": [
+                4
+            ],
+            "scale": 2.0892,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 170.51705170517053,
-                "y": 308.76420975430875
+                "x": 225.2058204097262,
+                "y": 345.5868274937775
             }
         },
         "tantegelCastle.tmx": {
@@ -168,11 +193,11 @@
             }
         },
         "tantegelCastleUpstairs.json": {
-            "scale": 1.3118,
+            "scale": 0.8245,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 191.72129897850283,
-                "y": 171.52004878792502
+                "x": 308.67192237719826,
+                "y": 194.05700424499696
             }
         },
         "tileset_tiles.json": {
@@ -185,7 +210,7 @@
     "map.height": 60,
     "map.lastUsedExportFilter": "JSON map files (*.json)",
     "map.lastUsedFormat": "json",
-    "map.orientation": 0,
+    "map.orientation": "1",
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "map.width": 60,
@@ -201,18 +226,18 @@
     ],
     "project": "dw.tiled-project",
     "recentFiles": [
+        "kol.json",
+        "collision_tiles.json",
         "overworld.json",
         "tantegelCastleUpstairs.json",
         "erdricksCave2.json",
         "erdricksCave1.json",
         "enemy_territory_tiles.json",
-        "collision_tiles.json",
         "garinham.json",
         "brecconary.json",
         "tantegelCastle.json",
         "tileset_tiles.json",
-        "erdricksCave1.tmx",
-        "brecconary.tmx"
+        "erdricksCave1.tmx"
     ],
     "textEdit.monospace": true,
     "tileset.lastUsedFormat": "json",

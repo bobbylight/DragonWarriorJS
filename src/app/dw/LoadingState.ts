@@ -141,6 +141,7 @@ export class LoadingState extends BaseState {
             void game.assets.addJson('erdricksCave1.json', 'res/maps/erdricksCave1.json');
             void game.assets.addJson('erdricksCave2.json', 'res/maps/erdricksCave2.json');
             void game.assets.addJson('garinham.json', 'res/maps/garinham.json');
+            void game.assets.addJson('kol.json', 'res/maps/kol.json');
             void game.assets.addSound('MUSIC_TITLE_SCREEN', 'res/sound/01 Dragon Quest 1 - Intro ~ Overture (22khz mono).ogg');
             void game.assets.addSound('MUSIC_TANTEGEL', 'res/sound/02 Dragon Quest 1 - Tantegel Castle (22khz mono).ogg');
             void game.assets.addSound('MUSIC_TANTEGEL_LOWER', 'res/sound/03 Dragon Quest 1 - Tantegel Castle (Lower) (22khz mono).ogg');
@@ -201,6 +202,7 @@ export class LoadingState extends BaseState {
                 game.assets.addTmxMap(game.initLoadedMap('erdricksCave1.json'));
                 game.assets.addTmxMap(game.initLoadedMap('erdricksCave2.json'));
                 game.assets.addTmxMap(game.initLoadedMap('garinham.json'));
+                game.assets.addTmxMap(game.initLoadedMap('kol.json'));
                 game.assets.onLoad(() => {
                     const skipTitle: string | null = Utils.getRequestParam('skipTitle');
                     if (skipTitle !== null) { // Allow empty strings
