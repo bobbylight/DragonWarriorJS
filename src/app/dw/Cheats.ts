@@ -48,16 +48,18 @@ export class Cheats {
 
     static createBattleBubble(game: DwGame): ChoiceBubble<EnemyData> {
 
-        const tileSize: number = game.getTileSize();
-        const w: number = game.getWidth() - 2 * tileSize;
+        const lineHeight = 10; // Lots of choices in this menu so decrease the line height
+        const w: number = game.getWidth() - 2 * game.getTileSize();
         const choices: EnemyData[] = game.getEnemyDatas();
         const rowCount: number = Math.ceil(choices.length / 2);
-        const h: number = (rowCount + 3) * tileSize; // +2 for padding, +1 for title
+        const h: number = rowCount * lineHeight * game.scale + 1.5 * game.getTileSize();
         const x: number = (game.getWidth() - w) / 2;
         const y: number = (game.getHeight() - h) / 2;
 
-        return new ChoiceBubble(game, x, y, w, h, choices,
+        const bubble = new ChoiceBubble(game, x, y, w, h, choices,
             (data) => data.shortName ?? data.name, true, 'BATTLE', 2);
+        bubble.setYInc(lineHeight);
+        return bubble;
     }
 
     static createWarpBubble(game: DwGame): ChoiceBubble<WarpLocation> {

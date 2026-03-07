@@ -78,6 +78,27 @@ export class Enemy extends BattleEntity {
         return Utils.randomInt(min, max + 1);
     }
 
+    computeHurtmoreSpellDamage(hero: Hero): number {
+        if (hero.armor?.name === 'magicArmor' || hero.armor?.name === 'erdricksArmor') {
+            return Utils.randomInt(20, 31);
+        }
+        return Utils.randomInt(30, 46);
+    }
+
+    computeFireBreathDamage(hero: Hero): number {
+        if (hero.armor?.name === 'erdricksArmor') {
+            return Utils.randomInt(10, 15);
+        }
+        return Utils.randomInt(16, 24);
+    }
+
+    computeStrongFireBreathDamage(hero: Hero): number {
+        if (hero.armor?.name === 'erdricksArmor') {
+            return Utils.randomInt(42, 49);
+        }
+        return Utils.randomInt(65, 73);
+    }
+
     computePhysicalAttackDamage(hero: Hero): number {
 
         if (hero.getDefense() >= this.str) {

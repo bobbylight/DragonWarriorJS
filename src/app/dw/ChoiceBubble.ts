@@ -107,7 +107,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
         if (this.columns === 2) {
             const leftCount = Math.ceil(this.choices.length / 2);
-            const colGap = 2 * this.game.getTileSize();
+            const colGap = this.game.getTileSize();
             const contentWidth = this.w - 2 * this.getXMargin();
             const colWidth = (contentWidth - colGap) / 2;
 
@@ -138,5 +138,9 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
     reset() {
         this.curChoice = 0;
+    }
+
+    setYInc(yInc: number) {
+        this.yInc = yInc * this.game.scale;
     }
 }
