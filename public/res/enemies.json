@@ -93,7 +93,7 @@
   "Druin": {
     "name": "Druin",
     "image": "Druin",
-    "damagedImage": "Druid_damaged",
+    "damagedImage": "Druin_damaged",
     "str": 20,
     "agility": 18,
     "hp": [17, 22],

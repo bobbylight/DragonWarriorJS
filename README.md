@@ -104,13 +104,11 @@ with the hero should be. Essentially, it can be:
 * An array of strings, in which case each string is rendered, but the user
   has to press a key to advance the conversation between each string
 * An array containing a mixture of strings and
-  [ConversationSegmentArgs](src/app/dw/ConversationSegment.ts#L23), which allow for
+  [ConversationSegmentArgs](src/app/dw/ConversationSegment.ts#L49), which allow for
   logic in a conversation (question/answer, give/take money, etc.).  This type
-  of conversation data is not well doc'd yet and is best observed by example
-  in the source. It's essentially a grab-bag of optional fields that are each
-  used in certain conditions.
-  * Note that `ConversationSegmentArgs` can denote a "special" conversation type,
-    as described by the `conversationType` property.  If this property is defined, it
-    must currently be set to either `innkeeper` or `merchant`. In these cases, the
-    logic for staying at an inn or purchasing items is automatically applied.
+  of conversation data is complex, but should be pretty understandable by reading
+  the code what is possible and what each property does.
+* A `ConversationTemplate`, which is just shorthand for common conversation types.
+  It saves us from having to duplicate the purchasing/conversation logic in each
+  map. This is used for things like innkeepers and merchants.
 
