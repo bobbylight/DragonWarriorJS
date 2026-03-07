@@ -12,6 +12,11 @@ extension), e.g. `kol` or `kol,garinham`.
   maps (e.g. `kol` → `public/res/maps/kol.json`). Skip any names that don't match an existing map
   file and note them in the output.
 
+## General Notes
+
+If any single map file has too many tokens to be read in one go with the Read tool, or any other tool,
+try to read it with offset/limit or some other means of pagination to validate the entire file if possible.
+
 ## Steps
 
 1. **Discover map JSON files** in `public/res/maps/` using Glob. Exclude tileset/utility files
@@ -29,17 +34,23 @@ extension), e.g. `kol` or `kol,garinham`.
 
 4. **Check: Warp layer**
     - Verify that the map has a `warpLayer` layer with a `type` property set to `objectgroup`.
-    - For all objects in the `objects` array with `"type": "warp"`, do the following:
+    - For all objects in the `objects` array, do the following:
       - Verify they have `x`, `y`, `width`, and `height` properties that are all multiple of 16
-      - Verify they have a `properties` array with the following properties (additional ones are OK, but
-        should be noted in the output):
-        - `col` is a REQUIRED property of type `string` with a value being a stringified number
-        - `row` is a REQUIRED property of type `string` with a value being a stringified number
-        - `map` is a REQUIRED property of type `string` with a value being the base name of a map JSON file in this
-          project
-        - `dir` is an OPTIONAL property of type `string` with a value being `NORTH`, `EAST`, `SOUTH`, or `WEST`,
-          ignoring case
-    - For all objects in the `objects` array with `type` NOT equal to `warp`, note them by name and type
+      - If the object has `"type": "warp"`, verify the following:
+        - Verify it has a `properties` array with the following properties (additional ones are OK, but
+          should be noted in the output):
+          - `col` is a REQUIRED property of type `string` with a value being a stringified number
+          - `row` is a REQUIRED property of type `string` with a value being a stringified number
+          - `map` is a REQUIRED property of type `string` with a value being the base name of a map JSON file in this
+            project
+          - `dir` is an OPTIONAL property of type `string` with a value being `NORTH`, `EAST`, `SOUTH`, or `WEST`,
+            ignoring case
+      - If the object has `"type": "insideOutside"`, verify the following:
+        - Verify it has a `properties` array with the following properties (additional ones are OK, but
+          should be noted in the output):
+          - `inside` is a REQUIRED property of type `string` or `boolean` with a value being either `true` or `false`
+      - If the object does not have a `type`, or its type is not one of `warp` or `insideOutside`, note it by name and
+        type
 
 5. **Check: NPC layer**
    - Check whether map has a `npcLayer` layer. If it doesn't, skip the rest of this check
@@ -60,11 +71,24 @@ extension), e.g. `kol` or `kol,garinham`.
    - Report any object in `objects` that is not one of the following values for `type`:
      - `npc`, `door`, `talkAcross`, `chest`
 
-6. ** Check: Additional map properties**
+6. **Check: Hidden Item layer**
+   - Check whether map has a `hiddenItemLayer` layer. If it doesn't, skip the rest of this check
+   - Verify its `type` property is set to `objectgroup`
+   - Verify all objects in the `objects` array have the following:
+     - A non-empty `name` string property
+     - An `x` property that's an integer and a multiple of 16
+     - A `y` property that's an integer and a multiple of 16
+     - A `width` property that's an integer and a multiple of 16
+     - A `height` property that's an integer and a multiple of 16
+     - A `type` property that is set to `item`
+     - A `properties` array with the following entries:
+       - An entry with name `item`, type `string`, and value `herb`
+
+7. ** Check: Additional map properties**
    - Verify that the map has a `music` property with a string value from the `Sounds` type in
      `src/app/dw/Sounds.ts`.
 
-7. **Report results** grouped by map:
+8. **Report results** grouped by map:
    - Map JSON filename
    - `logicFile` value and whether the `.ts` file exists
    - Any of the checks above that failed, with enough detail to identify them in the JSON.
