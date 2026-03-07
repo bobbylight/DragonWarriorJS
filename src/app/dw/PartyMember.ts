@@ -172,6 +172,14 @@ export class PartyMember extends RoamingEntity {
         return this.hp <= 0;
     }
 
+    isAsleep(): boolean {
+        return false;
+    }
+
+    isStopSpelled(): boolean {
+        return false;
+    }
+
     /**
      * Verifies whether the party member is intersecting an object in the Tiled
      * map, and if so, handles that intersection.

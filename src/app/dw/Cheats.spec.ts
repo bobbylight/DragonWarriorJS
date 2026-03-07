@@ -96,8 +96,9 @@ describe('Cheats', () => {
         });
 
         it('has height based on enemy count', () => {
+            const lineHeight = 10;
             const rowCount = Math.ceil(Object.keys(mockEnemies).length / 2);
-            expect(bubble.h).toEqual((rowCount + 3) * game.getTileSize());
+            expect(bubble.h).toEqual(rowCount * lineHeight * game.scale + 1.5 * game.getTileSize());
         });
 
         describe('when cancelled', () => {

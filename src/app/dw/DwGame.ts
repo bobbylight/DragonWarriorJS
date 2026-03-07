@@ -202,7 +202,8 @@ export class DwGame extends Game {
 
     getEnemy(name: string): EnemyData {
         const enemyDatas: Record<string, EnemyData> = this.assets.get('enemies');
-        return enemyDatas[name];
+        // The game itself looks up by ID/key, but the "Battle" cheats menu looks up by display name
+        return enemyDatas[name] ?? Object.values(enemyDatas).find((e) => e.name === name);
     }
 
     getEnemyDatas(): EnemyData[] {
