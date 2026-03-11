@@ -55,7 +55,7 @@ describe('AdventureLog', () => {
         it('sets createdAt and modifiedAt to the same ISO string', () => {
             const log = createNewAdventureLog();
             expect(log.createdAt).toBe(log.modifiedAt);
-            expect(() => new Date(log.createdAt)).not.toThrowError();
+            expect(() => new Date(log.createdAt)).not.toThrow();
         });
 
         it('initializes hero at the default starting position', () => {
