@@ -24,13 +24,14 @@
         "brecconary.json": {
             "expandedObjectLayers": [
                 6,
-                5
+                5,
+                4
             ],
             "scale": 1.7798,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 276.7164849983144,
-                "y": 140.46522081132713
+                "x": 206.48387459265084,
+                "y": 125.8568378469491
             }
         },
         "brecconary.tmx": {
@@ -142,10 +143,10 @@
                 4
             ],
             "scale": 2.466,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 201.74371451743713,
-                "y": 233.5766423357664
+                "x": 107.66423357664235,
+                "y": 314.27412814274123
             }
         },
         "overworld.json": {
@@ -155,8 +156,8 @@
             "scale": 1.7855,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1768.9722766732007,
-                "y": 249.22990758891066
+                "x": 775.4130495659479,
+                "y": 830.0196023522822
             }
         },
         "overworld.json#territories": {
