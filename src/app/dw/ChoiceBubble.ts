@@ -70,18 +70,20 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
             if (this.columns === 2) {
                 const leftCount = Math.ceil(this.choices.length / 2);
                 const colMin = this.curChoice >= leftCount ? leftCount : 0;
-                this.curChoice = Math.max(colMin, this.curChoice - 1);
+                const colMax = this.curChoice >= leftCount ? this.choices.length - 1 : leftCount - 1;
+                this.curChoice = this.curChoice === colMin ? colMax : this.curChoice - 1;
             } else {
-                this.curChoice = Math.max(0, this.curChoice - 1);
+                this.curChoice = this.curChoice === 0 ? this.choices.length - 1 : this.curChoice - 1;
             }
             this.resetArrowTimer();
         } else if (im.down(true)) {
             if (this.columns === 2) {
                 const leftCount = Math.ceil(this.choices.length / 2);
+                const colMin = this.curChoice >= leftCount ? leftCount : 0;
                 const colMax = this.curChoice >= leftCount ? this.choices.length - 1 : leftCount - 1;
-                this.curChoice = Math.min(this.curChoice + 1, colMax);
+                this.curChoice = this.curChoice === colMax ? colMin : this.curChoice + 1;
             } else {
-                this.curChoice = Math.min(this.curChoice + 1, this.choices.length - 1);
+                this.curChoice = this.curChoice === this.choices.length - 1 ? 0 : this.curChoice + 1;
             }
             this.resetArrowTimer();
         } else if (this.columns === 2 && im.left(true)) {

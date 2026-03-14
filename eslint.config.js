@@ -69,7 +69,7 @@ export default [
                 { selector: "import", format: ["camelCase", "PascalCase"] },
                 { selector: "objectLiteralProperty", format: ["camelCase", "PascalCase", "UPPER_CASE"], leadingUnderscore: "forbid" },
                 { selector: "typeParameter", format: ["PascalCase"] },
-                { selector: "variable", modifiers: ["const"], format: ["camelCase", "UPPER_CASE"] },
+                { selector: "variable", modifiers: ["const"], leadingUnderscore: 'allow', format: ["camelCase", "UPPER_CASE"] },
             ],
             "@typescript-eslint/no-empty-function": 0,
             "@typescript-eslint/no-non-null-assertion": 0, // TODO: Remove me
