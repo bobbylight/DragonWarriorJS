@@ -3,6 +3,7 @@ import { DwGame } from './DwGame';
 import { ChoiceBubble } from './ChoiceBubble';
 import { EnemyData } from './Enemy';
 import { Armor } from './Armor';
+import { Shield } from './Shield';
 import { Weapon } from './Weapon';
 
 export type CheatOption =
@@ -74,6 +75,19 @@ export class Cheats {
             (data) => data.shortName ?? data.name, true, 'BATTLE', 2);
         bubble.setYInc(lineHeight);
         return bubble;
+    }
+
+    static createShieldSelectBubble(game: DwGame): ChoiceBubble<Shield> {
+
+        const lineHeight = 18;
+        const tileSize: number = game.getTileSize();
+        const choices: Shield[] = game.getShieldArray();
+        const w: number = game.getWidth() - 4 * tileSize;
+        const h: number = choices.length * lineHeight * game.scale + 1.5 * tileSize;
+        const x: number = (game.getWidth() - w) / 2;
+        const y: number = (game.getHeight() - h) / 2;
+
+        return new ChoiceBubble(game, x, y, w, h, choices, (shield) => shield.displayName, true, 'SHIELD');
     }
 
     static createWeaponSelectBubble(game: DwGame): ChoiceBubble<Weapon> {

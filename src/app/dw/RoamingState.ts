@@ -15,6 +15,7 @@ import { CheatOption, Cheats, WarpLocation } from './Cheats';
 import { EnemyData } from './Enemy';
 import { Armor } from './Armor';
 import { ChoiceBubble } from './ChoiceBubble';
+import { Shield } from './Shield';
 import { Weapon } from './Weapon';
 import { Door } from './Door';
 import { DwMap } from './DwMap';
@@ -25,7 +26,7 @@ import { getSearchConversation } from './SearchConversations';
 import { SpellBubble } from '@/app/dw/SpellBubble';
 import { Spell } from '@/app/dw/Spell';
 
-type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION' | 'ARMOR_SELECTION';
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION' | 'ARMOR_SELECTION' | 'SHIELD_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
@@ -41,6 +42,7 @@ export class RoamingState extends BaseState {
     private battleBubble?: ChoiceBubble<EnemyData>;
     private weaponSelectBubble?: ChoiceBubble<Weapon>;
     private armorBubble?: ChoiceBubble<Armor>;
+    private shieldBubble?: ChoiceBubble<Shield>;
     private readonly stationaryTimer: Delay;
     private overnightDelay?: Delay;
     private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
@@ -73,6 +75,7 @@ export class RoamingState extends BaseState {
         this.updateMethods.set('BATTLE_SELECTION', this.updateBattleSelection.bind(this));
         this.updateMethods.set('WEAPON_SELECTION', this.updateWeaponSelection.bind(this));
         this.updateMethods.set('ARMOR_SELECTION', this.updateArmorSelection.bind(this));
+        this.updateMethods.set('SHIELD_SELECTION', this.updateShieldSelection.bind(this));
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
@@ -148,8 +151,7 @@ export class RoamingState extends BaseState {
                         this.setSubstate('ARMOR_SELECTION');
                         break;
                     case 'Shield Change':
-                        this.game.cycleShield();
-                        this.setSubstate('ROAMING');
+                        this.setSubstate('SHIELD_SELECTION');
                         break;
                     case 'Max HP/MP':
                         this.game.setHeroStats(255, 255, 255, 255);
@@ -427,6 +429,24 @@ export class RoamingState extends BaseState {
         }
     }
 
+    private updateShieldSelection(delta: number) {
+
+        // Do check here to appease tsc of shieldBubble being defined
+        this.shieldBubble ??= Cheats.createShieldSelectBubble(this.game);
+
+        this.shieldBubble.update(delta);
+        if (this.shieldBubble.handleInput()) {
+            const shield = this.shieldBubble.getSelectedItem();
+            this.shieldBubble = undefined;
+            if (shield) {
+                this.game.setShield(shield);
+                this.setSubstate('ROAMING');
+            } else {
+                this.setSubstate('CHEAT_SELECTION');
+            }
+        }
+    }
+
     private overnightOver() {
         this.game.audio.playMusic('MUSIC_TOWN');
         delete this.overnightDelay;
@@ -548,6 +568,9 @@ export class RoamingState extends BaseState {
         }
         if (this.armorBubble) {
             this.armorBubble.paint(ctx);
+        }
+        if (this.shieldBubble) {
+            this.shieldBubble.paint(ctx);
         }
 
         if (this.overnightDelay) {

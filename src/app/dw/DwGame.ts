@@ -144,9 +144,13 @@ export class DwGame extends Game {
                 }
             }
             i = (i + 1) % shieldArray.length;
-            this.hero.shield = shieldArray[ i ];
-            this.setStatusMessage(`Shield changed to: ${this.hero.shield.name}`);
+            this.setShield(shieldArray[ i ]);
         }
+    }
+
+    setShield(shield: Shield) {
+        this.hero.shield = shield;
+        this.setStatusMessage(`Shield changed to: ${shield.name}`);
     }
 
     cycleWeapon() {
@@ -670,6 +674,10 @@ export class DwGame extends Game {
     getShield(shield: string): Shield {
         const shieldMap: EquipmentMap<Shield> = this.assets.get('shields');
         return shieldMap[ shield ];
+    }
+
+    getShieldArray(): Shield[] {
+        return this.assets.get('shieldArray');
     }
 
     getTileSize(): number {
