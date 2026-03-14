@@ -66,10 +66,11 @@ describe('ChoiceBubble', () => {
             expect(bubble.getSelectedIndex()).toEqual(choices.length - 1);
         });
 
-        it('up does not move past the first item', () => {
+        it('up at the first item wraps to the last item', () => {
             upSpy.mockReturnValue(true);
             bubble.handleInput();
-            expect(bubble.getSelectedIndex()).toEqual(0);
+            expect(bubble.getSelectedIndex()).toEqual(choices.length - 1);
+            expect(bubble.getSelectedItem()).toEqual('Gamma');
         });
 
         it('up moves to the previous item', () => {
@@ -180,10 +181,21 @@ describe('ChoiceBubble', () => {
             expect(bubble.getSelectedIndex()).toEqual(leftCount - 1);
         });
 
-        it('up does not move past the top of the left column', () => {
+        it('up at the top of the left column wraps to the bottom of the left column', () => {
             upSpy.mockReturnValue(true);
             bubble.handleInput();
-            expect(bubble.getSelectedIndex()).toEqual(0);
+            expect(bubble.getSelectedIndex()).toEqual(leftCount - 1);
+            expect(bubble.getSelectedItem()).toEqual('Beta');
+        });
+
+        it('up at the top of the right column wraps to the bottom of the right column', () => {
+            rightSpy.mockReturnValue(true);
+            bubble.handleInput(); // → index 2 (top of right column)
+            rightSpy.mockReturnValue(false);
+            upSpy.mockReturnValue(true);
+            bubble.handleInput(); // wraps to bottom of right column (index 2 = only item)
+            expect(bubble.getSelectedIndex()).toEqual(choices.length - 1);
+            expect(bubble.getSelectedItem()).toEqual('Gamma');
         });
 
         it('right moves to the corresponding row in the right column', () => {
