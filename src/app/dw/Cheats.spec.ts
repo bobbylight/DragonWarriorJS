@@ -4,6 +4,7 @@ import { Cheats } from '@/app/dw/Cheats';
 import { EnemyData } from '@/app/dw/Enemy';
 import { Armor } from '@/app/dw/Armor';
 import { ChoiceBubble } from '@/app/dw/ChoiceBubble';
+import { Shield } from '@/app/dw/Shield';
 import { Weapon } from '@/app/dw/Weapon';
 
 const mockFont = {
@@ -75,6 +76,11 @@ const mockEnemies: Record<string, EnemyData> = {
     MetalScorpion: metalScorpionData,
 };
 
+// Shields in ascending defense order (as createShieldArray would produce)
+const smallShield = new Shield('smallShield', { name: 'smallShield', displayName: 'Small Shield', defense: 4 });
+const largeShield = new Shield('largeShield', { name: 'largeShield', displayName: 'Large Shield', defense: 10 });
+const mockShieldArray: Shield[] = [ smallShield, largeShield ];
+
 describe('Cheats', () => {
 
     let game: DwGame;
@@ -85,6 +91,7 @@ describe('Cheats', () => {
         game.assets.set('enemies', mockEnemies);
         game.assets.set('weaponsArray', mockWeaponsArray);
         game.assets.set('armorArray', mockArmorArray);
+        game.assets.set('shieldArray', mockShieldArray);
     });
 
     afterEach(() => {
@@ -273,5 +280,78 @@ describe('Cheats', () => {
             });
         });
 
+    });
+
+    describe('createShieldSelectBubble()', () => {
+
+        let bubble: ChoiceBubble<Shield>;
+
+        beforeEach(() => {
+            bubble = Cheats.createShieldSelectBubble(game);
+        });
+
+        it('has title "SHIELD"', () => {
+            expect(bubble.title).toEqual('SHIELD');
+        });
+
+        it('selects the first shield by default', () => {
+            expect(bubble.getSelectedIndex()).toEqual(0);
+            expect(bubble.getSelectedItem()).toEqual(smallShield);
+        });
+
+        it('has shields in ascending defense order', () => {
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(true);
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'down').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+
+            bubble.handleInput();
+
+            expect(bubble.getSelectedItem()).toEqual(smallShield);
+        });
+
+        it('uses displayName as the choice label', () => {
+            vi.spyOn(game.inputManager, 'down').mockReturnValueOnce(true).mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValueOnce(false).mockReturnValue(true);
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+
+            bubble.handleInput(); // navigate down to largeShield
+            bubble.handleInput(); // confirm largeShield
+
+            expect(bubble.getSelectedItem()).toEqual(largeShield);
+            expect(bubble.getSelectedItem()?.displayName).toEqual('Large Shield');
+        });
+
+        it('has width based on game width and tile size', () => {
+            expect(bubble.w).toEqual(game.getWidth() - 4 * game.getTileSize());
+        });
+
+        it('has height based on shield count', () => {
+            const lineHeight = 18;
+            expect(bubble.h).toEqual(mockShieldArray.length * lineHeight * game.scale + 1.5 * game.getTileSize());
+        });
+
+        describe('when cancelled', () => {
+
+            it('marks input as handled and returns no selected item', () => {
+                vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(true);
+                vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'down').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+
+                const done = bubble.handleInput();
+
+                expect(done).toEqual(true);
+                expect(bubble.getSelectedItem()).toBeUndefined();
+                expect(bubble.getSelectedIndex()).toEqual(-1);
+            });
+        });
     });
 });

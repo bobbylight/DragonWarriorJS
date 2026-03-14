@@ -10,12 +10,17 @@ import {
 import { EnemyData } from '@/app/dw/Enemy';
 import { BattleState } from '@/app/dw/BattleState';
 import { BattleTransitionState } from '@/app/dw/BattleTransitionState';
+import { Shield } from '@/app/dw/Shield';
 
 const mockFont = { cellW: 8, cellH: 9 };
 
 const mockWeapons = { club: { name: 'club' }, bambooStick: { name: 'bambooStick' } };
 const mockArmor = { clothes: { name: 'clothes' }, leather: { name: 'leather' } };
 const mockShields = { smallShield: { name: 'smallShield' }, largeShield: { name: 'largeShield' } };
+
+const smallShield = new Shield('smallShield', { name: 'smallShield', displayName: 'Small Shield', defense: 4 });
+const largeShield = new Shield('largeShield', { name: 'largeShield', displayName: 'Large Shield', defense: 10 });
+const mockShieldArray: Shield[] = [ smallShield, largeShield ];
 
 const slimeData: EnemyData = {
     name: 'Slime',
@@ -55,6 +60,7 @@ describe('DwGame', () => {
         game.assets.set('weapons', mockWeapons);
         game.assets.set('armor', mockArmor);
         game.assets.set('shields', mockShields);
+        game.assets.set('shieldArray', mockShieldArray);
         localStorage.clear();
     });
 
@@ -248,10 +254,39 @@ describe('DwGame', () => {
             game2.assets.set('weapons', mockWeapons);
             game2.assets.set('armor', mockArmor);
             game2.assets.set('shields', mockShields);
+            game2.assets.set('shieldArray', mockShieldArray);
             game2.loadAdventureLog();
             game2.saveAdventureLog();
 
             expect(getAdventureLogSummaries()).toHaveLength(2);
+        });
+    });
+
+    describe('getShieldArray()', () => {
+
+        it('returns the shield array from assets', () => {
+            expect(game.getShieldArray()).toEqual(mockShieldArray);
+        });
+    });
+
+    describe('setShield()', () => {
+
+        beforeEach(() => {
+            game.loadAdventureLog();
+        });
+
+        it('updates the hero shield', () => {
+            game.setShield(largeShield);
+
+            expect(game.hero.shield).toEqual(largeShield);
+        });
+
+        it('displays a status message with the shield name', () => {
+            const setStatusMessage = vi.spyOn(game, 'setStatusMessage');
+
+            game.setShield(largeShield);
+
+            expect(setStatusMessage).toHaveBeenCalledWith('Shield changed to: largeShield');
         });
     });
 });
