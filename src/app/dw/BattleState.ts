@@ -119,6 +119,17 @@ Thy gold increases by ${this.enemy.gp}.`;
                 });
                 break;
             }
+            case 'fire': {
+                const text = `The ${this.enemy.name} is breathing fire.`;
+                this.textBubble.addToConversation({ text, afterSound: 'breatheFire' }, true);
+                this.textBubble.onDone(() => {
+                    this.enemyAttackDelay = new Delay({
+                        millis: 600,
+                        callback: this.enemyAttackCallback.bind(this),
+                    });
+                });
+                break;
+            }
         }
     }
 

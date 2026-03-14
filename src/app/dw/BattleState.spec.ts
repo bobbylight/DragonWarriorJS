@@ -44,6 +44,41 @@ describe('BattleState', () => {
         vi.restoreAllMocks();
     });
 
+    describe('enemyAttack() with fire', () => {
+        let addToConversationSpy: MockInstance<TextBubble['addToConversation']>;
+
+        beforeEach(() => {
+            const textBubble = battleState.getTextBubble();
+            vi.spyOn(textBubble, 'onDone').mockImplementation((cb: () => void) => {
+                cb();
+            });
+            addToConversationSpy = vi.spyOn(textBubble, 'addToConversation');
+
+            const enemy = battleState.getEnemy();
+            // Ensure enemy survives the hero's attack so the enemy gets a turn
+            vi.spyOn(enemy, 'takeDamage').mockReturnValue(false);
+            vi.spyOn(enemy, 'ai').mockReturnValue({
+                type: 'fire',
+                damage: 10,
+            });
+
+            battleState.fight();
+            battleState.update(400); // advance past 300ms fight delay
+            battleState.update(500); // advance past 400ms flash delay
+        });
+
+        it('prints that the enemy is breathing fire', () => {
+            expect(addToConversationSpy).toHaveBeenCalledWith(
+                { text: 'The Slime is breathing fire.', afterSound: 'breatheFire' }, true,
+            );
+        });
+
+        it('advances to enemyAttackCallback after a 600ms delay', () => {
+            battleState.update(700); // advance past the 600ms fire delay
+            expect(playSoundSpy).toHaveBeenCalledWith('receiveDamage');
+        });
+    });
+
     describe('run()', () => {
         describe('when the run attempt fails', () => {
             let enemyAiSpy: MockInstance<EnemyAiFunc>;
