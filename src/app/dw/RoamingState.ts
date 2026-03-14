@@ -13,6 +13,7 @@ import { Hero } from './Hero';
 import { MapLogic } from './mapLogic/MapLogic';
 import { CheatOption, Cheats, WarpLocation } from './Cheats';
 import { EnemyData } from './Enemy';
+import { Armor } from './Armor';
 import { ChoiceBubble } from './ChoiceBubble';
 import { Weapon } from './Weapon';
 import { Door } from './Door';
@@ -24,7 +25,7 @@ import { getSearchConversation } from './SearchConversations';
 import { SpellBubble } from '@/app/dw/SpellBubble';
 import { Spell } from '@/app/dw/Spell';
 
-type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION';
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION' | 'ARMOR_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
@@ -39,6 +40,7 @@ export class RoamingState extends BaseState {
     private cheatBubble?: ChoiceBubble<CheatOption>;
     private battleBubble?: ChoiceBubble<EnemyData>;
     private weaponSelectBubble?: ChoiceBubble<Weapon>;
+    private armorBubble?: ChoiceBubble<Armor>;
     private readonly stationaryTimer: Delay;
     private overnightDelay?: Delay;
     private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
@@ -70,6 +72,7 @@ export class RoamingState extends BaseState {
         this.updateMethods.set('CHEAT_SELECTION', this.updateCheatSelection.bind(this));
         this.updateMethods.set('BATTLE_SELECTION', this.updateBattleSelection.bind(this));
         this.updateMethods.set('WEAPON_SELECTION', this.updateWeaponSelection.bind(this));
+        this.updateMethods.set('ARMOR_SELECTION', this.updateArmorSelection.bind(this));
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
@@ -142,8 +145,7 @@ export class RoamingState extends BaseState {
                         this.setSubstate('WEAPON_SELECTION');
                         break;
                     case 'Armor Change':
-                        this.game.cycleArmor();
-                        this.setSubstate('ROAMING');
+                        this.setSubstate('ARMOR_SELECTION');
                         break;
                     case 'Shield Change':
                         this.game.cycleShield();
@@ -406,6 +408,25 @@ export class RoamingState extends BaseState {
         }
     }
 
+    private updateArmorSelection(delta: number) {
+
+        // Do check here to appease tsc of armorBubble being defined
+        this.armorBubble ??= Cheats.createArmorSelectBubble(this.game);
+
+        this.armorBubble.update(delta);
+        if (this.armorBubble.handleInput()) {
+            const armor = this.armorBubble.getSelectedItem();
+            this.armorBubble = undefined;
+            if (armor) {
+                this.game.hero.armor = armor;
+                this.game.setStatusMessage(`Armor changed to: ${armor.displayName}`);
+                this.setSubstate('ROAMING');
+            } else {
+                this.setSubstate('CHEAT_SELECTION');
+            }
+        }
+    }
+
     private overnightOver() {
         this.game.audio.playMusic('MUSIC_TOWN');
         delete this.overnightDelay;
@@ -524,6 +545,9 @@ export class RoamingState extends BaseState {
         }
         if (this.weaponSelectBubble) {
             this.weaponSelectBubble.paint(ctx);
+        }
+        if (this.armorBubble) {
+            this.armorBubble.paint(ctx);
         }
 
         if (this.overnightDelay) {
