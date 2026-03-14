@@ -2,6 +2,7 @@ import { Direction } from './Direction';
 import { DwGame } from './DwGame';
 import { ChoiceBubble } from './ChoiceBubble';
 import { EnemyData } from './Enemy';
+import { Armor } from './Armor';
 import { Weapon } from './Weapon';
 
 export type CheatOption =
@@ -45,6 +46,18 @@ export class Cheats {
         ];
 
         return new ChoiceBubble(game, x, y, w, h, choices, undefined, true);
+    }
+
+    static createArmorSelectBubble(game: DwGame): ChoiceBubble<Armor> {
+
+        const tileSize: number = game.getTileSize();
+        const choices: Armor[] = game.assets.get('armorArray');
+        const w: number = game.getWidth() - 4 * tileSize;
+        const h: number = choices.length * 18 * game.scale + 1.5 * tileSize;
+        const x: number = (game.getWidth() - w) / 2;
+        const y: number = (game.getHeight() - h) / 2;
+
+        return new ChoiceBubble(game, x, y, w, h, choices, (armor) => armor.displayName, true, 'ARMOR');
     }
 
     static createBattleBubble(game: DwGame): ChoiceBubble<EnemyData> {

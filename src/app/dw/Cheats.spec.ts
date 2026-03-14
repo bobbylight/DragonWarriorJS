@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DwGame } from '@/app/dw/DwGame';
 import { Cheats } from '@/app/dw/Cheats';
 import { EnemyData } from '@/app/dw/Enemy';
+import { Armor } from '@/app/dw/Armor';
 import { ChoiceBubble } from '@/app/dw/ChoiceBubble';
 import { Weapon } from '@/app/dw/Weapon';
 
@@ -61,6 +62,12 @@ const metalScorpionData: EnemyData = {
     ai: 'attackOnly',
 };
 
+// 3 armors sorted by defense ascending (as LoadingState produces)
+const clothesArmor = new Armor('clothes', { name: 'clothes', displayName: 'Clothes', baseCost: 20, defense: 2 });
+const leatherArmor = new Armor('leatherArmor', { name: 'leatherArmor', displayName: 'Leather Armor', baseCost: 70, defense: 4 });
+const chainMail = new Armor('chainMail', { name: 'chainMail', displayName: 'Chain Mail', baseCost: 300, defense: 10 });
+const mockArmorArray: Armor[] = [ clothesArmor, leatherArmor, chainMail ];
+
 // 3 enemies: left column gets indices 0-1, right column gets index 2
 const mockEnemies: Record<string, EnemyData> = {
     Slime: slimeData,
@@ -77,6 +84,7 @@ describe('Cheats', () => {
         game.assets.set('font', mockFont);
         game.assets.set('enemies', mockEnemies);
         game.assets.set('weaponsArray', mockWeaponsArray);
+        game.assets.set('armorArray', mockArmorArray);
     });
 
     afterEach(() => {
@@ -157,6 +165,67 @@ describe('Cheats', () => {
                 expect(bubble.getSelectedItem()).toEqual(club);
             });
         });
+
+    });
+
+    describe('createArmorSelectBubble()', () => {
+
+        let bubble: ChoiceBubble<Armor>;
+
+        beforeEach(() => {
+            bubble = Cheats.createArmorSelectBubble(game);
+        });
+
+        it('has title "ARMOR"', () => {
+            expect(bubble.title).toEqual('ARMOR');
+        });
+
+        it('selects the first armor by default', () => {
+            expect(bubble.getSelectedIndex()).toEqual(0);
+            expect(bubble.getSelectedItem()).toEqual(clothesArmor);
+        });
+
+        it('has width based on game width and tile size', () => {
+            expect(bubble.w).toEqual(game.getWidth() - 4 * game.getTileSize());
+        });
+
+        it('has height based on armor count', () => {
+            expect(bubble.h).toEqual(mockArmorArray.length * 18 * game.scale + 1.5 * game.getTileSize());
+        });
+
+        it('uses displayName as the label for each armor', () => {
+            // Navigate to the second item and verify it's the correct armor
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'down').mockReturnValue(true);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+
+            bubble.handleInput();
+
+            expect(bubble.getSelectedItem()).toEqual(leatherArmor);
+            expect(bubble.getSelectedItem()?.displayName).toEqual('Leather Armor');
+        });
+
+        describe('when cancelled', () => {
+
+            it('marks input as handled and returns no selected item', () => {
+                vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(true);
+                vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'down').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+
+                const done = bubble.handleInput();
+
+                expect(done).toEqual(true);
+                expect(bubble.getSelectedItem()).toBeUndefined();
+                expect(bubble.getSelectedIndex()).toEqual(-1);
+            });
+        });
+
     });
 
     describe('createBattleBubble()', () => {
