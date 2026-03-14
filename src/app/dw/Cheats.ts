@@ -2,6 +2,7 @@ import { Direction } from './Direction';
 import { DwGame } from './DwGame';
 import { ChoiceBubble } from './ChoiceBubble';
 import { EnemyData } from './Enemy';
+import { Weapon } from './Weapon';
 
 export type CheatOption =
     '9999 Gold' |
@@ -60,6 +61,19 @@ export class Cheats {
             (data) => data.shortName ?? data.name, true, 'BATTLE', 2);
         bubble.setYInc(lineHeight);
         return bubble;
+    }
+
+    static createWeaponSelectBubble(game: DwGame): ChoiceBubble<Weapon> {
+
+        const tileSize: number = game.getTileSize();
+        const weaponsArray: Weapon[] = game.assets.get('weaponsArray');
+        const weapons: Weapon[] = [ ...weaponsArray ].sort((a, b) => a.power - b.power);
+        const w: number = game.getWidth() - 4 * tileSize;
+        const h: number = weapons.length * 18 * game.scale + 1.5 * tileSize;
+        const x: number = (game.getWidth() - w) / 2;
+        const y: number = (game.getHeight() - h) / 2;
+
+        return new ChoiceBubble(game, x, y, w, h, weapons, (weapon) => weapon.displayName, true, 'WEAPON');
     }
 
     static createWarpBubble(game: DwGame): ChoiceBubble<WarpLocation> {
