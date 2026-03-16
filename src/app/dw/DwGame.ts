@@ -195,9 +195,9 @@ export class DwGame extends Game {
 
     }
 
-    drawString(text: string | number, x: number, y: number) {
+    drawString(text: string | number, x: number, y: number, color?: string) {
         const textStr: string = typeof text === 'number' ? text.toString() : text;
-        this.getFont().drawString(this.getRenderingContext(), textStr, x, y);
+        this.getFont().drawString(this.getRenderingContext(), textStr, x, y, color);
     }
 
     getAdventureLog(): AdventureLog {
