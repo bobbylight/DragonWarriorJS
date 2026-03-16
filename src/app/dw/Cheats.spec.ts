@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { DwGame } from '@/app/dw/DwGame';
-import { Cheats } from '@/app/dw/Cheats';
+import { Cheats, GoldOption } from '@/app/dw/Cheats';
 import { EnemyData } from '@/app/dw/Enemy';
 import { Armor } from '@/app/dw/Armor';
 import { ChoiceBubble } from '@/app/dw/ChoiceBubble';
@@ -277,6 +277,97 @@ describe('Cheats', () => {
                 expect(done).toEqual(true);
                 expect(bubble.getSelectedItem()).toBeUndefined();
                 expect(bubble.getSelectedIndex()).toEqual(-1);
+            });
+        });
+
+    });
+
+    describe('createGoldSelectBubble()', () => {
+
+        let bubble: ChoiceBubble<GoldOption>;
+
+        beforeEach(() => {
+            bubble = Cheats.createGoldSelectBubble(game);
+        });
+
+        it('has title "GOLD"', () => {
+            expect(bubble.title).toEqual('GOLD');
+        });
+
+        it('selects "9999 Gold" by default', () => {
+            expect(bubble.getSelectedIndex()).toEqual(0);
+            expect(bubble.getSelectedItem()).toEqual('9999 Gold');
+        });
+
+        it('lists all four gold options navigable by pressing down', () => {
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+            vi.spyOn(game.audio, 'playSound').mockReturnValue(0);
+
+            expect(bubble.getSelectedItem()).toEqual('9999 Gold');
+
+            vi.spyOn(game.inputManager, 'down').mockReturnValueOnce(true).mockReturnValue(false);
+            bubble.handleInput();
+            expect(bubble.getSelectedItem()).toEqual('1000 Gold');
+
+            vi.spyOn(game.inputManager, 'down').mockReturnValueOnce(true).mockReturnValue(false);
+            bubble.handleInput();
+            expect(bubble.getSelectedItem()).toEqual('1 Gold');
+
+            vi.spyOn(game.inputManager, 'down').mockReturnValueOnce(true).mockReturnValue(false);
+            bubble.handleInput();
+            expect(bubble.getSelectedItem()).toEqual('0 Gold');
+        });
+
+        it('has width based on game width and tile size', () => {
+            expect(bubble.w).toEqual(game.getWidth() - 4 * game.getTileSize());
+        });
+
+        it('has height based on 4 options', () => {
+            expect(bubble.h).toEqual(4 * 18 * game.scale + 1.5 * game.getTileSize());
+        });
+
+        describe('when cancelled', () => {
+
+            it('marks input as handled and returns no selected item', () => {
+                vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(true);
+                vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'down').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+
+                const done = bubble.handleInput();
+
+                expect(done).toEqual(true);
+                expect(bubble.getSelectedItem()).toBeUndefined();
+                expect(bubble.getSelectedIndex()).toEqual(-1);
+            });
+        });
+
+        describe('when confirming a gold option', () => {
+
+            it('can select "1000 Gold"', () => {
+                vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+                vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'down').mockReturnValue(true);
+                vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+                vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+                vi.spyOn(game.audio, 'playSound').mockReturnValue(0);
+
+                bubble.handleInput(); // navigate down to '1000 Gold'
+
+                vi.spyOn(game.inputManager, 'down').mockReturnValue(false);
+                vi.spyOn(game, 'actionKeyPressed').mockReturnValue(true);
+
+                const done = bubble.handleInput(); // confirm
+
+                expect(done).toEqual(true);
+                expect(bubble.getSelectedItem()).toEqual('1000 Gold');
             });
         });
 
