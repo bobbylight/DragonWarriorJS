@@ -7,7 +7,7 @@ import { Shield } from './Shield';
 import { Weapon } from './Weapon';
 
 export type CheatOption =
-    '9999 Gold' |
+    'Change Gold...' |
     'Level Up' |
     'Weapon Change' |
     'Armor Change' |
@@ -15,6 +15,8 @@ export type CheatOption =
     'Max HP/MP' |
     'Min HP/MP' |
     'Battle...';
+
+export type GoldOption = '9999 Gold' | '1000 Gold' | '1 Gold' | '0 Gold';
 
 export type WarpLocation =
     'Brecconary' |
@@ -36,7 +38,7 @@ export class Cheats {
         const y: number = (game.getHeight() - h) / 2;
 
         const choices: CheatOption[] = [
-            '9999 Gold',
+            'Change Gold...',
             'Level Up',
             'Weapon Change',
             'Armor Change',
@@ -47,6 +49,18 @@ export class Cheats {
         ];
 
         return new ChoiceBubble(game, x, y, w, h, choices, undefined, true);
+    }
+
+    static createGoldSelectBubble(game: DwGame): ChoiceBubble<GoldOption> {
+
+        const tileSize: number = game.getTileSize();
+        const choices: GoldOption[] = [ '9999 Gold', '1000 Gold', '1 Gold', '0 Gold' ];
+        const w: number = game.getWidth() - 4 * tileSize;
+        const h: number = choices.length * 18 * game.scale + 1.5 * tileSize;
+        const x: number = (game.getWidth() - w) / 2;
+        const y: number = (game.getHeight() - h) / 2;
+
+        return new ChoiceBubble(game, x, y, w, h, choices, undefined, true, 'GOLD');
     }
 
     static createArmorSelectBubble(game: DwGame): ChoiceBubble<Armor> {

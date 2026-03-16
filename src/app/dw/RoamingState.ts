@@ -11,7 +11,7 @@ import { Item } from './Item';
 import { Npc } from './Npc';
 import { Hero } from './Hero';
 import { MapLogic } from './mapLogic/MapLogic';
-import { CheatOption, Cheats, WarpLocation } from './Cheats';
+import { CheatOption, Cheats, GoldOption, WarpLocation } from './Cheats';
 import { EnemyData } from './Enemy';
 import { Armor } from './Armor';
 import { ChoiceBubble } from './ChoiceBubble';
@@ -26,7 +26,7 @@ import { getSearchConversation } from './SearchConversations';
 import { SpellBubble } from '@/app/dw/SpellBubble';
 import { Spell } from '@/app/dw/Spell';
 
-type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION' | 'ARMOR_SELECTION' | 'SHIELD_SELECTION';
+type RoamingSubState = 'ROAMING' | 'MENU' | 'TALKING' | 'OVERNIGHT' | 'WARP_SELECTION' | 'CHEAT_SELECTION' | 'BATTLE_SELECTION' | 'WEAPON_SELECTION' | 'ARMOR_SELECTION' | 'SHIELD_SELECTION' | 'GOLD_SELECTION';
 
 type UpdateFunction = (delta: number) => void;
 
@@ -43,6 +43,7 @@ export class RoamingState extends BaseState {
     private weaponSelectBubble?: ChoiceBubble<Weapon>;
     private armorBubble?: ChoiceBubble<Armor>;
     private shieldBubble?: ChoiceBubble<Shield>;
+    private goldSelectBubble?: ChoiceBubble<GoldOption>;
     private readonly stationaryTimer: Delay;
     private overnightDelay?: Delay;
     private readonly updateMethods: Map<RoamingSubState, UpdateFunction>;
@@ -76,6 +77,7 @@ export class RoamingState extends BaseState {
         this.updateMethods.set('WEAPON_SELECTION', this.updateWeaponSelection.bind(this));
         this.updateMethods.set('ARMOR_SELECTION', this.updateArmorSelection.bind(this));
         this.updateMethods.set('SHIELD_SELECTION', this.updateShieldSelection.bind(this));
+        this.updateMethods.set('GOLD_SELECTION', this.updateGoldSelection.bind(this));
 
         this.textBubble = new TextBubble(this.game);
         this.showTextBubble = false;
@@ -136,10 +138,8 @@ export class RoamingState extends BaseState {
             this.cheatBubble = undefined;
             if (cheat) {
                 switch (cheat) {
-                    case '9999 Gold':
-                        this.game.party.addGold(9999);
-                        this.game.audio.playSound('openChest');
-                        this.setSubstate('ROAMING');
+                    case 'Change Gold...':
+                        this.setSubstate('GOLD_SELECTION');
                         break;
                     case 'Level Up':
                         this.game.audio.playSound('bump');
@@ -447,6 +447,33 @@ export class RoamingState extends BaseState {
         }
     }
 
+    private updateGoldSelection(delta: number) {
+
+        // Do check here to appease tsc of goldSelectBubble being defined
+        this.goldSelectBubble ??= Cheats.createGoldSelectBubble(this.game);
+
+        this.goldSelectBubble.update(delta);
+        if (this.goldSelectBubble.handleInput()) {
+            const goldOption: GoldOption | undefined = this.goldSelectBubble.getSelectedItem();
+            this.goldSelectBubble = undefined;
+            if (goldOption) {
+                const goldAmountMap = new Map<GoldOption, number>([
+                    [ '9999 Gold', 9999 ],
+                    [ '1000 Gold', 1000 ],
+                    [ '1 Gold', 1 ],
+                    [ '0 Gold', 0 ],
+                ]);
+                const newGold = goldAmountMap.get(goldOption)!;
+                this.game.party.gold = newGold;
+                this.game.setStatusMessage(`Gold changed to ${newGold}`);
+                this.game.audio.playSound('openChest');
+                this.setSubstate('ROAMING');
+            } else {
+                this.setSubstate('CHEAT_SELECTION');
+            }
+        }
+    }
+
     private overnightOver() {
         this.game.audio.playMusic('MUSIC_TOWN');
         delete this.overnightDelay;
@@ -571,6 +598,9 @@ export class RoamingState extends BaseState {
         }
         if (this.shieldBubble) {
             this.shieldBubble.paint(ctx);
+        }
+        if (this.goldSelectBubble) {
+            this.goldSelectBubble.paint(ctx);
         }
 
         if (this.overnightDelay) {
