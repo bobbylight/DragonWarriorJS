@@ -149,7 +149,13 @@ export class CommandBubble extends Bubble {
         // Draw the choices in 2 columns
         const rowCount: number = this.getRowCount();
         this.choices.forEach((choice, index) => {
-            this.game.drawString(choice, x, y0);
+            let color: string | undefined;
+            let choiceStr = choice;
+            if (choice.endsWith('*')) {
+                color = 'blue';
+                choiceStr = choice.substring(0, choice.length - 1);
+            }
+            this.game.drawString(choiceStr, x, y0, color);
             if (index !== rowCount - 1) {
                 y0 += this.yInc;
             } else {

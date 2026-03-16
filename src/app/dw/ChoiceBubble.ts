@@ -2,6 +2,8 @@ import { InputManager } from 'gtp';
 import { Bubble } from './Bubble';
 import { DwGame } from './DwGame';
 
+export type ChoiceStringifier<Choice> = (choice: Choice) => string;
+
 /**
  * A bubble that lets the user choose between several choices. Can optionally be titled
  * and be 2 columns if there are a lot of choices. Note you must provide its bounds and size
@@ -10,7 +12,7 @@ import { DwGame } from './DwGame';
 export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
     private readonly choices: ChoiceBubbleChoice[];
-    private readonly choiceStringifier: (choice: ChoiceBubbleChoice) => string;
+    private readonly choiceStringifier: ChoiceStringifier<ChoiceBubbleChoice>;
     private curChoice: number;
     private readonly cancellable: boolean;
     private readonly columns: number;
@@ -18,7 +20,7 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
     constructor(game: DwGame, x: number, y: number, w: number, h: number,
         choices: ChoiceBubbleChoice[] = [],
-        choiceStringifier?: (choice: ChoiceBubbleChoice) => string,
+        choiceStringifier?: ChoiceStringifier<ChoiceBubbleChoice>,
         cancellable = false,
         title?: string,
         columns = 1) {

@@ -194,7 +194,11 @@ export class LoadingState extends BaseState {
                 game.assets.set('shieldArray', LoadingState.createShieldArray(shieldMap));
 
                 const font: Image = game.assets.get('font');
-                game.assets.set('font', new BitmapFont(font, 8, 9, 1, 1, game.scale));
+                const bitmapFont = new BitmapFont(font, 8, 9, 1, 1, game.scale);
+                bitmapFont.addVariant('blue',
+                    { fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0xc0, toG: 0xff, toB: 0xff },
+                );
+                game.assets.set('font', bitmapFont);
 
                 game.assets.addTmxMap(game.initLoadedMap('overworld.json'));
                 game.assets.addTmxMap(game.initLoadedMap('brecconary.json'));
