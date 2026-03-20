@@ -6,9 +6,16 @@ export interface BreakApartDelay {
     millis: number;
 }
 
+export interface ColoredTextSpan {
+    colorId: string;
+    offs: number;
+    count: number;
+}
+
 export interface BreakApartResult {
     lines: string[];
     delays: BreakApartDelay[];
+    lineColorSpans: ColoredTextSpan[][];
 }
 
 /**
@@ -70,63 +77,131 @@ export class Bubble {
         this.setActive(true);
     }
 
+    /**
+     * Takes a string of text (say from a segment) and breaks it into multiple lines. Handles
+     * both `\n` representing newlines and the string being too wide for the bubble's width.
+     * @param text The text to break apart.
+     * @param w The maximum width.
+     */
     protected breakApart(text: string, w: number): BreakApartResult {
 
-        const result: BreakApartResult = { lines: [], delays: [] };
+        const result: BreakApartResult = { lines: [], delays: [], lineColorSpans: [] };
+        const allColorSpans: ColoredTextSpan[] = [];
 
         // Newlines are automatic line breaks
-        text = Bubble.removeSpecialEscapes(text, result.delays);
+        text = Bubble.removeSpecialEscapes(text, result.delays, allColorSpans);
         const lineList: string[] = text.split('\n');
 
+        let globalOffset = 0;
         lineList.forEach((line) => {
-            this.breakApartLine(line, w, result);
+            this.breakApartLine(line, w, result, globalOffset, allColorSpans);
+            globalOffset += line.length + 1; // +1 for the '\n' separator
         });
         return result;
     }
 
     /**
-     * Locates special escapes in text and adds entries into the appropriate
-     * arrays (delays, font color changes, etc.).
+     * Locates special escapes in text and removes them, recording their positions in the
+     * appropriate output arrays. All offsets are relative to the final cleaned text.
+     *
+     * Supported escape formats:
+     *   Delays: `\d{750}` (750 ms), `\d` (default 500 ms)
+     *   Colors: `\c{colorId}text\c` where colorId is letters, digits, underscores, or hyphens
      *
      * @param text The text to scan.
      * @param delays The array to put delays into.
-     * @return The text, with any escapes removed.
+     * @param colorSpans The optional array to put color spans into. Optional, but note color escapes
+     *        are still removed even if this is not provided. Only omittable for code that doesn't need
+     *        or want color spans.
+     * @return The text, with any processed escapes removed.
      */
-    static removeSpecialEscapes(text: string, delays: BreakApartDelay[]) {
+    static removeSpecialEscapes(text: string, delays: BreakApartDelay[], colorSpans?: ColoredTextSpan[]) {
 
-        // Delay formats:
-        //    \d{750} - 750ms
-        //    \d      - default (500ms)
+        // Single-pass scan so that all offsets are relative to the same fully cleaned text,
+        // regardless of the order in which delay and color escapes appear.
+        let i = 0;
+        let pendingColorId: string | null = null;
+        let pendingColorStart = 0;
 
-        let delay: number;
-        let index: number;
-        let lastOffs = 0;
-        while ((index = text.indexOf('\\d', lastOffs)) > -1) {
-
-            if (index + 2 < text.length && text.charAt(index + 2) === '{') {
-                const end: number = text.indexOf('}', index + 3);
-                if (end > -1) {
-                    delay = parseInt(text.substring(index + 3, end), 10);
-                    console.log(`Adding a delay of ${delay} ms`);
-                    delays.push({ offs: index, millis: delay });
-                    text = text.substring(0, index) + text.substring(end + 1);
-                } else {
-                    console.warn(`Suspicious, apparent unclosed delay at offset ${index}`);
-                }
-            } else {
-                delay = 500;
-                console.log(`Adding the default delay of ${delay} ms`);
-                delays.push({ offs: index, millis: delay });
-                text = text.substring(0, index) + text.substring(index + 2);
+        while (i < text.length) {
+            if (text[i] !== '\\') {
+                i++;
+                continue;
             }
 
-            lastOffs = index;
+            const next = text[i + 1];
+
+            // Delay escape: \d{N} or \d
+            if (next === 'd') {
+                if (i + 2 < text.length && text[i + 2] === '{') {
+                    const end = text.indexOf('}', i + 3);
+                    if (end > -1) {
+                        const millis = parseInt(text.substring(i + 3, end), 10);
+                        console.log(`Adding a delay of ${millis} ms`);
+                        delays.push({ offs: i, millis });
+                        text = text.substring(0, i) + text.substring(end + 1);
+                        continue; // i is now positioned at the character that followed the escape
+                    }
+                    console.warn(`Suspicious, apparent unclosed delay at offset ${i}`);
+                    i++;
+                    continue;
+                }
+                console.log('Adding the default delay of 500 ms');
+                delays.push({ offs: i, millis: 500 });
+                text = text.substring(0, i) + text.substring(i + 2);
+                continue;
+            }
+
+            // Color escape: \c{colorId} (open) or \c (close)
+            if (next === 'c') {
+                if (i + 2 < text.length && text[i + 2] === '{') {
+                    // Opening: \c{colorId}
+                    const braceEnd = text.indexOf('}', i + 3);
+                    if (braceEnd > -1) {
+                        const colorId = text.substring(i + 3, braceEnd);
+                        if (pendingColorId !== null) {
+                            console.warn(`Nested color span at offset ${i} is not supported; overwriting previous span`);
+                        }
+                        text = text.substring(0, i) + text.substring(braceEnd + 1);
+                        pendingColorId = colorId;
+                        pendingColorStart = i;
+                        continue;
+                    }
+                    console.warn(`Malformed color escape at offset ${i}`);
+                    i += 3;
+                    continue;
+                }
+
+                // Closing: \c
+                if (pendingColorId !== null) {
+                    colorSpans?.push({ colorId: pendingColorId, offs: pendingColorStart, count: i - pendingColorStart });
+                    text = text.substring(0, i) + text.substring(i + 2);
+                    pendingColorId = null;
+                    continue;
+                }
+
+                // Stray closing \c with no open span — skip
+                i += 2;
+                continue;
+            }
+
+            i++;
+        }
+
+        if (pendingColorId !== null) {
+            console.warn(`Missing closing \\c for color span starting at ${pendingColorStart}`);
         }
 
         return text;
     }
 
-    private breakApartLine(line: string, w: number, result: BreakApartResult) {
+    /**
+     * Takes input text that may be longer than the bubble's viewport, and breaks it into
+     * multiple lines that fit within the bubble's width. Also adjusts the "colored spans"
+     * to accommodate being on multiple lines if necessary.
+     */
+    private breakApartLine(line: string, w: number, result: BreakApartResult, globalOffset: number,
+        allColorSpans: ColoredTextSpan[]) {
 
         const optimal: number = Math.floor(w / this.fontWidth);
 
@@ -137,14 +212,35 @@ export class Bubble {
             while (ch !== ' ') {
                 ch = line.charAt(--offs);
             }
+            result.lineColorSpans.push(Bubble.getColorSpansForLine(globalOffset, offs, allColorSpans));
             result.lines.push(line.substring(0, offs));
 
+            globalOffset += offs + 1; // +1 to skip the space consumed by trim()
             line = line.substring(offs).trim();
         }
 
         //if (line.length>0) {
+        result.lineColorSpans.push(Bubble.getColorSpansForLine(globalOffset, line.length, allColorSpans));
         result.lines.push(line);
         //}
+    }
+
+    /**
+     * Returns the color spans that apply to a line of text.
+     * @param lineStart The start of the line.
+     * @param lineLength The length of the line.
+     * @param allColorSpans All spans for the segment (could be multiple lines).
+     */
+    private static getColorSpansForLine(lineStart: number, lineLength: number,
+        allColorSpans: ColoredTextSpan[]): ColoredTextSpan[] {
+        const lineEnd = lineStart + lineLength;
+        return allColorSpans
+            .filter((s) => s.offs < lineEnd && s.offs + s.count > lineStart)
+            .map((s) => ({
+                colorId: s.colorId,
+                offs: Math.max(0, s.offs - lineStart),
+                count: Math.min(lineEnd, s.offs + s.count) - Math.max(lineStart, s.offs),
+            }));
     }
 
     protected drawArrow(x: number, y: number) {

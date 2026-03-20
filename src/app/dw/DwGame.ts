@@ -49,6 +49,7 @@ import { RoamingEntityRange } from './RoamingEntity';
 import { HERB, Item, getItemByName } from '@/app/dw/Item';
 import { HiddenItem, HiddenItemType } from '@/app/dw/HiddenItem';
 import { Kol } from '@/app/dw/mapLogic/kol';
+import { ColoredTextSpan } from '@/app/dw/Bubble';
 
 
 export type TiledMapMap = Record<string, DwMap>;
@@ -198,6 +199,33 @@ export class DwGame extends Game {
     drawString(text: string | number, x: number, y: number, color?: string) {
         const textStr: string = typeof text === 'number' ? text.toString() : text;
         this.getFont().drawString(this.getRenderingContext(), textStr, x, y, color);
+    }
+
+    drawStringWithColor(text: string, spans: ColoredTextSpan[], x: number, y: number): void {
+        if (spans.length === 0) {
+            this.drawString(text, x, y);
+            return;
+        }
+
+        const fontW = this.stringWidth('x');
+        let pos = 0;
+        let drawX = x;
+
+        for (const span of spans) {
+            if (pos < span.offs) {
+                const before = text.substring(pos, span.offs);
+                this.drawString(before, drawX, y);
+                drawX += before.length * fontW;
+            }
+            const spanText = text.substring(span.offs, span.offs + span.count);
+            this.drawString(spanText, drawX, y, span.colorId);
+            drawX += spanText.length * fontW;
+            pos = span.offs + span.count;
+        }
+
+        if (pos < text.length) {
+            this.drawString(text.substring(pos), drawX, y);
+        }
     }
 
     getAdventureLog(): AdventureLog {

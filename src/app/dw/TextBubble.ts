@@ -1,5 +1,5 @@
 import { Delay } from 'gtp';
-import { Bubble,BreakApartDelay, BreakApartResult } from './Bubble';
+import { Bubble, BreakApartDelay, BreakApartResult, ColoredTextSpan } from './Bubble';
 import { DwGame } from './DwGame';
 import { ShoppingBubble } from './ShoppingBubble';
 import { Conversation } from './Conversation';
@@ -20,6 +20,7 @@ export class TextBubble extends Bubble {
     private curLine: number;
     private lines: string[];
     private delays: BreakApartDelay[];
+    private lineColorSpans: ColoredTextSpan[][];
     private curOffs: number;
     private curCharMillis: number;
     private textDone: boolean;
@@ -50,6 +51,7 @@ export class TextBubble extends Bubble {
         this.curLine = 0;
         this.lines = [];
         this.delays = [];
+        this.lineColorSpans = [];
         this.curOffs = -1;
         this.curCharMillis = 0;
         this.textDone = true;
@@ -81,6 +83,7 @@ export class TextBubble extends Bubble {
         const breakApartResult: BreakApartResult = this.breakApart(curText, w);
         this.lines = this.lines.concat(breakApartResult.lines);
         this.delays = breakApartResult.delays;
+        this.lineColorSpans = this.lineColorSpans.concat(breakApartResult.lineColorSpans);
         this.curOffs = -1;
         this.curCharMillis = 0;
         this.textDone = false;
@@ -169,7 +172,9 @@ export class TextBubble extends Bubble {
             if (!this.textDone) {
                 this.textDone = true;
                 if (this.lines.length > TextBubble.MAX_LINE_COUNT) {
-                    this.lines.splice(0, this.lines.length - TextBubble.MAX_LINE_COUNT);
+                    const removeCount = this.lines.length - TextBubble.MAX_LINE_COUNT;
+                    this.lines.splice(0, removeCount);
+                    this.lineColorSpans.splice(0, removeCount);
                 }
                 this.curLine = this.lines.length - 1;
             } else {
@@ -252,6 +257,12 @@ export class TextBubble extends Bubble {
         }
     }
 
+    private shiftLine(): void {
+        this.lines.shift();
+        this.lineColorSpans.shift();
+        this.curLine--;
+    }
+
     override updateImpl(delta: number): void {
 
         if (this.delay) {
@@ -266,8 +277,7 @@ export class TextBubble extends Bubble {
         if (this.textDone &&
                 this.curOffs === -1 && this.curLine === TextBubble.MAX_LINE_COUNT - 1 &&
                 this.conversation.hasNext()) {
-            this.lines.shift();
-            this.curLine--;
+            this.shiftLine();
         }
 
         if (!this.textDone) {
@@ -275,8 +285,7 @@ export class TextBubble extends Bubble {
             if (this.curCharMillis > TextBubble.CHAR_RENDER_MILLIS) {
                 this.curCharMillis -= TextBubble.CHAR_RENDER_MILLIS;
                 if (this.curOffs === -1 && this.curLine === TextBubble.MAX_LINE_COUNT) {
-                    this.lines.shift();
-                    this.curLine--;
+                    this.shiftLine();
                 }
                 // TODO: This could be more performant...
                 if (this.delays && this.delays.length > 0) {
@@ -348,7 +357,7 @@ export class TextBubble extends Bubble {
                     const end: number = Math.max(0, this.curOffs);
                     text = text.substring(0, end);
                 }
-                this.game.drawString(text, x, y);
+                this.game.drawStringWithColor(text, this.lineColorSpans[i], x, y);
                 y += 10 * this.game.scale;
             }
             if (this.textDone && this.conversation.hasNext()) {
@@ -394,6 +403,7 @@ export class TextBubble extends Bubble {
             const breakApartResult: BreakApartResult = this.breakApart(this.text, w);
             this.lines = breakApartResult.lines;
             this.delays = breakApartResult.delays;
+            this.lineColorSpans = breakApartResult.lineColorSpans;
             this.curLine = 0;
             this.curOffs = -1;
             this.curCharMillis = 0;

@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, MockInstance, vi } from 'vitest';
 import { DwGame } from '@/app/dw/DwGame';
+import { ColoredTextSpan } from '@/app/dw/Bubble';
 import {
     AdventureLog,
     createNewAdventureLog,
@@ -287,6 +288,73 @@ describe('DwGame', () => {
             game.setShield(largeShield);
 
             expect(setStatusMessage).toHaveBeenCalledWith('Shield changed to: largeShield');
+        });
+    });
+
+    describe('drawStringWithColor()', () => {
+
+        const fontW = mockFont.cellW;
+        let drawStringSpy: MockInstance<DwGame['drawString']>;
+
+        beforeEach(() => {
+            game.assets.set('font', mockFont);
+            drawStringSpy = vi.spyOn(game, 'drawString').mockImplementation(() => {});
+        });
+
+        it('calls drawString once with the full text when spans is empty', () => {
+            game.drawStringWithColor('Hello', [], 10, 20);
+            expect(drawStringSpy).toHaveBeenCalledExactlyOnceWith('Hello', 10, 20);
+        });
+
+        it('renders a span covering the entire text', () => {
+            const spans: ColoredTextSpan[] = [ { colorId: 'blue', offs: 0, count: 5 } ];
+            game.drawStringWithColor('Hello', spans, 10, 20);
+            expect(drawStringSpy).toHaveBeenCalledExactlyOnceWith('Hello', 10, 20, 'blue');
+        });
+
+        it('renders plain text before the span, then the colored span, then plain text after', () => {
+            const spans: ColoredTextSpan[] = [ { colorId: 'red', offs: 6, count: 5 } ];
+            game.drawStringWithColor('Hello world!', spans, 0, 0);
+            expect(drawStringSpy).toHaveBeenCalledTimes(3);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(1, 'Hello ', 0, 0);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(2, 'world', 6 * fontW, 0, 'red');
+            expect(drawStringSpy).toHaveBeenNthCalledWith(3, '!', 11 * fontW, 0);
+        });
+
+        it('renders a span at the start with plain text after', () => {
+            const spans: ColoredTextSpan[] = [ { colorId: 'green', offs: 0, count: 3 } ];
+            game.drawStringWithColor('Go now', spans, 4, 8);
+            expect(drawStringSpy).toHaveBeenCalledTimes(2);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(1, 'Go ', 4, 8, 'green');
+            expect(drawStringSpy).toHaveBeenNthCalledWith(2, 'now', 4 + 3 * fontW, 8);
+        });
+
+        it('renders plain text before a span at the end', () => {
+            const spans: ColoredTextSpan[] = [ { colorId: 'yellow', offs: 3, count: 3 } ];
+            game.drawStringWithColor('Go now', spans, 0, 0);
+            expect(drawStringSpy).toHaveBeenCalledTimes(2);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(1, 'Go ', 0, 0);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(2, 'now', 3 * fontW, 0, 'yellow');
+        });
+
+        it('renders multiple non-adjacent spans with plain text between them', () => {
+            const spans: ColoredTextSpan[] = [
+                { colorId: 'red', offs: 0, count: 1 },
+                { colorId: 'blue', offs: 6, count: 1 },
+            ];
+            game.drawStringWithColor('A and B', spans, 0, 0);
+            expect(drawStringSpy).toHaveBeenCalledTimes(3);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(1, 'A', 0, 0, 'red');
+            expect(drawStringSpy).toHaveBeenNthCalledWith(2, ' and ', 1 * fontW, 0);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(3, 'B', 6 * fontW, 0, 'blue');
+        });
+
+        it('advances drawX correctly for each segment', () => {
+            const spans: ColoredTextSpan[] = [ { colorId: 'red', offs: 3, count: 2 } ];
+            game.drawStringWithColor('abcDEfg', spans, 100, 50);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(1, 'abc', 100, 50);
+            expect(drawStringSpy).toHaveBeenNthCalledWith(2, 'DE', 100 + 3 * fontW, 50, 'red');
+            expect(drawStringSpy).toHaveBeenNthCalledWith(3, 'fg', 100 + 5 * fontW, 50);
         });
     });
 });
