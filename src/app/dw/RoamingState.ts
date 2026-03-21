@@ -144,13 +144,13 @@ export class RoamingState extends BaseState {
                     case 'Level Up':
                         this.game.audio.playSound('bump');
                         break;
-                    case 'Weapon Change':
+                    case 'Change Weapon...':
                         this.setSubstate('WEAPON_SELECTION');
                         break;
-                    case 'Armor Change':
+                    case 'Change Armor...':
                         this.setSubstate('ARMOR_SELECTION');
                         break;
-                    case 'Shield Change':
+                    case 'Change Shield...':
                         this.setSubstate('SHIELD_SELECTION');
                         break;
                     case 'Max HP/MP':

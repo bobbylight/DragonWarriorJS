@@ -196,7 +196,13 @@ export class LoadingState extends BaseState {
                 const font: Image = game.assets.get('font');
                 const bitmapFont = new BitmapFont(font, 8, 9, 1, 1, game.scale);
                 bitmapFont.addVariant('blue',
-                    { fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0xc0, toG: 0xff, toB: 0xff },
+                    { fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0xa0, toG: 0xff, toB: 0xff },
+                );
+                bitmapFont.addVariant('statIncrease',
+                    { fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0xa0, toG: 0xff, toB: 0xa0 },
+                );
+                bitmapFont.addVariant('statDecrease',
+                    { fromR: 0xff, fromG: 0xff, fromB: 0xff, toR: 0xff, toG: 0xa0, toB: 0xa0 },
                 );
                 game.assets.set('font', bitmapFont);
 
