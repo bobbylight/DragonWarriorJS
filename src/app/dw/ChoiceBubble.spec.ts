@@ -251,6 +251,41 @@ describe('ChoiceBubble', () => {
         });
     });
 
+    describe('ChoiceStringifier contentCharWidth', () => {
+
+        it('passes the content width in characters to the stringifier', () => {
+            const capturedWidths: number[] = [];
+            const stringifier = (choice: string, w: number) => {
+                capturedWidths.push(w);
+                return choice;
+            };
+            // Bubble width 100, xMargin = (1+2+13) * scale = 16, contentWidth = 68, charWidth = 8 → 8 chars
+            const bubble = new ChoiceBubble(game, 0, 0, 100, 100, choices, stringifier);
+            vi.spyOn(game, 'stringWidth').mockReturnValue(8);
+            vi.spyOn(game, 'drawString').mockImplementation(() => undefined);
+            vi.spyOn(game, 'drawStringWithColor').mockImplementation(() => undefined);
+            bubble.paintContent(game.getRenderingContext(), 0, 0);
+            expect(capturedWidths.every((w) => w === 8)).toBe(true);
+            expect(capturedWidths).toHaveLength(choices.length);
+        });
+
+        it('strips color escapes and renders with drawStringWithColor', () => {
+            const stringifier = (choice: string) => `\\c{statIncrease}${choice}\\c`;
+            const bubble = new ChoiceBubble(game, 0, 0, 100, 100, choices, stringifier);
+            vi.spyOn(game, 'stringWidth').mockReturnValue(8);
+            vi.spyOn(game, 'drawString').mockImplementation(() => undefined);
+            const drawSpy = vi.spyOn(game, 'drawStringWithColor').mockImplementation(() => undefined);
+            bubble.paintContent(game.getRenderingContext(), 0, 0);
+            // Every call should pass the clean text and a populated span
+            for (const call of drawSpy.mock.calls) {
+                const [ text, spans ] = call;
+                expect(text).not.toContain('\\c');
+                expect(spans).toHaveLength(1);
+                expect(spans[0].colorId).toEqual('statIncrease');
+            }
+        });
+    });
+
     describe('reset()', () => {
 
         it('resets the selection to the first item', () => {

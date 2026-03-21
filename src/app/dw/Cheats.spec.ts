@@ -445,4 +445,129 @@ describe('Cheats', () => {
             });
         });
     });
+
+    describe('weaponStringifier()', () => {
+
+        it('returns only the displayName when delta is 0', () => {
+            expect(Cheats.weaponStringifier(bambooStick, 20, bambooStick.power)).toEqual('Bamboo Stick');
+        });
+
+        it('appends right-aligned "+N" with statIncrease color for positive delta', () => {
+            // currentPower 0, bambooStick.power = 2, delta = +2
+            const result = Cheats.weaponStringifier(bambooStick, 16, 0);
+            expect(result).toEqual('Bamboo Stick  \\c{statIncrease}+2\\c');
+        });
+
+        it('appends right-aligned "-N" with statDecrease color for negative delta', () => {
+            // currentPower = club.power (4), bambooStick.power = 2, delta = -2
+            const result = Cheats.weaponStringifier(bambooStick, 16, club.power);
+            expect(result).toEqual('Bamboo Stick  \\c{statDecrease}-2\\c');
+        });
+
+        it('the visible text is exactly contentCharWidth characters long', () => {
+            const contentCharWidth = 20;
+            const result = Cheats.weaponStringifier(bambooStick, contentCharWidth, 0);
+            // Strip escape sequences to get visible length
+            const visible = result.replace(/\\c\{[^}]+\}/g, '').replace(/\\c/g, '');
+            expect(visible.length).toEqual(contentCharWidth);
+        });
+    });
+
+    describe('armorStringifier()', () => {
+
+        it('returns only the displayName when delta is 0', () => {
+            expect(Cheats.armorStringifier(clothesArmor, 20, clothesArmor.defense)).toEqual('Clothes');
+        });
+
+        it('appends right-aligned "+N" with statIncrease color for positive delta', () => {
+            // currentDefense 0, clothesArmor.defense = 2, delta = +2
+            const result = Cheats.armorStringifier(clothesArmor, 12, 0);
+            expect(result).toEqual('Clothes   \\c{statIncrease}+2\\c');
+        });
+
+        it('appends right-aligned "-N" with statDecrease color for negative delta', () => {
+            // currentDefense = chainMail.defense (10), clothesArmor.defense = 2, delta = -8
+            const result = Cheats.armorStringifier(clothesArmor, 12, chainMail.defense);
+            expect(result).toEqual('Clothes   \\c{statDecrease}-8\\c');
+        });
+
+        it('the visible text is exactly contentCharWidth characters long', () => {
+            const contentCharWidth = 20;
+            const result = Cheats.armorStringifier(clothesArmor, contentCharWidth, 0);
+            const visible = result.replace(/\\c\{[^}]+\}/g, '').replace(/\\c/g, '');
+            expect(visible.length).toEqual(contentCharWidth);
+        });
+    });
+
+    describe('shieldStringifier()', () => {
+
+        it('returns only the displayName when delta is 0', () => {
+            expect(Cheats.shieldStringifier(smallShield, 20, smallShield.defense)).toEqual('Small Shield');
+        });
+
+        it('appends right-aligned "+N" with statIncrease color for positive delta', () => {
+            // currentDefense 0, smallShield.defense = 4, delta = +4
+            const result = Cheats.shieldStringifier(smallShield, 16, 0);
+            expect(result).toEqual('Small Shield  \\c{statIncrease}+4\\c');
+        });
+
+        it('appends right-aligned "-N" with statDecrease color for negative delta', () => {
+            // currentDefense = largeShield.defense (10), smallShield.defense = 4, delta = -6
+            const result = Cheats.shieldStringifier(smallShield, 16, largeShield.defense);
+            expect(result).toEqual('Small Shield  \\c{statDecrease}-6\\c');
+        });
+
+        it('the visible text is exactly contentCharWidth characters long', () => {
+            const contentCharWidth = 20;
+            const result = Cheats.shieldStringifier(smallShield, contentCharWidth, 0);
+            const visible = result.replace(/\\c\{[^}]+\}/g, '').replace(/\\c/g, '');
+            expect(visible.length).toEqual(contentCharWidth);
+        });
+    });
+
+    describe('createCheatBubble()', () => {
+
+        it('uses "Change Weapon..." as the label for the weapon cheat', () => {
+            const bubble = Cheats.createCheatBubble(game);
+            // Navigate down past 'Change Gold...' and 'Level Up' to 'Change Weapon...'
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'down').mockReturnValue(true);
+            bubble.handleInput(); // → 'Level Up'
+            bubble.handleInput(); // → 'Change Weapon...'
+            expect(bubble.getSelectedItem()).toEqual('Change Weapon...');
+        });
+
+        it('uses "Change Armor..." as the label for the armor cheat', () => {
+            const bubble = Cheats.createCheatBubble(game);
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'down').mockReturnValue(true);
+            bubble.handleInput(); // → 'Level Up'
+            bubble.handleInput(); // → 'Change Weapon...'
+            bubble.handleInput(); // → 'Change Armor...'
+            expect(bubble.getSelectedItem()).toEqual('Change Armor...');
+        });
+
+        it('uses "Change Shield..." as the label for the shield cheat', () => {
+            const bubble = Cheats.createCheatBubble(game);
+            vi.spyOn(game, 'cancelKeyPressed').mockReturnValue(false);
+            vi.spyOn(game, 'actionKeyPressed').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'up').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'left').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'right').mockReturnValue(false);
+            vi.spyOn(game.inputManager, 'down').mockReturnValue(true);
+            bubble.handleInput(); // → 'Level Up'
+            bubble.handleInput(); // → 'Change Weapon...'
+            bubble.handleInput(); // → 'Change Armor...'
+            bubble.handleInput(); // → 'Change Shield...'
+            expect(bubble.getSelectedItem()).toEqual('Change Shield...');
+        });
+    });
 });

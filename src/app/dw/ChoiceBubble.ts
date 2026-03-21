@@ -1,8 +1,8 @@
 import { InputManager } from 'gtp';
-import { Bubble } from './Bubble';
+import { Bubble, ColoredTextSpan } from './Bubble';
 import { DwGame } from './DwGame';
 
-export type ChoiceStringifier<Choice> = (choice: Choice) => string;
+export type ChoiceStringifier<Choice> = (choice: Choice, contentCharWidth: number) => string;
 
 /**
  * A bubble that lets the user choose between several choices. Can optionally be titled
@@ -109,6 +109,9 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
 
         ctx.fillStyle = 'rgb(255,255,255)';
 
+        const charWidth = this.game.stringWidth('x');
+        const contentCharWidth = Math.floor((this.w - 2 * this.getXMargin()) / charWidth);
+
         if (this.columns === 2) {
             const leftCount = Math.ceil(this.choices.length / 2);
             const colGap = this.game.getTileSize();
@@ -127,14 +130,20 @@ export class ChoiceBubble<ChoiceBubbleChoice> extends Bubble {
                         : this.x + Bubble.ARROW_MARGIN;
                     this.drawArrow(arrowX, textY);
                 }
-                this.game.drawString(this.choiceStringifier(choice), textX, textY);
+                const rawText = this.choiceStringifier(choice, contentCharWidth);
+                const spans: ColoredTextSpan[] = [];
+                const text = Bubble.removeSpecialEscapes(rawText, [], spans);
+                this.game.drawStringWithColor(text, spans, textX, textY);
             });
         } else {
             this.choices.forEach((choice, index) => {
                 if (this.curChoice === index) {
                     this.drawArrow(this.x + Bubble.ARROW_MARGIN, y);
                 }
-                this.game.drawString(this.choiceStringifier(choice), x, y);
+                const rawText = this.choiceStringifier(choice, contentCharWidth);
+                const spans: ColoredTextSpan[] = [];
+                const text = Bubble.removeSpecialEscapes(rawText, [], spans);
+                this.game.drawStringWithColor(text, spans, x, y);
                 y += this.yInc;
             });
         }

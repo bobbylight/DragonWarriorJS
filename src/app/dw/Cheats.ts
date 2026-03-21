@@ -9,9 +9,9 @@ import { Weapon } from './Weapon';
 export type CheatOption =
     'Change Gold...' |
     'Level Up' |
-    'Weapon Change' |
-    'Armor Change' |
-    'Shield Change' |
+    'Change Weapon...' |
+    'Change Armor...' |
+    'Change Shield...' |
     'Max HP/MP' |
     'Min HP/MP' |
     'Battle...';
@@ -40,9 +40,9 @@ export class Cheats {
         const choices: CheatOption[] = [
             'Change Gold...',
             'Level Up',
-            'Weapon Change',
-            'Armor Change',
-            'Shield Change',
+            'Change Weapon...',
+            'Change Armor...',
+            'Change Shield...',
             'Max HP/MP',
             'Min HP/MP',
             'Battle...',
@@ -63,6 +63,14 @@ export class Cheats {
         return new ChoiceBubble(game, x, y, w, h, choices, undefined, true, 'GOLD');
     }
 
+    static armorStringifier(armor: Armor, contentCharWidth: number, currentDefense: number): string {
+        const delta = armor.defense - currentDefense;
+        if (delta === 0) return armor.displayName;
+        const statStr = delta > 0 ? `+${delta}` : `${delta}`;
+        const colorId = delta > 0 ? 'statIncrease' : 'statDecrease';
+        return `${armor.displayName.padEnd(contentCharWidth - statStr.length)}\\c{${colorId}}${statStr}\\c`;
+    }
+
     static createArmorSelectBubble(game: DwGame): ChoiceBubble<Armor> {
 
         const tileSize: number = game.getTileSize();
@@ -72,7 +80,9 @@ export class Cheats {
         const x: number = (game.getWidth() - w) / 2;
         const y: number = (game.getHeight() - h) / 2;
 
-        return new ChoiceBubble(game, x, y, w, h, choices, (armor) => armor.displayName, true, 'ARMOR');
+        const currentDefense = game.hero.armor?.defense ?? 0;
+        return new ChoiceBubble(game, x, y, w, h, choices,
+            (armor, w) => Cheats.armorStringifier(armor, w, currentDefense), true, 'ARMOR');
     }
 
     static createBattleBubble(game: DwGame): ChoiceBubble<EnemyData> {
@@ -91,6 +101,14 @@ export class Cheats {
         return bubble;
     }
 
+    static shieldStringifier(shield: Shield, contentCharWidth: number, currentDefense: number): string {
+        const delta = shield.defense - currentDefense;
+        if (delta === 0) return shield.displayName;
+        const statStr = delta > 0 ? `+${delta}` : `${delta}`;
+        const colorId = delta > 0 ? 'statIncrease' : 'statDecrease';
+        return `${shield.displayName.padEnd(contentCharWidth - statStr.length)}\\c{${colorId}}${statStr}\\c`;
+    }
+
     static createShieldSelectBubble(game: DwGame): ChoiceBubble<Shield> {
 
         const lineHeight = 18;
@@ -101,7 +119,17 @@ export class Cheats {
         const x: number = (game.getWidth() - w) / 2;
         const y: number = (game.getHeight() - h) / 2;
 
-        return new ChoiceBubble(game, x, y, w, h, choices, (shield) => shield.displayName, true, 'SHIELD');
+        const currentDefense = game.hero.shield?.defense ?? 0;
+        return new ChoiceBubble(game, x, y, w, h, choices,
+            (shield, w) => Cheats.shieldStringifier(shield, w, currentDefense), true, 'SHIELD');
+    }
+
+    static weaponStringifier(weapon: Weapon, contentCharWidth: number, currentPower: number): string {
+        const delta = weapon.power - currentPower;
+        if (delta === 0) return weapon.displayName;
+        const statStr = delta > 0 ? `+${delta}` : `${delta}`;
+        const colorId = delta > 0 ? 'statIncrease' : 'statDecrease';
+        return `${weapon.displayName.padEnd(contentCharWidth - statStr.length)}\\c{${colorId}}${statStr}\\c`;
     }
 
     static createWeaponSelectBubble(game: DwGame): ChoiceBubble<Weapon> {
@@ -114,7 +142,9 @@ export class Cheats {
         const x: number = (game.getWidth() - w) / 2;
         const y: number = (game.getHeight() - h) / 2;
 
-        return new ChoiceBubble(game, x, y, w, h, weapons, (weapon) => weapon.displayName, true, 'WEAPON');
+        const currentPower = game.hero.weapon?.power ?? 0;
+        return new ChoiceBubble(game, x, y, w, h, weapons,
+            (weapon, w) => Cheats.weaponStringifier(weapon, w, currentPower), true, 'WEAPON');
     }
 
     static createWarpBubble(game: DwGame): ChoiceBubble<WarpLocation> {
